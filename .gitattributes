@@ -1,0 +1,19 @@
+# Detect text automatically; keep common source and Unity text assets on LF.
+* text=auto
+.gitattributes text eol=lf
+.gitignore text eol=lf
+*.cs text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.json text eol=lf
+*.asmdef text eol=lf
+*.asmref text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.meta text eol=lf
+*.unity text eol=lf
+*.prefab text eol=lf
+*.inputactions text eol=lf
+*.shader text eol=lf
+*.hlsl text eol=lf
+# .asset files can be text or binary; leave their detection automatic.
