@@ -1,0 +1,24 @@
+
+# Unity 生成目录
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+
+# 本机编辑器配置
+/.vscode/
+/.vs/
+/.idea/
+
+# 自动生成的工程文件
+*.csproj
+*.sln
+*.slnx
+*.suo
+*.user
+*.userprefs
