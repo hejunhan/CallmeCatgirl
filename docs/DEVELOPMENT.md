@@ -4,7 +4,7 @@
 
 使用 `ProjectSettings/ProjectVersion.txt` 指定的 Unity 版本，当前为 **6000.5.2f1**。
 包版本以 `Packages/manifest.json` 和 `Packages/packages-lock.json` 为准。
-入口示例场景为 `Assets/_Game/Scenes/Prototypes/SampleScene.unity`。
+核心玩法验收场景为 `Assets/_Game/Scenes/Prototypes/CoreGameplay.unity`；原模板示例场景保留。详细说明见 [CORE_GAMEPLAY.md](CORE_GAMEPLAY.md)。
 
 第一次打开克隆项目时，需要等待 Unity 恢复依赖、导入资源和编译。
 `Library/` 不在 Git 中，首次导入耗时长于日常打开属于预期。
@@ -26,7 +26,7 @@
 - 自研脚本命名空间使用 `CallmeCatgirl` 前缀，再按模块划分，例如 `CallmeCatgirl.Gameplay.Interaction`。
 - UI 资源可使用 `MainMenuPanel`、`ConfirmButton` 等表达用途的名称，避免 `NewPrefab`、`Test2`。
 - Editor 工具放在 `Scripts/Editor/`；运行时代码不直接依赖 `UnityEditor`。
-- 当前没有新增运行时代码或程序集定义。模块稳定后再按实际依赖拆分 asmdef，避免初期引入不必要的引用管理。
+- 当前已新增TaskGrid纯逻辑程序集与EditMode测试程序集；配置与界面使用默认程序集，一次性Editor生成工具已移除。新增模块按实际依赖拆分。
 - 后续添加自动化测试时，通过 Unity Test Runner 创建对应测试程序集，再组织 EditMode 和 PlayMode 测试。
 
 ## 资源与引用

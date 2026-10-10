@@ -1,0 +1,7 @@
+{
+  "name": "CallmeCatgirl.TaskGrid.Tests",
+  "references": ["CallmeCatgirl.TaskGrid", "UnityEngine.UI"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

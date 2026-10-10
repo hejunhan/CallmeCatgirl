@@ -1,0 +1,6 @@
+{
+  "name": "CallmeCatgirl.TaskGrid",
+  "rootNamespace": "CallmeCatgirl.Gameplay.TaskGrid",
+  "autoReferenced": true,
+  "noEngineReferences": true
+}
