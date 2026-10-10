@@ -75,6 +75,59 @@ namespace CallmeCatgirl.Tests
             Assert.That(Object.FindObjectsByType<Text>(FindObjectsSortMode.None).All(t => t.font != null), Is.True);
             yield return new ExitPlayMode();
         }
+        [UnityTest]
+        public IEnumerator SpeedSelectionStaysVisibleAfterFocusChangesAndReset()
+        {
+            EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity");
+            yield return new EnterPlayMode();
+            yield return null;
+            var controller = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
+                .Single(b => b.GetType().FullName == "CallmeCatgirl.Gameplay.CoreGameplayController");
+            var view = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
+                .Single(b => b.GetType().FullName == "CallmeCatgirl.UI.CoreGameplayCanvasView");
+            var sim = (TaskSimulation)controller.GetType().GetProperty("Simulation").GetValue(controller);
+            sim.Paused = true;
+            var buttons = new[] { ButtonNamed("SpeedButton"), ButtonNamed("Speed2Button"), ButtonNamed("Speed4Button") };
+            var idle = buttons.Select(b => b.targetGraphic.color).ToArray();
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                Canvas.ForceUpdateCanvases();
+                var rect = (RectTransform)buttons[i].transform;
+                var pointer = new PointerEventData(EventSystem.current)
+                {
+                    position = RectTransformUtility.WorldToScreenPoint(null, rect.TransformPoint(rect.rect.center)),
+                    button = PointerEventData.InputButton.Left
+                };
+                var hits = new System.Collections.Generic.List<RaycastResult>();
+                EventSystem.current.RaycastAll(pointer, hits);
+                Assert.That(hits.Count, Is.GreaterThan(0));
+                var receiver = ExecuteEvents.GetEventHandler<IPointerClickHandler>(hits[0].gameObject);
+                Assert.That(receiver, Is.EqualTo(buttons[i].gameObject));
+                ExecuteEvents.Execute(receiver, pointer, ExecuteEvents.pointerClickHandler);
+                view.GetType().GetMethod("Refresh").Invoke(view, null);
+                Assert.That(buttons[i].targetGraphic.color, Is.Not.EqualTo(idle[i]), "Active speed must remain highlighted.");
+                for (int j = 0; j < buttons.Length; j++)
+                    if (j != i) Assert.That(buttons[j].targetGraphic.color, Is.EqualTo(idle[j]));
+                Assert.That(GameObject.Find("SpeedReadout").GetComponent<Text>().text,
+                    Is.EqualTo($"速度 {1 << i}x · 已暂停"));
+                EventSystem.current.SetSelectedGameObject(ButtonNamed("User_B").gameObject);
+                yield return null;
+                Assert.That(buttons[i].targetGraphic.color, Is.Not.EqualTo(idle[i]), "Changing UI focus must not clear speed selection.");
+                double before = sim.GameTime;
+                yield return null;
+                Assert.That(sim.GameTime, Is.EqualTo(before));
+                sim.Paused = false;
+                yield return null;
+                Assert.That(sim.GameTime - before, Is.EqualTo(Time.unscaledDeltaTime * (1 << i)).Within(0.0001));
+                Assert.That(GameObject.Find("SpeedReadout").GetComponent<Text>().text, Does.Contain("运行中"));
+                sim.Paused = true;
+            }
+            controller.GetType().GetMethod("ResetSimulation").Invoke(controller, null);
+            float resetSpeed = (float)controller.GetType().GetProperty("PlaybackSpeed").GetValue(controller);
+            for (int i = 0; i < buttons.Length; i++)
+                Assert.That(buttons[i].targetGraphic.color == idle[i], Is.EqualTo(!Mathf.Approximately(resetSpeed, 1 << i)));
+            yield return new ExitPlayMode();
+        }
         private static Button ButtonNamed(string name) => Object.FindObjectsByType<Button>(FindObjectsSortMode.None).Single(b => b.name == name);
         private static Vector2 ScreenCell(RectTransform board,int x,int y) => RectTransformUtility.WorldToScreenPoint(null,
             board.TransformPoint(new Vector3(board.rect.xMin+(x+0.5f)*board.rect.width/8,board.rect.yMax-(y+0.5f)*board.rect.height/8,0)));

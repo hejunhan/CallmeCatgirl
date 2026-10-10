@@ -25,6 +25,9 @@ namespace CallmeCatgirl.UI
         [SerializeField] private Text logLabel;
         [SerializeField] private Text pauseLabel;
         [SerializeField] private Text speedLabel;
+        [SerializeField] private Button[] speedButtons; // 1x, 2x, 4x
+        [SerializeField] private Color speedActiveColor = new Color(0.32f, 0.12f, 0.9f, 1f);
+        private Color[] speedIdleColors;
         [SerializeField] private GameObject infoPanel;
         [SerializeField] private Text infoTitle;
         [SerializeField] private Text infoStatus;
@@ -53,6 +56,8 @@ namespace CallmeCatgirl.UI
         public void Initialize(CoreGameplayController owner)
         {
             CancelDrag(); controller = owner;
+            if (speedIdleColors == null && speedButtons != null)
+                speedIdleColors = speedButtons.Select(b => b.targetGraphic.color).ToArray();
             foreach (var module in modules.Values) if (module != null) { module.gameObject.SetActive(false); Destroy(module.gameObject); }
             modules.Clear(); cards.Clear();
             foreach (var card in candidateContent.GetComponentsInChildren<TaskCardView>(true))
@@ -73,7 +78,11 @@ namespace CallmeCatgirl.UI
             clockLabel.text = $"游戏时间 {sim.GameTime:0.0}s   模型周期 {sim.Model.Interval:0.#}s";
             messageLabel.text = controller.Message; logLabel.text = string.Join("\n", controller.Logs);
             pauseLabel.text = sim.Paused ? "继续 [空格]" : "暂停 [空格]";
-            speedLabel.text = $"速度 {controller.PlaybackSpeed:0.##}x";
+            speedLabel.text = $"速度 {controller.PlaybackSpeed:0.##}x · {(sim.Paused ? "已暂停" : "运行中")}";
+            if (speedButtons != null && speedIdleColors != null)
+                for (int i = 0; i < speedButtons.Length; i++)
+                    speedButtons[i].targetGraphic.color = Mathf.Approximately(controller.PlaybackSpeed, 1 << i)
+                        ? speedActiveColor : speedIdleColors[i];
             float width = board.rect.width / sim.Width, height = board.rect.height / sim.Height;
             int open = 0;
             for (int i = 0; i < gridCells.Length; i++)

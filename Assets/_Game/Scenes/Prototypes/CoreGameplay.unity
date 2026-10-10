@@ -10018,6 +10018,11 @@ MonoBehaviour:
   logLabel: {fileID: 1009214779}
   pauseLabel: {fileID: 1664164032}
   speedLabel: {fileID: 834203435}
+  speedButtons:
+  - {fileID: 1459192722}
+  - {fileID: 741469704}
+  - {fileID: 301798548}
+  speedActiveColor: {r: 0.32, g: 0.12, b: 0.9, a: 1}
   infoPanel: {fileID: 983446995}
   infoTitle: {fileID: 605237408}
   infoStatus: {fileID: 1516882954}
