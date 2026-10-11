@@ -16,6 +16,8 @@ namespace CallmeCatgirl.Gameplay
         public Vector4 ModelPoints = new Vector4(4, 1, 1, 0);
         [Range(0.1f, 2)] public float PlaybackSpeed = 0.5f;
         public DemoTask[] Requests;
+        [Tooltip("独立的内存升级价格、扩容和解锁条件配置。")]
+        public MemoryUpgradeConfiguration MemoryUpgrades;
 
         public ModelDefinition BuildModel() => new ModelDefinition("test-model", AbilityInterval,
             new Dictionary<AbilityKind, double> {

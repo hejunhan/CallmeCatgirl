@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1575394dd76641c788cc22e33da73ae7, type: 3}
+  m_Name: MemoryUpgradeConfiguration
+  m_EditorClassIdentifier: Assembly-CSharp::CallmeCatgirl.Gameplay.MemoryUpgradeConfiguration
+  Levels:
+  - TargetLevel: 2
+    Cost: 100
+    AddedCells: 4
+    RequiredCompletedTasks: 0
+  - TargetLevel: 3
+    Cost: 200
+    AddedCells: 4
+    RequiredCompletedTasks: 3
+  - TargetLevel: 4
+    Cost: 400
+    AddedCells: 6
+    RequiredCompletedTasks: 6
+  - TargetLevel: 5
+    Cost: 800
+    AddedCells: 10
+    RequiredCompletedTasks: 10
