@@ -17,6 +17,15 @@ namespace CallmeCatgirl.Gameplay
         public string SelectedId { get; private set; }
         public TaskInstance SelectedTask => SelectedId != null && Simulation.Tasks.TryGetValue(SelectedId, out var task) ? task : null;
         public float PlaybackSpeed { get; private set; }
+        public int MemoryLevel { get; private set; }
+        public int Funds { get; private set; }
+        public int CompletedTasks { get; private set; }
+        public MemoryUpgradeConfiguration.UpgradeStep NextMemoryUpgrade
+            => configuration.MemoryUpgrades.TryGetNextLevel(MemoryLevel, out var step) ? step : null;
+        public bool CanUpgradeMemory => NextMemoryUpgrade != null && NextMemoryUpgrade.Cost >= 0
+            && Funds >= NextMemoryUpgrade.Cost && CompletedTasks >= NextMemoryUpgrade.RequiredCompletedTasks;
+        public int NextMemoryCellCount => NextMemoryUpgrade == null ? 0
+            : configuration.MemoryUpgrades.GetOpenCells(NextMemoryUpgrade.TargetLevel).Count - Simulation.OpenCellCount;
         public string Message { get; private set; }
         public IReadOnlyList<string> Logs => logs;
         public event Action<TaskEvent> TaskEventRaised;
@@ -46,6 +55,7 @@ namespace CallmeCatgirl.Gameplay
             try
             {
                 Simulation = configuration.BuildSimulation(); Simulation.Paused = true; definitions.Clear(); logs.Clear(); serial = 0;
+                MemoryLevel = configuration.MemoryUpgrades.InitialLevel; Funds = configuration.InitialFunds; CompletedTasks = 0;
                 foreach (var source in configuration.Requests)
                 {
                     var definition = source.Build(); definitions.Add(definition.Id, definition);
@@ -105,10 +115,35 @@ namespace CallmeCatgirl.Gameplay
             Simulation.TryCreate(previous.ConversationId + "-" + round, previous.ConversationId, round, previous.Definition, out var next);
             SelectedId = next?.Id;
         }
+        public void UpgradeMemory()
+        {
+            ReadEvents();
+            var next = NextMemoryUpgrade;
+            if (next == null) { Message = "内存已满级。"; return; }
+            if (!CanUpgradeMemory)
+            { Message = CompletedTasks < next.RequiredCompletedTasks ? $"需要累计达标提交 {next.RequiredCompletedTasks} 个任务。" : "升级资金不足。"; return; }
+            int before = Simulation.OpenCellCount;
+            if (!Simulation.TryUnlockCells(configuration.MemoryUpgrades.GetOpenCells(next.TargetLevel)))
+            { Message = "升级格子配置越界，未扣费。"; return; }
+            Funds -= next.Cost;
+            MemoryLevel = next.TargetLevel;
+            Message = $"内存升级至 Lv{MemoryLevel}：新增 {Simulation.OpenCellCount - before} 格，花费 {next.Cost}。";
+            logs.Insert(0, Message);
+            if (logs.Count > 7) logs.RemoveAt(logs.Count - 1);
+            canvasView?.Refresh();
+        }
+        // 留给后续收益系统的入账接口；当前测试资金来自主配置。
+        public void AddFunds(int amount)
+        {
+            if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));
+            Funds = checked(Funds + amount);
+            canvasView?.Refresh();
+        }
         private void ReadEvents()
         {
             foreach (var item in Simulation.DrainEvents())
             {
+                if (item.Kind == TaskEventKind.Submitted && item.Result != null && item.Result.Overall != Quality.BelowStandard) CompletedTasks++;
                 logs.Insert(0, $"{item.GameTime:0.0}s  {item.RequestId}  {EventText(item.Kind)}"
                     + (item.Kind == TaskEventKind.Submitted || item.Kind == TaskEventKind.TimedOut ? $"  token={item.BillableTokens:0.##}" : ""));
                 if (logs.Count > 7) logs.RemoveAt(logs.Count - 1);

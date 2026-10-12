@@ -201,6 +201,113 @@ namespace CallmeCatgirl.Tests
             Assert.That(ButtonNamed("PauseButton").GetComponentInChildren<Text>().text, Is.EqualTo("开始 [空格]"));
             yield return new ExitPlayMode();
         }
+        [UnityTest]
+        public IEnumerator MemoryUpgradeButtonEnforcesConditionsAndPreservesTasks()
+        {
+            EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity");
+            Assert.That(GameObject.Find("UpgradeMemoryButton"), Is.Not.Null);
+            yield return new EnterPlayMode();
+            yield return null;
+            var controller = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
+                .Single(b => b.GetType().FullName == "CallmeCatgirl.Gameplay.CoreGameplayController");
+            int Value(string name) => (int)controller.GetType().GetProperty(name).GetValue(controller);
+            void Command(string name) => controller.GetType().GetMethod(name).Invoke(controller, null);
+            var sim = (TaskSimulation)controller.GetType().GetProperty("Simulation").GetValue(controller);
+            var task = sim.Tasks["A-1"];
+            sim.TryPlace(task.Id, new Cell(2, 0), 0, out _);
+            sim.Paused = false; sim.Advance(4); sim.Paused = true;
+            var button = ButtonNamed("UpgradeMemoryButton");
+            button.onClick.Invoke();
+            Assert.That(Value("MemoryLevel"), Is.EqualTo(2));
+            Assert.That(Value("Funds"), Is.EqualTo(1400));
+            Assert.That(sim.OpenCellCount, Is.EqualTo(44));
+            Assert.That(sim.IsOpen(new Cell(0, 0)), Is.True);
+            Assert.That(sim.Tasks[task.Id], Is.SameAs(task));
+            Assert.That(task.Progress, Is.EqualTo(40));
+            Assert.That(sim.Occupancy.Count, Is.EqualTo(4));
+            Assert.That(sim.Paused, Is.True);
+            Assert.That(button.interactable, Is.False, "Next level requires three completed tasks.");
+            button.onClick.Invoke();
+            Assert.That(Value("Funds"), Is.EqualTo(1400));
+            Assert.That(Value("MemoryLevel"), Is.EqualTo(2));
+            Assert.That(sim.TryPlace(task.Id, new Cell(0, 0), 0, out _), Is.True);
+            sim.TryPlace("B-1", new Cell(2, 3), 0, out _);
+            sim.Paused = false; sim.Advance(10); sim.Paused = true;
+            controller.GetType().GetMethod("SelectRequest").Invoke(controller, new object[] { "B-1" });
+            Command("SubmitSelected");
+            yield return null;
+            Assert.That(Value("CompletedTasks"), Is.Zero, "Below-standard submissions do not satisfy the upgrade condition.");
+            controller.GetType().GetMethod("SelectRequest").Invoke(controller, new object[] { "A-1" });
+            for (int completed = 1; completed <= 10; completed++)
+            {
+                if (completed > 1)
+                {
+                    Command("NextRound");
+                    string id = (string)controller.GetType().GetProperty("SelectedId").GetValue(controller);
+                    Assert.That(sim.TryPlace(id, new Cell(0, 0), 0, out _), Is.True);
+                    sim.Paused = false; sim.Advance(10); sim.Paused = true;
+                }
+                Command("SubmitSelected");
+                yield return null;
+                Assert.That(Value("CompletedTasks"), Is.EqualTo(completed));
+                if (completed == 3 || completed == 6 || completed == 10)
+                {
+                    Assert.That(button.interactable, Is.True);
+                    button.onClick.Invoke();
+                }
+            }
+            Assert.That(Value("MemoryLevel"), Is.EqualTo(5));
+            Assert.That(Value("Funds"), Is.Zero);
+            Assert.That(sim.OpenCellCount, Is.EqualTo(64));
+            Assert.That(button.interactable, Is.False);
+            button.onClick.Invoke();
+            Assert.That(Value("Funds"), Is.Zero);
+            Command("ResetSimulation");
+            sim = (TaskSimulation)controller.GetType().GetProperty("Simulation").GetValue(controller);
+            Assert.That(Value("MemoryLevel"), Is.EqualTo(1));
+            Assert.That(Value("Funds"), Is.EqualTo(1500));
+            Assert.That(Value("CompletedTasks"), Is.Zero);
+            Assert.That(sim.OpenCellCount, Is.EqualTo(40));
+            Assert.That(sim.Paused, Is.True);
+            yield return new ExitPlayMode();
+        }
+
+        [UnityTest]
+        public IEnumerator MemoryUpgradeRejectsInsufficientFundsAndAcceptsExternalCredit()
+        {
+            EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity");
+            yield return new EnterPlayMode();
+            yield return null;
+            var controller = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
+                .Single(b => b.GetType().FullName == "CallmeCatgirl.Gameplay.CoreGameplayController");
+            var serialized = new UnityEditor.SerializedObject(controller);
+            var original = (ScriptableObject)serialized.FindProperty("configuration").objectReferenceValue;
+            var config = Object.Instantiate(original);
+            try
+            {
+                config.GetType().GetField("InitialFunds").SetValue(config, 0);
+                serialized.FindProperty("configuration").objectReferenceValue = config;
+                serialized.ApplyModifiedPropertiesWithoutUndo();
+                controller.GetType().GetMethod("ResetSimulation").Invoke(controller, null);
+                var button = ButtonNamed("UpgradeMemoryButton");
+                Assert.That(button.interactable, Is.False);
+                button.onClick.Invoke();
+                Assert.That(controller.GetType().GetProperty("MemoryLevel").GetValue(controller), Is.EqualTo(1));
+                Assert.That(controller.GetType().GetProperty("Funds").GetValue(controller), Is.EqualTo(0));
+                controller.GetType().GetMethod("AddFunds").Invoke(controller, new object[] { 100 });
+                Assert.That(button.interactable, Is.True);
+                button.onClick.Invoke();
+                Assert.That(controller.GetType().GetProperty("MemoryLevel").GetValue(controller), Is.EqualTo(2));
+                Assert.That(controller.GetType().GetProperty("Funds").GetValue(controller), Is.EqualTo(0));
+            }
+            finally
+            {
+                serialized.FindProperty("configuration").objectReferenceValue = original;
+                serialized.ApplyModifiedPropertiesWithoutUndo();
+                Object.DestroyImmediate(config);
+            }
+            yield return new ExitPlayMode();
+        }
         private static Button ButtonNamed(string name) => Object.FindObjectsByType<Button>(FindObjectsSortMode.None).Single(b => b.name == name);
         private static Vector2 ScreenCell(RectTransform board,int x,int y) => RectTransformUtility.WorldToScreenPoint(null,
             board.TransformPoint(new Vector3(board.rect.xMin+(x+0.5f)*board.rect.width/8,board.rect.yMax-(y+0.5f)*board.rect.height/8,0)));

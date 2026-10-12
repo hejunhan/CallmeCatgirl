@@ -55,3 +55,4 @@ MonoBehaviour:
     Minimum: {x: 4, y: 1, z: 1}
     Excellent: {x: 8, y: 2, z: 2}
   MemoryUpgrades: {fileID: 11400000, guid: d19834b4bb6a4df7b7fe6cb998f98fae, type: 2}
+  InitialFunds: 1500

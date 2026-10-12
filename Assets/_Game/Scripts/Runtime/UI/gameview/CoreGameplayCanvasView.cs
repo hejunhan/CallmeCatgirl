@@ -43,6 +43,9 @@ namespace CallmeCatgirl.UI
         [Header("User avatars — A, B, C, then new users" )]
         [SerializeField] private Sprite[] userAvatars;
         [SerializeField] private Image conversationAvatar;
+        [SerializeField] private Button memoryUpgradeButton;
+        [SerializeField] private Text memoryUpgradeLabel;
+        [SerializeField] private Text memoryUpgradeButtonLabel;
         private readonly Dictionary<string, TaskCardView> cards = new Dictionary<string, TaskCardView>();
         private readonly Dictionary<string, TaskModuleView> modules = new Dictionary<string, TaskModuleView>();
         private CoreGameplayController controller;
@@ -86,6 +89,14 @@ namespace CallmeCatgirl.UI
                 for (int i = 0; i < speedButtons.Length; i++)
                     speedButtons[i].targetGraphic.color = Mathf.Approximately(controller.PlaybackSpeed, 1 << i)
                         ? speedActiveColor : speedIdleColors[i];
+            if (memoryUpgradeButton != null)
+            {
+                var next = controller.NextMemoryUpgrade;
+                memoryUpgradeButton.interactable = controller.CanUpgradeMemory;
+                memoryUpgradeButtonLabel.text = next == null ? "内存已满级" : $"升级内存 Lv{next.TargetLevel} · {next.Cost}";
+                memoryUpgradeLabel.text = $"内存 Lv{controller.MemoryLevel} · 资金 {controller.Funds}\n"
+                    + (next == null ? "全部升级完成" : $"下一档 +{controller.NextMemoryCellCount}格 · 达标 {controller.CompletedTasks}/{next.RequiredCompletedTasks}");
+            }
             float width = board.rect.width / sim.Width, height = board.rect.height / sim.Height;
             int open = 0;
             for (int i = 0; i < gridCells.Length; i++)

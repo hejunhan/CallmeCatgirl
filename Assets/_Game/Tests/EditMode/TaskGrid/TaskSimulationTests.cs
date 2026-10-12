@@ -22,6 +22,23 @@ namespace CallmeCatgirl.Tests
         private static void Place(TaskSimulation sim, string id, int x = 0, int y = 0, int rotation = 0)
         { Assert.That(sim.TryPlace(id, new Cell(x, y), rotation, out var failure), Is.True, failure.ToString()); }
 
+        [Test] public void MemoryExpansionIsAtomicAndPreservesRunningTasks()
+        {
+            var sim = new TaskSimulation(5, 5, new[] { new Cell(0, 0), new Cell(1, 0) }, Model());
+            var task = Add(sim); Place(sim, task.Id); sim.Advance(4);
+            Assert.That(sim.TryUnlockCells(new[] { new Cell(2, 0), new Cell(5, 0) }), Is.False);
+            Assert.That(sim.IsOpen(new Cell(2, 0)), Is.False);
+            Assert.That(sim.OpenCellCount, Is.EqualTo(2));
+            Assert.That(sim.TryUnlockCells(new[] { new Cell(0, 0), new Cell(2, 0), new Cell(2, 0) }), Is.True);
+            Assert.That(sim.OpenCellCount, Is.EqualTo(3));
+            Assert.That(sim.Tasks[task.Id], Is.SameAs(task));
+            Assert.That(task.Progress, Is.EqualTo(40));
+            Assert.That(task.GetAbility(AbilityKind.Writing), Is.EqualTo(4));
+            Assert.That(sim.GameTime, Is.EqualTo(4));
+            Assert.That(sim.Occupancy.Count, Is.EqualTo(2));
+            Assert.That(sim.TaskAt(new Cell(0, 0)), Is.EqualTo(task.Id));
+            Assert.That(sim.TryUnlockCells(null), Is.False);
+        }
         [Test] public void RepeatedRoundAndRequestAreRejectedUntilFeedbackEnds()
         {
             var sim = Simulation(); var a = Add(sim);

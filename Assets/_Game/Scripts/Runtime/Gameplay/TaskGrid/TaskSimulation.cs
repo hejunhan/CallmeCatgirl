@@ -36,6 +36,16 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
             Occupancy = new ReadOnlyDictionary<Cell, string>(occupancy);
         }
 
+        public int OpenCellCount => openCells.Count;
+        // 扩容只增加开放格子，不改变任务、进度或占格；非法输入不产生部分修改。
+        public bool TryUnlockCells(IEnumerable<Cell> cells)
+        {
+            if (cells == null) return false;
+            var additions = new HashSet<Cell>(cells);
+            if (additions.Any(cell => !InBounds(cell))) return false;
+            openCells.UnionWith(additions);
+            return true;
+        }
         public bool IsOpen(Cell cell) => openCells.Contains(cell);
         public string TaskAt(Cell cell) => occupancy.TryGetValue(cell, out var id) ? id : null;
         private bool InBounds(Cell c) => c.X >= 0 && c.Y >= 0 && c.X < Width && c.Y < Height;
