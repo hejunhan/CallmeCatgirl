@@ -12,20 +12,84 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1575394dd76641c788cc22e33da73ae7, type: 3}
   m_Name: MemoryUpgradeConfiguration
   m_EditorClassIdentifier: Assembly-CSharp::CallmeCatgirl.Gameplay.MemoryUpgradeConfiguration
+  BoardWidth: 8
+  BoardHeight: 8
+  InitialLevel: 1
+  CellUnlockLevels:
+  - 2
+  - 2
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 2
+  - 2
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 3
+  - 3
+  - 3
+  - 3
+  - 4
+  - 4
+  - 4
+  - 4
+  - 4
+  - 4
+  - 5
+  - 5
+  - 5
+  - 5
+  - 5
+  - 5
+  - 5
+  - 5
+  - 5
+  - 5
   Levels:
   - TargetLevel: 2
     Cost: 100
-    AddedCells: 4
     RequiredCompletedTasks: 0
   - TargetLevel: 3
     Cost: 200
-    AddedCells: 4
     RequiredCompletedTasks: 3
   - TargetLevel: 4
     Cost: 400
-    AddedCells: 6
     RequiredCompletedTasks: 6
   - TargetLevel: 5
     Cost: 800
-    AddedCells: 10
     RequiredCompletedTasks: 10

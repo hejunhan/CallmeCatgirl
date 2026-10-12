@@ -1,21 +1,39 @@
 using System;
+using System.Collections.Generic;
+using CallmeCatgirl.Gameplay.TaskGrid;
 using UnityEngine;
 
 namespace CallmeCatgirl.Gameplay
 {
-    [CreateAssetMenu(menuName = "CallmeCatgirl/Memory Upgrade Configuration")]
+    [CreateAssetMenu(menuName = "CallmeCatgirl/Memory Configuration")]
     public sealed class MemoryUpgradeConfiguration : ScriptableObject
     {
-        [InspectorName("升级档位")]
+        // 棋盘尺寸与格子开放规则统一保存在这里，Inspector 用可视化棋盘编辑。
+        [HideInInspector] public int BoardWidth = 8;
+        [HideInInspector] public int BoardHeight = 8;
+        [Min(1), InspectorName("初始内存等级")] public int InitialLevel = 1;
+        [HideInInspector] public int[] CellUnlockLevels = new int[64]; // 0 永久锁定，1 初始，2+ 对应等级解锁。
+        [InspectorName("升级价格和条件")]
         public UpgradeStep[] Levels =
         {
-            new UpgradeStep { TargetLevel = 2, Cost = 100, AddedCells = 4, RequiredCompletedTasks = 0 },
-            new UpgradeStep { TargetLevel = 3, Cost = 200, AddedCells = 4, RequiredCompletedTasks = 3 },
-            new UpgradeStep { TargetLevel = 4, Cost = 400, AddedCells = 6, RequiredCompletedTasks = 6 },
-            new UpgradeStep { TargetLevel = 5, Cost = 800, AddedCells = 10, RequiredCompletedTasks = 10 }
+            new UpgradeStep { TargetLevel = 2, Cost = 100, RequiredCompletedTasks = 0 },
+            new UpgradeStep { TargetLevel = 3, Cost = 200, RequiredCompletedTasks = 3 },
+            new UpgradeStep { TargetLevel = 4, Cost = 400, RequiredCompletedTasks = 6 },
+            new UpgradeStep { TargetLevel = 5, Cost = 800, RequiredCompletedTasks = 10 }
         };
 
-        // 当前等级属于玩家进度；这里只查下一档配置，不扣费或开放格子。
+        public List<Cell> GetOpenCells(int level)
+        {
+            if (BoardWidth < 1 || BoardHeight < 1 || CellUnlockLevels == null
+                || CellUnlockLevels.Length != BoardWidth * BoardHeight)
+                throw new InvalidOperationException("内存棋盘尺寸与格子配置不一致。");
+            var cells = new List<Cell>();
+            for (int i = 0; i < CellUnlockLevels.Length; i++)
+                if (CellUnlockLevels[i] > 0 && CellUnlockLevels[i] <= level)
+                    cells.Add(new Cell(i % BoardWidth, i / BoardWidth));
+            return cells;
+        }
+
         public bool TryGetNextLevel(int currentLevel, out UpgradeStep step)
         {
             if (Levels != null)
@@ -31,12 +49,7 @@ namespace CallmeCatgirl.Gameplay
         {
             [Min(2), InspectorName("升级后的等级")] public int TargetLevel = 2;
             [Min(0), InspectorName("升级花费")] public int Cost;
-            [Min(1), InspectorName("本次新增格子数")]
-            [Tooltip("本次增加的开放格子数量，不是升级后的总格子数。")]
-            public int AddedCells = 4;
-            [Min(0), InspectorName("需要累计完成任务数")]
-            [Tooltip("填 0 表示没有任务数量门槛。")]
-            public int RequiredCompletedTasks;
+            [Min(0), InspectorName("需要累计完成任务数")] public int RequiredCompletedTasks;
         }
     }
 }

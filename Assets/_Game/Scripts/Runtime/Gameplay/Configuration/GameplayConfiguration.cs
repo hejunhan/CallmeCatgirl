@@ -8,15 +8,11 @@ namespace CallmeCatgirl.Gameplay
     [CreateAssetMenu(menuName = "CallmeCatgirl/Core Gameplay Configuration")]
     public sealed class GameplayConfiguration : ScriptableObject
     {
-        //内存长宽
-        [Min(1)] public int BoardWidth = 8;
-        [Min(1)] public int BoardHeight = 8;
-        [Tooltip("Empty means every cell is open.")] public Vector2Int[] OpenCells;
         [Min(0.1f)] public float AbilityInterval = 3;
         public Vector4 ModelPoints = new Vector4(4, 1, 1, 0);
         [Range(0.1f, 2)] public float PlaybackSpeed = 0.5f;
         public DemoTask[] Requests;
-        [Tooltip("独立的内存升级价格、扩容和解锁条件配置。")]
+        [InspectorName("内存配置"), Tooltip("棋盘布局、初始开放格子及升级规则都在这份配置中。")]
         public MemoryUpgradeConfiguration MemoryUpgrades;
 
         public ModelDefinition BuildModel() => new ModelDefinition("test-model", AbilityInterval,
@@ -27,15 +23,10 @@ namespace CallmeCatgirl.Gameplay
 
         public TaskSimulation BuildSimulation()
         {
-            var cells = new List<Cell>();
-            if (OpenCells != null && OpenCells.Length > 0)
-                foreach (var cell in OpenCells) cells.Add(new Cell(cell.x, cell.y));
-            else
-                for (int y = 0; y < BoardHeight; y++)
-                    for (int x = 0; x < BoardWidth; x++) cells.Add(new Cell(x, y));
-            return new TaskSimulation(BoardWidth, BoardHeight, cells, BuildModel());
+            if (MemoryUpgrades == null) throw new InvalidOperationException("请在主配置中指定内存配置。");
+            return new TaskSimulation(MemoryUpgrades.BoardWidth, MemoryUpgrades.BoardHeight,
+                MemoryUpgrades.GetOpenCells(MemoryUpgrades.InitialLevel), BuildModel());
         }
-
         [Serializable]
         public sealed class DemoTask
         {
