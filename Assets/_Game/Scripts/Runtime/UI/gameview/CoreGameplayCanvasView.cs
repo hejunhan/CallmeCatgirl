@@ -80,7 +80,7 @@ namespace CallmeCatgirl.UI
                 || (dragging.State != RequestState.Running && dragging.State != RequestState.Waiting && dragging.State != RequestState.Withdrawn))) CancelDrag();
             clockLabel.text = $"游戏时间 {sim.GameTime:0.0}s   模型周期 {sim.Model.Interval:0.#}s";
             messageLabel.text = controller.Message; logLabel.text = string.Join("\n", controller.Logs);
-            pauseLabel.text = sim.Paused ? "继续 [空格]" : "暂停 [空格]";
+            pauseLabel.text = sim.Paused ? (sim.GameTime == 0 ? "开始 [空格]" : "继续 [空格]") : "暂停 [空格]";
             speedLabel.text = $"速度 {controller.PlaybackSpeed:0.##}x · {(sim.Paused ? "已暂停" : "运行中")}";
             if (speedButtons != null && speedIdleColors != null)
                 for (int i = 0; i < speedButtons.Length; i++)

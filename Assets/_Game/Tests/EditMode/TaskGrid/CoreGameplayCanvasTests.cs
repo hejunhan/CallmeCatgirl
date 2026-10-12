@@ -167,6 +167,40 @@ namespace CallmeCatgirl.Tests
             Assert.That(GameObject.Find("ConversationPanel"), Is.Not.Null);
             yield return new ExitPlayMode();
         }
+        [UnityTest]
+        public IEnumerator StartsAndResetsPausedUntilPlayerStarts()
+        {
+            EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity");
+            yield return new EnterPlayMode();
+            yield return null;
+            var controller = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
+                .Single(b => b.GetType().FullName == "CallmeCatgirl.Gameplay.CoreGameplayController");
+            var sim = (TaskSimulation)controller.GetType().GetProperty("Simulation").GetValue(controller);
+            Assert.That(sim.Paused, Is.True);
+            Assert.That(sim.GameTime, Is.Zero);
+            Assert.That(ButtonNamed("PauseButton").GetComponentInChildren<Text>().text, Is.EqualTo("开始 [空格]"));
+            sim.TryPlace("A-1", new Cell(2, 0), 0, out _);
+            ButtonNamed("Speed4Button").onClick.Invoke();
+            yield return new WaitForSecondsRealtime(0.1f);
+            Assert.That(sim.Paused, Is.True, "Speed selection must not start the session.");
+            Assert.That(sim.GameTime, Is.Zero);
+            Assert.That(sim.Tasks["A-1"].Progress, Is.Zero);
+            Assert.That(sim.Tasks["A-1"].Remaining(sim.GameTime), Is.EqualTo(90));
+            ButtonNamed("PauseButton").onClick.Invoke();
+            yield return null;
+            Assert.That(sim.Paused, Is.False);
+            Assert.That(sim.GameTime, Is.GreaterThan(0));
+            Assert.That(sim.Tasks["A-1"].Progress, Is.GreaterThan(0));
+            Assert.That(ButtonNamed("PauseButton").GetComponentInChildren<Text>().text, Is.EqualTo("暂停 [空格]"));
+            controller.GetType().GetMethod("ResetSimulation").Invoke(controller, null);
+            sim = (TaskSimulation)controller.GetType().GetProperty("Simulation").GetValue(controller);
+            yield return new WaitForSecondsRealtime(0.1f);
+            Assert.That(sim.Paused, Is.True);
+            Assert.That(sim.GameTime, Is.Zero);
+            Assert.That(sim.Occupancy.Count, Is.Zero);
+            Assert.That(ButtonNamed("PauseButton").GetComponentInChildren<Text>().text, Is.EqualTo("开始 [空格]"));
+            yield return new ExitPlayMode();
+        }
         private static Button ButtonNamed(string name) => Object.FindObjectsByType<Button>(FindObjectsSortMode.None).Single(b => b.name == name);
         private static Vector2 ScreenCell(RectTransform board,int x,int y) => RectTransformUtility.WorldToScreenPoint(null,
             board.TransformPoint(new Vector3(board.rect.xMin+(x+0.5f)*board.rect.width/8,board.rect.yMax-(y+0.5f)*board.rect.height/8,0)));

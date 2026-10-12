@@ -45,7 +45,7 @@ namespace CallmeCatgirl.Gameplay
             if (configuration == null) { Debug.LogError("CoreGameplayController requires a GameplayConfiguration.", this); enabled = false; return; }
             try
             {
-                Simulation = configuration.BuildSimulation(); definitions.Clear(); logs.Clear(); serial = 0;
+                Simulation = configuration.BuildSimulation(); Simulation.Paused = true; definitions.Clear(); logs.Clear(); serial = 0;
                 foreach (var source in configuration.Requests)
                 {
                     var definition = source.Build(); definitions.Add(definition.Id, definition);
