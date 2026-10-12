@@ -8,7 +8,7 @@ using System.Linq;
 namespace CallmeCatgirl.Gameplay.TaskGrid
 {//代码块定义
     public readonly struct Cell : IEquatable<Cell>
-    {
+    {//实现了“判断两个格子是否相等”的接口equal
         public readonly int X;
         public readonly int Y;
         public Cell(int x, int y) { X = x; Y = y; }
@@ -20,10 +20,14 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
     }
 
     public enum AbilityKind { Writing, Code, Reasoning, Retrieval }
+    //定义模型能力
     public enum RequestState { Waiting, Running, Withdrawn, Ready, Submitted, TimedOut, Closed }
+    //定义每个任务等待情况
     public enum Quality { BelowStandard, Complete, Excellent }
+    //定义每个任务完成情况
     public enum PlacementFailure { None, UnknownTask, InvalidState, OutOfBounds, LockedCell, Overlap }
     public enum TaskEventKind { Arrived, Placed, Withdrawn, Ready, Submitted, TimedOut, FeedbackClosed }
+    //定义每个任务的事件类别
     //能力要求
 
     public sealed class AbilityRequirement
@@ -171,7 +175,7 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
     }
 
     internal static class Rules
-    {
+    {//检查数值是否合法的工具
         internal static void NonNegative(double value, string name)
         {
             if (double.IsNaN(value) || double.IsInfinity(value) || value < 0)
