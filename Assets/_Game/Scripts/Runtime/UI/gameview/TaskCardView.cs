@@ -16,6 +16,7 @@ namespace CallmeCatgirl.UI
         [SerializeField] private RectTransform shapeRoot;
         [SerializeField] private TaskCellView cellPrefab;
         [SerializeField] private Image selectionBorder;
+        [SerializeField] private Image avatar;
         [SerializeField] private Color shapeColor = new Color(0.7f, 0.8f, 0.95f);
         private readonly List<TaskCellView> shapeCells = new List<TaskCellView>();
         private CoreGameplayCanvasView owner;
@@ -25,6 +26,7 @@ namespace CallmeCatgirl.UI
         public void Bind(CoreGameplayCanvasView view, TaskInstance task)
         {
             owner = view; requestId = task.Id;
+            if (avatar != null) { avatar.sprite = view.GetAvatar(task.ConversationId); avatar.enabled = avatar.sprite != null; }
             if (shapeCells.Count == 0) shapeCells.AddRange(shapeRoot.GetComponentsInChildren<TaskCellView>(true));
         }
         public void Refresh(TaskInstance task, double now, bool selected)

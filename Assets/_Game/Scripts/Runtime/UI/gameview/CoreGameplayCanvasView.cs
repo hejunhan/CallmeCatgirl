@@ -40,6 +40,9 @@ namespace CallmeCatgirl.UI
         [SerializeField] private Text occupancyLabel;
         [SerializeField] private Text modelLabel;
         [SerializeField] private Text conversationLabel;
+        [Header("User avatars — A, B, C, then new users" )]
+        [SerializeField] private Sprite[] userAvatars;
+        [SerializeField] private Image conversationAvatar;
         private readonly Dictionary<string, TaskCardView> cards = new Dictionary<string, TaskCardView>();
         private readonly Dictionary<string, TaskModuleView> modules = new Dictionary<string, TaskModuleView>();
         private CoreGameplayController controller;
@@ -129,6 +132,8 @@ namespace CallmeCatgirl.UI
         private void RefreshInfo()
         {
             var task = controller.SelectedTask; infoPanel.SetActive(task != null);
+            if (conversationAvatar != null)
+            { conversationAvatar.sprite = GetAvatar(task?.ConversationId); conversationAvatar.enabled = conversationAvatar.sprite != null; }
             if (conversationLabel != null) conversationLabel.text = task == null ? "选择用户或请求，查看关联通讯。"
                 : $"用户 {task.ConversationId}  /  第 {task.RoundId} 轮\n\n{task.Definition.Title}\n\n当前请求 {task.Id}\n{CoreGameplayController.StateText(task.State)}\n\n"
                 + (task.Result == null ? "安排请求后开始计算。\n算完后在任务详情中确认提交。" : "本轮结果：" + CoreGameplayController.QualityText(task.Result.Overall));
@@ -146,6 +151,14 @@ namespace CallmeCatgirl.UI
             nextRoundButton.interactable = task.State == RequestState.Submitted || task.State == RequestState.TimedOut;
         }
 
+        public Sprite GetAvatar(string conversationId)
+        {
+            if (string.IsNullOrEmpty(conversationId) || userAvatars == null || userAvatars.Length == 0) return null;
+            int index = conversationId == "B" ? 1 : conversationId == "C" ? 2 : 0;
+            if (conversationId.StartsWith("new-user-") && int.TryParse(conversationId.Substring(9), out int serial))
+                index = (serial + 2) % userAvatars.Length;
+            return userAvatars[index % userAvatars.Length];
+        }
         public void SelectRequest(string id) { controller.SelectRequest(id); RefreshInfo(); }
         public void BeginDrag(string id, PointerEventData data, bool fromBoard)
         {

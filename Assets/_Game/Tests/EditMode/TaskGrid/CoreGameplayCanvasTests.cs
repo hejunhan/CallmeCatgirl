@@ -128,6 +128,45 @@ namespace CallmeCatgirl.Tests
                 Assert.That(buttons[i].targetGraphic.color == idle[i], Is.EqualTo(!Mathf.Approximately(resetSpeed, 1 << i)));
             yield return new ExitPlayMode();
         }
+        [UnityTest]
+        public IEnumerator AvatarsFollowConversationsAndAppearOnNewRequestCards()
+        {
+            EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity");
+            yield return new EnterPlayMode();
+            yield return null;
+            var controller = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
+                .Single(b => b.GetType().FullName == "CallmeCatgirl.Gameplay.CoreGameplayController");
+            var view = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
+                .Single(b => b.GetType().FullName == "CallmeCatgirl.UI.CoreGameplayCanvasView");
+            var sim = (TaskSimulation)controller.GetType().GetProperty("Simulation").GetValue(controller);
+            sim.Paused = true;
+            var portrait = GameObject.Find("ConversationAvatar").GetComponent<Image>();
+            var expected = new[] { "Avatar_Female_BrownHair_Glasses", "Avatar_Male_BlackHair_Glasses", "Avatar_Female_SilverHair_Bow" };
+            for (int i = 0; i < expected.Length; i++)
+            {
+                ButtonNamed("User_" + "ABC"[i]).onClick.Invoke();
+                view.GetType().GetMethod("Refresh").Invoke(view, null);
+                Assert.That(portrait.sprite.name, Is.EqualTo(expected[i]));
+                Assert.That(portrait.raycastTarget, Is.False, "Avatars must not intercept input.");
+                Assert.That(ButtonNamed("User_" + "ABC"[i]).transform.Find("Avatar").GetComponent<Image>().sprite, Is.EqualTo(portrait.sprite));
+                var card = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
+                    .Single(b => b.GetType().FullName == "CallmeCatgirl.UI.TaskCardView"
+                        && (string)b.GetType().GetProperty("RequestId").GetValue(b) == "ABC"[i] + "-1");
+                Assert.That(card.transform.Find("Avatar").GetComponent<Image>().sprite, Is.EqualTo(portrait.sprite));
+            }
+            controller.GetType().GetMethod("AddRequest").Invoke(controller, null);
+            view.GetType().GetMethod("Refresh").Invoke(view, null);
+            Assert.That(portrait.sprite.name, Is.EqualTo("Avatar_Male_GrayHair_Glasses"));
+            var newCard = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
+                .Single(b => b.GetType().FullName == "CallmeCatgirl.UI.TaskCardView"
+                    && (string)b.GetType().GetProperty("RequestId").GetValue(b) == "new-1");
+            Assert.That(newCard.transform.Find("Avatar").GetComponent<Image>().sprite, Is.EqualTo(portrait.sprite));
+            controller.GetType().GetMethod("CloseInfo").Invoke(controller, null);
+            view.GetType().GetMethod("Refresh").Invoke(view, null);
+            Assert.That(portrait.enabled, Is.False);
+            Assert.That(GameObject.Find("ConversationPanel"), Is.Not.Null);
+            yield return new ExitPlayMode();
+        }
         private static Button ButtonNamed(string name) => Object.FindObjectsByType<Button>(FindObjectsSortMode.None).Single(b => b.name == name);
         private static Vector2 ScreenCell(RectTransform board,int x,int y) => RectTransformUtility.WorldToScreenPoint(null,
             board.TransformPoint(new Vector3(board.rect.xMin+(x+0.5f)*board.rect.width/8,board.rect.yMax-(y+0.5f)*board.rect.height/8,0)));
