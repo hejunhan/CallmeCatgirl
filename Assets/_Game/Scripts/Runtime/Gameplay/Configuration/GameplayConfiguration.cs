@@ -12,7 +12,7 @@ namespace CallmeCatgirl.Gameplay
         public Vector4 ModelPoints = new Vector4(4, 1, 1, 0);
         [Range(0.1f, 2)] public float PlaybackSpeed = 0.5f;
         public DemoTask[] Requests;
-        [Min(0), InspectorName("初始测试资金" )] public int InitialFunds = 1500;
+        [Min(0), InspectorName("初始资金"), Tooltip("新开局或重开时读取，可在主配置资源中调整。")] public int InitialFunds = 1500;
         [InspectorName("内存配置"), Tooltip("棋盘布局、初始开放格子及升级规则都在这份配置中。")]
         public MemoryUpgradeConfiguration MemoryUpgrades;
         [Min(0), InspectorName("每Token收入单价")] public int TokenPrice = 1;

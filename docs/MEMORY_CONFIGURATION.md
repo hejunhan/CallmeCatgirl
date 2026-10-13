@@ -30,7 +30,7 @@
 
 任务门槛按达标（完成或优秀）且已提交计数，未达标提交、超时和重复提交不会增加计数。
 
-当前主配置中的“初始测试资金”默认为1500。升级实际扣除该档价格。当前评审分支已接入达标提交和超时部分Token收入，统一由 EconomyManager 管理余额；外部系统仍可调用 `CoreGameplayController.AddFunds(amount)` 入账。
+当前主配置中的“初始资金”默认为1500。升级实际扣除该档价格。当前评审分支已接入达标提交和超时部分Token收入，统一由 EconomyManager 管理余额；外部系统仍可调用 `CoreGameplayController.AddFunds(amount)` 入账。
 
 点击升级后，`TaskSimulation.TryUnlockCells(cells)` 只增加开放格子，运行任务的进度、能力、占格和时间保持不变。可以在准备阶段或暂停时升级；升级不会自动开始或解除暂停。
 
