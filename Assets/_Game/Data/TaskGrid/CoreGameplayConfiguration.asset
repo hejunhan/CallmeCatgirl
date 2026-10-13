@@ -54,8 +54,9 @@ MonoBehaviour:
     Tokens: 30
     Minimum: {x: 4, y: 1, z: 1}
     Excellent: {x: 8, y: 2, z: 2}
-  MemoryUpgrades: {fileID: 11400000, guid: d19834b4bb6a4df7b7fe6cb998f98fae, type: 2}
   InitialFunds: 1500
+  MemoryUpgrades: {fileID: 11400000, guid: d19834b4bb6a4df7b7fe6cb998f98fae, type: 2}
+  Story: {fileID: 11400000, guid: 7097ee7307375ad4e88ce31b0180cfb9, type: 2}
   TokenPrice: 1
   MonthlyMaintenanceFee: 50
   SecondsPerGameMonth: 20

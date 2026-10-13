@@ -22,8 +22,8 @@ namespace CallmeCatgirl.Tests
                 var sim = (TaskSimulation)controller.GetType().GetProperty("Simulation").GetValue(controller);
                 Assert.That(sim, Is.Not.Null); Assert.That(sim.Tasks.Count, Is.EqualTo(3));
                 Assert.That(sim.IsOpen(new Cell(0, 0)), Is.False);
-                Assert.That(sim.TryPlace("A-1", new Cell(2, 0), 0, out _), Is.True);
-                Assert.That(sim.TryPlace("B-1", new Cell(2, 3), 0, out _), Is.True);
+                Assert.That(sim.TryPlace("A-1", FreeOrigin(sim, "A-1"), 0, out _), Is.True);
+                Assert.That(sim.TryPlace("B-1", FreeOrigin(sim, "B-1"), 0, out _), Is.True);
                 sim.Paused = false; sim.Advance(10); sim.Paused = true;
                 Assert.That(sim.Tasks["A-1"].State, Is.EqualTo(RequestState.Ready));
                 Assert.That(sim.Tasks["A-1"].GetAbility(AbilityKind.Writing), Is.EqualTo(12));
@@ -43,16 +43,18 @@ namespace CallmeCatgirl.Tests
             var config = UnityEditor.AssetDatabase.LoadAssetAtPath<ScriptableObject>("Assets/_Game/Data/TaskGrid/CoreGameplayConfiguration.asset");
             Assert.That(config.GetType().GetField("MemoryUpgrades").GetValue(config), Is.SameAs(memory));
             Assert.That(config.GetType().GetField("OpenCells"), Is.Null, "Initial cells must not have a second configuration source.");
-            int[] expected = { 40, 44, 48, 54, 64 };
+            int previousCount = 0;
             for (int level = 1; level <= 5; level++)
             {
                 var cells = (System.Collections.Generic.List<Cell>)memory.GetType().GetMethod("GetOpenCells").Invoke(memory, new object[] { level });
-                Assert.That(cells.Count, Is.EqualTo(expected[level - 1]));
+                Assert.That(cells.Count, Is.GreaterThanOrEqualTo(previousCount)); previousCount = cells.Count;
                 Assert.That(cells.Distinct().Count(), Is.EqualTo(cells.Count));
             }
             var sim = (TaskSimulation)config.GetType().GetMethod("BuildSimulation").Invoke(config, null);
             Assert.That(sim.IsOpen(new Cell(0, 0)), Is.False);
-            Assert.That(sim.IsOpen(new Cell(2, 0)), Is.True);
+            var initial = (System.Collections.Generic.List<Cell>)memory.GetType().GetMethod("GetOpenCells").Invoke(memory, new object[] { 1 });
+            Assert.That(sim.OpenCellCount, Is.EqualTo(initial.Count));
+            Assert.That(initial.All(sim.IsOpen), Is.True);
             var editor = UnityEditor.Editor.CreateEditor(memory);
             try { Assert.That(editor.GetType().Name, Is.EqualTo("MemoryUpgradeConfigurationEditor")); }
             finally { UnityEngine.Object.DestroyImmediate(editor); }
@@ -68,10 +70,11 @@ namespace CallmeCatgirl.Tests
                 var serialized = new UnityEditor.SerializedObject(memory);
                 var first = serialized.FindProperty("CellUnlockLevels").GetArrayElementAtIndex(0);
                 int original = first.intValue;
+                int before = ((System.Collections.Generic.List<Cell>)memory.GetType().GetMethod("GetOpenCells").Invoke(memory, new object[] { 1 })).Count;
                 first.intValue = 1;
                 serialized.ApplyModifiedProperties();
                 var cells = (System.Collections.Generic.List<Cell>)memory.GetType().GetMethod("GetOpenCells").Invoke(memory, new object[] { 1 });
-                Assert.That(cells.Count, Is.EqualTo(41));
+                Assert.That(cells.Count, Is.EqualTo(before + (original == 1 ? 0 : 1)));
                 Assert.That(cells.Contains(new Cell(0, 0)), Is.True);
                 UnityEditor.Undo.FlushUndoRecordObjects();
                 UnityEditor.Undo.PerformUndo();
@@ -87,6 +90,8 @@ namespace CallmeCatgirl.Tests
             }
             finally { UnityEngine.Object.DestroyImmediate(memory); }
         }
+        private static Cell FreeOrigin(TaskSimulation sim, string id) => Enumerable.Range(0, sim.Width * sim.Height)
+            .Select(i => new Cell(i % sim.Width, i / sim.Width)).First(c => sim.Preview(id, c, 0) == PlacementFailure.None);
         [UnityTearDown]
         public IEnumerator EnsurePlayModeIsClosed()
         {

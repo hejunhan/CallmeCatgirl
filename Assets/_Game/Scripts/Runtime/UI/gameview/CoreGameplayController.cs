@@ -14,6 +14,12 @@ namespace CallmeCatgirl.Gameplay
         [SerializeField] private GameplayConfiguration configuration;
         [SerializeField] private CoreGameplayCanvasView canvasView;
         public TaskSimulation Simulation { get; private set; }
+        public ConversationStory Story { get; private set; }
+        public bool IsStoryOpen => Story != null && Story.IsOpen;
+        public bool IsMemoryUpgradeOpen { get; private set; }
+        public bool IsModalOpen => IsStoryOpen || IsMemoryUpgradeOpen;
+        public IReadOnlyList<Cell> NextMemoryCells => NextMemoryUpgrade == null ? Array.Empty<Cell>()
+            : configuration.MemoryUpgrades.GetOpenCells(NextMemoryUpgrade.TargetLevel);
         public string SelectedId { get; private set; }
         public TaskInstance SelectedTask => SelectedId != null && Simulation.Tasks.TryGetValue(SelectedId, out var task) ? task : null;
         public float PlaybackSpeed { get; private set; }
@@ -30,7 +36,7 @@ namespace CallmeCatgirl.Gameplay
         public int CompletedTasks { get; private set; }
         public MemoryUpgradeConfiguration.UpgradeStep NextMemoryUpgrade
             => configuration.MemoryUpgrades.TryGetNextLevel(MemoryLevel, out var step) ? step : null;
-        public bool CanUpgradeMemory => !GameEnded && NextMemoryUpgrade != null && NextMemoryUpgrade.Cost >= 0
+        public bool CanUpgradeMemory => !GameEnded && !IsStoryOpen && NextMemoryUpgrade != null && NextMemoryUpgrade.Cost >= 0
             && Funds >= NextMemoryUpgrade.Cost && CompletedTasks >= NextMemoryUpgrade.RequiredCompletedTasks;
         public int NextMemoryCellCount => NextMemoryUpgrade == null ? 0
             : configuration.MemoryUpgrades.GetOpenCells(NextMemoryUpgrade.TargetLevel).Count - Simulation.OpenCellCount;
@@ -47,7 +53,9 @@ namespace CallmeCatgirl.Gameplay
         {
             if (Simulation == null) return;
             AdvanceGame(Time.unscaledDeltaTime * PlaybackSpeed);
-            if (!GameEnded && Keyboard.current != null)
+            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame && IsMemoryUpgradeOpen)
+                CloseMemoryUpgrade();
+            if (!GameEnded && !IsModalOpen && Keyboard.current != null)
             {
                 if (Keyboard.current.rKey.wasPressedThisFrame) RotateSelected();
                 if (Keyboard.current.spaceKey.wasPressedThisFrame) TogglePause();
@@ -62,6 +70,8 @@ namespace CallmeCatgirl.Gameplay
             if (configuration == null) { Debug.LogError("CoreGameplayController requires a GameplayConfiguration.", this); enabled = false; return; }
             try
             {
+                IsMemoryUpgradeOpen = false;
+                Story = new ConversationStory(configuration.Story);
                 Simulation = configuration.BuildSimulation(); Simulation.Paused = true; definitions.Clear(); logs.Clear(); serial = 0;
                 MemoryLevel = configuration.MemoryUpgrades.InitialLevel; CompletedTasks = 0;
                 if (configuration.SecondsPerGameMonth <= 0 || float.IsNaN(configuration.SecondsPerGameMonth)
@@ -74,6 +84,7 @@ namespace CallmeCatgirl.Gameplay
                     var definition = source.Build(); definitions.Add(definition.Id, definition);
                     Simulation.TryCreate(definition.Id + "-1", definition.Id, "1", definition, out _);
                 }
+                configuration.Story?.Validate(definitions.Keys);
                 SelectedId = Simulation.Tasks.Keys.FirstOrDefault(); PlaybackSpeed = configuration.PlaybackSpeed;
                 Message = "拖动请求到格子。R旋转，空格暂停，Esc取消拖拽；撤回不重置忍耐。";
                 ReadEvents();
@@ -90,12 +101,12 @@ namespace CallmeCatgirl.Gameplay
         }
         public void CloseInfo() => SelectedId = null;
         public void SetMessage(string value) => Message = value;
-        public void TogglePause() { if (!GameEnded) Simulation.Paused = !Simulation.Paused; }
+        public void TogglePause() { if (!GameEnded && !IsModalOpen) Simulation.Paused = !Simulation.Paused; }
         public void CycleSpeed() => PlaybackSpeed = PlaybackSpeed == 0.5f ? 1f : PlaybackSpeed == 1 ? 0.25f : 0.5f;
         public void SetSpeed(float value) => PlaybackSpeed = value;
         public void RotateSelected()
         {
-            if (GameEnded) return;
+            if (GameEnded || IsModalOpen) return;
             if (canvasView != null && canvasView.IsDragging) { canvasView.RotateDrag(); return; }
             var task = SelectedTask; if (task == null) return;
             if (task.State == RequestState.Running)
@@ -107,19 +118,19 @@ namespace CallmeCatgirl.Gameplay
         }
         public void WithdrawSelected()
         {
-            if (GameEnded) return;
+            if (GameEnded || IsModalOpen) return;
             if (SelectedTask == null || !Simulation.TryWithdraw(SelectedId)) return;
             canvasView?.CancelDrag(); Message = "已撤回：进度和能力保留，忍耐继续。";
         }
         public void SubmitSelected()
         {
-            if (GameEnded) return;
+            if (GameEnded || IsModalOpen) return;
             if (SelectedTask != null && Simulation.TrySubmit(SelectedId))
             { ReadEvents(); Message = "已提交：释放格子并完成结算。"; canvasView?.Refresh(); }
         }
         public void AddRequest()
         {
-            if (GameEnded) return;
+            if (GameEnded || IsModalOpen) return;
             if (definitions.Count == 0) return;
             string suffix = (++serial).ToString();
             Simulation.TryCreate("new-" + suffix, "new-user-" + suffix, "extra-" + suffix, definitions.Values.First(), out var task);
@@ -127,16 +138,26 @@ namespace CallmeCatgirl.Gameplay
         }
         public void NextRound()
         {
-            if (GameEnded) return;
+            if (GameEnded || IsModalOpen) return;
             var previous = SelectedTask;
             if (previous == null || !Simulation.TryCloseFeedback(previous.Id)) return;
+            string nextRequest = Story.NextRequest(previous.ConversationId);
+            var definition = previous.Definition;
+            if (!string.IsNullOrEmpty(nextRequest) && definitions.TryGetValue(nextRequest, out var configured)) definition = configured;
             string round = "round-" + (++serial);
-            Simulation.TryCreate(previous.ConversationId + "-" + round, previous.ConversationId, round, previous.Definition, out var next);
+            Simulation.TryCreate(previous.ConversationId + "-" + round, previous.ConversationId, round, definition, out var next);
+            ReadEvents();
             SelectedId = next?.Id;
         }
+        public void OpenMemoryUpgrade()
+        {
+            if (GameEnded || IsStoryOpen) return;
+            IsMemoryUpgradeOpen = true; Message = "查看新增格子，点击确认后才会扣费。"; canvasView?.CancelDrag(); canvasView?.Refresh();
+        }
+        public void CloseMemoryUpgrade() { IsMemoryUpgradeOpen = false; canvasView?.Refresh(); }
         public void UpgradeMemory()
         {
-            if (GameEnded) return;
+            if (GameEnded || IsStoryOpen) return;
             ReadEvents();
             var next = NextMemoryUpgrade;
             if (next == null) { Message = "内存已满级。"; return; }
@@ -152,13 +173,25 @@ namespace CallmeCatgirl.Gameplay
             if (logs.Count > 7) logs.RemoveAt(logs.Count - 1);
             canvasView?.Refresh();
         }
+        public void ChooseReply(int index)
+        {
+            if (!Story.Choose(index)) return;
+            Message = "回复已发送。可查看对话记录，或创建下一轮请求。";
+            canvasView?.Refresh();
+        }
+        public void OpenConversationHistory()
+        {
+            if (SelectedTask == null || GameEnded || IsMemoryUpgradeOpen) return;
+            Story.OpenHistory(SelectedTask.ConversationId); canvasView?.CancelDrag(); canvasView?.Refresh();
+        }
+        public void CloseConversationHistory() { Story.CloseHistory(); canvasView?.Refresh(); }
         public void AddFunds(int amount) { Economy.AddFunds(amount); canvasView?.Refresh(); }
         // 分段推进到每个月底，先处理任务结算，再扣维护费，跨多月也不会漏结算。
         public void AdvanceGame(double delta)
         {
             if (double.IsNaN(delta) || double.IsInfinity(delta) || delta < 0) throw new ArgumentOutOfRangeException(nameof(delta));
-            if (Simulation == null || GameEnded || Simulation.Paused) return;
-            while (delta > 0 && !GameEnded)
+            if (Simulation == null || GameEnded || Simulation.Paused || IsModalOpen) return;
+            while (delta > 0 && !GameEnded && !IsModalOpen)
             {
                 double step = Math.Min(delta, configuration.SecondsPerGameMonth - monthTimer);
                 Simulation.Advance(step); ReadEvents(); monthTimer += step; delta -= step;
@@ -184,6 +217,11 @@ namespace CallmeCatgirl.Gameplay
             {
                 if (item.Kind == TaskEventKind.Submitted && item.Result != null && item.Result.Overall != Quality.BelowStandard) CompletedTasks++;
                 Economy.Settle(item);
+                if (Simulation.Tasks.TryGetValue(item.RequestId, out var task))
+                {
+                    if (item.Kind == TaskEventKind.Arrived) Story.Arrived(task);
+                    if (item.Kind == TaskEventKind.Submitted) { IsMemoryUpgradeOpen = false; Story.Submitted(task); canvasView?.CancelDrag(); }
+                }
                 logs.Insert(0, $"{item.GameTime:0.0}s  {item.RequestId}  {EventText(item.Kind)}"
                     + (item.Kind == TaskEventKind.Submitted || item.Kind == TaskEventKind.TimedOut ? $"  token={item.BillableTokens:0.##}" : ""));
                 if (logs.Count > 7) logs.RemoveAt(logs.Count - 1);

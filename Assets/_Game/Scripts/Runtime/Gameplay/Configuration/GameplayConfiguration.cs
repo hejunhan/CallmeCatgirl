@@ -15,6 +15,7 @@ namespace CallmeCatgirl.Gameplay
         [Min(0), InspectorName("初始资金"), Tooltip("新开局或重开时读取，可在主配置资源中调整。")] public int InitialFunds = 1500;
         [InspectorName("内存配置"), Tooltip("棋盘布局、初始开放格子及升级规则都在这份配置中。")]
         public MemoryUpgradeConfiguration MemoryUpgrades;
+        [InspectorName("剧情配置")] public StoryConfiguration Story;
         [Min(0), InspectorName("每Token收入单价")] public int TokenPrice = 1;
         [Min(0), InspectorName("每月维护费")] public int MonthlyMaintenanceFee = 50;
         [Min(0.1f), InspectorName("每月游戏秒数")] public float SecondsPerGameMonth = 20;

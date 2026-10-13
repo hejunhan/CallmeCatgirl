@@ -49,6 +49,8 @@ namespace CallmeCatgirl.UI
         [SerializeField] private Text economyStatusLabel;
         [SerializeField] private GameObject endingPanel;
         [SerializeField] private Text endingLabel;
+        [SerializeField] private ConversationPopupView conversationPopup;
+        [SerializeField] private MemoryUpgradePopupView memoryUpgradePopup;
         private readonly Dictionary<string, TaskCardView> cards = new Dictionary<string, TaskCardView>();
         private readonly Dictionary<string, TaskModuleView> modules = new Dictionary<string, TaskModuleView>();
         private CoreGameplayController controller;
@@ -84,27 +86,27 @@ namespace CallmeCatgirl.UI
             var sim = controller.Simulation;
             if (draggedId != null && (!sim.Tasks.TryGetValue(draggedId, out var dragging)
                 || (dragging.State != RequestState.Running && dragging.State != RequestState.Waiting && dragging.State != RequestState.Withdrawn))) CancelDrag();
-            if (controller.GameEnded && IsDragging) CancelDrag();
+            if ((controller.GameEnded || controller.IsModalOpen) && IsDragging) CancelDrag();
             if (endingPanel != null) endingPanel.SetActive(controller.GameEnded);
             if (endingLabel != null) endingLabel.text = controller.EndingText;
             if (economyStatusLabel != null) economyStatusLabel.text = $"第{controller.CurrentMonth}月 · 月底剩 {controller.MonthTimeRemaining:0.0}s · "
                 + (controller.GameEnded ? "经营结束" : controller.IsInGracePeriod ? $"宽限期，欠款 {controller.DebtAmount}" : "正常经营");
-            pauseLabel.GetComponentInParent<Button>().interactable = !controller.GameEnded;
+            pauseLabel.GetComponentInParent<Button>().interactable = !controller.GameEnded && !controller.IsModalOpen;
+            if (conversationPopup != null) conversationPopup.Refresh(controller, GetAvatar(controller.Story.UserId));
             clockLabel.text = $"游戏时间 {sim.GameTime:0.0}s   模型周期 {sim.Model.Interval:0.#}s";
             messageLabel.text = controller.Message; logLabel.text = string.Join("\n", controller.Logs);
-            pauseLabel.text = controller.GameEnded ? "经营结束" : sim.Paused ? (sim.GameTime == 0 ? "开始 [空格]" : "继续 [空格]") : "暂停 [空格]";
-            speedLabel.text = $"速度 {controller.PlaybackSpeed:0.##}x · {(sim.Paused ? "已暂停" : "运行中")}";
+            pauseLabel.text = controller.IsMemoryUpgradeOpen ? "内存升级中" : controller.IsStoryOpen ? "剧情阅读中" : controller.GameEnded ? "经营结束" : sim.Paused ? (sim.GameTime == 0 ? "开始 [空格]" : "继续 [空格]") : "暂停 [空格]";
+            speedLabel.text = $"速度 {controller.PlaybackSpeed:0.##}x · {(controller.IsMemoryUpgradeOpen ? "升级暂停" : controller.IsStoryOpen ? "剧情暂停" : sim.Paused ? "已暂停" : "运行中")}";
             if (speedButtons != null && speedIdleColors != null)
                 for (int i = 0; i < speedButtons.Length; i++)
                     speedButtons[i].targetGraphic.color = Mathf.Approximately(controller.PlaybackSpeed, 1 << i)
                         ? speedActiveColor : speedIdleColors[i];
+            if (memoryUpgradePopup != null) memoryUpgradePopup.Refresh(controller);
             if (memoryUpgradeButton != null)
             {
-                var next = controller.NextMemoryUpgrade;
-                memoryUpgradeButton.interactable = controller.CanUpgradeMemory;
-                memoryUpgradeButtonLabel.text = next == null ? "内存已满级" : $"升级内存 Lv{next.TargetLevel} · {next.Cost}";
-                memoryUpgradeLabel.text = $"内存 Lv{controller.MemoryLevel} · 资金 {controller.Funds}\n"
-                    + (next == null ? "全部升级完成" : $"下一档 +{controller.NextMemoryCellCount}格 · 达标 {controller.CompletedTasks}/{next.RequiredCompletedTasks}");
+                memoryUpgradeButton.interactable = !controller.GameEnded && !controller.IsModalOpen;
+                memoryUpgradeButtonLabel.text = "内存升级";
+                memoryUpgradeLabel.text = $"内存 Lv{controller.MemoryLevel} · 资金 {controller.Funds}";
             }
             float width = board.rect.width / sim.Width, height = board.rect.height / sim.Height;
             int open = 0;
@@ -154,9 +156,9 @@ namespace CallmeCatgirl.UI
             var task = controller.SelectedTask; infoPanel.SetActive(task != null);
             if (conversationAvatar != null)
             { conversationAvatar.sprite = GetAvatar(task?.ConversationId); conversationAvatar.enabled = conversationAvatar.sprite != null; }
-            if (conversationLabel != null) conversationLabel.text = task == null ? "选择用户或请求，查看关联通讯。"
-                : $"用户 {task.ConversationId}  /  第 {task.RoundId} 轮\n\n{task.Definition.Title}\n\n当前请求 {task.Id}\n{CoreGameplayController.StateText(task.State)}\n\n"
-                + (task.Result == null ? "安排请求后开始计算。\n算完后在任务详情中确认提交。" : "本轮结果：" + CoreGameplayController.QualityText(task.Result.Overall));
+            if (conversationLabel != null) conversationLabel.text = task == null ? "选择用户查看通讯。"
+                : controller.Story.Name(task.ConversationId) + "\n" + CoreGameplayController.StateText(task.State)
+                + "\n\n" + controller.Story.Latest(task.ConversationId);
             if (task == null) return;
             infoTitle.text = "当前请求 / " + task.Id + " · " + task.Definition.Title;
             infoStatus.text = $"{CoreGameplayController.StateText(task.State)}  ·  计算 {task.Progress:0.#}/{task.Definition.Calculation:0.#}  ·  忍耐 {task.Remaining(controller.Simulation.GameTime):0.0}s";
@@ -165,10 +167,10 @@ namespace CallmeCatgirl.UI
                 + (task.Result == null ? "" : "  " + CoreGameplayController.QualityText(task.Result.ByAbility[req.Kind]))));
             qualityLabel.text = task.Result == null ? "各项能力分别达标，超额不能补其他能力的短板。"
                 : "最终质量：" + CoreGameplayController.QualityText(task.Result.Overall) + "；结果已冻结，等待不会再增加能力。";
-            rotateButton.interactable = !controller.GameEnded && (task.State == RequestState.Waiting || task.State == RequestState.Withdrawn || task.State == RequestState.Running);
-            withdrawButton.interactable = !controller.GameEnded && (task.State == RequestState.Running);
-            submitButton.interactable = !controller.GameEnded && (task.State == RequestState.Ready);
-            nextRoundButton.interactable = !controller.GameEnded && (task.State == RequestState.Submitted || task.State == RequestState.TimedOut);
+            rotateButton.interactable = !controller.GameEnded && !controller.IsModalOpen && (task.State == RequestState.Waiting || task.State == RequestState.Withdrawn || task.State == RequestState.Running);
+            withdrawButton.interactable = !controller.GameEnded && !controller.IsModalOpen && (task.State == RequestState.Running);
+            submitButton.interactable = !controller.GameEnded && !controller.IsModalOpen && (task.State == RequestState.Ready);
+            nextRoundButton.interactable = !controller.GameEnded && !controller.IsModalOpen && (task.State == RequestState.Submitted || task.State == RequestState.TimedOut);
         }
 
         public Sprite GetAvatar(string conversationId)
@@ -183,7 +185,7 @@ namespace CallmeCatgirl.UI
         public void BeginDrag(string id, PointerEventData data, bool fromBoard)
         {
             CancelDrag();
-            if (controller.GameEnded) return;
+            if (controller.GameEnded || controller.IsModalOpen) return;
             if (!controller.Simulation.Tasks.TryGetValue(id, out var task)
                 || (task.State != RequestState.Waiting && task.State != RequestState.Withdrawn && task.State != RequestState.Running)) return;
             controller.SelectRequest(id); draggedId = id; dragRotation = task.Rotation;

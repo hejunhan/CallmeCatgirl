@@ -111,7 +111,9 @@ namespace CallmeCatgirl.Tests
                 Configure(controller, config); Call(controller, "ResetSimulation");
                 controller.GetType().GetEvent("TaskEventRaised").AddEventHandler(controller, submit);
                 var sim = Value<TaskSimulation>(controller, "Simulation");
-                sim.TryPlace("A-1", new Cell(2, 0), 0, out _); sim.Paused = false;
+                var origin = Enumerable.Range(0, sim.Width * sim.Height).Select(i => new Cell(i % sim.Width, i / sim.Width))
+                    .First(c => sim.Preview("A-1", c, 0) == PlacementFailure.None);
+                sim.TryPlace("A-1", origin, 0, out _); sim.Paused = false;
                 Call(controller, "AdvanceGame", 10d); sim.Paused = true;
                 Assert.That(Value<int>(controller, "CompletedTasks"), Is.EqualTo(1));
                 Assert.That(Value<int>(controller, "Funds"), Is.Zero);

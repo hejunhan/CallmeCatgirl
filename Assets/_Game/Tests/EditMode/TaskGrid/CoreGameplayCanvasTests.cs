@@ -37,40 +37,43 @@ namespace CallmeCatgirl.Tests
             Assert.That(controller.GetType().GetProperty("PlaybackSpeed").GetValue(controller), Is.EqualTo(1f));
             var card = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
                 .Single(b => b.GetType().FullName == "CallmeCatgirl.UI.TaskCardView" && (string)b.GetType().GetProperty("RequestId").GetValue(b) == "A-1");
+            bool panelWasActive = Panel().activeSelf;
+            var legal = FreeOrigin(sim, "A-1");
             var data = new PointerEventData(EventSystem.current) { position = new Vector2(10,10), button = PointerEventData.InputButton.Left };
             ((IBeginDragHandler)card).OnBeginDrag(data);
-            data.position = ScreenCell(board, 2, 0);
+            data.position = ScreenCell(board, legal.X, legal.Y);
             ((IDragHandler)card).OnDrag(data); ((IEndDragHandler)card).OnEndDrag(data);
             Assert.That(sim.Tasks["A-1"].State, Is.EqualTo(RequestState.Running));
-            Assert.That(sim.Tasks["A-1"].Origin, Is.EqualTo(new Cell(2,0)));
+            Assert.That(sim.Tasks["A-1"].Origin, Is.EqualTo(legal));
             Assert.That(GameObject.Find("OccupancyLabel").GetComponent<Text>().text, Does.StartWith("已占用 4 /"));
             ButtonNamed("RotateButton").onClick.Invoke();
             Assert.That(sim.Tasks["A-1"].Rotation, Is.EqualTo(1));
             yield return null;
             var module = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
                 .Single(b => b.GetType().FullName == "CallmeCatgirl.UI.TaskModuleView" && b.name == "RunningModule_A-1");
-            data.position = ScreenCell(board,2,0); ((IBeginDragHandler)module).OnBeginDrag(data);
-            data.position = ScreenCell(board,0,0); ((IEndDragHandler)module).OnEndDrag(data);
-            Assert.That(sim.Tasks["A-1"].Origin, Is.EqualTo(new Cell(2,0)), "Illegal drop retains the original placement.");
+            data.position = ScreenCell(board,legal.X,legal.Y); ((IBeginDragHandler)module).OnBeginDrag(data);
+            data.position = ScreenCell(board,-1,-1); ((IEndDragHandler)module).OnEndDrag(data);
+            Assert.That(sim.Tasks["A-1"].Origin, Is.EqualTo(legal), "Illegal drop retains the original placement.");
             ButtonNamed("WithdrawButton").onClick.Invoke();
             view.GetType().GetMethod("Refresh").Invoke(view,null);
             Assert.That(sim.Tasks["A-1"].State, Is.EqualTo(RequestState.Withdrawn));
             Assert.That(card.gameObject.activeSelf, Is.True);
-            ((IBeginDragHandler)card).OnBeginDrag(data); data.position = ScreenCell(board,2,0); ((IEndDragHandler)card).OnEndDrag(data);
+            ((IBeginDragHandler)card).OnBeginDrag(data); data.position = ScreenCell(board,legal.X,legal.Y); ((IEndDragHandler)card).OnEndDrag(data);
             sim.Paused = false; sim.Advance(10); sim.Paused = true;
             view.GetType().GetMethod("Refresh").Invoke(view,null);
             Assert.That(sim.Tasks["A-1"].GetAbility(AbilityKind.Writing), Is.EqualTo(12));
             Assert.That(ButtonNamed("SubmitButton").interactable, Is.True);
             ButtonNamed("SubmitButton").onClick.Invoke();
             Assert.That(sim.Tasks["A-1"].State, Is.EqualTo(RequestState.Submitted));
+            controller.GetType().GetMethod("ChooseReply").Invoke(controller, new object[] { 0 });
             ButtonNamed("CloseButton").onClick.Invoke();
             view.GetType().GetMethod("Refresh").Invoke(view,null);
-            Assert.That(GameObject.Find("ConversationPanel"), Is.Not.Null, "Communication stays visible when details close.");
-            ButtonNamed("User_A").onClick.Invoke();
+            Assert.That(Panel().activeSelf, Is.EqualTo(panelWasActive), "Closing task details preserves the authored conversation-panel visibility.");
+            controller.GetType().GetMethod("SelectConversation").Invoke(controller, new object[] { "A" });
             view.GetType().GetMethod("Refresh").Invoke(view,null);
             ButtonNamed("NextRoundButton").onClick.Invoke();
             Assert.That(sim.Tasks.Count, Is.EqualTo(4));
-            ButtonNamed("User_B").onClick.Invoke();
+            controller.GetType().GetMethod("SelectConversation").Invoke(controller, new object[] { "B" });
             Assert.That(controller.GetType().GetProperty("SelectedId").GetValue(controller), Is.EqualTo("B-1"));
             Assert.That(Object.FindObjectsByType<Text>(FindObjectsSortMode.None).All(t => t.font != null), Is.True);
             yield return new ExitPlayMode();
@@ -110,7 +113,7 @@ namespace CallmeCatgirl.Tests
                     if (j != i) Assert.That(buttons[j].targetGraphic.color, Is.EqualTo(idle[j]));
                 Assert.That(GameObject.Find("SpeedReadout").GetComponent<Text>().text,
                     Is.EqualTo($"速度 {1 << i}x · 已暂停"));
-                EventSystem.current.SetSelectedGameObject(ButtonNamed("User_B").gameObject);
+                EventSystem.current.SetSelectedGameObject(ButtonNamed("PauseButton").gameObject);
                 yield return null;
                 Assert.That(buttons[i].targetGraphic.color, Is.Not.EqualTo(idle[i]), "Changing UI focus must not clear speed selection.");
                 double before = sim.GameTime;
@@ -140,6 +143,7 @@ namespace CallmeCatgirl.Tests
                 .Single(b => b.GetType().FullName == "CallmeCatgirl.UI.CoreGameplayCanvasView");
             var sim = (TaskSimulation)controller.GetType().GetProperty("Simulation").GetValue(controller);
             sim.Paused = true;
+            Panel().SetActive(true);
             var portrait = GameObject.Find("ConversationAvatar").GetComponent<Image>();
             var expected = new[] { "Avatar_Female_BrownHair_Glasses", "Avatar_Male_BlackHair_Glasses", "Avatar_Female_SilverHair_Bow" };
             for (int i = 0; i < expected.Length; i++)
@@ -179,7 +183,7 @@ namespace CallmeCatgirl.Tests
             Assert.That(sim.Paused, Is.True);
             Assert.That(sim.GameTime, Is.Zero);
             Assert.That(ButtonNamed("PauseButton").GetComponentInChildren<Text>().text, Is.EqualTo("开始 [空格]"));
-            sim.TryPlace("A-1", new Cell(2, 0), 0, out _);
+            sim.TryPlace("A-1", FreeOrigin(sim, "A-1"), 0, out _);
             ButtonNamed("Speed4Button").onClick.Invoke();
             yield return new WaitForSecondsRealtime(0.1f);
             Assert.That(sim.Paused, Is.True, "Speed selection must not start the session.");
@@ -213,15 +217,18 @@ namespace CallmeCatgirl.Tests
             int Value(string name) => (int)controller.GetType().GetProperty(name).GetValue(controller);
             void Command(string name) => controller.GetType().GetMethod(name).Invoke(controller, null);
             var sim = (TaskSimulation)controller.GetType().GetProperty("Simulation").GetValue(controller);
+            int initialCells = sim.OpenCellCount;
             var task = sim.Tasks["A-1"];
-            sim.TryPlace(task.Id, new Cell(2, 0), 0, out _);
+            sim.TryPlace(task.Id, FreeOrigin(sim, task.Id), 0, out _);
             sim.Paused = false; sim.Advance(4); sim.Paused = true;
-            var button = ButtonNamed("UpgradeMemoryButton");
+            ButtonNamed("UpgradeMemoryButton").onClick.Invoke();
+            int nextCells = ((System.Collections.Generic.IReadOnlyList<Cell>)controller.GetType().GetProperty("NextMemoryCells").GetValue(controller)).Count;
+            var button = ButtonNamed("ConfirmMemoryUpgradeButton");
             button.onClick.Invoke();
             Assert.That(Value("MemoryLevel"), Is.EqualTo(2));
             Assert.That(Value("Funds"), Is.EqualTo(1400));
-            Assert.That(sim.OpenCellCount, Is.EqualTo(44));
-            Assert.That(sim.IsOpen(new Cell(0, 0)), Is.True);
+            Assert.That(sim.OpenCellCount, Is.EqualTo(nextCells));
+
             Assert.That(sim.Tasks[task.Id], Is.SameAs(task));
             Assert.That(task.Progress, Is.EqualTo(40));
             Assert.That(sim.Occupancy.Count, Is.EqualTo(4));
@@ -230,11 +237,13 @@ namespace CallmeCatgirl.Tests
             button.onClick.Invoke();
             Assert.That(Value("Funds"), Is.EqualTo(1400));
             Assert.That(Value("MemoryLevel"), Is.EqualTo(2));
-            Assert.That(sim.TryPlace(task.Id, new Cell(0, 0), 0, out _), Is.True);
-            sim.TryPlace("B-1", new Cell(2, 3), 0, out _);
+            Command("CloseMemoryUpgrade");
+            Assert.That(sim.TryPlace(task.Id, FreeOrigin(sim, task.Id), 0, out _), Is.True);
+            sim.TryPlace("B-1", FreeOrigin(sim, "B-1"), 0, out _);
             sim.Paused = false; sim.Advance(10); sim.Paused = true;
             controller.GetType().GetMethod("SelectRequest").Invoke(controller, new object[] { "B-1" });
             Command("SubmitSelected");
+            controller.GetType().GetMethod("ChooseReply").Invoke(controller, new object[] { 0 });
             yield return null;
             Assert.That(Value("CompletedTasks"), Is.Zero, "Below-standard submissions do not satisfy the upgrade condition.");
             controller.GetType().GetMethod("SelectRequest").Invoke(controller, new object[] { "A-1" });
@@ -244,21 +253,25 @@ namespace CallmeCatgirl.Tests
                 {
                     Command("NextRound");
                     string id = (string)controller.GetType().GetProperty("SelectedId").GetValue(controller);
-                    Assert.That(sim.TryPlace(id, new Cell(0, 0), 0, out _), Is.True);
+                    Assert.That(sim.TryPlace(id, FreeOrigin(sim, id), 0, out _), Is.True);
                     sim.Paused = false; sim.Advance(10); sim.Paused = true;
                 }
                 Command("SubmitSelected");
+                controller.GetType().GetMethod("ChooseReply").Invoke(controller, new object[] { 0 });
                 yield return null;
                 Assert.That(Value("CompletedTasks"), Is.EqualTo(completed));
                 if (completed == 3 || completed == 6 || completed == 10)
                 {
+                    Command("OpenMemoryUpgrade");
                     Assert.That(button.interactable, Is.True);
                     button.onClick.Invoke();
+                    Command("CloseMemoryUpgrade");
                 }
             }
             Assert.That(Value("MemoryLevel"), Is.EqualTo(5));
             Assert.That(Value("Funds"), Is.EqualTo(1000));
             Assert.That(sim.OpenCellCount, Is.EqualTo(64));
+            Command("OpenMemoryUpgrade");
             Assert.That(button.interactable, Is.False);
             button.onClick.Invoke();
             Assert.That(Value("Funds"), Is.EqualTo(1000));
@@ -267,7 +280,7 @@ namespace CallmeCatgirl.Tests
             Assert.That(Value("MemoryLevel"), Is.EqualTo(1));
             Assert.That(Value("Funds"), Is.EqualTo(1500));
             Assert.That(Value("CompletedTasks"), Is.Zero);
-            Assert.That(sim.OpenCellCount, Is.EqualTo(40));
+            Assert.That(sim.OpenCellCount, Is.EqualTo(initialCells));
             Assert.That(sim.Paused, Is.True);
             yield return new ExitPlayMode();
         }
@@ -289,7 +302,9 @@ namespace CallmeCatgirl.Tests
                 serialized.FindProperty("configuration").objectReferenceValue = config;
                 serialized.ApplyModifiedPropertiesWithoutUndo();
                 controller.GetType().GetMethod("ResetSimulation").Invoke(controller, null);
-                var button = ButtonNamed("UpgradeMemoryButton");
+                Assert.That(ButtonNamed("UpgradeMemoryButton").interactable, Is.True);
+                ButtonNamed("UpgradeMemoryButton").onClick.Invoke();
+                var button = ButtonNamed("ConfirmMemoryUpgradeButton");
                 Assert.That(button.interactable, Is.False);
                 button.onClick.Invoke();
                 Assert.That(controller.GetType().GetProperty("MemoryLevel").GetValue(controller), Is.EqualTo(1));
@@ -308,6 +323,9 @@ namespace CallmeCatgirl.Tests
             }
             yield return new ExitPlayMode();
         }
+        private static GameObject Panel() => Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None).Single(t => t.name == "ConversationPanel").gameObject;
+        private static Cell FreeOrigin(TaskSimulation sim, string id) => Enumerable.Range(0, sim.Width * sim.Height)
+            .Select(i => new Cell(i % sim.Width, i / sim.Width)).First(c => sim.Preview(id, c, 0) == PlacementFailure.None);
         private static Button ButtonNamed(string name) => Object.FindObjectsByType<Button>(FindObjectsSortMode.None).Single(b => b.name == name);
         private static Vector2 ScreenCell(RectTransform board,int x,int y) => RectTransformUtility.WorldToScreenPoint(null,
             board.TransformPoint(new Vector3(board.rect.xMin+(x+0.5f)*board.rect.width/8,board.rect.yMax-(y+0.5f)*board.rect.height/8,0)));
