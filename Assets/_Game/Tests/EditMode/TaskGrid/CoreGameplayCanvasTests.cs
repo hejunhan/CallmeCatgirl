@@ -257,11 +257,11 @@ namespace CallmeCatgirl.Tests
                 }
             }
             Assert.That(Value("MemoryLevel"), Is.EqualTo(5));
-            Assert.That(Value("Funds"), Is.Zero);
+            Assert.That(Value("Funds"), Is.EqualTo(1000));
             Assert.That(sim.OpenCellCount, Is.EqualTo(64));
             Assert.That(button.interactable, Is.False);
             button.onClick.Invoke();
-            Assert.That(Value("Funds"), Is.Zero);
+            Assert.That(Value("Funds"), Is.EqualTo(1000));
             Command("ResetSimulation");
             sim = (TaskSimulation)controller.GetType().GetProperty("Simulation").GetValue(controller);
             Assert.That(Value("MemoryLevel"), Is.EqualTo(1));

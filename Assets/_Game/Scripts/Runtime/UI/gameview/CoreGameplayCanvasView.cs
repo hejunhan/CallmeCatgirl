@@ -46,6 +46,9 @@ namespace CallmeCatgirl.UI
         [SerializeField] private Button memoryUpgradeButton;
         [SerializeField] private Text memoryUpgradeLabel;
         [SerializeField] private Text memoryUpgradeButtonLabel;
+        [SerializeField] private Text economyStatusLabel;
+        [SerializeField] private GameObject endingPanel;
+        [SerializeField] private Text endingLabel;
         private readonly Dictionary<string, TaskCardView> cards = new Dictionary<string, TaskCardView>();
         private readonly Dictionary<string, TaskModuleView> modules = new Dictionary<string, TaskModuleView>();
         private CoreGameplayController controller;
@@ -81,9 +84,15 @@ namespace CallmeCatgirl.UI
             var sim = controller.Simulation;
             if (draggedId != null && (!sim.Tasks.TryGetValue(draggedId, out var dragging)
                 || (dragging.State != RequestState.Running && dragging.State != RequestState.Waiting && dragging.State != RequestState.Withdrawn))) CancelDrag();
+            if (controller.GameEnded && IsDragging) CancelDrag();
+            if (endingPanel != null) endingPanel.SetActive(controller.GameEnded);
+            if (endingLabel != null) endingLabel.text = controller.EndingText;
+            if (economyStatusLabel != null) economyStatusLabel.text = $"第{controller.CurrentMonth}月 · 月底剩 {controller.MonthTimeRemaining:0.0}s · "
+                + (controller.GameEnded ? "经营结束" : controller.IsInGracePeriod ? $"宽限期，欠款 {controller.DebtAmount}" : "正常经营");
+            pauseLabel.GetComponentInParent<Button>().interactable = !controller.GameEnded;
             clockLabel.text = $"游戏时间 {sim.GameTime:0.0}s   模型周期 {sim.Model.Interval:0.#}s";
             messageLabel.text = controller.Message; logLabel.text = string.Join("\n", controller.Logs);
-            pauseLabel.text = sim.Paused ? (sim.GameTime == 0 ? "开始 [空格]" : "继续 [空格]") : "暂停 [空格]";
+            pauseLabel.text = controller.GameEnded ? "经营结束" : sim.Paused ? (sim.GameTime == 0 ? "开始 [空格]" : "继续 [空格]") : "暂停 [空格]";
             speedLabel.text = $"速度 {controller.PlaybackSpeed:0.##}x · {(sim.Paused ? "已暂停" : "运行中")}";
             if (speedButtons != null && speedIdleColors != null)
                 for (int i = 0; i < speedButtons.Length; i++)
@@ -156,10 +165,10 @@ namespace CallmeCatgirl.UI
                 + (task.Result == null ? "" : "  " + CoreGameplayController.QualityText(task.Result.ByAbility[req.Kind]))));
             qualityLabel.text = task.Result == null ? "各项能力分别达标，超额不能补其他能力的短板。"
                 : "最终质量：" + CoreGameplayController.QualityText(task.Result.Overall) + "；结果已冻结，等待不会再增加能力。";
-            rotateButton.interactable = task.State == RequestState.Waiting || task.State == RequestState.Withdrawn || task.State == RequestState.Running;
-            withdrawButton.interactable = task.State == RequestState.Running;
-            submitButton.interactable = task.State == RequestState.Ready;
-            nextRoundButton.interactable = task.State == RequestState.Submitted || task.State == RequestState.TimedOut;
+            rotateButton.interactable = !controller.GameEnded && (task.State == RequestState.Waiting || task.State == RequestState.Withdrawn || task.State == RequestState.Running);
+            withdrawButton.interactable = !controller.GameEnded && (task.State == RequestState.Running);
+            submitButton.interactable = !controller.GameEnded && (task.State == RequestState.Ready);
+            nextRoundButton.interactable = !controller.GameEnded && (task.State == RequestState.Submitted || task.State == RequestState.TimedOut);
         }
 
         public Sprite GetAvatar(string conversationId)
@@ -174,6 +183,7 @@ namespace CallmeCatgirl.UI
         public void BeginDrag(string id, PointerEventData data, bool fromBoard)
         {
             CancelDrag();
+            if (controller.GameEnded) return;
             if (!controller.Simulation.Tasks.TryGetValue(id, out var task)
                 || (task.State != RequestState.Waiting && task.State != RequestState.Withdrawn && task.State != RequestState.Running)) return;
             controller.SelectRequest(id); draggedId = id; dragRotation = task.Rotation;
