@@ -20,12 +20,16 @@ MonoBehaviour:
   - TargetLevel: 2
     Cost: 100
     RequiredCompletedTasks: 0
+    AbilityPoints: 7
   - TargetLevel: 3
     Cost: 200
     RequiredCompletedTasks: 3
+    AbilityPoints: 4
   - TargetLevel: 4
     Cost: 400
     RequiredCompletedTasks: 6
+    AbilityPoints: 4
   - TargetLevel: 5
     Cost: 800
     RequiredCompletedTasks: 10
+    AbilityPoints: 8

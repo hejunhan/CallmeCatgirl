@@ -12,7 +12,6 @@ namespace CallmeCatgirl.Gameplay
         {
             public StoryConfiguration.UserStory Profile;
             public string NodeId;
-            public string NextRequestId;
             public readonly List<string> History = new List<string>();
         }
         private readonly StoryConfiguration configuration;
@@ -32,7 +31,7 @@ namespace CallmeCatgirl.Gameplay
         {
             if (users.TryGetValue(id, out var state)) return state;
             var profile = configuration?.Users?.FirstOrDefault(p => p != null && p.UserId == id);
-            state = new UserState { Profile = profile, NodeId = profile?.StartNodeId };
+            state = new UserState { Profile = profile, NodeId = profile?.FirstNodeId };
             if (!string.IsNullOrWhiteSpace(profile?.InitialHistory)) state.History.Add(profile.InitialHistory);
             users.Add(id, state); return state;
         }
@@ -41,7 +40,14 @@ namespace CallmeCatgirl.Gameplay
         public string Latest(string id) => User(id).History.LastOrDefault() ?? "还没有对话记录。";
         public void Arrived(TaskInstance task)
         {
-            User(task.ConversationId).History.Add($"{Name(task.ConversationId)}：{task.Definition.Title}"); Revision++;
+            var state = User(task.ConversationId); var node = state.Profile?.FindNode(state.NodeId);
+            if (node != null)
+            {
+                state.History.Add("[" + Progress(task.ConversationId) + "]");
+                state.History.Add(Name(task.ConversationId) + "：" + node.UserMessage);
+            }
+            else state.History.Add($"{Name(task.ConversationId)}：{task.Definition.Title}");
+            Revision++;
         }
         public void Submitted(TaskInstance task)
         {
@@ -55,14 +61,18 @@ namespace CallmeCatgirl.Gameplay
             IsOpen = IsReply = true;
             var state = User(UserId);
             state.History.Add($"[提交 {task.Id} · {CoreGameplayController.QualityText(Result)}]");
-            var node = state.Profile?.Nodes?.FirstOrDefault(n => n != null && n.Id == state.NodeId);
-            if (!string.IsNullOrWhiteSpace(node?.UserMessage)) state.History.Add(Name(UserId) + "：" + node.UserMessage);
+            var node = state.Profile?.FindNode(state.NodeId);
+            LoadChoices(state, node);
+        }
+        private void LoadChoices(UserState state, StoryConfiguration.StoryNode node)
+        {
             var options = node?.Choices;
             if (options == null || options.Length == 0) options = configuration?.DefaultChoices;
             Choices = (options ?? Array.Empty<StoryConfiguration.ReplyChoice>())
                 .Where(c => c != null && c.IsAvailable(Result)).ToArray();
             // 配置漏填或全被质量条件挡住，也允许完成这次回复。
-            if (Choices.Count == 0) Choices = new[] { new StoryConfiguration.ReplyChoice() };
+            if (Choices.Count == 0) Choices = new[] { new StoryConfiguration.ReplyChoice
+            { NextNodeId = state.Profile?.SequentialNext(state.NodeId) } };
             Revision++;
         }
         public bool Choose(int index)
@@ -71,12 +81,37 @@ namespace CallmeCatgirl.Gameplay
             var state = User(UserId); var choice = Choices[index];
             if (!string.IsNullOrWhiteSpace(choice.PlayerReply)) state.History.Add("我：" + choice.PlayerReply);
             if (!string.IsNullOrWhiteSpace(choice.UserReply)) state.History.Add(Name(UserId) + "：" + choice.UserReply);
-            state.NodeId = choice.NextNodeId; state.NextRequestId = choice.NextRequestId;
+            var session = state.Profile?.FindSession(state.NodeId);
+            state.NodeId = choice.NextNodeId;
+            if (session != null && state.Profile.FindSession(state.NodeId) == session)
+            {
+                var next = state.Profile.FindNode(state.NodeId);
+                state.History.Add(Name(UserId) + "：" + next.UserMessage);
+                LoadChoices(state, next); return true;
+            }
+            if (Finished(UserId)) state.History.Add("[" + Progress(UserId) + "]");
             Choices = Array.Empty<StoryConfiguration.ReplyChoice>(); IsOpen = IsReply = false; Revision++;
             if (pending.Count > 0) OpenReply(pending.Dequeue());
             return true;
         }
-        public string NextRequest(string id) => User(id).NextRequestId;
+        public bool Finished(string id) => User(id).Profile?.HasSessions == true && string.IsNullOrEmpty(User(id).NodeId);
+        public string Progress(string id) => User(id).Profile?.Progress(User(id).NodeId) ?? string.Empty;
+        public TaskDefinition BuildNextTask(string id, IReadOnlyDictionary<string, TaskDefinition> templates, TaskDefinition fallback)
+        {
+            var state = User(id); var session = state.Profile?.FindSession(state.NodeId);
+            string templateId = session?.RequestId;
+            var basis = !string.IsNullOrEmpty(templateId) && templates.TryGetValue(templateId, out var template) ? template : fallback;
+            if (session == null) return basis;
+            var difficulty = session.Task;
+            var requirements = difficulty?.Abilities != null && difficulty.Abilities.Length > 0
+                ? difficulty.Abilities.Select(a => a.Build()) : basis.Requirements;
+            return new TaskDefinition(basis.Id, string.IsNullOrWhiteSpace(session.Title) ? basis.Title : session.Title,
+                difficulty?.Shape != null && difficulty.Shape.Length > 0 ? ShapePattern.Parse(difficulty.Shape) : basis.Shape,
+                difficulty != null && difficulty.Calculation > 0 ? difficulty.Calculation : basis.Calculation,
+                difficulty != null && difficulty.Speed > 0 ? difficulty.Speed : basis.Speed,
+                difficulty != null && difficulty.Patience > 0 ? difficulty.Patience : basis.Patience,
+                difficulty != null && difficulty.Tokens >= 0 ? difficulty.Tokens : basis.Tokens, requirements);
+        }
         public void OpenHistory(string id)
         {
             if (IsReply || string.IsNullOrEmpty(id)) return;

@@ -105,8 +105,8 @@ namespace CallmeCatgirl.UI
             if (memoryUpgradeButton != null)
             {
                 memoryUpgradeButton.interactable = !controller.GameEnded && !controller.IsModalOpen;
-                memoryUpgradeButtonLabel.text = "内存升级";
-                memoryUpgradeLabel.text = $"内存 Lv{controller.MemoryLevel} · 资金 {controller.Funds}";
+                memoryUpgradeButtonLabel.text = "内存 / 加点";
+                memoryUpgradeLabel.text = $"内存 Lv{controller.MemoryLevel} · 资金 {controller.Funds} · 点数 {controller.AvailableAbilityPoints}";
             }
             float width = board.rect.width / sim.Width, height = board.rect.height / sim.Height;
             int open = 0;
@@ -116,8 +116,8 @@ namespace CallmeCatgirl.UI
                 gridCells[i].Show(available); if (available) open++;
             }
             if (occupancyLabel != null) occupancyLabel.text = $"已占用 {sim.Occupancy.Count} / {open} 格";
-            if (modelLabel != null) modelLabel.text = $"固定模型 · {sim.Model.Id}\n\n每个请求独立，全速运算\n每 {sim.Model.Interval:0.#} 秒增加能力\n\n"
-                + string.Join("\n", sim.Model.Points.Select(p => $"{CoreGameplayController.AbilityText(p.Key)}  +{p.Value:0.#}"));
+            if (modelLabel != null) modelLabel.text = $"当前模型 · {sim.Model.Id}\n\n每个请求独立，全速运算\n每 {sim.Model.Interval:0.#} 秒增加能力\n\n"
+                + string.Join("\n", sim.Model.Points.Select(p => $"{CoreGameplayController.AbilityText(p.Key)}  +{p.Value:0.##}"));
             foreach (var task in sim.Tasks.Values)
             {
                 bool candidate = task.State == RequestState.Waiting || task.State == RequestState.Withdrawn;
@@ -170,7 +170,7 @@ namespace CallmeCatgirl.UI
             rotateButton.interactable = !controller.GameEnded && !controller.IsModalOpen && (task.State == RequestState.Waiting || task.State == RequestState.Withdrawn || task.State == RequestState.Running);
             withdrawButton.interactable = !controller.GameEnded && !controller.IsModalOpen && (task.State == RequestState.Running);
             submitButton.interactable = !controller.GameEnded && !controller.IsModalOpen && (task.State == RequestState.Ready);
-            nextRoundButton.interactable = !controller.GameEnded && !controller.IsModalOpen && (task.State == RequestState.Submitted || task.State == RequestState.TimedOut);
+            nextRoundButton.interactable = !controller.GameEnded && !controller.IsModalOpen && !controller.Story.Finished(task.ConversationId) && (task.State == RequestState.Submitted || task.State == RequestState.TimedOut);
         }
 
         public Sprite GetAvatar(string conversationId)

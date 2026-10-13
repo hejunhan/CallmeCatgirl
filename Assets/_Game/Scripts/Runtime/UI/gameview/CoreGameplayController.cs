@@ -34,10 +34,15 @@ namespace CallmeCatgirl.Gameplay
         public double MonthTimeRemaining => Math.Max(0, configuration.SecondsPerGameMonth - monthTimer);
         private double monthTimer;
         public int CompletedTasks { get; private set; }
+        public int AvailableAbilityPoints { get; private set; }
+        public bool CanAllocateAbility => !GameEnded && IsMemoryUpgradeOpen && !IsStoryOpen && AvailableAbilityPoints > 0;
         public MemoryUpgradeConfiguration.UpgradeStep NextMemoryUpgrade
             => configuration.MemoryUpgrades.TryGetNextLevel(MemoryLevel, out var step) ? step : null;
-        public bool CanUpgradeMemory => !GameEnded && !IsStoryOpen && NextMemoryUpgrade != null && NextMemoryUpgrade.Cost >= 0
+        public bool CanUpgradeMemory => !GameEnded && !IsStoryOpen && NextMemoryUpgrade != null && NextMemoryUpgrade.Cost >= 0 && NextMemoryUpgrade.AbilityPoints >= 0
+            && AvailableAbilityPoints <= int.MaxValue - NextMemoryUpgrade.AbilityPoints
             && Funds >= NextMemoryUpgrade.Cost && CompletedTasks >= NextMemoryUpgrade.RequiredCompletedTasks;
+        public string NextMemoryPointRewardText => NextMemoryUpgrade == null ? string.Empty
+            : NextMemoryUpgrade.AbilityPoints < 0 ? "奖励点数配置无效" : $"升级奖励：{NextMemoryUpgrade.AbilityPoints} 点，由玩家自由分配";
         public int NextMemoryCellCount => NextMemoryUpgrade == null ? 0
             : configuration.MemoryUpgrades.GetOpenCells(NextMemoryUpgrade.TargetLevel).Count - Simulation.OpenCellCount;
         public string Message { get; private set; }
@@ -73,7 +78,7 @@ namespace CallmeCatgirl.Gameplay
                 IsMemoryUpgradeOpen = false;
                 Story = new ConversationStory(configuration.Story);
                 Simulation = configuration.BuildSimulation(); Simulation.Paused = true; definitions.Clear(); logs.Clear(); serial = 0;
-                MemoryLevel = configuration.MemoryUpgrades.InitialLevel; CompletedTasks = 0;
+                MemoryLevel = configuration.MemoryUpgrades.InitialLevel; CompletedTasks = 0; AvailableAbilityPoints = 0;
                 if (configuration.SecondsPerGameMonth <= 0 || float.IsNaN(configuration.SecondsPerGameMonth)
                     || float.IsInfinity(configuration.SecondsPerGameMonth)) throw new InvalidOperationException("每月游戏秒数必须是正的有限数值。");
                 if (Economy != null) Economy.OnEconomyLog -= AddEconomyLog;
@@ -82,9 +87,11 @@ namespace CallmeCatgirl.Gameplay
                 foreach (var source in configuration.Requests)
                 {
                     var definition = source.Build(); definitions.Add(definition.Id, definition);
-                    Simulation.TryCreate(definition.Id + "-1", definition.Id, "1", definition, out _);
                 }
                 configuration.Story?.Validate(definitions.Keys);
+                foreach (var definition in definitions.Values)
+                    Simulation.TryCreate(definition.Id + "-1", definition.Id, "1",
+                        Story.BuildNextTask(definition.Id, definitions, definition), out _);
                 SelectedId = Simulation.Tasks.Keys.FirstOrDefault(); PlaybackSpeed = configuration.PlaybackSpeed;
                 Message = "拖动请求到格子。R旋转，空格暂停，Esc取消拖拽；撤回不重置忍耐。";
                 ReadEvents();
@@ -140,10 +147,8 @@ namespace CallmeCatgirl.Gameplay
         {
             if (GameEnded || IsModalOpen) return;
             var previous = SelectedTask;
-            if (previous == null || !Simulation.TryCloseFeedback(previous.Id)) return;
-            string nextRequest = Story.NextRequest(previous.ConversationId);
-            var definition = previous.Definition;
-            if (!string.IsNullOrEmpty(nextRequest) && definitions.TryGetValue(nextRequest, out var configured)) definition = configured;
+            if (previous == null || Story.Finished(previous.ConversationId) || !Simulation.TryCloseFeedback(previous.Id)) return;
+            var definition = Story.BuildNextTask(previous.ConversationId, definitions, previous.Definition);
             string round = "round-" + (++serial);
             Simulation.TryCreate(previous.ConversationId + "-" + round, previous.ConversationId, round, definition, out var next);
             ReadEvents();
@@ -161,22 +166,43 @@ namespace CallmeCatgirl.Gameplay
             ReadEvents();
             var next = NextMemoryUpgrade;
             if (next == null) { Message = "内存已满级。"; return; }
+            if (next.AbilityPoints < 0 || AvailableAbilityPoints > int.MaxValue - next.AbilityPoints)
+            { Message = "奖励点数配置无效或超过上限，未升级或扣费。"; canvasView?.Refresh(); return; }
             if (!CanUpgradeMemory)
             { Message = CompletedTasks < next.RequiredCompletedTasks ? $"需要累计达标提交 {next.RequiredCompletedTasks} 个任务。" : "升级资金不足。"; return; }
             int before = Simulation.OpenCellCount;
             if (!Simulation.TryUnlockCells(configuration.MemoryUpgrades.GetOpenCells(next.TargetLevel)))
             { Message = "升级格子配置越界，未扣费。"; return; }
             Economy.TrySpendFunds(next.Cost);
-            MemoryLevel = next.TargetLevel;
-            Message = $"内存升级至 Lv{MemoryLevel}：新增 {Simulation.OpenCellCount - before} 格，花费 {next.Cost}。";
+            MemoryLevel = next.TargetLevel; AvailableAbilityPoints += next.AbilityPoints;
+            Message = $"内存升级至 Lv{MemoryLevel}：新增 {Simulation.OpenCellCount - before} 格，花费 {next.Cost}，获得 {next.AbilityPoints} 点（剩余 {AvailableAbilityPoints} 点）";
             logs.Insert(0, Message);
             if (logs.Count > 7) logs.RemoveAt(logs.Count - 1);
             canvasView?.Refresh();
         }
+        public void AllocateAbility(AbilityKind ability)
+        {
+            if (!CanAllocateAbility || !Enum.IsDefined(typeof(AbilityKind), ability)) return;
+            var current = Simulation.Model;
+            var points = current.Points.ToDictionary(p => p.Key, p => p.Value);
+            points.TryGetValue(ability, out double before); points[ability] = before + 1;
+            var model = new ModelDefinition(current.Id, current.Interval, points);
+            bool paused = Simulation.Paused, applied;
+            try { Simulation.Paused = true; applied = Simulation.TryChangeModel(model); }
+            finally { Simulation.Paused = paused; }
+            if (!applied) return;
+            AvailableAbilityPoints--;
+            Message = $"{AbilityText(ability)}每周期产出 {before:0.##} → {before + 1:0.##}，剩余 {AvailableAbilityPoints} 点。";
+            canvasView?.Refresh();
+        }
+
         public void ChooseReply(int index)
         {
+            string user = Story.UserId, request = Story.RequestId;
             if (!Story.Choose(index)) return;
-            Message = "回复已发送。可查看对话记录，或创建下一轮请求。";
+            if (Story.Finished(user)) { Simulation.TryCloseFeedback(request); ReadEvents(); }
+            Message = Story.Finished(user) ? Story.Name(user) + "的剧情已完成。" :
+                Story.IsReply && Story.RequestId == request ? "请继续选择，完成本次会话。" : "本次会话结束，可开始下一次会话。";
             canvasView?.Refresh();
         }
         public void OpenConversationHistory()

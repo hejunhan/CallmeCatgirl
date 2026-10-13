@@ -13,13 +13,13 @@ namespace CallmeCatgirl.Gameplay
         [HideInInspector] public int BoardHeight = 8;
         [Min(1), InspectorName("初始内存等级")] public int InitialLevel = 1;
         [HideInInspector] public int[] CellUnlockLevels = new int[64]; // 0 永久锁定，1 初始，2+ 对应等级解锁。
-        [InspectorName("升级价格和条件")]
+        [InspectorName("升级价格、条件和奖励点数")]
         public UpgradeStep[] Levels =
         {
-            new UpgradeStep { TargetLevel = 2, Cost = 100, RequiredCompletedTasks = 0 },
-            new UpgradeStep { TargetLevel = 3, Cost = 200, RequiredCompletedTasks = 3 },
-            new UpgradeStep { TargetLevel = 4, Cost = 400, RequiredCompletedTasks = 6 },
-            new UpgradeStep { TargetLevel = 5, Cost = 800, RequiredCompletedTasks = 10 }
+            new UpgradeStep { TargetLevel = 2, Cost = 100, RequiredCompletedTasks = 0, AbilityPoints = 1 },
+            new UpgradeStep { TargetLevel = 3, Cost = 200, RequiredCompletedTasks = 3, AbilityPoints = 1 },
+            new UpgradeStep { TargetLevel = 4, Cost = 400, RequiredCompletedTasks = 6, AbilityPoints = 1 },
+            new UpgradeStep { TargetLevel = 5, Cost = 800, RequiredCompletedTasks = 10, AbilityPoints = 1 }
         };
 
         public List<Cell> GetOpenCells(int level)
@@ -50,6 +50,8 @@ namespace CallmeCatgirl.Gameplay
             [Min(2), InspectorName("升级后的等级")] public int TargetLevel = 2;
             [Min(0), InspectorName("升级花费")] public int Cost;
             [Min(0), InspectorName("需要累计完成任务数")] public int RequiredCompletedTasks;
+            [Min(0), InspectorName("奖励能力点数"), Tooltip("升级获得可分配点数，玩家自由分配；1点使对应能力每周期产出+1。")]
+            public int AbilityPoints = 1;
         }
     }
 }

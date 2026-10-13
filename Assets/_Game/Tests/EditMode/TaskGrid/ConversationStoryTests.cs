@@ -16,6 +16,19 @@ namespace CallmeCatgirl.Tests
 {
     public sealed class ConversationStoryTests
     {
+        private MonoBehaviour owner;
+        private ScriptableObject original, fixtureConfig, fixtureStory;
+        [UnitySetUp] public IEnumerator Prepare()
+        {
+            EditorSceneManager.OpenScene(Scene); yield return new EnterPlayMode(); yield return null;
+            owner = Controller();
+            var field = owner.GetType().GetField("configuration", BindingFlags.Instance | BindingFlags.NonPublic);
+            original = (ScriptableObject)field.GetValue(owner); fixtureConfig = Object.Instantiate(original);
+            var importer = Type.GetType("CallmeCatgirl.EditorTools.StoryJsonImporter, Assembly-CSharp-Editor", true);
+            fixtureStory = (ScriptableObject)importer.GetMethod("Parse").Invoke(null, new object[] { @"{""version"": 1, ""characters"": [{""id"": ""A"", ""name"": ""林小满"", ""initialHistory"": ""林小满：还醒着吗？"", ""sessions"": [{""id"": ""s1"", ""title"": ""一句晚安"", ""requestId"": ""A"", ""rounds"": [{""id"": ""r1"", ""message"": ""可以认真说一句晚安吗？"", ""choices"": [{""label"": ""温柔地说晚安"", ""reply"": ""辛苦啦，晚安喵。"", ""response"": """", ""requirement"": ""Any""}, {""label"": ""聊聊计划"", ""reply"": ""今天最让你担心的是什么？"", ""response"": """", ""requirement"": ""Any""}, {""label"": ""特别的晚安信"", ""reply"": ""愿你做个好梦。"", ""response"": """", ""requirement"": ""ExcellentOnly""}]}]}, {""id"": ""s2"", ""title"": ""聊聊明天"", ""requestId"": ""C"", ""rounds"": [{""id"": ""r1"", ""message"": ""我应该从哪里开始？"", ""choices"": [{""label"": ""从小事开始"", ""reply"": ""先完成最小的一件事。"", ""response"": """", ""requirement"": ""Any""}]}]}]}, {""id"": ""C"", ""name"": ""苏禾"", ""sessions"": [{""id"": ""s1"", ""title"": ""待办"", ""rounds"": [{""id"": ""r1"", ""message"": ""能帮我整理待办吗？"", ""choices"": [{""label"": ""开始整理"", ""reply"": ""先整理最紧急的事情。"", ""response"": """", ""requirement"": ""Any""}]}]}, {""id"": ""s2"", ""title"": ""复盘"", ""rounds"": [{""id"": ""r1"", ""message"": ""我们复盘一下吧。"", ""choices"": [{""label"": ""好的"", ""reply"": ""看看做了什么。"", ""response"": """", ""requirement"": ""Any""}]}]}]}]}", new[] { "A", "B", "C" } });
+            fixtureConfig.GetType().GetField("Story").SetValue(fixtureConfig, fixtureStory);
+            field.SetValue(owner, fixtureConfig); Call(owner, "ResetSimulation");
+        }
         private const string Scene = "Assets/_Game/Scenes/Prototypes/CoreGameplay.unity";
         private static MonoBehaviour Controller() => Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
             .Single(c => c.GetType().FullName == "CallmeCatgirl.Gameplay.CoreGameplayController");
@@ -41,7 +54,6 @@ namespace CallmeCatgirl.Tests
 
         [UnityTest] public IEnumerator SubmissionOpensRealModalAndBlocksTimeAndUnderlyingInput()
         {
-            EditorSceneManager.OpenScene(Scene); yield return new EnterPlayMode(); yield return null;
             var owner = Controller(); var sim = Value<TaskSimulation>(owner, "Simulation");
             Complete(owner, "A-1", new Cell(2, 0), 10);
             Place(sim, "B-1", new Cell(2, 3));
@@ -73,12 +85,10 @@ namespace CallmeCatgirl.Tests
             Call(owner, "AdvanceGame", 1d); sim.Paused = true;
             Assert.That(sim.GameTime, Is.EqualTo(time + 1)); Assert.That(sim.Tasks["B-1"].Progress, Is.GreaterThan(progress));
             Assert.That(Call(story, "History", "A"), Does.Contain("辛苦啦"));
-            yield return new ExitPlayMode();
         }
 
         [UnityTest] public IEnumerator ChoicesRouteNextTaskAndNextSubmissionAndHistoryRemainsPerUser()
         {
-            EditorSceneManager.OpenScene(Scene); yield return new EnterPlayMode(); yield return null;
             var owner = Controller(); var sim = Value<TaskSimulation>(owner, "Simulation");
             Complete(owner, "A-1", new Cell(2, 0), 10); Call(owner, "SubmitSelected"); Call(owner, "ChooseReply", 1);
             Assert.That(sim.Paused, Is.True, "A paused session must remain paused after choosing.");
@@ -98,14 +108,13 @@ namespace CallmeCatgirl.Tests
             Call(owner, "ResetSimulation");
             story = Value<object>(owner, "Story");
             Assert.That(Call(story, "History", "A"), Does.Not.Contain("最小的一件"));
-            yield return new ExitPlayMode();
+            yield break;
         }
 
         [UnityTest] public IEnumerator QualityConditionsRevealExcellentChoicesAndFallbackPreventsDeadEnd()
         {
-            EditorSceneManager.OpenScene(Scene); yield return new EnterPlayMode(); yield return null;
             VerifyQualityAndFallback(Controller());
-            yield return new ExitPlayMode();
+            yield break;
         }
         private static void VerifyQualityAndFallback(MonoBehaviour owner)
         {
@@ -130,7 +139,6 @@ namespace CallmeCatgirl.Tests
 
         [UnityTest] public IEnumerator SimultaneousSubmissionsAreQueuedAndSettledOnlyOnce()
         {
-            EditorSceneManager.OpenScene(Scene); yield return new EnterPlayMode(); yield return null;
             var owner = Controller(); var sim = Value<TaskSimulation>(owner, "Simulation");
             Complete(owner, "A-1", new Cell(2, 0), 10); Complete(owner, "C-1", new Cell(4, 2), 3);
             int funds = Value<int>(owner, "Funds");
@@ -144,11 +152,9 @@ namespace CallmeCatgirl.Tests
             Call(owner, "ChooseReply", 0); Assert.That(Value<bool>(owner, "IsStoryOpen"), Is.False);
             Assert.That(Value<int>(owner, "Funds"), Is.EqualTo(funds + 130));
             Assert.That(Call(story, "History", "C"), Does.Not.Contain("晚安喵"));
-            yield return new ExitPlayMode();
         }
         [UnityTest] public IEnumerator HistoryReviewAndNewUsersHaveFallbackAndResetClosesModal()
         {
-            EditorSceneManager.OpenScene(Scene); yield return new EnterPlayMode(); yield return null;
             var owner = Controller();
             Call(owner, "AddRequest"); yield return null;
             string id = Value<string>(owner, "SelectedId"); Complete(owner, id, new Cell(2, 0), 10);
@@ -159,11 +165,9 @@ namespace CallmeCatgirl.Tests
             Assert.That(GameObject.Find("ChoiceScroll").GetComponent<ScrollRect>().vertical, Is.True);
             Call(owner, "ChooseReply", 0); Call(owner, "OpenConversationHistory");
             Call(owner, "ResetSimulation"); Assert.That(Value<bool>(owner, "IsStoryOpen"), Is.False);
-            yield return new ExitPlayMode();
         }
         [UnityTest] public IEnumerator LongHistoryAndEightChoicesCanBeScrolledAndSelected()
         {
-            EditorSceneManager.OpenScene(Scene); yield return new EnterPlayMode(); yield return null;
             var owner = Controller();
             var field = owner.GetType().GetField("configuration", BindingFlags.Instance | BindingFlags.NonPublic);
             var original = (ScriptableObject)field.GetValue(owner); var config = Object.Instantiate(original);
@@ -174,7 +178,8 @@ namespace CallmeCatgirl.Tests
                 var user = users.GetValue(0);
                 user.GetType().GetField("InitialHistory").SetValue(user,
                     string.Join("\n", Enumerable.Range(0, 60).Select(i => "林小满：这是之前的第 " + i + " 条对话记录。")));
-                var node = ((Array)user.GetType().GetField("Nodes").GetValue(user)).GetValue(0);
+                var session = ((Array)user.GetType().GetField("Sessions").GetValue(user)).GetValue(0);
+                var node = ((Array)session.GetType().GetField("Rounds").GetValue(session)).GetValue(0);
                 var choicesField = node.GetType().GetField("Choices"); var choiceType = choicesField.FieldType.GetElementType();
                 var choices = Array.CreateInstance(choiceType, 8);
                 for (int i = 0; i < choices.Length; i++)
@@ -206,8 +211,13 @@ namespace CallmeCatgirl.Tests
                 Assert.That(Call(Value<object>(owner, "Story"), "History", "A"), Does.Contain("长列表回复 7"));
             }
             finally { field.SetValue(owner, original); Object.DestroyImmediate(config); Object.DestroyImmediate(storyConfig); }
-            yield return new ExitPlayMode();
         }
-        [UnityTearDown] public IEnumerator Cleanup() { if (EditorApplication.isPlaying) yield return new ExitPlayMode(); }
+        [UnityTearDown] public IEnumerator Cleanup()
+        {
+            if (owner != null) owner.GetType().GetField("configuration", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(owner, original);
+            if (fixtureConfig != null) Object.DestroyImmediate(fixtureConfig);
+            if (fixtureStory != null) Object.DestroyImmediate(fixtureStory);
+            if (EditorApplication.isPlaying) yield return new ExitPlayMode();
+        }
     }
 }

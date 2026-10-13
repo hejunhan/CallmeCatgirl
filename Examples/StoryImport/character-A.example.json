@@ -1,0 +1,1016 @@
+{
+  "version": 1,
+  "characters": [
+    {
+      "id": "A",
+      "name": "林小满",
+      "initialHistory": "林小满：你好，我想和你慢慢聊聊。",
+      "sessions": [
+        {
+          "id": "s01",
+          "title": "晚安",
+          "requestId": "A",
+          "task": {
+            "calculation": 30,
+            "patience": 100,
+            "abilities": [
+              {
+                "kind": "Writing",
+                "minimum": 4,
+                "excellent": 8
+              },
+              {
+                "kind": "Code",
+                "minimum": 1,
+                "excellent": 2
+              },
+              {
+                "kind": "Reasoning",
+                "minimum": 1,
+                "excellent": 2
+              }
+            ]
+          },
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "今天想和你聊聊“晚安”。你愿意先听我说吗？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "分析两种可能",
+                  "reply": "我们比较两种做法的收益和风险，再一起选择。",
+                  "response": "你考虑得很周到，我想继续听。",
+                  "requirement": "ExcellentOnly"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s02",
+          "title": "今天的烦恼",
+          "requestId": "A",
+          "task": {
+            "calculation": 30,
+            "patience": 100,
+            "abilities": [
+              {
+                "kind": "Writing",
+                "minimum": 4,
+                "excellent": 8
+              },
+              {
+                "kind": "Code",
+                "minimum": 1,
+                "excellent": 2
+              },
+              {
+                "kind": "Reasoning",
+                "minimum": 1,
+                "excellent": 2
+              }
+            ]
+          },
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "今天想和你聊聊“今天的烦恼”。你愿意先听我说吗？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "暂时结束本次会话",
+                  "reply": "今天先整理到这里，下次再继续。",
+                  "response": "谢谢你陪我，下一次会话再见。",
+                  "requirement": "Any",
+                  "nextRoundId": "END"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s03",
+          "title": "明天的计划",
+          "requestId": "A",
+          "task": {
+            "calculation": 60,
+            "patience": 110,
+            "abilities": [
+              {
+                "kind": "Writing",
+                "minimum": 8,
+                "excellent": 12
+              },
+              {
+                "kind": "Code",
+                "minimum": 2,
+                "excellent": 3
+              },
+              {
+                "kind": "Reasoning",
+                "minimum": 2,
+                "excellent": 3
+              }
+            ]
+          },
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "今天想和你聊聊“明天的计划”。你愿意先听我说吗？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "分析两种可能",
+                  "reply": "我们比较两种做法的收益和风险，再一起选择。",
+                  "response": "你考虑得很周到，我想继续听。",
+                  "requirement": "ExcellentOnly"
+                }
+              ]
+            },
+            {
+              "id": "r2",
+              "message": "关于“明天的计划”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s04",
+          "title": "想念朋友",
+          "requestId": "A",
+          "task": {
+            "calculation": 60,
+            "patience": 110,
+            "abilities": [
+              {
+                "kind": "Writing",
+                "minimum": 8,
+                "excellent": 12
+              },
+              {
+                "kind": "Code",
+                "minimum": 2,
+                "excellent": 3
+              },
+              {
+                "kind": "Reasoning",
+                "minimum": 2,
+                "excellent": 3
+              }
+            ]
+          },
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "今天想和你聊聊“想念朋友”。你愿意先听我说吗？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                }
+              ]
+            },
+            {
+              "id": "r2",
+              "message": "关于“想念朋友”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "分析两种可能",
+                  "reply": "我们比较两种做法的收益和风险，再一起选择。",
+                  "response": "你考虑得很周到，我想继续听。",
+                  "requirement": "ExcellentOnly"
+                },
+                {
+                  "label": "暂时结束本次会话",
+                  "reply": "今天先整理到这里，下次再继续。",
+                  "response": "谢谢你陪我，下一次会话再见。",
+                  "requirement": "Any",
+                  "nextRoundId": "END"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s05",
+          "title": "工作失误",
+          "requestId": "A",
+          "task": {
+            "calculation": 90,
+            "patience": 120,
+            "abilities": [
+              {
+                "kind": "Writing",
+                "minimum": 12,
+                "excellent": 16
+              },
+              {
+                "kind": "Code",
+                "minimum": 3,
+                "excellent": 4
+              },
+              {
+                "kind": "Reasoning",
+                "minimum": 3,
+                "excellent": 4
+              }
+            ]
+          },
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "今天想和你聊聊“工作失误”。你愿意先听我说吗？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "分析两种可能",
+                  "reply": "我们比较两种做法的收益和风险，再一起选择。",
+                  "response": "你考虑得很周到，我想继续听。",
+                  "requirement": "ExcellentOnly"
+                },
+                {
+                  "label": "暂时结束本次会话",
+                  "reply": "今天先整理到这里，下次再继续。",
+                  "response": "谢谢你陪我，下一次会话再见。",
+                  "requirement": "Any",
+                  "nextRoundId": "END"
+                }
+              ]
+            },
+            {
+              "id": "r2",
+              "message": "关于“工作失误”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                }
+              ]
+            },
+            {
+              "id": "r3",
+              "message": "关于“工作失误”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "分析两种可能",
+                  "reply": "我们比较两种做法的收益和风险，再一起选择。",
+                  "response": "你考虑得很周到，我想继续听。",
+                  "requirement": "ExcellentOnly"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s06",
+          "title": "学会拒绝",
+          "requestId": "A",
+          "task": {
+            "calculation": 90,
+            "patience": 120,
+            "abilities": [
+              {
+                "kind": "Writing",
+                "minimum": 12,
+                "excellent": 16
+              },
+              {
+                "kind": "Code",
+                "minimum": 3,
+                "excellent": 4
+              },
+              {
+                "kind": "Reasoning",
+                "minimum": 3,
+                "excellent": 4
+              }
+            ]
+          },
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "今天想和你聊聊“学会拒绝”。你愿意先听我说吗？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                }
+              ]
+            },
+            {
+              "id": "r2",
+              "message": "关于“学会拒绝”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "分析两种可能",
+                  "reply": "我们比较两种做法的收益和风险，再一起选择。",
+                  "response": "你考虑得很周到，我想继续听。",
+                  "requirement": "ExcellentOnly"
+                }
+              ]
+            },
+            {
+              "id": "r3",
+              "message": "关于“学会拒绝”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "暂时结束本次会话",
+                  "reply": "今天先整理到这里，下次再继续。",
+                  "response": "谢谢你陪我，下一次会话再见。",
+                  "requirement": "Any",
+                  "nextRoundId": "END"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s07",
+          "title": "雨天散步",
+          "requestId": "A",
+          "task": {
+            "calculation": 120,
+            "patience": 130,
+            "abilities": [
+              {
+                "kind": "Writing",
+                "minimum": 16,
+                "excellent": 20
+              },
+              {
+                "kind": "Code",
+                "minimum": 4,
+                "excellent": 5
+              },
+              {
+                "kind": "Reasoning",
+                "minimum": 4,
+                "excellent": 5
+              }
+            ]
+          },
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "今天想和你聊聊“雨天散步”。你愿意先听我说吗？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "分析两种可能",
+                  "reply": "我们比较两种做法的收益和风险，再一起选择。",
+                  "response": "你考虑得很周到，我想继续听。",
+                  "requirement": "ExcellentOnly"
+                }
+              ]
+            },
+            {
+              "id": "r2",
+              "message": "关于“雨天散步”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "暂时结束本次会话",
+                  "reply": "今天先整理到这里，下次再继续。",
+                  "response": "谢谢你陪我，下一次会话再见。",
+                  "requirement": "Any",
+                  "nextRoundId": "END"
+                }
+              ]
+            },
+            {
+              "id": "r3",
+              "message": "关于“雨天散步”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "分析两种可能",
+                  "reply": "我们比较两种做法的收益和风险，再一起选择。",
+                  "response": "你考虑得很周到，我想继续听。",
+                  "requirement": "ExcellentOnly"
+                }
+              ]
+            },
+            {
+              "id": "r4",
+              "message": "关于“雨天散步”，我们已经整理了前面的想法。第4个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s08",
+          "title": "长远的目标",
+          "requestId": "A",
+          "task": {
+            "calculation": 120,
+            "patience": 130,
+            "abilities": [
+              {
+                "kind": "Writing",
+                "minimum": 16,
+                "excellent": 20
+              },
+              {
+                "kind": "Code",
+                "minimum": 4,
+                "excellent": 5
+              },
+              {
+                "kind": "Reasoning",
+                "minimum": 4,
+                "excellent": 5
+              }
+            ]
+          },
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "今天想和你聊聊“长远的目标”。你愿意先听我说吗？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "暂时结束本次会话",
+                  "reply": "今天先整理到这里，下次再继续。",
+                  "response": "谢谢你陪我，下一次会话再见。",
+                  "requirement": "Any",
+                  "nextRoundId": "END"
+                }
+              ]
+            },
+            {
+              "id": "r2",
+              "message": "关于“长远的目标”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "分析两种可能",
+                  "reply": "我们比较两种做法的收益和风险，再一起选择。",
+                  "response": "你考虑得很周到，我想继续听。",
+                  "requirement": "ExcellentOnly"
+                }
+              ]
+            },
+            {
+              "id": "r3",
+              "message": "关于“长远的目标”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                }
+              ]
+            },
+            {
+              "id": "r4",
+              "message": "关于“长远的目标”，我们已经整理了前面的想法。第4个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "分析两种可能",
+                  "reply": "我们比较两种做法的收益和风险，再一起选择。",
+                  "response": "你考虑得很周到，我想继续听。",
+                  "requirement": "ExcellentOnly"
+                },
+                {
+                  "label": "暂时结束本次会话",
+                  "reply": "今天先整理到这里，下次再继续。",
+                  "response": "谢谢你陪我，下一次会话再见。",
+                  "requirement": "Any",
+                  "nextRoundId": "END"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s09",
+          "title": "一个重要决定",
+          "requestId": "A",
+          "task": {
+            "calculation": 150,
+            "patience": 140,
+            "abilities": [
+              {
+                "kind": "Writing",
+                "minimum": 20,
+                "excellent": 24
+              },
+              {
+                "kind": "Code",
+                "minimum": 5,
+                "excellent": 6
+              },
+              {
+                "kind": "Reasoning",
+                "minimum": 5,
+                "excellent": 6
+              }
+            ]
+          },
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "今天想和你聊聊“一个重要决定”。你愿意先听我说吗？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "分析两种可能",
+                  "reply": "我们比较两种做法的收益和风险，再一起选择。",
+                  "response": "你考虑得很周到，我想继续听。",
+                  "requirement": "ExcellentOnly"
+                }
+              ]
+            },
+            {
+              "id": "r2",
+              "message": "关于“一个重要决定”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                }
+              ]
+            },
+            {
+              "id": "r3",
+              "message": "关于“一个重要决定”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "分析两种可能",
+                  "reply": "我们比较两种做法的收益和风险，再一起选择。",
+                  "response": "你考虑得很周到，我想继续听。",
+                  "requirement": "ExcellentOnly"
+                },
+                {
+                  "label": "暂时结束本次会话",
+                  "reply": "今天先整理到这里，下次再继续。",
+                  "response": "谢谢你陪我，下一次会话再见。",
+                  "requirement": "Any",
+                  "nextRoundId": "END"
+                }
+              ]
+            },
+            {
+              "id": "r4",
+              "message": "关于“一个重要决定”，我们已经整理了前面的想法。第4个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                }
+              ]
+            },
+            {
+              "id": "r5",
+              "message": "关于“一个重要决定”，我们已经整理了前面的想法。第5个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "分析两种可能",
+                  "reply": "我们比较两种做法的收益和风险，再一起选择。",
+                  "response": "你考虑得很周到，我想继续听。",
+                  "requirement": "ExcellentOnly"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s10",
+          "title": "重新认识自己",
+          "requestId": "A",
+          "task": {
+            "calculation": 180,
+            "patience": 150,
+            "abilities": [
+              {
+                "kind": "Writing",
+                "minimum": 24,
+                "excellent": 28
+              },
+              {
+                "kind": "Code",
+                "minimum": 6,
+                "excellent": 7
+              },
+              {
+                "kind": "Reasoning",
+                "minimum": 6,
+                "excellent": 7
+              }
+            ]
+          },
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "今天想和你聊聊“重新认识自己”。你愿意先听我说吗？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                }
+              ]
+            },
+            {
+              "id": "r2",
+              "message": "关于“重新认识自己”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "分析两种可能",
+                  "reply": "我们比较两种做法的收益和风险，再一起选择。",
+                  "response": "你考虑得很周到，我想继续听。",
+                  "requirement": "ExcellentOnly"
+                },
+                {
+                  "label": "暂时结束本次会话",
+                  "reply": "今天先整理到这里，下次再继续。",
+                  "response": "谢谢你陪我，下一次会话再见。",
+                  "requirement": "Any",
+                  "nextRoundId": "END"
+                }
+              ]
+            },
+            {
+              "id": "r3",
+              "message": "关于“重新认识自己”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                }
+              ]
+            },
+            {
+              "id": "r4",
+              "message": "关于“重新认识自己”，我们已经整理了前面的想法。第4个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "分析两种可能",
+                  "reply": "我们比较两种做法的收益和风险，再一起选择。",
+                  "response": "你考虑得很周到，我想继续听。",
+                  "requirement": "ExcellentOnly"
+                }
+              ]
+            },
+            {
+              "id": "r5",
+              "message": "关于“重新认识自己”，我们已经整理了前面的想法。第5个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "暂时结束本次会话",
+                  "reply": "今天先整理到这里，下次再继续。",
+                  "response": "谢谢你陪我，下一次会话再见。",
+                  "requirement": "Any",
+                  "nextRoundId": "END"
+                }
+              ]
+            },
+            {
+              "id": "r6",
+              "message": "关于“重新认识自己”，我们已经整理了前面的想法。第6个问题：接下来该怎样具体行动？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "先说说现在的情况，我会认真听。",
+                  "response": "好，我们从最具体的一件事说起。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "给出一个小步骤",
+                  "reply": "先找一个今天能完成的小步骤，再逐步推进。",
+                  "response": "这样容易开始，我愿意试试。",
+                  "requirement": "CompleteOrBetter"
+                },
+                {
+                  "label": "分析两种可能",
+                  "reply": "我们比较两种做法的收益和风险，再一起选择。",
+                  "response": "你考虑得很周到，我想继续听。",
+                  "requirement": "ExcellentOnly"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

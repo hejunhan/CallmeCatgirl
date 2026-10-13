@@ -1,0 +1,147 @@
+{
+  "version": 1,
+  "characters": [
+    {
+      "id": "A",
+      "name": "林小满",
+      "initialHistory": "林小满：还醒着吗？今天也想和你说说话。",
+      "sessions": [
+        {
+          "id": "s1",
+          "title": "一句晚安",
+          "requestId": "A",
+          "task": {
+            "calculation": 30,
+            "patience": 100,
+            "abilities": [
+              {
+                "kind": "Writing",
+                "minimum": 4,
+                "excellent": 8
+              },
+              {
+                "kind": "Code",
+                "minimum": 1,
+                "excellent": 2
+              },
+              {
+                "kind": "Reasoning",
+                "minimum": 1,
+                "excellent": 2
+              }
+            ]
+          },
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "可以认真地跟我说一句晚安吗？",
+              "choices": [
+                {
+                  "label": "温柔道晚安",
+                  "reply": "今天辛苦了，晚安。",
+                  "response": "谢谢，明天再聊。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "猫娘式晚安",
+                  "reply": "晚安喵，今晚做个好梦。",
+                  "response": "好可爱，心情好多了。",
+                  "requirement": "ExcellentOnly"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "聊聊明天",
+          "requestId": "A",
+          "task": {
+            "calculation": 90,
+            "patience": 120,
+            "abilities": [
+              {
+                "kind": "Writing",
+                "minimum": 12,
+                "excellent": 16
+              },
+              {
+                "kind": "Code",
+                "minimum": 3,
+                "excellent": 4
+              },
+              {
+                "kind": "Reasoning",
+                "minimum": 3,
+                "excellent": 4
+              }
+            ]
+          },
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "明天有好多事情，你愿意陪我整理一下吗？",
+              "choices": [
+                {
+                  "label": "先听她说",
+                  "reply": "当然，先说说你最担心什么。",
+                  "response": "我怕做不完。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "今晚先休息",
+                  "reply": "今晚先好好休息，明天再整理。",
+                  "response": "好，那这次先聊到这里。",
+                  "requirement": "Any",
+                  "nextRoundId": "END"
+                }
+              ]
+            },
+            {
+              "id": "r2",
+              "message": "我想做三件事，但不知道先做哪件。",
+              "choices": [
+                {
+                  "label": "问最紧急的事",
+                  "reply": "哪一件必须明天完成？",
+                  "response": "有一份报告要交。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "问最轻松的事",
+                  "reply": "哪一件最容易开始？",
+                  "response": "整理资料比较容易。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "帮她排顺序",
+                  "reply": "先交报告，再整理资料，最后做其他事。",
+                  "response": "这样就清楚了。",
+                  "requirement": "CompleteOrBetter"
+                }
+              ]
+            },
+            {
+              "id": "r3",
+              "message": "这样想想，明天也没那么可怕了。",
+              "choices": [
+                {
+                  "label": "鼓励她",
+                  "reply": "一步一步来，我会陪着你。",
+                  "response": "谢谢你，下次再找你聊。",
+                  "requirement": "Any"
+                },
+                {
+                  "label": "记住计划",
+                  "reply": "记住今天的计划，明天先完成第一件。",
+                  "response": "嗯，我们下次再见。",
+                  "requirement": "Any"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

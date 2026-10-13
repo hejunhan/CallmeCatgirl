@@ -16,6 +16,10 @@ namespace CallmeCatgirl.UI
         [SerializeField] private Button confirmButton;
         [SerializeField] private Text confirmLabel;
         [SerializeField] private Image[] previewCells;
+        [SerializeField] private Text abilityPointsLabel;
+        [SerializeField] private Text[] abilityLabels;
+        [SerializeField] private Button[] allocationButtons;
+        private CoreGameplayController bound;
         [SerializeField] private Color openColor = new Color(.22f, .3f, .4f);
         [SerializeField] private Color newColor = new Color(.44f, .26f, .85f);
         [SerializeField] private Color lockedColor = new Color(.07f, .085f, .12f);
@@ -30,7 +34,26 @@ namespace CallmeCatgirl.UI
             conditionsLabel.text = next == null ? "全部升级已完成。" :
                 $"下一等级 Lv{next.TargetLevel} · 新增 {owner.NextMemoryCellCount} 格\n"
                 + $"资金：{owner.Funds} / {next.Cost}（{(owner.Funds >= next.Cost ? "满足" : "不足")}）\n"
-                + $"达标提交：{owner.CompletedTasks} / {next.RequiredCompletedTasks}（{(owner.CompletedTasks >= next.RequiredCompletedTasks ? "满足" : "不足")}）";
+                + $"达标提交：{owner.CompletedTasks} / {next.RequiredCompletedTasks}（{(owner.CompletedTasks >= next.RequiredCompletedTasks ? "满足" : "不足")}）\n"
+                + owner.NextMemoryPointRewardText;
+            conditionsLabel.resizeTextForBestFit = true; conditionsLabel.resizeTextMinSize = 12; conditionsLabel.resizeTextMaxSize = conditionsLabel.fontSize;
+            if (abilityPointsLabel != null) abilityPointsLabel.text = $"可分配点数：{owner.AvailableAbilityPoints} · 每{sim.Model.Interval:0.##}秒产出";
+            if (allocationButtons != null)
+                for (int i = 0; i < allocationButtons.Length; i++)
+                {
+                    if (allocationButtons[i] == null) continue;
+                    int index = i;
+                    if (bound != owner)
+                    {
+                        allocationButtons[i].onClick.RemoveAllListeners();
+                        allocationButtons[i].onClick.AddListener(() => owner.AllocateAbility((AbilityKind)index));
+                    }
+                    allocationButtons[i].interactable = owner.CanAllocateAbility;
+                    sim.Model.Points.TryGetValue((AbilityKind)i, out double value);
+                    if (abilityLabels != null && i < abilityLabels.Length && abilityLabels[i] != null)
+                        abilityLabels[i].text = $"{CoreGameplayController.AbilityText((AbilityKind)i)}：{value:0.##} → {value + 1:0.##}";
+                }
+            bound = owner;
             feedbackLabel.text = owner.Message;
             previewLabel.text = next == null ? "当前布局 · 内存已满级" : $"升级到 Lv{next.TargetLevel} 后的布局\n紫色：本次新增 · 蓝灰：已开放 · 深色：未开放";
             var cells = new HashSet<Cell>(owner.NextMemoryCells);
