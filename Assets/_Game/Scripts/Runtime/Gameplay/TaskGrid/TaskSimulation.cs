@@ -10,6 +10,7 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
     {//整个游玩区域
         private const double Epsilon = 1e-9;
         private readonly HashSet<Cell> openCells;
+        private readonly int[] compartments;
         private readonly Dictionary<Cell, string> occupancy = new Dictionary<Cell, string>();
         private readonly Dictionary<string, TaskInstance> tasks = new Dictionary<string, TaskInstance>();
         private readonly Dictionary<string, string> activeConversations = new Dictionary<string, string>();
@@ -23,7 +24,7 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
         public IReadOnlyDictionary<string, TaskInstance> Tasks { get; }
         public IReadOnlyDictionary<Cell, string> Occupancy { get; }
 
-        public TaskSimulation(int width, int height, IEnumerable<Cell> availableCells, ModelDefinition model)
+        public TaskSimulation(int width, int height, IEnumerable<Cell> availableCells, ModelDefinition model, int[] cellCompartments = null)
         {
             if (width <= 0 || height <= 0) throw new ArgumentOutOfRangeException(nameof(width));
             Width = width; 
@@ -32,6 +33,9 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
             openCells = new HashSet<Cell>(availableCells ?? throw new ArgumentNullException(nameof(availableCells)));
             if (openCells.Count == 0 || openCells.Any(c => !InBounds(c)))
                 throw new ArgumentException("Open cells must be inside the board.");
+            if (cellCompartments != null && (cellCompartments.Length != width * height || cellCompartments.Any(id => id < 0)))
+                throw new ArgumentException("Compartment IDs must be nonnegative and cover the entire board.", nameof(cellCompartments));
+            compartments = cellCompartments == null ? new int[width * height] : (int[])cellCompartments.Clone();
             Tasks = new ReadOnlyDictionary<string, TaskInstance>(tasks);
             Occupancy = new ReadOnlyDictionary<Cell, string>(occupancy);
         }
@@ -45,6 +49,11 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
             if (additions.Any(cell => !InBounds(cell))) return false;
             openCells.UnionWith(additions);
             return true;
+        }
+        public int CompartmentAt(Cell cell)
+        {
+            if (!InBounds(cell)) throw new ArgumentOutOfRangeException(nameof(cell));
+            return compartments[cell.X + cell.Y * Width];
         }
         public bool IsOpen(Cell cell) => openCells.Contains(cell);
         public string TaskAt(Cell cell) => occupancy.TryGetValue(cell, out var id) ? id : null;
@@ -71,6 +80,7 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
             if (!tasks.TryGetValue(requestId, out var task)) return PlacementFailure.UnknownTask;
             if (task.State != RequestState.Waiting && task.State != RequestState.Withdrawn
                 && task.State != RequestState.Running) return PlacementFailure.InvalidState;
+            int? compartment = null;
             foreach (var offset in task.Definition.RotatedShape(rotation))
             {
                 Cell cell = origin + offset;
@@ -78,6 +88,9 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
                 if (!IsOpen(cell)) return PlacementFailure.LockedCell;
                 if (occupancy.TryGetValue(cell, out var occupant) && occupant != requestId)
                     return PlacementFailure.Overlap;
+                int current = CompartmentAt(cell);
+                if (compartment.HasValue && compartment.Value != current) return PlacementFailure.CrossesPartition;
+                compartment = current;
             }
             return PlacementFailure.None;
         }

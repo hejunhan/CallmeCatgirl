@@ -82,54 +82,76 @@ namespace CallmeCatgirl.Tests
         public IEnumerator SpeedSelectionStaysVisibleAfterFocusChangesAndReset()
         {
             EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity");
-            yield return new EnterPlayMode();
-            yield return null;
+            yield return new EnterPlayMode(); yield return null;
             var controller = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
                 .Single(b => b.GetType().FullName == "CallmeCatgirl.Gameplay.CoreGameplayController");
             var view = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
                 .Single(b => b.GetType().FullName == "CallmeCatgirl.UI.CoreGameplayCanvasView");
             var sim = (TaskSimulation)controller.GetType().GetProperty("Simulation").GetValue(controller);
-            sim.Paused = true;
-            var buttons = new[] { ButtonNamed("SpeedButton"), ButtonNamed("Speed2Button"), ButtonNamed("Speed4Button") };
+            var buttons = new[] { ButtonNamed("0.5SpeedButton"), ButtonNamed("SpeedButton"), ButtonNamed("Speed2Button"), ButtonNamed("Speed4Button") };
+            float[] values = { .5f, 1, 2, 4 };
+            var colors = buttons.Select(b => b.targetGraphic.color).ToArray();
+            // 初始0.5倍速和初始暂停应同时高亮，不能把高亮后的颜色当作普通底色。
+            var pause = ButtonNamed("PauseButton"); var pauseActive = pause.targetGraphic.color;
+            Assert.That(sim.Paused, Is.True);
+            Assert.That((float)controller.GetType().GetProperty("PlaybackSpeed").GetValue(controller), Is.EqualTo(.5f));
+            for (int i = 1; i < colors.Length; i++)
+                Assert.That(colors[i], Is.Not.EqualTo(colors[0]), "Only the initial half-speed button should be highlighted.");
+            Graphic halfGraphic = buttons[0].targetGraphic;
+            ClickButton(buttons[1]); var halfIdle = halfGraphic.color;
+            Assert.That(halfIdle, Is.Not.EqualTo(colors[0]));
             var idle = buttons.Select(b => b.targetGraphic.color).ToArray();
+            idle[1] = colors[1];
             for (int i = 0; i < buttons.Length; i++)
             {
-                Canvas.ForceUpdateCanvases();
-                var rect = (RectTransform)buttons[i].transform;
-                var pointer = new PointerEventData(EventSystem.current)
-                {
-                    position = RectTransformUtility.WorldToScreenPoint(null, rect.TransformPoint(rect.rect.center)),
-                    button = PointerEventData.InputButton.Left
-                };
-                var hits = new System.Collections.Generic.List<RaycastResult>();
-                EventSystem.current.RaycastAll(pointer, hits);
-                Assert.That(hits.Count, Is.GreaterThan(0));
-                var receiver = ExecuteEvents.GetEventHandler<IPointerClickHandler>(hits[0].gameObject);
-                Assert.That(receiver, Is.EqualTo(buttons[i].gameObject));
-                ExecuteEvents.Execute(receiver, pointer, ExecuteEvents.pointerClickHandler);
-                view.GetType().GetMethod("Refresh").Invoke(view, null);
+                ClickButton(buttons[i]);
+                Assert.That((float)controller.GetType().GetProperty("PlaybackSpeed").GetValue(controller), Is.EqualTo(values[i]));
                 Assert.That(buttons[i].targetGraphic.color, Is.Not.EqualTo(idle[i]), "Active speed must remain highlighted.");
                 for (int j = 0; j < buttons.Length; j++)
                     if (j != i) Assert.That(buttons[j].targetGraphic.color, Is.EqualTo(idle[j]));
-                Assert.That(GameObject.Find("SpeedReadout").GetComponent<Text>().text,
-                    Is.EqualTo($"速度 {1 << i}x · 已暂停"));
-                EventSystem.current.SetSelectedGameObject(ButtonNamed("PauseButton").gameObject);
+                Assert.That(GameObject.Find("SpeedReadout").GetComponent<Text>().text, Is.EqualTo($"速度 {values[i]:0.##}x · 已暂停"));
+                Assert.That(pause.targetGraphic.color, Is.EqualTo(pauseActive));
+                EventSystem.current.SetSelectedGameObject(ButtonNamed("ResetButton").gameObject);
                 yield return null;
-                Assert.That(buttons[i].targetGraphic.color, Is.Not.EqualTo(idle[i]), "Changing UI focus must not clear speed selection.");
-                double before = sim.GameTime;
-                yield return null;
+                Assert.That(buttons[i].targetGraphic.color, Is.Not.EqualTo(idle[i]), "UI focus must not clear speed selection.");
+                Assert.That(pause.targetGraphic.color, Is.EqualTo(pauseActive), "UI focus must not clear pause highlighting.");
+                double before = sim.GameTime; yield return null;
                 Assert.That(sim.GameTime, Is.EqualTo(before));
-                sim.Paused = false;
+                ClickButton(pause); Assert.That(sim.Paused, Is.False);
+                Assert.That(pause.targetGraphic.color, Is.Not.EqualTo(pauseActive));
                 yield return null;
-                Assert.That(sim.GameTime - before, Is.EqualTo(Time.unscaledDeltaTime * (1 << i)).Within(0.0001));
+                Assert.That(sim.GameTime - before, Is.EqualTo(Time.unscaledDeltaTime * values[i]).Within(.0001));
                 Assert.That(GameObject.Find("SpeedReadout").GetComponent<Text>().text, Does.Contain("运行中"));
-                sim.Paused = true;
+                ClickButton(pause); Assert.That(sim.Paused, Is.True);
+                Assert.That(pause.targetGraphic.color, Is.EqualTo(pauseActive));
             }
+            // 弹窗也会冻结游戏，暂停按钮禁用但仍表示暂停状态；关闭后恢复原状态。
+            ClickButton(pause);
+            var pauseIdle = pause.targetGraphic.color;
+            controller.GetType().GetMethod("OpenMemoryUpgrade").Invoke(controller, null);
+            Assert.That(pause.interactable, Is.False); Assert.That(pause.targetGraphic.color, Is.EqualTo(pauseActive));
+            controller.GetType().GetMethod("CloseMemoryUpgrade").Invoke(controller, null);
+            Assert.That(pause.interactable, Is.True); Assert.That(pause.targetGraphic.color, Is.EqualTo(pauseIdle));
+            // 键盘空格也调用同一TogglePause命令，验证命令能立即更新高亮。
+            controller.GetType().GetMethod("TogglePause").Invoke(controller, null);
+            Assert.That(pause.targetGraphic.color, Is.EqualTo(pauseActive));
             controller.GetType().GetMethod("ResetSimulation").Invoke(controller, null);
-            float resetSpeed = (float)controller.GetType().GetProperty("PlaybackSpeed").GetValue(controller);
+            sim = (TaskSimulation)controller.GetType().GetProperty("Simulation").GetValue(controller);
+            Assert.That(sim.Paused, Is.True); Assert.That(pause.targetGraphic.color, Is.EqualTo(pauseActive));
             for (int i = 0; i < buttons.Length; i++)
-                Assert.That(buttons[i].targetGraphic.color == idle[i], Is.EqualTo(!Mathf.Approximately(resetSpeed, 1 << i)));
+                Assert.That(buttons[i].targetGraphic.color == idle[i], Is.EqualTo(i != 0));
             yield return new ExitPlayMode();
+        }
+        private static void ClickButton(Button button)
+        {
+            Canvas.ForceUpdateCanvases(); var rect = (RectTransform)button.transform;
+            var pointer = new PointerEventData(EventSystem.current)
+            { position = RectTransformUtility.WorldToScreenPoint(null, rect.TransformPoint(rect.rect.center)), button = PointerEventData.InputButton.Left };
+            var hits = new System.Collections.Generic.List<RaycastResult>(); EventSystem.current.RaycastAll(pointer, hits);
+            Assert.That(hits.Count, Is.GreaterThan(0), "No hit: " + button.name);
+            var receiver = ExecuteEvents.GetEventHandler<IPointerClickHandler>(hits[0].gameObject);
+            Assert.That(receiver, Is.EqualTo(button.gameObject), "Top hit: " + hits[0].gameObject.name);
+            ExecuteEvents.Execute(receiver, pointer, ExecuteEvents.pointerClickHandler);
         }
         [UnityTest]
         public IEnumerator AvatarsFollowConversationsAndAppearOnNewRequestCards()
@@ -189,7 +211,7 @@ namespace CallmeCatgirl.Tests
             Assert.That(sim.Paused, Is.True, "Speed selection must not start the session.");
             Assert.That(sim.GameTime, Is.Zero);
             Assert.That(sim.Tasks["A-1"].Progress, Is.Zero);
-            Assert.That(sim.Tasks["A-1"].Remaining(sim.GameTime), Is.EqualTo(90));
+            Assert.That(sim.Tasks["A-1"].Remaining(sim.GameTime), Is.EqualTo(sim.Tasks["A-1"].Definition.Patience));
             ButtonNamed("PauseButton").onClick.Invoke();
             yield return null;
             Assert.That(sim.Paused, Is.False);

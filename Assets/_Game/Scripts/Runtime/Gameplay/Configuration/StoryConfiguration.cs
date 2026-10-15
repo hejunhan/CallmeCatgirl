@@ -99,7 +99,7 @@ namespace CallmeCatgirl.Gameplay
             [Min(0), Tooltip("0沿用任务模板")] public float Patience;
             [Min(0), Tooltip("0沿用任务模板")] public float Speed;
             [Tooltip("-1沿用任务模板，0为无Token收入")] public float Tokens = -1;
-            [InspectorName("方块图案（空为沿用模板）")] public string[] Shape;
+            [InspectorName("方块图案（空为从独立形状库随机）")] public string[] Shape;
             [InspectorName("能力门槛（空为沿用模板）")] public AbilityTarget[] Abilities;
             public void Validate()
             {

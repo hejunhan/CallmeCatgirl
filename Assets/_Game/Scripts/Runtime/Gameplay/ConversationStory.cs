@@ -15,6 +15,8 @@ namespace CallmeCatgirl.Gameplay
             public readonly List<string> History = new List<string>();
         }
         private readonly StoryConfiguration configuration;
+        private readonly TaskGenerationConfiguration generation;
+        private readonly System.Random shapeRandom;
         private readonly Dictionary<string, UserState> users = new Dictionary<string, UserState>();
         private readonly HashSet<string> submitted = new HashSet<string>();
         private readonly Queue<TaskInstance> pending = new Queue<TaskInstance>();
@@ -27,6 +29,8 @@ namespace CallmeCatgirl.Gameplay
         public IReadOnlyList<StoryConfiguration.ReplyChoice> Choices { get; private set; }
             = Array.Empty<StoryConfiguration.ReplyChoice>();
         public ConversationStory(StoryConfiguration config) => configuration = config;
+        public ConversationStory(StoryConfiguration config, TaskGenerationConfiguration taskGeneration, System.Random random) : this(config)
+        { generation = taskGeneration; shapeRandom = random; }
         private UserState User(string id)
         {
             if (users.TryGetValue(id, out var state)) return state;
@@ -101,12 +105,12 @@ namespace CallmeCatgirl.Gameplay
             var state = User(id); var session = state.Profile?.FindSession(state.NodeId);
             string templateId = session?.RequestId;
             var basis = !string.IsNullOrEmpty(templateId) && templates.TryGetValue(templateId, out var template) ? template : fallback;
-            if (session == null) return basis;
-            var difficulty = session.Task;
+            if (session == null && generation == null) return basis;
+            var difficulty = session?.Task;
             var requirements = difficulty?.Abilities != null && difficulty.Abilities.Length > 0
                 ? difficulty.Abilities.Select(a => a.Build()) : basis.Requirements;
-            return new TaskDefinition(basis.Id, string.IsNullOrWhiteSpace(session.Title) ? basis.Title : session.Title,
-                difficulty?.Shape != null && difficulty.Shape.Length > 0 ? ShapePattern.Parse(difficulty.Shape) : basis.Shape,
+            return new TaskDefinition(basis.Id, string.IsNullOrWhiteSpace(session?.Title) ? basis.Title : session.Title,
+                difficulty?.Shape != null && difficulty.Shape.Length > 0 ? ShapePattern.Parse(difficulty.Shape) : generation != null ? generation.PickShape(shapeRandom) : basis.Shape,
                 difficulty != null && difficulty.Calculation > 0 ? difficulty.Calculation : basis.Calculation,
                 difficulty != null && difficulty.Speed > 0 ? difficulty.Speed : basis.Speed,
                 difficulty != null && difficulty.Patience > 0 ? difficulty.Patience : basis.Patience,

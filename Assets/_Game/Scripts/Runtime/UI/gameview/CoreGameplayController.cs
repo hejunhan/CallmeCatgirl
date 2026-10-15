@@ -24,6 +24,7 @@ namespace CallmeCatgirl.Gameplay
         public TaskInstance SelectedTask => SelectedId != null && Simulation.Tasks.TryGetValue(SelectedId, out var task) ? task : null;
         public float PlaybackSpeed { get; private set; }
         public int MemoryLevel { get; private set; }
+        public string ModelName => configuration.MemoryUpgrades.GetModelName(MemoryLevel, Simulation.Model.Id);
         public EconomyManager Economy { get; private set; }
         public int Funds => Economy.CurrentFunds;
         public int CurrentMonth { get; private set; }
@@ -38,19 +39,25 @@ namespace CallmeCatgirl.Gameplay
         public bool CanAllocateAbility => !GameEnded && IsMemoryUpgradeOpen && !IsStoryOpen && AvailableAbilityPoints > 0;
         public MemoryUpgradeConfiguration.UpgradeStep NextMemoryUpgrade
             => configuration.MemoryUpgrades.TryGetNextLevel(MemoryLevel, out var step) ? step : null;
-        public bool CanUpgradeMemory => !GameEnded && !IsStoryOpen && NextMemoryUpgrade != null && NextMemoryUpgrade.Cost >= 0 && NextMemoryUpgrade.AbilityPoints >= 0
+        public bool CanUpgradeMemory => !GameEnded && !IsStoryOpen && NextMemoryUpgrade != null
+            && (NextMemoryUpgrade.TaskMultipliers == null || NextMemoryUpgrade.TaskMultipliers.IsValid) && NextMemoryUpgrade.Cost >= 0 && NextMemoryUpgrade.AbilityPoints >= 0
             && AvailableAbilityPoints <= int.MaxValue - NextMemoryUpgrade.AbilityPoints
             && Funds >= NextMemoryUpgrade.Cost && CompletedTasks >= NextMemoryUpgrade.RequiredCompletedTasks;
         public string NextMemoryPointRewardText => NextMemoryUpgrade == null ? string.Empty
             : NextMemoryUpgrade.AbilityPoints < 0 ? "奖励点数配置无效" : $"升级奖励：{NextMemoryUpgrade.AbilityPoints} 点，由玩家自由分配";
+        public string NextTaskMultiplierText => NextMemoryUpgrade == null ? string.Empty
+            : configuration.MemoryUpgrades.GetTaskMultipliers(NextMemoryUpgrade.TargetLevel)?.Description ?? "计算量 ×1 · 奖励 ×1";
         public int NextMemoryCellCount => NextMemoryUpgrade == null ? 0
             : configuration.MemoryUpgrades.GetOpenCells(NextMemoryUpgrade.TargetLevel).Count - Simulation.OpenCellCount;
         public string Message { get; private set; }
         public IReadOnlyList<string> Logs => logs;
         public event Action<TaskEvent> TaskEventRaised;
         private readonly List<string> logs = new List<string>();
+        private readonly Dictionary<string, TaskDefinition> taskBases = new Dictionary<string, TaskDefinition>();
         private readonly Dictionary<string, TaskDefinition> definitions = new Dictionary<string, TaskDefinition>();
         private int serial;
+        private System.Random requestRandom;
+        private TaskDefinition[] requestTemplates;
 
         private void Awake() => ResetSimulation();
         private void Start() { if (canvasView != null && Simulation != null) canvasView.Initialize(this); }
@@ -76,8 +83,11 @@ namespace CallmeCatgirl.Gameplay
             try
             {
                 IsMemoryUpgradeOpen = false;
-                Story = new ConversationStory(configuration.Story);
-                Simulation = configuration.BuildSimulation(); Simulation.Paused = true; definitions.Clear(); logs.Clear(); serial = 0;
+                configuration.MemoryUpgrades.ValidateTaskMultipliers();
+                configuration.TaskGeneration?.Validate(configuration.MemoryUpgrades.BoardWidth, configuration.MemoryUpgrades.BoardHeight);
+                requestRandom = configuration.TaskGeneration?.CreateRandom() ?? new System.Random();
+                Story = new ConversationStory(configuration.Story, configuration.TaskGeneration, requestRandom);
+                Simulation = configuration.BuildSimulation(); Simulation.Paused = true; definitions.Clear(); taskBases.Clear(); logs.Clear(); serial = 0;
                 MemoryLevel = configuration.MemoryUpgrades.InitialLevel; CompletedTasks = 0; AvailableAbilityPoints = 0;
                 if (configuration.SecondsPerGameMonth <= 0 || float.IsNaN(configuration.SecondsPerGameMonth)
                     || float.IsInfinity(configuration.SecondsPerGameMonth)) throw new InvalidOperationException("每月游戏秒数必须是正的有限数值。");
@@ -88,12 +98,12 @@ namespace CallmeCatgirl.Gameplay
                 {
                     var definition = source.Build(); definitions.Add(definition.Id, definition);
                 }
+                requestTemplates = definitions.Values.ToArray();
                 configuration.Story?.Validate(definitions.Keys);
                 foreach (var definition in definitions.Values)
-                    Simulation.TryCreate(definition.Id + "-1", definition.Id, "1",
-                        Story.BuildNextTask(definition.Id, definitions, definition), out _);
+                    CreateTask(definition.Id + "-1", definition.Id, "1", definition);
                 SelectedId = Simulation.Tasks.Keys.FirstOrDefault(); PlaybackSpeed = configuration.PlaybackSpeed;
-                Message = "拖动请求到格子。R旋转，空格暂停，Esc取消拖拽；撤回不重置忍耐。";
+                Message = "拖动请求到同一背包内的格子，不能跨隔板。R旋转，空格暂停，Esc取消拖拽；撤回不重置忍耐。";
                 ReadEvents();
                 if (canvasView != null && canvasView.IsInitialized) canvasView.Initialize(this);
             }
@@ -108,9 +118,9 @@ namespace CallmeCatgirl.Gameplay
         }
         public void CloseInfo() => SelectedId = null;
         public void SetMessage(string value) => Message = value;
-        public void TogglePause() { if (!GameEnded && !IsModalOpen) Simulation.Paused = !Simulation.Paused; }
+        public void TogglePause() { if (!GameEnded && !IsModalOpen) { Simulation.Paused = !Simulation.Paused; canvasView?.Refresh(); } }
         public void CycleSpeed() => PlaybackSpeed = PlaybackSpeed == 0.5f ? 1f : PlaybackSpeed == 1 ? 0.25f : 0.5f;
-        public void SetSpeed(float value) => PlaybackSpeed = value;
+        public void SetSpeed(float value) { PlaybackSpeed = value; canvasView?.Refresh(); }
         public void RotateSelected()
         {
             if (GameEnded || IsModalOpen) return;
@@ -138,26 +148,50 @@ namespace CallmeCatgirl.Gameplay
         public void AddRequest()
         {
             if (GameEnded || IsModalOpen) return;
-            if (definitions.Count == 0) return;
-            string suffix = (++serial).ToString();
-            Simulation.TryCreate("new-" + suffix, "new-user-" + suffix, "extra-" + suffix, definitions.Values.First(), out var task);
-            SelectedId = task?.Id;
+            var task = CreateRandomRequest();
+            if (task != null) SelectedId = task.Id;
+            ReadEvents(); canvasView?.Refresh();
+        }
+        private TaskInstance CreateRandomRequest()
+        {
+            if (requestTemplates.Length == 0) return null;
+            string suffix = (++serial).ToString(), user = "new-user-" + suffix;
+            var basis = requestTemplates[requestRandom.Next(requestTemplates.Length)];
+            return CreateTask("new-" + suffix, user, "extra-" + suffix, basis);
+        }
+        private TaskInstance CreateTask(string requestId, string user, string round, TaskDefinition fallback)
+        {
+            var basis = Story.BuildNextTask(user, definitions, fallback);
+            var scaled = configuration.MemoryUpgrades.ScaleTask(MemoryLevel, basis, requestRandom);
+            if (!Simulation.TryCreate(requestId, user, round, scaled, out var task)) return null;
+            taskBases.Add(requestId, basis); // 保存未乘倍率的原始任务，下一会话不能拿已放大的值再乘。
+            return task;
+        }
+        private void RefreshMonthlyRequests()
+        {
+            var generation = configuration.TaskGeneration;
+            if (generation == null || !generation.ShouldRefresh(CurrentMonth)) return;
+            int count = 0;
+            for (int i = 0; i < generation.RequestsPerRefresh; i++) if (CreateRandomRequest() != null) count++;
+            ReadEvents();
+            Message = $"第{CurrentMonth}月：新增{count}个请求，已有请求继续保留。";
+            AddEconomyLog(Message);
         }
         public void NextRound()
         {
             if (GameEnded || IsModalOpen) return;
             var previous = SelectedTask;
             if (previous == null || Story.Finished(previous.ConversationId) || !Simulation.TryCloseFeedback(previous.Id)) return;
-            var definition = Story.BuildNextTask(previous.ConversationId, definitions, previous.Definition);
+            var basis = taskBases.TryGetValue(previous.Id, out var original) ? original : previous.Definition;
             string round = "round-" + (++serial);
-            Simulation.TryCreate(previous.ConversationId + "-" + round, previous.ConversationId, round, definition, out var next);
+            var next = CreateTask(previous.ConversationId + "-" + round, previous.ConversationId, round, basis);
             ReadEvents();
             SelectedId = next?.Id;
         }
         public void OpenMemoryUpgrade()
         {
             if (GameEnded || IsStoryOpen) return;
-            IsMemoryUpgradeOpen = true; Message = "查看新增格子，点击确认后才会扣费。"; canvasView?.CancelDrag(); canvasView?.Refresh();
+            IsMemoryUpgradeOpen = true; Message = "查看新增格子，点击确认后才会扣费。倍率只影响升级后新生成的请求。"; canvasView?.CancelDrag(); canvasView?.Refresh();
         }
         public void CloseMemoryUpgrade() { IsMemoryUpgradeOpen = false; canvasView?.Refresh(); }
         public void UpgradeMemory()
@@ -166,6 +200,8 @@ namespace CallmeCatgirl.Gameplay
             ReadEvents();
             var next = NextMemoryUpgrade;
             if (next == null) { Message = "内存已满级。"; return; }
+            if (next.TaskMultipliers != null && !next.TaskMultipliers.IsValid)
+            { Message = "新任务倍率范围配置无效，未升级或扣费。"; canvasView?.Refresh(); return; }
             if (next.AbilityPoints < 0 || AvailableAbilityPoints > int.MaxValue - next.AbilityPoints)
             { Message = "奖励点数配置无效或超过上限，未升级或扣费。"; canvasView?.Refresh(); return; }
             if (!CanUpgradeMemory)
@@ -223,7 +259,7 @@ namespace CallmeCatgirl.Gameplay
                 Simulation.Advance(step); ReadEvents(); monthTimer += step; delta -= step;
                 if (monthTimer + 1e-9 < configuration.SecondsPerGameMonth) continue;
                 monthTimer = 0;
-                if (Economy.SettleMonth(configuration.MonthlyMaintenanceFee)) CurrentMonth++;
+                if (Economy.SettleMonth(configuration.MonthlyMaintenanceFee)) { CurrentMonth++; RefreshMonthlyRequests(); }
                 else
                 {
                     GameEnded = true; Simulation.Paused = true;
@@ -242,7 +278,7 @@ namespace CallmeCatgirl.Gameplay
             foreach (var item in Simulation.DrainEvents())
             {
                 if (item.Kind == TaskEventKind.Submitted && item.Result != null && item.Result.Overall != Quality.BelowStandard) CompletedTasks++;
-                Economy.Settle(item);
+                int income = Economy.Settle(item);
                 if (Simulation.Tasks.TryGetValue(item.RequestId, out var task))
                 {
                     if (item.Kind == TaskEventKind.Arrived) Story.Arrived(task);
@@ -251,13 +287,14 @@ namespace CallmeCatgirl.Gameplay
                 logs.Insert(0, $"{item.GameTime:0.0}s  {item.RequestId}  {EventText(item.Kind)}"
                     + (item.Kind == TaskEventKind.Submitted || item.Kind == TaskEventKind.TimedOut ? $"  token={item.BillableTokens:0.##}" : ""));
                 if (logs.Count > 7) logs.RemoveAt(logs.Count - 1);
+                if (item.Kind == TaskEventKind.Submitted || item.Kind == TaskEventKind.TimedOut) canvasView?.ShowSettlement(item, income);
                 TaskEventRaised?.Invoke(item);
             }
         }
         public static string AbilityText(AbilityKind kind) => kind == AbilityKind.Writing ? "写作" : kind == AbilityKind.Code ? "代码" : kind == AbilityKind.Reasoning ? "推理" : "检索";
         public static string QualityText(Quality quality) => quality == Quality.Excellent ? "优秀" : quality == Quality.Complete ? "完成" : "未达标";
         public static string StateText(RequestState state) => new[] { "等待摆放", "运行中", "已撤回", "算完待确认", "已提交待回复", "超时失败", "反馈结束" }[(int)state];
-        public static string FailureText(PlacementFailure failure) => new[] { "无", "任务不存在", "当前状态不可摆放", "越界", "未开放格", "与其他任务重叠" }[(int)failure];
+        public static string FailureText(PlacementFailure failure) => new[] { "无", "任务不存在", "当前状态不可摆放", "越界", "未开放格", "与其他任务重叠", "跨越隔板，任务必须完整放在同一背包内" }[(int)failure];
         private static string EventText(TaskEventKind kind) => new[] { "请求到达", "合法摆放", "撤回", "算完判质", "提交结算", "超时结算", "反馈结束" }[(int)kind];
     }
 }

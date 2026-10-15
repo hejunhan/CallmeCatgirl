@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f8c6763df8b45c89928f34b68852fc2, type: 3}
+  m_Name: UIFeedbackConfiguration
+  m_EditorClassIdentifier: Assembly-CSharp::CallmeCatgirl.UI.UIFeedbackConfiguration
+  TaskNormal: {r: 0.36, g: 0.47, b: 0.63, a: 1}
+  TaskSelected: {r: 0.31, g: 0.12, b: 0.9, a: 1}
+  CardSelected: {r: 0.55, g: 0.4, b: 0.95, a: 0.16}
+  SpeedSelected: {r: 0.32, g: 0.12, b: 0.9, a: 1}
+  PauseSelected: {r: 0.32, g: 0.12, b: 0.9, a: 1}
+  LegalPreview: {r: 0.25, g: 0.9, b: 0.45, a: 0.65}
+  IllegalPreview: {r: 1, g: 0.3, b: 0.3, a: 0.65}
+  BelowStandard: {r: 0.85, g: 0.48, b: 0.36, a: 1}
+  Complete: {r: 0.28, g: 0.68, b: 0.45, a: 1}
+  Excellent: {r: 0.73, g: 0.63, b: 0.34, a: 1}
+  Error: {r: 0.95, g: 0.3, b: 0.3, a: 1}
+  UpgradePreview: {r: 0.44, g: 0.26, b: 0.85, a: 1}
+  Signal: {r: 0.55, g: 0.85, b: 0.9, a: 1}
+  TaskBorders:
+  - {r: 0.56, g: 0.78, b: 0.82, a: 1}
+  - {r: 0.79, g: 0.65, b: 0.86, a: 1}
+  - {r: 0.83, g: 0.74, b: 0.5, a: 1}
+  - {r: 0.58, g: 0.79, b: 0.65, a: 1}
+  - {r: 0.83, g: 0.62, b: 0.57, a: 1}
+  - {r: 0.57, g: 0.67, b: 0.9, a: 1}
+  SelectedBorder: {r: 0.86, g: 0.78, b: 1, a: 1}
+  BorderWidth: 1.5
+  Animate: 1
+  ScanOpacity: 0.12
+  ScanSeconds: 3
+  PulseSeconds: 0.55
+  PulseStrength: 0.65
+  DragScale: 0.04
+  PlacementScale: 0.07
+  PlacementSeconds: 0.28
+  RejectShakePixels: 4
+  RejectSeconds: 0.2
+  AbilityTextSeconds: 0.9
+  ShowUnselectedAbilityText: 0
+  CompletionTextSeconds: 1.1
+  CompletionScale: 0.05
+  ReadyPulseStrength: 0.16
+  ReadyPulseSeconds: 1.6
+  SettlementSeconds: 1.4
+  FloatingTextRise: 22

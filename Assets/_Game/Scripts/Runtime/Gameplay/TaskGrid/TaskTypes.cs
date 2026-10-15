@@ -25,7 +25,7 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
     //定义每个任务等待情况
     public enum Quality { BelowStandard, Complete, Excellent }
     //定义每个任务完成情况
-    public enum PlacementFailure { None, UnknownTask, InvalidState, OutOfBounds, LockedCell, Overlap }
+    public enum PlacementFailure { None, UnknownTask, InvalidState, OutOfBounds, LockedCell, Overlap, CrossesPartition }
     public enum TaskEventKind { Arrived, Placed, Withdrawn, Ready, Submitted, TimedOut, FeedbackClosed }
     //定义每个任务的事件类别
     //能力要求

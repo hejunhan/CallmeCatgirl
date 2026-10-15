@@ -20,10 +20,20 @@ namespace CallmeCatgirl.UI
         private readonly List<Button> buttons = new List<Button>();
         private ConversationStory displayed;
         private int revision = -1;
-        public void Refresh(CoreGameplayController owner, Sprite portrait)
+        private float openedAt;
+        private Color resultIdle;
+        private bool colorCaptured;
+        public void Refresh(CoreGameplayController owner, Sprite portrait, UIFeedbackConfiguration feedback = null)
         {
             var story = owner.Story; panel.SetActive(story != null && story.IsOpen);
-            if (story == null || !story.IsOpen || (story == displayed && revision == story.Revision)) return;
+            if (story == null || !story.IsOpen) return;
+            if (!colorCaptured) { resultIdle = resultLabel.color; colorCaptured = true; }
+            bool changed = story != displayed || revision != story.Revision;
+            if (changed) openedAt = Time.unscaledTime;
+            float flash = feedback != null && feedback.Animate && story.IsReply
+                ? Mathf.Clamp01(1 - (Time.unscaledTime - openedAt) / Mathf.Max(.05f,feedback.PulseSeconds)) : 0;
+            resultLabel.color = Color.Lerp(resultIdle,feedback == null ? resultIdle : feedback.ResultColor(story.Result),flash);
+            if (!changed) return;
             displayed = story; revision = story.Revision;
             userLabel.text = story.Name(story.UserId);
             resultLabel.text = story.IsReply ? $"{story.RequestId} · {CoreGameplayController.QualityText(story.Result)} · 请选择回复（时间已冻结）" : "过往对话记录 · 时间已冻结";

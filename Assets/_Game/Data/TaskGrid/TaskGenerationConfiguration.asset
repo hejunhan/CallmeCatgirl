@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6088543fabad47388d0ab9c75beca688, type: 3}
+  m_Name: TaskGenerationConfiguration
+  m_EditorClassIdentifier: Assembly-CSharp::CallmeCatgirl.Gameplay.TaskGenerationConfiguration
+  RequestsPerRefresh: 5
+  MonthsPerRefresh: 1
+  RandomSeed: -1
+  Shapes:
+  - Name: "\u56DB\u683C"
+    Pattern:
+    - .#.
+    - .#.
+    - .#.
+    - .#.
+  - Name: "\u53CC\u683C"
+    Pattern:
+    - '##'
+  - Name: "\u4E09\u683C\u76F4\u7EBF"
+    Pattern:
+    - '###'
+  - Name: "\u4E09\u683C\u8F6C\u89D2"
+    Pattern:
+    - '#.'
+    - '##'
+  - Name: "\u56DB\u683C\u6B63\u65B9\u5F62"
+    Pattern:
+    - '##'
+    - '##'
+  - Name: "\u56DB\u683CT\u5F62"
+    Pattern:
+    - '###'
+    - .#.
+  - Name: "\u56DB\u683CL\u5F62"
+    Pattern:
+    - '#.'
+    - '#.'
+    - '##'
+  - Name: "\u56DB\u683CS\u5F62"
+    Pattern:
+    - .##
+    - '##.'
+  - Name: "\u56DB\u683CZ\u5F62"
+    Pattern:
+    - '##.'
+    - .##
+  - Name: "\u4E94\u683C\u5341\u5B57"
+    Pattern:
+    - .#.
+    - '###'
+    - .#.
+  - Name: "7\u683C"
+    Pattern:
+    - '##..'
+    - '####'
+    - ...#
+  - Name: "\u5927l"
+    Pattern:
+    - '#...'
+    - '#...'
+    - '###.'

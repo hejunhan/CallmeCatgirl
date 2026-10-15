@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using CallmeCatgirl.Gameplay.TaskGrid;
 using UnityEngine;
-//Inspector 中的棋盘、模型和任务数值配置，设定后无法更改
+//主玩法数值；修改配置后重开游戏生效。
 namespace CallmeCatgirl.Gameplay
 {
     [CreateAssetMenu(menuName = "CallmeCatgirl/Core Gameplay Configuration")]
@@ -18,7 +18,8 @@ namespace CallmeCatgirl.Gameplay
         [InspectorName("剧情配置")] public StoryConfiguration Story;
         [Min(0), InspectorName("每Token收入单价")] public int TokenPrice = 1;
         [Min(0), InspectorName("每月维护费")] public int MonthlyMaintenanceFee = 50;
-        [Min(0.1f), InspectorName("每月游戏秒数")] public float SecondsPerGameMonth = 20;
+        [Min(0.1f), InspectorName("每月游戏秒数")] public float SecondsPerGameMonth = 30;
+        [InspectorName("任务生成与方块配置")] public TaskGenerationConfiguration TaskGeneration;
         public EconomyManager BuildEconomyManager() => new EconomyManager(InitialFunds, TokenPrice);
 
         public ModelDefinition BuildModel() => new ModelDefinition("test-model", AbilityInterval,
@@ -31,7 +32,7 @@ namespace CallmeCatgirl.Gameplay
         {
             if (MemoryUpgrades == null) throw new InvalidOperationException("请在主配置中指定内存配置。");
             return new TaskSimulation(MemoryUpgrades.BoardWidth, MemoryUpgrades.BoardHeight,
-                MemoryUpgrades.GetOpenCells(MemoryUpgrades.InitialLevel), BuildModel());
+                MemoryUpgrades.GetOpenCells(MemoryUpgrades.InitialLevel), BuildModel(), MemoryUpgrades.GetCompartments());
         }
         [Serializable]
         public sealed class DemoTask
@@ -39,7 +40,7 @@ namespace CallmeCatgirl.Gameplay
             //代码块配置
             public string Id;
             public string Title;
-            public Vector2Int[] Shape;
+            [HideInInspector] public Vector2Int[] Shape; // 旧模板兼容；新任务形状优先来自剧情或独立形状库。
             [Min(0.1f)] public float Calculation = 100;
             [Min(0.1f)] public float Speed = 10;
             [Min(0.1f)] public float Patience = 60;
@@ -50,7 +51,7 @@ namespace CallmeCatgirl.Gameplay
             public TaskDefinition Build()
             {
                 var cells = new List<Cell>();
-                foreach (var cell in Shape) cells.Add(new Cell(cell.x, cell.y));
+                foreach (var cell in Shape == null || Shape.Length == 0 ? new[] { Vector2Int.zero } : Shape) cells.Add(new Cell(cell.x, cell.y));
                 var req = new List<AbilityRequirement>();
                 // A zero minimum means this ability is not required by the inspector configuration.
                 if (Minimum.x > 0) req.Add(new AbilityRequirement(AbilityKind.Writing, Minimum.x, Excellent.x));
