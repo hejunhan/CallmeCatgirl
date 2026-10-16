@@ -1,0 +1,290 @@
+[
+  {
+    "file": "03_bubbles/message_incoming.png",
+    "width": 512,
+    "height": 128,
+    "mode": "RGBA",
+    "slice_ltrb": [
+      16,
+      16,
+      16,
+      16
+    ]
+  },
+  {
+    "file": "03_bubbles/message_outgoing.png",
+    "width": 512,
+    "height": 128,
+    "mode": "RGBA",
+    "slice_ltrb": [
+      16,
+      16,
+      16,
+      16
+    ]
+  },
+  {
+    "file": "03_bubbles/message_system.png",
+    "width": 512,
+    "height": 80,
+    "mode": "RGBA",
+    "slice_ltrb": [
+      16,
+      16,
+      16,
+      16
+    ]
+  },
+  {
+    "file": "04_buttons/reply_normal.png",
+    "width": 1200,
+    "height": 96,
+    "mode": "RGBA",
+    "slice_ltrb": [
+      16,
+      16,
+      16,
+      16
+    ]
+  },
+  {
+    "file": "04_buttons/common_normal.png",
+    "width": 240,
+    "height": 64,
+    "mode": "RGBA",
+    "slice_ltrb": [
+      16,
+      16,
+      16,
+      16
+    ]
+  },
+  {
+    "file": "04_buttons/reply_hover.png",
+    "width": 1200,
+    "height": 96,
+    "mode": "RGBA",
+    "slice_ltrb": [
+      16,
+      16,
+      16,
+      16
+    ]
+  },
+  {
+    "file": "04_buttons/common_hover.png",
+    "width": 240,
+    "height": 64,
+    "mode": "RGBA",
+    "slice_ltrb": [
+      16,
+      16,
+      16,
+      16
+    ]
+  },
+  {
+    "file": "04_buttons/reply_selected.png",
+    "width": 1200,
+    "height": 96,
+    "mode": "RGBA",
+    "slice_ltrb": [
+      16,
+      16,
+      16,
+      16
+    ]
+  },
+  {
+    "file": "04_buttons/common_selected.png",
+    "width": 240,
+    "height": 64,
+    "mode": "RGBA",
+    "slice_ltrb": [
+      16,
+      16,
+      16,
+      16
+    ]
+  },
+  {
+    "file": "04_buttons/reply_pressed.png",
+    "width": 1200,
+    "height": 96,
+    "mode": "RGBA",
+    "slice_ltrb": [
+      16,
+      16,
+      16,
+      16
+    ]
+  },
+  {
+    "file": "04_buttons/common_pressed.png",
+    "width": 240,
+    "height": 64,
+    "mode": "RGBA",
+    "slice_ltrb": [
+      16,
+      16,
+      16,
+      16
+    ]
+  },
+  {
+    "file": "04_buttons/reply_disabled.png",
+    "width": 1200,
+    "height": 96,
+    "mode": "RGBA",
+    "slice_ltrb": [
+      16,
+      16,
+      16,
+      16
+    ]
+  },
+  {
+    "file": "04_buttons/common_disabled.png",
+    "width": 240,
+    "height": 64,
+    "mode": "RGBA",
+    "slice_ltrb": [
+      16,
+      16,
+      16,
+      16
+    ]
+  },
+  {
+    "file": "02_window/reply_region.png",
+    "width": 1200,
+    "height": 280,
+    "mode": "RGBA",
+    "slice_ltrb": [
+      16,
+      16,
+      16,
+      16
+    ]
+  },
+  {
+    "file": "02_window/dialogue_pattern_1920x540.png",
+    "width": 1920,
+    "height": 540,
+    "mode": "RGBA",
+    "slice_ltrb": null
+  },
+  {
+    "file": "02_window/dialogue_pattern_1920x1080.png",
+    "width": 1920,
+    "height": 1080,
+    "mode": "RGBA",
+    "slice_ltrb": null
+  },
+  {
+    "file": "05_avatar/avatar_generic.png",
+    "width": 256,
+    "height": 256,
+    "mode": "RGBA",
+    "slice_ltrb": null
+  },
+  {
+    "file": "05_avatar/avatar_frame.png",
+    "width": 256,
+    "height": 256,
+    "mode": "RGBA",
+    "slice_ltrb": [
+      12,
+      12,
+      12,
+      12
+    ]
+  },
+  {
+    "file": "06_status/status_online.png",
+    "width": 64,
+    "height": 64,
+    "mode": "RGBA",
+    "slice_ltrb": null
+  },
+  {
+    "file": "06_status/status_offline.png",
+    "width": 64,
+    "height": 64,
+    "mode": "RGBA",
+    "slice_ltrb": null
+  },
+  {
+    "file": "06_status/status_busy.png",
+    "width": 64,
+    "height": 64,
+    "mode": "RGBA",
+    "slice_ltrb": null
+  },
+  {
+    "file": "06_status/status_unread.png",
+    "width": 64,
+    "height": 64,
+    "mode": "RGBA",
+    "slice_ltrb": null
+  },
+  {
+    "file": "07_icons/check_light.png",
+    "width": 64,
+    "height": 64,
+    "mode": "RGBA",
+    "slice_ltrb": null
+  },
+  {
+    "file": "07_icons/check_dark.png",
+    "width": 64,
+    "height": 64,
+    "mode": "RGBA",
+    "slice_ltrb": null
+  },
+  {
+    "file": "07_icons/back.png",
+    "width": 64,
+    "height": 64,
+    "mode": "RGBA",
+    "slice_ltrb": null
+  },
+  {
+    "file": "07_icons/close.png",
+    "width": 64,
+    "height": 64,
+    "mode": "RGBA",
+    "slice_ltrb": null
+  },
+  {
+    "file": "01_background/background_1920x1080.png",
+    "width": 1920,
+    "height": 1080,
+    "mode": "RGBA",
+    "slice_ltrb": null
+  },
+  {
+    "file": "02_window/im_window_1920x1080.png",
+    "width": 1920,
+    "height": 1080,
+    "mode": "RGBA",
+    "slice_ltrb": [
+      100,
+      100,
+      100,
+      100
+    ]
+  },
+  {
+    "file": "02_window/im_window_1920x540.png",
+    "width": 1920,
+    "height": 540,
+    "mode": "RGBA",
+    "slice_ltrb": [
+      100,
+      100,
+      100,
+      100
+    ]
+  }
+]

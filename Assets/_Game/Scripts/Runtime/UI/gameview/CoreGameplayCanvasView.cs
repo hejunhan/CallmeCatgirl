@@ -53,7 +53,7 @@ namespace CallmeCatgirl.UI
         [SerializeField] private Text messageLabel;
         [SerializeField] private Text logLabel;
         [SerializeField] private Text pauseLabel;
-        [SerializeField] private Text speedLabel;
+
         [SerializeField] private Button[] speedButtons;
         [SerializeField, Tooltip("与速度按钮一一对应的倍率。")] private float[] speedValues = { 1, 2, 4 };
         [SerializeField] private Color speedActiveColor = new Color(0.32f, 0.12f, 0.9f, 1f);
@@ -143,16 +143,16 @@ namespace CallmeCatgirl.UI
             if (economyStatusLabel != null) economyStatusLabel.text = $"第{controller.CurrentMonth}月 · 月底剩 {controller.MonthTimeRemaining:0.0}s · "
                 + (controller.GameEnded ? "经营结束" : controller.IsInGracePeriod ? $"宽限期，欠款 {controller.DebtAmount}" : "正常经营");
             pauseButton.interactable = !controller.GameEnded && !controller.IsModalOpen;
-            pauseButton.targetGraphic.color = sim.Paused || controller.IsModalOpen ? (feedback != null ? feedback.PauseSelected : pauseActiveColor) : pauseIdleColor;
+            SetControlSelected(pauseButton, sim.Paused || controller.IsModalOpen, feedback != null ? feedback.PauseSelected : pauseActiveColor, pauseIdleColor);
             if (conversationPopup != null) conversationPopup.Refresh(controller, GetAvatar(controller.Story.UserId), feedback);
             clockLabel.text = $"游戏时间 {sim.GameTime:0.0}s   模型周期 {sim.Model.Interval:0.#}s";
             messageLabel.text = controller.Message; logLabel.text = string.Join("\n", controller.Logs);
             pauseLabel.text = controller.IsMemoryUpgradeOpen ? "内存升级中" : controller.IsStoryOpen ? "剧情阅读中" : controller.GameEnded ? "经营结束" : sim.Paused ? (sim.GameTime == 0 ? "开始 [空格]" : "继续 [空格]") : "暂停 [空格]";
-            speedLabel.text = $"速度 {controller.PlaybackSpeed:0.##}x · {(controller.IsMemoryUpgradeOpen ? "升级暂停" : controller.IsStoryOpen ? "剧情暂停" : sim.Paused ? "已暂停" : "运行中")}";
+
             if (speedButtons != null && speedIdleColors != null)
                 for (int i = 0; i < speedButtons.Length && i < speedValues.Length; i++)
-                    speedButtons[i].targetGraphic.color = Mathf.Approximately(controller.PlaybackSpeed, speedValues[i])
-                        ? (feedback != null ? feedback.SpeedSelected : speedActiveColor) : speedIdleColors[i];
+                    SetControlSelected(speedButtons[i], Mathf.Approximately(controller.PlaybackSpeed, speedValues[i]),
+                        feedback != null ? feedback.SpeedSelected : speedActiveColor, speedIdleColors[i]);
             if (memoryUpgradePopup != null) memoryUpgradePopup.Refresh(controller, feedback);
             if (memoryUpgradeButton != null)
             {
@@ -203,6 +203,13 @@ namespace CallmeCatgirl.UI
             RefreshSignals();
             RefreshInfo();
             if (IsDragging) RenderGhost();
+        }
+
+        private static void SetControlSelected(Button button, bool selected, Color active, Color idle)
+        {
+            var artwork = button.GetComponent<ButtonArtwork>();
+            if (artwork != null && artwork.enabled) artwork.SetSelected(selected);
+            else button.targetGraphic.color = selected ? active : idle;
         }
 
         private void RefreshSignals()

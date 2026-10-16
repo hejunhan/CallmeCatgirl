@@ -1,0 +1,249 @@
+[
+  {
+    "file": "frame_window.png",
+    "source_box_xyxy": [
+      36,
+      88,
+      1052,
+      899
+    ],
+    "size": [
+      1016,
+      811
+    ]
+  },
+  {
+    "file": "button_pause.png",
+    "source_box_xyxy": [
+      40,
+      925,
+      490,
+      1053
+    ],
+    "size": [
+      450,
+      128
+    ]
+  },
+  {
+    "file": "button_speed_1x.png",
+    "source_box_xyxy": [
+      494,
+      925,
+      676,
+      1053
+    ],
+    "size": [
+      182,
+      128
+    ]
+  },
+  {
+    "file": "button_speed_2x.png",
+    "source_box_xyxy": [
+      677,
+      925,
+      858,
+      1053
+    ],
+    "size": [
+      181,
+      128
+    ]
+  },
+  {
+    "file": "button_speed_4x.png",
+    "source_box_xyxy": [
+      860,
+      925,
+      1046,
+      1053
+    ],
+    "size": [
+      186,
+      128
+    ]
+  },
+  {
+    "file": "button_new_request.png",
+    "source_box_xyxy": [
+      40,
+      1057,
+      528,
+      1178
+    ],
+    "size": [
+      488,
+      121
+    ]
+  },
+  {
+    "file": "button_reset.png",
+    "source_box_xyxy": [
+      532,
+      1057,
+      798,
+      1178
+    ],
+    "size": [
+      266,
+      121
+    ]
+  },
+  {
+    "file": "button_blank.png",
+    "source_box_xyxy": [
+      801,
+      1057,
+      1046,
+      1178
+    ],
+    "size": [
+      245,
+      121
+    ]
+  },
+  {
+    "file": "button_normal.png",
+    "source_box_xyxy": [
+      39,
+      1180,
+      378,
+      1297
+    ],
+    "size": [
+      341,
+      117
+    ]
+  },
+  {
+    "file": "button_selected.png",
+    "source_box_xyxy": [
+      383,
+      1180,
+      703,
+      1297
+    ],
+    "size": [
+      341,
+      117
+    ]
+  },
+  {
+    "file": "button_disabled.png",
+    "source_box_xyxy": [
+      707,
+      1180,
+      1048,
+      1297
+    ],
+    "size": [
+      341,
+      117
+    ]
+  },
+  {
+    "file": "icon_play.png",
+    "source_box_xyxy": [
+      77,
+      1310,
+      147,
+      1393
+    ],
+    "size": [
+      96,
+      96
+    ]
+  },
+  {
+    "file": "icon_pause.png",
+    "source_box_xyxy": [
+      199,
+      1310,
+      267,
+      1393
+    ],
+    "size": [
+      96,
+      96
+    ]
+  },
+  {
+    "file": "icon_reset.png",
+    "source_box_xyxy": [
+      311,
+      1309,
+      402,
+      1394
+    ],
+    "size": [
+      96,
+      96
+    ]
+  },
+  {
+    "file": "icon_plus.png",
+    "source_box_xyxy": [
+      441,
+      1310,
+      514,
+      1393
+    ],
+    "size": [
+      96,
+      96
+    ]
+  },
+  {
+    "file": "icon_close.png",
+    "source_box_xyxy": [
+      574,
+      1310,
+      640,
+      1393
+    ],
+    "size": [
+      96,
+      96
+    ]
+  },
+  {
+    "file": "icon_minus.png",
+    "source_box_xyxy": [
+      690,
+      1310,
+      764,
+      1393
+    ],
+    "size": [
+      96,
+      96
+    ]
+  },
+  {
+    "file": "icon_back.png",
+    "source_box_xyxy": [
+      803,
+      1310,
+      886,
+      1393
+    ],
+    "size": [
+      96,
+      96
+    ]
+  },
+  {
+    "file": "icon_settings.png",
+    "source_box_xyxy": [
+      930,
+      1308,
+      1023,
+      1396
+    ],
+    "size": [
+      96,
+      96
+    ]
+  }
+]

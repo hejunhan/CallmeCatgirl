@@ -90,56 +90,48 @@ namespace CallmeCatgirl.Tests
             var sim = (TaskSimulation)controller.GetType().GetProperty("Simulation").GetValue(controller);
             var buttons = new[] { ButtonNamed("0.5SpeedButton"), ButtonNamed("SpeedButton"), ButtonNamed("Speed2Button"), ButtonNamed("Speed4Button") };
             float[] values = { .5f, 1, 2, 4 };
-            var colors = buttons.Select(b => b.targetGraphic.color).ToArray();
-            // 初始0.5倍速和初始暂停应同时高亮，不能把高亮后的颜色当作普通底色。
-            var pause = ButtonNamed("PauseButton"); var pauseActive = pause.targetGraphic.color;
+            var pause = ButtonNamed("PauseButton");
+            var activeColor = buttons[0].targetGraphic.color; var pauseActive = pause.targetGraphic.color;
             Assert.That(sim.Paused, Is.True);
             Assert.That((float)controller.GetType().GetProperty("PlaybackSpeed").GetValue(controller), Is.EqualTo(.5f));
-            for (int i = 1; i < colors.Length; i++)
-                Assert.That(colors[i], Is.Not.EqualTo(colors[0]), "Only the initial half-speed button should be highlighted.");
-            Graphic halfGraphic = buttons[0].targetGraphic;
-            ClickButton(buttons[1]); var halfIdle = halfGraphic.color;
-            Assert.That(halfIdle, Is.Not.EqualTo(colors[0]));
-            var idle = buttons.Select(b => b.targetGraphic.color).ToArray();
-            idle[1] = colors[1];
+            for (int i = 0; i < buttons.Length; i++) Assert.That(ControlSelected(buttons[i], activeColor), Is.EqualTo(i == 0));
             for (int i = 0; i < buttons.Length; i++)
             {
                 ClickButton(buttons[i]);
                 Assert.That((float)controller.GetType().GetProperty("PlaybackSpeed").GetValue(controller), Is.EqualTo(values[i]));
-                Assert.That(buttons[i].targetGraphic.color, Is.Not.EqualTo(idle[i]), "Active speed must remain highlighted.");
+                Assert.That(ControlSelected(buttons[i], activeColor), Is.True, "Active speed must remain highlighted.");
                 for (int j = 0; j < buttons.Length; j++)
-                    if (j != i) Assert.That(buttons[j].targetGraphic.color, Is.EqualTo(idle[j]));
-                Assert.That(GameObject.Find("SpeedReadout").GetComponent<Text>().text, Is.EqualTo($"速度 {values[i]:0.##}x · 已暂停"));
-                Assert.That(pause.targetGraphic.color, Is.EqualTo(pauseActive));
+                    if (j != i) Assert.That(ControlSelected(buttons[j], activeColor), Is.False);
+                if (GameObject.Find("SpeedReadout") is GameObject readout) Assert.That(readout.GetComponent<Text>().text, Is.EqualTo($"速度 {values[i]:0.##}x · 已暂停"));
+                Assert.That(ControlSelected(pause, pauseActive), Is.True);
                 EventSystem.current.SetSelectedGameObject(ButtonNamed("ResetButton").gameObject);
                 yield return null;
-                Assert.That(buttons[i].targetGraphic.color, Is.Not.EqualTo(idle[i]), "UI focus must not clear speed selection.");
-                Assert.That(pause.targetGraphic.color, Is.EqualTo(pauseActive), "UI focus must not clear pause highlighting.");
+                Assert.That(ControlSelected(buttons[i], activeColor), Is.True, "UI focus must not clear speed selection.");
+                Assert.That(ControlSelected(pause, pauseActive), Is.True, "UI focus must not clear pause highlighting.");
                 double before = sim.GameTime; yield return null;
                 Assert.That(sim.GameTime, Is.EqualTo(before));
                 ClickButton(pause); Assert.That(sim.Paused, Is.False);
-                Assert.That(pause.targetGraphic.color, Is.Not.EqualTo(pauseActive));
+                Assert.That(ControlSelected(pause, pauseActive), Is.False);
                 yield return null;
                 Assert.That(sim.GameTime - before, Is.EqualTo(Time.unscaledDeltaTime * values[i]).Within(.0001));
-                Assert.That(GameObject.Find("SpeedReadout").GetComponent<Text>().text, Does.Contain("运行中"));
+                if (GameObject.Find("SpeedReadout") is GameObject runningReadout) Assert.That(runningReadout.GetComponent<Text>().text, Does.Contain("运行中"));
                 ClickButton(pause); Assert.That(sim.Paused, Is.True);
-                Assert.That(pause.targetGraphic.color, Is.EqualTo(pauseActive));
+                Assert.That(ControlSelected(pause, pauseActive), Is.True);
             }
             // 弹窗也会冻结游戏，暂停按钮禁用但仍表示暂停状态；关闭后恢复原状态。
             ClickButton(pause);
-            var pauseIdle = pause.targetGraphic.color;
             controller.GetType().GetMethod("OpenMemoryUpgrade").Invoke(controller, null);
-            Assert.That(pause.interactable, Is.False); Assert.That(pause.targetGraphic.color, Is.EqualTo(pauseActive));
+            Assert.That(pause.interactable, Is.False); Assert.That(ControlSelected(pause, pauseActive), Is.True);
             controller.GetType().GetMethod("CloseMemoryUpgrade").Invoke(controller, null);
-            Assert.That(pause.interactable, Is.True); Assert.That(pause.targetGraphic.color, Is.EqualTo(pauseIdle));
+            Assert.That(pause.interactable, Is.True); Assert.That(ControlSelected(pause, pauseActive), Is.False);
             // 键盘空格也调用同一TogglePause命令，验证命令能立即更新高亮。
             controller.GetType().GetMethod("TogglePause").Invoke(controller, null);
-            Assert.That(pause.targetGraphic.color, Is.EqualTo(pauseActive));
+            Assert.That(ControlSelected(pause, pauseActive), Is.True);
             controller.GetType().GetMethod("ResetSimulation").Invoke(controller, null);
             sim = (TaskSimulation)controller.GetType().GetProperty("Simulation").GetValue(controller);
-            Assert.That(sim.Paused, Is.True); Assert.That(pause.targetGraphic.color, Is.EqualTo(pauseActive));
+            Assert.That(sim.Paused, Is.True); Assert.That(ControlSelected(pause, pauseActive), Is.True);
             for (int i = 0; i < buttons.Length; i++)
-                Assert.That(buttons[i].targetGraphic.color == idle[i], Is.EqualTo(i != 0));
+                Assert.That(ControlSelected(buttons[i], activeColor), Is.EqualTo(i == 0));
             yield return new ExitPlayMode();
         }
         private static void ClickButton(Button button)
@@ -344,6 +336,11 @@ namespace CallmeCatgirl.Tests
                 Object.DestroyImmediate(config);
             }
             yield return new ExitPlayMode();
+        }
+        private static bool ControlSelected(Button button, Color legacyActive)
+        {
+            var artwork = button.GetComponents<Component>().FirstOrDefault(c => c.GetType().Name == "ButtonArtwork");
+            return artwork != null ? (bool)artwork.GetType().GetProperty("IsSelected").GetValue(artwork) : button.targetGraphic.color == legacyActive;
         }
         private static GameObject Panel() => Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None).Single(t => t.name == "ConversationPanel").gameObject;
         private static Cell FreeOrigin(TaskSimulation sim, string id) => Enumerable.Range(0, sim.Width * sim.Height)

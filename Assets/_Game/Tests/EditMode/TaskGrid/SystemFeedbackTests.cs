@@ -51,6 +51,9 @@ namespace CallmeCatgirl.Tests
             var sim=Value<TaskSimulation>(controller,"Simulation"); var original=(ScriptableObject)Value<object>(view,"Feedback");
             var config=Object.Instantiate(original); var field=view.GetType().GetField("feedback",BindingFlags.Instance|BindingFlags.NonPublic);
             field.SetValue(view,config);
+            // 未启用美术皮肤时仍保留原有的配置颜色回退。
+            var artwork = new[]{"0.5SpeedButton","PauseButton"}.Select(n => GameObject.Find(n).GetComponents<MonoBehaviour>().FirstOrDefault(c => c.GetType().Name == "ButtonArtwork")).Where(c => c != null).ToArray();
+            foreach(var skin in artwork) skin.enabled=false;
             try
             {
                 Color custom=new Color(.8f,.2f,.7f);config.GetType().GetField("SpeedSelected").SetValue(config,custom);
@@ -71,7 +74,7 @@ namespace CallmeCatgirl.Tests
                 Assert.That((float)Field(signals[0],"opacity"),Is.Zero);Assert.That((float)Field(signals[0],"pulse"),Is.Zero);
                 Assert.That(sim.Tasks["visual"].Progress,Is.Zero);Assert.That(sim.Paused,Is.True);
             }
-            finally { field.SetValue(view,original);Call(view,"Refresh");Object.DestroyImmediate(config); }
+            finally { field.SetValue(view,original);foreach(var skin in artwork) skin.enabled=true;Call(view,"Refresh");Object.DestroyImmediate(config); }
         }
         private static void AddBoardTasks(TaskSimulation sim)
         {

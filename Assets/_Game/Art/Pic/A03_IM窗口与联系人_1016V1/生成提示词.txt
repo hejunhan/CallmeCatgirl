@@ -1,0 +1,5 @@
+Mode: built-in imagegen
+
+Window: Production game UI asset. Single empty rectangular window with subtle chamfered corners, warm ivory frosted precision case, fine champagne inlay and restrained corner fasteners, matching approved A04 v5. Front view. Near-white matte reading surface with faint etching at outer edges, center blank. Transparent exterior. No avatar, buttons, messages, text, logo or lower panel. Low reflection.
+
+Background: Production game UI background, landscape 16:9. Empty warm light gray ivory laboratory backdrop, pearl matte, slightly darker periphery, subtle broad diffuse illumination. Faint technical etched lines confined to outermost corners, clean center. No windows, frames, controls, text, logos, objects, room, perspective floor, black or neon. Opaque.

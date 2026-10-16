@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.17, g: 0.21, b: 0.27, a: 1}
+  m_Color: {r: 0.95, g: 0.94, b: 0.91, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -91,8 +91,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CallmeCatgirl.UI.GridCellView
   background: {fileID: 8035333150549167678}
   lockedMarker: {fileID: 8823358978549643760}
-  openColor: {r: 0.035, g: 0.035, b: 0.035, a: 1}
-  lockedColor: {r: 0.13, g: 0.13, b: 0.13, a: 1}
+  openColor: {r: 0.95, g: 0.94, b: 0.91, a: 1}
+  lockedColor: {r: 0.76, g: 0.75, b: 0.71, a: 1}
 --- !u!1 &8823358978549643760
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9, g: 0.94, b: 1, a: 1}
+  m_Color: {r: 0.145, g: 0.153, b: 0.161, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -159,7 +159,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 1cb58839798f6a748b1a3385468d1e9f, type: 3}
+    m_Font: {fileID: 12800000, guid: 807199caa85ea1a4d9f978d688276892, type: 3}
     m_FontSize: 18
     m_FontStyle: 0
     m_BestFit: 0
