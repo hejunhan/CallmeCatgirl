@@ -158,14 +158,16 @@ namespace CallmeCatgirl.Tests
             yield return new EnterPlayMode(); Application.runInBackground = true; yield return null;
             var owner = Owner(); var simulation = Get<TaskSimulation>(owner, "Simulation");
             var presentation = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).Single(p => p.GetType().Name == "PlanningPresentation");
-            Assert.That(Get<bool>(presentation, "PlanningRequested"), Is.False);
+            Assert.That(Get<bool>(presentation, "PlanningRequested"), Is.True);
             var papers = Object.FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None).Where(p => p.GetType().Name == "PlanningPaper").ToArray();
             Assert.That(papers.Select(p => p.name), Is.EquivalentTo(new[] { "MemoryPanel", "CandidatePanel", "ConversationPanel", "LogArea" }));
             foreach (var paper in papers)
                 Assert.That(paper.GetComponent<Image>().raycastTarget, Is.True, "Whole paper must receive hover events.");
             var card = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).Single(p => p.GetType().Name == "TaskCardView" && Get<string>(p, "RequestId") == "A-1");
             var rect = (RectTransform)card.transform;
-            var point = RectTransformUtility.WorldToScreenPoint(null, rect.TransformPoint(rect.rect.center));
+            var shape=Get<RectTransform>(card,"ShapeRect");var first=simulation.Tasks["A-1"].Definition.RotatedShape(0)[0];
+            float step=shape.rect.width/(simulation.Tasks["A-1"].Definition.Shape.Max(c=>c.X)+1);
+            var point = RectTransformUtility.WorldToScreenPoint(null,shape.TransformPoint(new Vector3((first.X+.5f)*step,-(first.Y+.5f)*step)));
             var events = UnityEngine.EventSystems.EventSystem.current;
             var pointer = new UnityEngine.EventSystems.PointerEventData(events) { position = point, button = UnityEngine.EventSystems.PointerEventData.InputButton.Left };
             var hits = new System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult>();
@@ -383,7 +385,7 @@ namespace CallmeCatgirl.Tests
                 string longName=new string('猫',40);
                 Api(owner,new ApiInput {kind="renameModel",id=Get<string>(output,"Id"),displayName=longName});
                 yield return null;Canvas.ForceUpdateCanvases();
-                var modelLabels=Object.FindObjectsByType<Text>(FindObjectsInactive.Include,FindObjectsSortMode.None).Where(t=>t.name=="ModelName").ToArray();
+                var modelLabels=Object.FindObjectsByType<Text>(FindObjectsInactive.Include,FindObjectsSortMode.None).Where(t=>t.name=="ModelName" && t.gameObject.activeInHierarchy).ToArray();
                 Assert.That(modelLabels.Length,Is.EqualTo(2));var longLabel=modelLabels.Single(t=>t.text==longName);
                 Assert.That(longLabel.preferredHeight,Is.LessThanOrEqualTo(longLabel.rectTransform.rect.height+1),"Maximum-length model names must not be cut off.");
                 var search=Object.FindObjectsByType<InputField>(FindObjectsInactive.Include,FindObjectsSortMode.None).Single(f=>f.name=="ModelSearch");

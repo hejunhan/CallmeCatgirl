@@ -15,7 +15,7 @@ namespace CallmeCatgirl.UI
     public sealed class UIWindowLayers : MonoBehaviour
     {
         public const int GameplayOrder=0,PauseEffectOrder=100;
-        private sealed class Window
+        [System.Serializable] private sealed class Window
         {
             public GameObject Root;
             public RectTransform Surface;
@@ -24,11 +24,12 @@ namespace CallmeCatgirl.UI
             public bool WasVisible;
             public int Opened;
         }
-        private readonly List<Window> windows=new List<Window>();
+        [SerializeField] private List<Window> windows=new List<Window>();
         private readonly List<RectTransform> surfaces=new List<RectTransform>();
-        private RectTransform workspace,windowLayer,hints,compute;
-        private CanvasGroup workspaceInput;
-        private GameObject blocker;
+        [SerializeField] private RectTransform workspace,windowLayer,hints;
+        private RectTransform compute;
+        [SerializeField] private CanvasGroup workspaceInput;
+        [SerializeField] private GameObject blocker;
         private PlanningPresentation presentation;
         private CoreGameplayController owner;
         private Window top;
@@ -41,8 +42,8 @@ namespace CallmeCatgirl.UI
         public void Configure(RectTransform computeSurface,PlanningPresentation pause,CoreGameplayController source)
         {
             compute=computeSurface;presentation=pause;owner=source;
-            GetComponent<Canvas>().sortingOrder=GameplayOrder;
-            if(pause!=null)pause.GetComponent<Canvas>().sortingOrder=PauseEffectOrder;
+            if (!Application.isPlaying)
+            { GetComponent<Canvas>().sortingOrder=GameplayOrder; if(pause!=null)pause.GetComponent<Canvas>().sortingOrder=PauseEffectOrder; }
             if(workspace==null)
             {
                 workspace=Layer("BaseInteractionRoot");workspaceInput=workspace.gameObject.AddComponent<CanvasGroup>();
@@ -50,7 +51,8 @@ namespace CallmeCatgirl.UI
                 windowLayer=Layer("WindowLayer");
                 var r=Layer("ModalInputBlocker",windowLayer);var image=r.gameObject.AddComponent<Image>();image.color=Color.clear;image.raycastTarget=true;image.canvasRenderer.cullTransparentMesh=false;blocker=r.gameObject;
             }
-            AdoptChildren();Synchronize();
+            if (!Application.isPlaying) AdoptChildren();
+            Synchronize();
         }
         private RectTransform Layer(string name,Transform parent=null)
         {
@@ -87,9 +89,10 @@ namespace CallmeCatgirl.UI
                 var input=root.GetComponent<CanvasGroup>();if(input==null)input=root.AddComponent<CanvasGroup>();
                 entry=new Window{Root=root,Input=input};windows.Add(entry);
             }
-            entry.Surface=surface;entry.Kind=kind;root.transform.SetParent(windowLayer,false);Stretch((RectTransform)root.transform);
+            entry.Surface=surface;entry.Kind=kind;
+            if(root.transform.parent!=windowLayer){root.transform.SetParent(windowLayer,false);Stretch((RectTransform)root.transform);}
         }
-        private void LateUpdate(){if(workspace!=null){AdoptChildren();Synchronize();}}
+        private void LateUpdate(){if(workspace!=null)Synchronize();}
         public void Synchronize()
         {
             if(workspace==null)return;

@@ -22,28 +22,31 @@ namespace CallmeCatgirl.UI
         }
         private CoreGameplayController owner;
         private CoreGameplayCanvasView view;
-        private RectTransform list;
-        private Font font;
+        [SerializeField] private RectTransform list;
+        [SerializeField] private RectTransform contactTemplate;
+        [SerializeField] private Button conversationsButton, modelsButton;
+        [SerializeField] private Font font;
         private string fingerprint,hovered;
         private Object hoverSource;
-        private AssociationLineGraphic lines;
+        [SerializeField] private AssociationLineGraphic lines;
         private readonly Dictionary<string,Row> rows=new Dictionary<string,Row>();
         public bool IsHighlighted(string id)=>id!=null&&id==hovered;
         public void Hover(string id,Object source){hovered=id;hoverSource=source;}
         public void Clear(Object source){if(hoverSource==source){hovered=null;hoverSource=null;}}
         public void Bind(CoreGameplayController source,CoreGameplayCanvasView canvasView,RectTransform panel,RectTransform candidates,Font textFont)
         {
-            owner=source;view=canvasView;font=textFont;fingerprint=null;hovered=null;
+            owner=source;view=canvasView;if(font==null)font=textFont;fingerprint=null;hovered=null;
             if(list==null)
             {
+                if(Application.isPlaying)throw new System.InvalidOperationException("Contact layout is missing from scene.");
                 foreach(Transform child in panel)child.gameObject.SetActive(false);
                 var navigation=Rect("FixedNavigation",transform,0,0,0,0);
                 navigation.anchorMin=Vector2.zero;navigation.anchorMax=Vector2.one;navigation.offsetMin=navigation.offsetMax=Vector2.zero;
                 var rail=Rect("NavigationRail",navigation,0,120,64,0);rail.anchorMin=new Vector2(0,0);rail.anchorMax=new Vector2(0,1);rail.offsetMin=new Vector2(0,60);rail.offsetMax=new Vector2(64,-120);
                 rail.gameObject.AddComponent<Image>().color=new Color32(232,232,232,255);
                 var rule=Rect("Separator",rail,63,0,1,0);rule.anchorMin=new Vector2(0,0);rule.anchorMax=new Vector2(0,1);rule.offsetMin=new Vector2(63,0);rule.offsetMax=new Vector2(64,0);rule.gameObject.AddComponent<Image>().color=new Color32(111,111,111,255);
-                NavigationButton(rail,"Conversations",16,()=>{if(!owner.Story.IsReply)owner.CloseConversationHistory();},false);
-                NavigationButton(rail,"Models",88,()=>{if(owner.IsModalOpen)return;var button=transform.GetComponentsInChildren<Button>(true).FirstOrDefault(b=>b.name=="OpenTraining");button?.onClick.Invoke();},true);
+                conversationsButton=NavigationButton(rail,"Conversations",16,()=>{if(!owner.Story.IsReply)owner.CloseConversationHistory();},false);
+                modelsButton=NavigationButton(rail,"Models",88,()=>{if(owner.IsModalOpen)return;var button=transform.GetComponentsInChildren<Button>(true).FirstOrDefault(b=>b.name=="OpenTraining");button?.onClick.Invoke();},true);
                 panel.SetParent(navigation,false);
                 panel.anchorMin=new Vector2(0,0);panel.anchorMax=new Vector2(0,1);panel.pivot=new Vector2(0,1);panel.offsetMin=new Vector2(80,60);panel.offsetMax=new Vector2(400,-120);
                 var motion=panel.GetComponent<CallmeCatgirl.Presentation.PlanningPaper>();if(motion!=null)motion.enabled=false;
@@ -60,8 +63,20 @@ namespace CallmeCatgirl.UI
                 var r=graphic.GetComponent<RectTransform>();r.anchorMin=Vector2.zero;r.anchorMax=Vector2.one;r.offsetMin=r.offsetMax=Vector2.zero;
                 lines=graphic.GetComponent<AssociationLineGraphic>();lines.raycastTarget=false;
             }
+            conversationsButton.onClick.RemoveAllListeners();
+            conversationsButton.onClick.AddListener(()=>{if(!owner.Story.IsReply)owner.CloseConversationHistory();});
+            modelsButton.onClick.RemoveAllListeners();modelsButton.onClick.AddListener(()=>owner.OpenTraining());
             Refresh();
         }
+#if UNITY_EDITOR
+        public void PrepareTemplate()
+        {
+            if(contactTemplate!=null||list.childCount==0)return;
+            contactTemplate=Instantiate((RectTransform)list.GetChild(0),list.parent);
+            contactTemplate.name="ContactTemplate";contactTemplate.gameObject.SetActive(false);
+            foreach(var hover in contactTemplate.GetComponentsInChildren<ConversationHoverTarget>(true))DestroyImmediate(hover);
+        }
+#endif
         public void Refresh()
         {
             if(owner==null||list==null)return;
@@ -77,14 +92,29 @@ namespace CallmeCatgirl.UI
                 {
                     var summary=corpus.FirstOrDefault(c=>c.ConversationId==id);
                     string conversation=id;int requests=tasks.Where(t=>t.ConversationId==id).Select(t=>t.Id).Concat(summary==null?new string[0]:summary.RequestIds).Distinct().Count(),records=summary==null?0:summary.RecordCount;
-                    var r=Rect("Conversation_"+id,list,0,0,296,112);r.gameObject.AddComponent<LayoutElement>().preferredHeight=112;
+                    RectTransform r; InnerBorderGraphic border,corpusBorder; Image badge; Button button; Text info;
+                    if(contactTemplate!=null)
+                    {
+                        r=Instantiate(contactTemplate,list);r.name="Conversation_"+id;r.gameObject.SetActive(true);
+                        border=r.Find("InnerBorder").GetComponent<InnerBorderGraphic>();button=r.GetComponent<Button>();
+                        r.Find("Name").GetComponent<Text>().text=owner.Story.Name(id);
+                        info=r.Find("Summary").GetComponent<Text>();badge=r.Find("Corpus").GetComponent<Image>();
+                        corpusBorder=badge.transform.Find("InnerBorder").GetComponent<InnerBorderGraphic>();
+                    }
+                    else
+                    {
+                    r=Rect("Conversation_"+id,list,0,0,296,112);r.gameObject.AddComponent<LayoutElement>().preferredHeight=112;
                     r.gameObject.AddComponent<Image>().color=new Color32(244,244,244,255);
-                    var border=InnerBorderGraphic.Attach(r,1,BorderEdges.Bottom,new Color32(111,111,111,255));
-                    var button=r.gameObject.AddComponent<Button>();button.onClick.AddListener(()=>SelectConversation(conversation,false));
-                    Label(r,owner.Story.Name(id),12,10,220,58,26);
-                    var info=Label(r,"",12,76,272,30,20);info.color=new Color32(82,82,82,255);
-                    var badge=Rect("Corpus_"+id,r,244,18,36,36).gameObject.AddComponent<Image>();badge.color=new Color32(211,197,167,255);badge.gameObject.SetActive(records>0);
-                    var corpusBorder=InnerBorderGraphic.Attach(badge.rectTransform,1,BorderEdges.All,new Color32(82,82,82,255));
+                    border=InnerBorderGraphic.Attach(r,1,BorderEdges.Bottom,new Color32(111,111,111,255));
+                    button=r.gameObject.AddComponent<Button>();button.onClick.AddListener(()=>SelectConversation(conversation,false));
+                    Label(r,owner.Story.Name(id),12,10,220,58,26).name="Name";
+                    info=Label(r,"",12,76,272,30,20);info.color=new Color32(82,82,82,255);
+                    badge=Rect("Corpus_"+id,r,244,18,36,36).gameObject.AddComponent<Image>();badge.color=new Color32(211,197,167,255);badge.gameObject.SetActive(records>0);
+                    corpusBorder=InnerBorderGraphic.Attach(badge.rectTransform,1,BorderEdges.All,new Color32(82,82,82,255));
+                        info.name="Summary";badge.name="Corpus";
+                    }
+                    badge.gameObject.SetActive(records>0);
+                    button.onClick.RemoveAllListeners();button.onClick.AddListener(()=>SelectConversation(conversation,false));
                     AddHover(r.gameObject,id);AddHover(badge.gameObject,id);
                     rows.Add(id,new Row{Rect=r,Border=border,Corpus=badge,CorpusBorder=corpusBorder,Button=button,Summary=info,Requests=requests,Records=records});
                 }
@@ -109,7 +139,7 @@ namespace CallmeCatgirl.UI
         }
         private void LateUpdate()
         {
-            if(lines==null)return;
+            if(lines==null||owner==null)return;
             var paths=new List<Vector2[]>();
             Row row;
             if(hovered!=null&&!owner.IsModalOpen&&rows.TryGetValue(hovered,out row))
@@ -125,7 +155,7 @@ namespace CallmeCatgirl.UI
         }
         private Vector2 LocalPoint(RectTransform rect,Vector2 point)=>lines.rectTransform.InverseTransformPoint(rect.TransformPoint(point));
         private void AddHover(GameObject go,string id){var h=go.AddComponent<ConversationHoverTarget>();h.Bind(this,id);}
-        private void NavigationButton(RectTransform rail,string name,float y,UnityEngine.Events.UnityAction action,bool grid)
+        private Button NavigationButton(RectTransform rail,string name,float y,UnityEngine.Events.UnityAction action,bool grid)
         {
             var r=Rect(name,rail,8,y,48,48);r.gameObject.AddComponent<Image>().color=new Color32(244,244,244,255);
             var button=r.gameObject.AddComponent<Button>();button.onClick.AddListener(action);
@@ -136,6 +166,7 @@ namespace CallmeCatgirl.UI
                 var inset=Rect("Inset",bubble.transform,2,2,24,18).gameObject.AddComponent<Image>();inset.color=new Color32(244,244,244,255);inset.raycastTarget=false;
                 var tail=Rect("Tail",r,12,34,6,5).gameObject.AddComponent<Image>();tail.color=new Color32(82,82,82,255);tail.raycastTarget=false;
             }
+            return button;
         }
         private static RectTransform Rect(string name,Transform parent,float x,float y,float width,float height)
         {
@@ -144,34 +175,6 @@ namespace CallmeCatgirl.UI
         private Text Label(Transform parent,string text,float x,float y,float width,float height,int size)
         {
             var t=Rect("Label",parent,x,y,width,height).gameObject.AddComponent<Text>();t.font=font;t.text=text;t.fontSize=size;t.color=new Color32(22,22,22,255);t.raycastTarget=false;return t;
-        }
-    }
-    public sealed class ConversationHoverTarget : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,IPointerClickHandler
-    {
-        private ConversationWorkspaceView owner;private string id;
-        public void Bind(ConversationWorkspaceView view,string conversation){owner=view;id=conversation;}
-        public void OnPointerEnter(PointerEventData e)=>owner.Hover(id,this);
-        public void OnPointerExit(PointerEventData e)=>owner.Clear(this);
-        public void OnPointerClick(PointerEventData e){if(e.button==PointerEventData.InputButton.Left)owner.SelectConversation(id,e.clickCount>=2);}
-    }
-    [RequireComponent(typeof(CanvasRenderer))]
-    public sealed class AssociationLineGraphic : MaskableGraphic
-    {
-        private List<Vector2[]> paths=new List<Vector2[]>();
-        public void SetPaths(List<Vector2[]> value){paths=value;raycastTarget=false;SetVerticesDirty();}
-        protected override void OnPopulateMesh(VertexHelper mesh)
-        {
-            mesh.Clear();float scale=canvas==null?1:canvas.scaleFactor;float dash=8/scale,gap=6/scale,width=1.5f/scale;
-            foreach(var path in paths)for(int segment=1;segment<path.Length;segment++)
-            {
-                var a=path[segment-1];var b=path[segment];var direction=(b-a).normalized;var n=new Vector2(-direction.y,direction.x)*width*.5f;float length=Vector2.Distance(a,b);
-                for(float offset=0;offset<length;offset+=dash+gap)
-                {
-                    var p=a+direction*offset;var q=a+direction*Mathf.Min(offset+dash,length);int i=mesh.currentVertCount;
-                    foreach(var v in new[]{p-n,q-n,q+n,p+n})mesh.AddVert(v,new Color32(82,82,82,255),Vector2.zero);
-                    mesh.AddTriangle(i,i+1,i+2);mesh.AddTriangle(i,i+2,i+3);
-                }
-            }
         }
     }
 }

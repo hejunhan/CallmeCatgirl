@@ -15,11 +15,12 @@ namespace CallmeCatgirl.Gameplay.Training
         private readonly HashSet<string> selected = new HashSet<string>();
         private string nameInput = "我的模型", recipeId, architectureId;
         private TrainingSession bound;
-        private CallmeCatgirl.UI.ModelGalleryView gallery;
+        [SerializeField] private CallmeCatgirl.UI.ModelGalleryView gallery;
         public void Open()
         {
             IsOpen = true;
-            if (gallery == null) gallery = gameObject.AddComponent<CallmeCatgirl.UI.ModelGalleryView>();
+            if (gallery == null) gallery = GetComponent<CallmeCatgirl.UI.ModelGalleryView>();
+            if (gallery == null) throw new System.InvalidOperationException("Model gallery must be authored in the scene.");
             gallery.Open(controller, this);
         }
         public void Close() { IsOpen = false; if (gallery != null) gallery.Close(); }

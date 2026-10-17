@@ -5,10 +5,18 @@ using UnityEngine.UI;
 
 namespace CallmeCatgirl.UI
 {
-    [RequireComponent(typeof(CanvasRenderer))]
+    [ExecuteAlways, RequireComponent(typeof(CanvasRenderer))]
     public sealed class RequestShapeGraphic : MaskableGraphic
     {
+        [SerializeField, HideInInspector] private Vector2Int[] editorShape;
+        [SerializeField, HideInInspector] private string editorConversation;
         private Cell[] cells=new Cell[0];
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            if(!Application.isPlaying && editorShape!=null && editorShape.Length>0)
+                Show(System.Array.ConvertAll(editorShape,c=>new Cell(c.x,c.y)),editorConversation,0,false,false,false);
+        }
         private readonly HashSet<Cell> occupied=new HashSet<Cell>();
         private Color fill;
         private Color strokeColor;
@@ -17,6 +25,9 @@ namespace CallmeCatgirl.UI
         private bool emphasized,ready,selectedShape;
         public void Show(Cell[] shape,string conversation,float calculation,bool selected,bool linked,bool complete)
         {
+#if UNITY_EDITOR
+            if(!Application.isPlaying){editorShape=System.Array.ConvertAll(shape,c=>new Vector2Int(c.X,c.Y));editorConversation=conversation;}
+#endif
             cells=shape;occupied.Clear();int columns=1,rows=1;
             foreach(var c in cells){occupied.Add(c);columns=Mathf.Max(columns,c.X+1);rows=Mathf.Max(rows,c.Y+1);}
             step=Mathf.Min(30,112f/Mathf.Max(columns,rows));

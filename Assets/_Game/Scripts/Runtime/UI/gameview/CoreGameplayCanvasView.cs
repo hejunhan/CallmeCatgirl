@@ -92,7 +92,9 @@ namespace CallmeCatgirl.UI
         private readonly Dictionary<string, TaskCardView> cards = new Dictionary<string, TaskCardView>();
         private readonly Dictionary<string, TaskModuleView> modules = new Dictionary<string, TaskModuleView>();
         private CoreGameplayController controller;
-        private ConversationWorkspaceView conversationWorkspace;
+        [SerializeField] private ConversationWorkspaceView conversationWorkspace;
+        [SerializeField, HideInInspector] private bool sceneLayoutReady;
+        [SerializeField] private RectTransform taskDebugSlot;
         public UIWindowLayers WindowLayers { get; private set; }
         private string draggedId;
         private int dragRotation;
@@ -114,12 +116,17 @@ namespace CallmeCatgirl.UI
                 messageIdle = messageLabel.color;
                 if (modelLabel != null) modelIdle = modelLabel.color;
             }
+            if (!sceneLayoutReady && Application.isPlaying)
+                throw new System.InvalidOperationException("Bake the fixed UI into the scene with CallmeCatgirl/Save Current UI Layout To Scene first.");
+            if (!sceneLayoutReady)
+            {
             foreach(var text in new[]{modelLabel,memoryUpgradeLabel,clockLabel,infoStatus,abilitiesLabel,qualityLabel})
                 if(text!=null){text.fontSize=28;text.resizeTextForBestFit=false;}
             if(memoryUpgradeLabel!=null)memoryUpgradeLabel.rectTransform.sizeDelta=new Vector2(500,44);
             if(infoStatus!=null){infoStatus.fontSize=26;infoStatus.rectTransform.sizeDelta=new Vector2(640,72);}
             if(abilitiesLabel!=null){abilitiesLabel.rectTransform.anchoredPosition=new Vector2(0,-108);abilitiesLabel.rectTransform.sizeDelta=new Vector2(740,102);}
             if(qualityLabel!=null){qualityLabel.rectTransform.anchoredPosition=new Vector2(560,-176);qualityLabel.rectTransform.sizeDelta=new Vector2(180,36);}
+            }
             controller = owner; lastFunds = owner.Funds; fundsAt = rejectedAt = settlementAt = -100;
             if (settlementFeedback != null) settlementFeedback.Clear();
             if (speedIdleColors == null && speedButtons != null)
@@ -144,17 +151,42 @@ namespace CallmeCatgirl.UI
             }
             if(conversationWorkspace==null)conversationWorkspace=gameObject.AddComponent<ConversationWorkspaceView>();
             conversationWorkspace.Bind(owner,this,(RectTransform)modelLabel.transform.parent,candidateContent,modelLabel.font);
+            if (!sceneLayoutReady)
+            {
             logLabel.transform.parent.gameObject.SetActive(false);
             foreach(var text in new[]{infoTitle,infoStatus,abilitiesLabel,qualityLabel})text.gameObject.SetActive(false);
             var candidatePanel=candidateContent.GetComponentsInParent<RectTransform>().FirstOrDefault(r=>r.name=="CandidatePanel");
             var candidateTitle=candidatePanel==null?null:candidatePanel.Find("Title");if(candidateTitle!=null)candidateTitle.GetComponent<Text>().text="候选";
             ArrangeWorkspace(candidatePanel);
             ApplyWorkspaceHierarchy(candidatePanel);
+            }
             if(WindowLayers==null)WindowLayers=GetComponent<UIWindowLayers>()??gameObject.AddComponent<UIWindowLayers>();
             WindowLayers.Configure(board.GetComponentsInParent<RectTransform>().First(r=>r.name=="BoardPanel"),planningPresentation,owner);
+            // Keep the effect canvas hidden in the editor; enable it only for a live session.
+            if (Application.isPlaying && planningPresentation != null)
+            {
+                planningPresentation.gameObject.SetActive(true);
+                SetManualPlanningVisual(owner.Simulation.Paused);
+            }
             Canvas.ForceUpdateCanvases(); Refresh();
         }
 
+#if UNITY_EDITOR
+        public void PrepareSceneLayout(CoreGameplayController owner)
+        {
+            if (sceneLayoutReady) return;
+            Initialize(owner);
+            conversationWorkspace.PrepareTemplate();
+            if (taskDebugSlot == null)
+            {
+                taskDebugSlot = new GameObject("InlineTaskDebugSlot", typeof(RectTransform)).GetComponent<RectTransform>();
+                taskDebugSlot.SetParent(infoPanel.transform, false); taskDebugSlot.anchorMin = taskDebugSlot.anchorMax = Vector2.one;
+                taskDebugSlot.pivot = Vector2.one; taskDebugSlot.anchoredPosition = new Vector2(-4, -42);
+                taskDebugSlot.sizeDelta = new Vector2(350, 270); taskDebugSlot.localScale = Vector3.one * .63f;
+            }
+            sceneLayoutReady = true;
+        }
+#endif
         private void ApplyWorkspaceHierarchy(RectTransform candidatePanel)
         {
             var boardPanel=board.GetComponentsInParent<RectTransform>().First(r=>r.name=="BoardPanel");
@@ -253,7 +285,7 @@ namespace CallmeCatgirl.UI
             {
                 memoryUpgradeButton.interactable = !controller.GameEnded && !controller.IsModalOpen;
                 memoryUpgradeButtonLabel.text = "内存 / 加点";
-                memoryUpgradeLabel.text = $"内存 Lv{controller.MemoryLevel}   资金 <size=42>{DisplayFunds}</size>   点数 {controller.AvailableAbilityPoints}";
+                memoryUpgradeLabel.text = $"内存 Lv{controller.MemoryLevel}   资金 <size={Mathf.RoundToInt(memoryUpgradeLabel.fontSize*42f/22f)}>{DisplayFunds}</size>   点数 {controller.AvailableAbilityPoints}";
             }
             float width = board.rect.width / sim.Width, height = board.rect.height / sim.Height;
             int open = 0;
@@ -337,11 +369,9 @@ namespace CallmeCatgirl.UI
         private void RefreshInfo()
         {
             var task = controller.SelectedTask; infoPanel.SetActive(task != null);
-            if(taskDebug==null && controller.DebugCommands!=null && CallmeCatgirl.Debugging.DebugBuild.Enabled)
+            if(Application.isPlaying && taskDebugSlot!=null && taskDebug==null && controller.DebugCommands!=null && CallmeCatgirl.Debugging.DebugBuild.Enabled)
             {
-                var slot=new GameObject("InlineTaskDebugSlot",typeof(RectTransform)).GetComponent<RectTransform>();slot.SetParent(infoPanel.transform,false);
-                slot.anchorMin=slot.anchorMax=new Vector2(1,1);slot.pivot=new Vector2(1,1);slot.anchoredPosition=new Vector2(-4,-42);slot.sizeDelta=new Vector2(350,270);slot.localScale=Vector3.one*.63f;
-                taskDebug=LocalDebugFoldout.Attach(slot,controller.DebugCommands,"task",task?.Id,infoTitle.font);
+                taskDebug=LocalDebugFoldout.Attach(taskDebugSlot,controller.DebugCommands,"task",task?.Id,infoTitle.font);
             }
             taskDebug?.SetTarget(task?.Id);
             bool trainingTask = task != null && controller.TrainingEnabled && controller.Training.IsTrainingRequest(task.Id);

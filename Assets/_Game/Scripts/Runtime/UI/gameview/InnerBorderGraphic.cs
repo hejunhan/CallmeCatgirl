@@ -8,8 +8,8 @@ namespace CallmeCatgirl.UI
     [RequireComponent(typeof(CanvasRenderer))]
     public sealed class InnerBorderGraphic : MaskableGraphic
     {
-        private float pixels=1;
-        private BorderEdges edges=BorderEdges.All;
+        [SerializeField] private float pixels=1;
+        [SerializeField] private BorderEdges edges=BorderEdges.All;
         public static InnerBorderGraphic Attach(RectTransform target,float width,BorderEdges sides,Color tint)
         {
             var child=target.Find("InnerBorder");

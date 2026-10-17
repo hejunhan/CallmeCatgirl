@@ -27,10 +27,23 @@ namespace CallmeCatgirl.Gameplay
         public string SavePath => Path.Combine(SlotDirectory(saveSlot),"run.json");
         private void InitializeSaveButtons()
         {
-            var canvas=GameObject.Find("GameplayCanvas"); if(canvas == null || canvas.transform.Find("SaveRun") != null) return;
-            AddSaveButton(canvas.transform,"SaveRun","保存游戏",470,()=>ExecuteCommand(new GameCommand{kind="save"}));
-            AddSaveButton(canvas.transform,"LoadRun","读取存档",610,()=>ExecuteCommand(new GameCommand{kind="restore"}));
+            var canvas=GameObject.Find("GameplayCanvas"); if(canvas==null)return;
+            foreach(var button in canvas.GetComponentsInChildren<UnityEngine.UI.Button>(true))
+            {
+                string command=button.name=="SaveRun"?"save":button.name=="LoadRun"?"restore":null;
+                if(command==null)continue;button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(()=>ExecuteCommand(new GameCommand{kind=command}));
+            }
         }
+#if UNITY_EDITOR
+        public void PrepareSaveButtons()
+        {
+            var canvas=GameObject.Find("GameplayCanvas");
+            foreach(var entry in new[]{new[]{"SaveRun","保存游戏","470"},new[]{"LoadRun","读取存档","610"}})
+                if(!canvas.GetComponentsInChildren<UnityEngine.UI.Button>(true).Any(b=>b.name==entry[0]))
+                    AddSaveButton(canvas.transform,entry[0],entry[1],float.Parse(entry[2]),()=>{});
+        }
+#endif
         private void AddSaveButton(Transform parent,string name,string title,float x,Action action)
         {
             var go=new GameObject(name,typeof(RectTransform),typeof(UnityEngine.UI.Image),typeof(UnityEngine.UI.Button)); go.transform.SetParent(parent,false);
