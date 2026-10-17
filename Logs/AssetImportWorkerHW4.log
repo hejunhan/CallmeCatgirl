@@ -1,0 +1,318 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Built from '6000.5/staging' branch; Version is '6000.5.2f1 (eb73d3b415a1) revision 15430611'; Using compiler version '194234433'; Build Type 'Release'
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-张" at "2026-10-13T16:52:30.5482155Z"
+OS: 'Windows 11  (10.0.26200) CoreCountrySpecific' Language: 'zh' Physical Memory: 16160 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+System  architecture: x64
+Process architecture: x64
+Date: 2026-10-13T16:52:30Z
+[Licensing::Client] Code 1 while verifying Licensing Client signature (process Id: 23676, path: "C:/UNITYXG/UNITY/Unity Hub/UnityLicensingClient_V1/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Error: HandshakeResponse reported an error:
+	ResponseCode: 505
+	ResponseStatus: Unsupported protocol version '1.18.1'.
+[Licensing::Module] Error: Failed to handshake to channel: "LicenseClient-张"
+[Licensing::IpcConnector] LicenseClient-张 channel disconnected successfully.
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-张-6000.5.2" at "2026-10-13T16:52:30.584098Z"
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 14056, path: "C:/UNITYXG/xinbanben52f1/Editor/Data/Resources/Licensing/Client/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.1+9fbee8e
+  Session Id:              c46c4237e05041278a7279aaa6954942
+  Correlation Id:          54a1f823172d22c5ea488048ccf6eee1
+  External correlation Id: 3297167825331232044
+  Machine Id:              u2z9lhlGKtSuu9/VbO9Ls2chj74=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-张-6000.5.2" (connect: 0.00s, validation: 0.00s, handshake: 0.08s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-张-6000.5.2-notifications" at "2026-10-13T16:52:30.6655439Z"
+[Licensing::Module] Licensing Background thread has ended after 0.12s
+
+COMMAND LINE ARGUMENTS:
+C:\UNITYXG\xinbanben52f1\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorkerHW4
+-projectPath
+C:/UNITYXG/UNITY/main/CallmeCatgirl-mainV02
+-logFile
+Logs/AssetImportWorkerHW4.log
+-srvPort
+58684
+-parentPid
+5852
+-analyticsCloudUserId
+33264297562201
+-analyticsCloudProjectId
+51d6dfa2-df1c-4b99-808e-257363b29d7c
+-analyticsLocalProjectId
+44cd010c372081d41a67924d841b41b4
+-licensingIpc
+LicenseClient-张
+-noDiagnosticSwitchPersistentStore
+-job-worker-count
+5
+-background-job-worker-count
+8
+-asset-garbage-collectors
+1
+-force-d3d12
+-name
+AssetImport
+Successfully changed project path to: C:/UNITYXG/UNITY/main/CallmeCatgirl-mainV02
+C:/UNITYXG/UNITY/main/CallmeCatgirl-mainV02
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gfx=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-main-allocator-mimalloc-enabled=0"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+Player connection [29508]  Target information:
+
+Player connection [29508]  * "[IP] 192.168.187.1 [Port] 0 [Flags] 2 [Guid] 3981983507 [EditorId] 3981983507 [Version] 1048832 [Id] WindowsEditor(7,LAPTOP-G8NBB8A0) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [29508]  * "[IP] 192.168.119.1 [Port] 0 [Flags] 2 [Guid] 3981983507 [EditorId] 3981983507 [Version] 1048832 [Id] WindowsEditor(7,LAPTOP-G8NBB8A0) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [29508]  * "[IP] 192.168.0.100 [Port] 0 [Flags] 2 [Guid] 3981983507 [EditorId] 3981983507 [Version] 1048832 [Id] WindowsEditor(7,LAPTOP-G8NBB8A0) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [29508] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [29508] Host joined alternative multi-casting on [225.0.0.222:34997]...
+JobSystem: Creating JobQueue using job-worker-count value 5
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+Library Redirect Path: Library/
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Refreshing native plugins compatible for Editor in 13.55 ms, found 4 plugins.
+Initialize engine version: 6000.5.2f1 (eb73d3b415a1)
+[Subsystems] Discovering subsystems at path C:/UNITYXG/xinbanben52f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/UNITYXG/UNITY/main/CallmeCatgirl-mainV02/Assets
+Forcing GfxDevice: Direct3D 12
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+d3d12: failed to query info queue interface (0x80004002).
+Direct3D:
+    Version:         Direct3D 12 [level 12.1]
+    Renderer:        NVIDIA GeForce GTX 1650 Ti (ID=0x1f95)
+    Vendor:          NVIDIA
+    VRAM:            3935 MB
+    App VRAM Budget: 3344 MB
+    Driver:          32.0.15.8183
+Initialize mono
+Mono path[0] = 'C:/UNITYXG/xinbanben52f1/Editor/Data/Managed'
+Mono path[1] = 'C:/UNITYXG/xinbanben52f1/Editor/Data/BCLExtensions/runtime/netstandard2.1'
+Mono path[2] = 'C:/UNITYXG/xinbanben52f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/UNITYXG/xinbanben52f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56480
+CodeReloadManager initialized
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/UNITYXG/xinbanben52f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.005849 seconds.
+Native extension for WindowsStandalone target not found
+Package Manager log level set to [2]
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.527 seconds
+Domain Reload Profiling: 1281ms
+	BeginReloadAssembly (217ms)
+	RebuildCommonClasses (6ms)
+	RebuildNativeTypeToScriptingClass (23ms)
+	initialDomainReloadingComplete (123ms)
+	LoadAllAssembliesAndSetupDomain (382ms)
+		LoadAssemblies (205ms)
+		AnalyzeDomain (272ms)
+			TypeCache.Refresh (270ms)
+				TypeCache.ScanAssembly (250ms)
+	FinalizeReload (530ms)
+		SetupLoadedEditorAssemblies (0ms)
+			InitializePlatformSupportModulesInManaged (3ms)
+			BeforeProcessingInitializeOnLoad (121ms)
+			ProcessInitializeOnLoadAttributes (141ms)
+			ProcessInitializeOnLoadMethodAttributes (158ms)
+Initializing Unity extensions:
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: F4-JUKZ-77Q3-ZHVV-CQ63-XXXX
+  Product: Unity Personal
+  Type: ULF
+  Expiration: 2026-10-23T17:22:57Z
+========================================================================
+Worker process is ready to serve import requests
+Import Worker Mode flag is 0x00
+Begin MonoManager ReloadAssembly
+Refreshing native plugins compatible for Editor in 4.14 ms, found 4 plugins.
+Native extension for WindowsStandalone target not found
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Refreshing native plugins compatible for Editor in 6.38 ms, found 4 plugins.
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+ScheduleIndexationOnStartup MainProcess:False IndexOnStartup:True
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.953 seconds
+Domain Reload Profiling: 2481ms
+	BeginReloadAssembly (292ms)
+		DisableScriptedObjects (7ms)
+		CreateAndSetChildDomain (33ms)
+	RebuildCommonClasses (10ms)
+	RebuildNativeTypeToScriptingClass (23ms)
+	initialDomainReloadingComplete (141ms)
+	LoadAllAssembliesAndSetupDomain (1062ms)
+		LoadAssemblies (724ms)
+		AnalyzeDomain (316ms)
+			TypeCache.Refresh (228ms)
+				TypeCache.ScanAssembly (205ms)
+			BuildScriptInfoCaches (78ms)
+			ResolveRequiredComponents (8ms)
+	FinalizeReload (954ms)
+		SetupLoadedEditorAssemblies (0ms)
+			BeforeProcessingInitializeOnLoad (111ms)
+			ProcessInitializeOnLoadAttributes (347ms)
+			ProcessInitializeOnLoadMethodAttributes (133ms)
+			AfterProcessingInitializeOnLoad (26ms)
+		AwakeInstancesAfterBackupRestoration (3ms)
+AcceleratorClientConnectionCallback - disconnected - :0
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.02 seconds
+Refreshing native plugins compatible for Editor in 4.28 ms, found 4 plugins.
+Unloading 22 Unused Serialized files (Serialized files now loaded: 0)
+Curl error 3: URL rejected: Malformed input to a URL function
+Unloading 6456 unused Assets / (5.8 MB). Loaded Objects now: 7290.
+Memory consumption went from 317.1 MB to 311.4 MB.
+Total: 12.722800 ms (FindLiveObjects: 0.903300 ms CreateObjectMapping: 2.525400 ms MarkObjects: 5.678600 ms  DeleteObjects: 3.612600 ms)
+
+========================================================================
+Received Import Request.
+  Time of request: 2026-10-13T16:54:08.6583718Z
+  Time since last request: 2061.61569559999998 seconds.
+  importAddress: GUID: c6c7d7f7d8e29bf45a51b1255f667187 - Path: Assets/_Game/Art/Pic/Head/Avatar_Female_BlueHair_Buns.jpg - Importer: PreviewImporter
+Importing 'GUID: c6c7d7f7d8e29bf45a51b1255f667187 - Path: Assets/_Game/Art/Pic/Head/Avatar_Female_BlueHair_Buns.jpg - Importer: PreviewImporter' with importer (PreviewImporter)
+Imported 'GUID: c6c7d7f7d8e29bf45a51b1255f667187' -> (Import Result ID: '3b2e11f4d001c3056d58da770d3d595c') in 0.147 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=949336a5be062c61a43603f34906c536 DependenciesID=4240a78ad87a59d5533171218a8dec31 StaticDependenciesID=3c0f30091475bd47d67862d80dc635ef 
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time of request: 2026-10-13T16:54:08.8254058Z
+  Time since last request: 0.0000302 seconds.
+  importAddress: GUID: 8834dd1a9cccd2d42a3bc0ce015a4a08 - Path: Assets/_Game/Art/Pic/Head/Avatar_Male_BlackHair.jpg - Importer: PreviewImporter
+Importing 'GUID: 8834dd1a9cccd2d42a3bc0ce015a4a08 - Path: Assets/_Game/Art/Pic/Head/Avatar_Male_BlackHair.jpg - Importer: PreviewImporter' with importer (PreviewImporter)
+Imported 'GUID: 8834dd1a9cccd2d42a3bc0ce015a4a08' -> (Import Result ID: '5a5d40aff67fd016184196e898e3d0dc') in 0.022 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=8d41478f0058bc70c086a9594bc1aa42 DependenciesID=3a1b6282729ef248c6967310eeca0cef StaticDependenciesID=cee40f7edadaf5c7604a2e41d8c0d1b8 
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time of request: 2026-10-13T16:54:08.8606972Z
+  Time since last request: 0.0004224 seconds.
+  importAddress: GUID: d0480e03c3b220143a98ea33fdbdaea6 - Path: Assets/_Game/Art/Pic/Head/Avatar_Female_SilverHair_Bow.jpg - Importer: PreviewImporter
+Importing 'GUID: d0480e03c3b220143a98ea33fdbdaea6 - Path: Assets/_Game/Art/Pic/Head/Avatar_Female_SilverHair_Bow.jpg - Importer: PreviewImporter' with importer (PreviewImporter)
+Imported 'GUID: d0480e03c3b220143a98ea33fdbdaea6' -> (Import Result ID: '836d9fd07e7ff28ab84497beaac526c9') in 0.020 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=f5c000fa116b5e2f08bd0db5ae0263e6 DependenciesID=6cb7e1fb7e8e983f14505db32b7464b0 StaticDependenciesID=c46690aaa9572a70e16ba65f43f9e481 
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time of request: 2026-10-13T16:54:11.5917026Z
+  Time since last request: 2.6957578 seconds.
+  importAddress: GUID: 33599c3229ff909448eada6976c3f620 - Path: Assets/_Game/Art/Pic/Head/Avatar_Male_BlackHair_Glasses.jpg - Importer: PreviewImporter
+Importing 'GUID: 33599c3229ff909448eada6976c3f620 - Path: Assets/_Game/Art/Pic/Head/Avatar_Male_BlackHair_Glasses.jpg - Importer: PreviewImporter' with importer (PreviewImporter)
+Imported 'GUID: 33599c3229ff909448eada6976c3f620' -> (Import Result ID: '2dcfe1e7ba230aaa9aab05ef0646b6b4') in 0.021 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=7d0f2bc56510337eba27f9488d4aa74d DependenciesID=9b9bc03408417775fdade5956ed60137 StaticDependenciesID=ff842bb9589df509aad4fcf1e52b9c3f 
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Import Request.
+  Time of request: 2026-10-13T16:54:11.6303883Z
+  Time since last request: 0.0046278 seconds.
+  importAddress: GUID: b7554a3d2c41f0a44b788f1e013dd509 - Path: Assets/_Game/Art/Pic/Head/Avatar_Male_GrayHair_Glasses.jpg - Importer: PreviewImporter
+Importing 'GUID: b7554a3d2c41f0a44b788f1e013dd509 - Path: Assets/_Game/Art/Pic/Head/Avatar_Male_GrayHair_Glasses.jpg - Importer: PreviewImporter' with importer (PreviewImporter)
+Imported 'GUID: b7554a3d2c41f0a44b788f1e013dd509' -> (Import Result ID: '54e0b14ed5fb92e253ef66af7e22b2bc') in 0.016 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=98235c9adf3d3721354a22720fd6a9c3 DependenciesID=d8be163451b144d176033f811cbcbac4 StaticDependenciesID=efe17e0be63891924f77aa0abac55ff9 
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 3
+========================================================================
+Received Prepare
+AcceleratorClientConnectionCallback - disconnected - :0
+Refreshing native plugins compatible for Editor in 11.16 ms, found 4 plugins.
+Unloading 22 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 22 unused Assets / (2.6 MB). Loaded Objects now: 7300.
+Memory consumption went from 312.8 MB to 310.2 MB.
+Total: 214.919200 ms (FindLiveObjects: 3.042200 ms CreateObjectMapping: 2.566400 ms MarkObjects: 207.459100 ms  DeleteObjects: 1.846700 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Import Request.
+  Time of request: 2026-10-13T17:23:15.5778792Z
+  Time since last request: 1743.9204878999999 seconds.
+  importAddress: GUID: 6005b92dca966d9478a66da7b9836c52 - Path: Assets/_Game/Art/MemoryInstall/03_插槽底座.png - Importer: PreviewImporter
+Importing 'GUID: 6005b92dca966d9478a66da7b9836c52 - Path: Assets/_Game/Art/MemoryInstall/03_插槽底座.png - Importer: PreviewImporter' with importer (PreviewImporter)
+Imported 'GUID: 6005b92dca966d9478a66da7b9836c52' -> (Import Result ID: 'dab1c68f00c92e25b52ad2703521018b') in 0.059 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=3eeb18ae48a3073f82bd639a04b8d6e9 DependenciesID=d77afdffec6401476f3fbb7a9d6dc1bc StaticDependenciesID=6724b488576bba7149d820115de73ce4 
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2
+========================================================================
+Received Import Request.
+  Time of request: 2026-10-13T17:23:15.6840433Z
+  Time since last request: 0.0000347 seconds.
+  importAddress: GUID: fdc40f86a0d304845aa9207435a2e274 - Path: Assets/_Game/Art/MemoryInstall/02_内存条.png - Importer: PreviewImporter
+Importing 'GUID: fdc40f86a0d304845aa9207435a2e274 - Path: Assets/_Game/Art/MemoryInstall/02_内存条.png - Importer: PreviewImporter' with importer (PreviewImporter)
+Imported 'GUID: fdc40f86a0d304845aa9207435a2e274' -> (Import Result ID: 'f027bea312593c8e5392198712851909') in 0.197 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=1689e8e4f5fc2187160494991ad4c032 DependenciesID=a2c1aa01bfc4482f9f9a1822d8f63c63 StaticDependenciesID=e0b2ed040b6a88fc1e7d9b51565d8cc4 
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2
+========================================================================
+Received Import Request.
+  Time of request: 2026-10-13T17:23:15.9025488Z
+  Time since last request: 0.0001981 seconds.
+  importAddress: GUID: 4053cf79574de744ba18038f57e8ccab - Path: Assets/_Game/Art/MemoryInstall/06_前沿遮挡.png - Importer: PreviewImporter
+Importing 'GUID: 4053cf79574de744ba18038f57e8ccab - Path: Assets/_Game/Art/MemoryInstall/06_前沿遮挡.png - Importer: PreviewImporter' with importer (PreviewImporter)
+Imported 'GUID: 4053cf79574de744ba18038f57e8ccab' -> (Import Result ID: '68de27e1bfd384377eb49222a933411d') in 0.030 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=a95ffc367d7c068b0ac570f156047b07 DependenciesID=2b1c8917ff0342fb3966310387c8128d StaticDependenciesID=b7bb2ba849ba205e85bb6f71bdea348c 
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2
+========================================================================
+Received Import Request.
+  Time of request: 2026-10-13T17:23:15.9557656Z
+  Time since last request: 0.0000178 seconds.
+  importAddress: GUID: afff3f13828f9a148b90ab036bc19c5e - Path: Assets/_Game/Art/MemoryInstall/04_左卡扣.png - Importer: PreviewImporter
+Importing 'GUID: afff3f13828f9a148b90ab036bc19c5e - Path: Assets/_Game/Art/MemoryInstall/04_左卡扣.png - Importer: PreviewImporter' with importer (PreviewImporter)
+Imported 'GUID: afff3f13828f9a148b90ab036bc19c5e' -> (Import Result ID: 'f360d01fdd9a590d0b2827c0c7073a2c') in 0.037 seconds [static and dynamic dependencies]. Details - ImportResultOutputID=05be3767410e82195a5587c7292df1c5 DependenciesID=a857c253105585b587ee874a0ed49695 StaticDependenciesID=754b56be39638acafca8b289c7ee680c 
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 2
+Editor requested this worker to shutdown with reason: Scaling down because of idle timeout
+AcceleratorClientConnectionCallback - disconnected - :0
+AssetImportWorker is now disconnected from the server
+Process exiting
+Exiting without the bug reporter. Application will terminate with return code 0
