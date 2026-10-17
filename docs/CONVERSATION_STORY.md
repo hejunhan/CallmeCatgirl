@@ -13,5 +13,3 @@ NextNodeId 仍作为内部跳转目标保留，指向某个会话的某轮对话
 没有配置剧情的用户使用默认回复，仍可继续产生请求。已配置角色全部会话结束后停止创建后续任务，仍可查看历史。历史和进度属于本局，重开清空。
 
 主场景为 `Assets/_Game/Scenes/Prototypes/CoreGameplay.unity`，主配置的 Story 引用剧情资源。`StoryConfiguration` 保存数据，`ConversationStory` 管理进度/历史/队列，控制器通过提交事件打开弹窗，`ConversationPopupView` 显示并处理选项。真实 Canvas 布局和美术接口保留。
-
-形状缺省规则更新：主配置已指定任务生成配置时，未填写方块的会话从 `TaskGenerationConfiguration.asset` 的预设库随机分配；已填写的剧情图案优先。未引用任务生成配置的旧配置仍沿用模板形状。详细数值和编辑说明见 `docs/TASK_GENERATION.md`。
