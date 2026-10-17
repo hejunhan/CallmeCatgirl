@@ -12,12 +12,12 @@ namespace CallmeCatgirl.EditorTools
     {
         [Serializable] private sealed class Document { public int version; public Character[] characters; }
         [Serializable] private sealed class Character
-        { public string id, name, initialHistory; public Session[] sessions; }
+        { public string id, name, initialHistory, kind; public Session[] sessions; }
         [Serializable] private sealed class Session
         { public string id, title, requestId; public Difficulty task; public Round[] rounds; }
         [Serializable] private sealed class Round { public string id, message; public Choice[] choices; }
         [Serializable] private sealed class Choice
-        { public string label, reply, response, requirement, nextRoundId; }
+        { public string label, reply, response, requirement, nextRoundId; public int minimumFunds, fundsReward; }
         [Serializable] private sealed class Difficulty { public float calculation, patience; public string[] shape; public Ability[] abilities; }
         [Serializable] private sealed class Ability { public string kind; public float minimum, excellent; }
 
@@ -67,11 +67,12 @@ namespace CallmeCatgirl.EditorTools
         {
             if (data == null) throw new ArgumentException("characters 不能包含 null。");
             Id(data.id, "角色id");
-            if (!known.Contains(data.id)) throw new ArgumentException("角色 " + data.id + " 没有对应的主配置请求模板；当前可用：" + string.Join(", ", known));
+            var kind = string.IsNullOrEmpty(data.kind) ? StoryConfiguration.ConversationKind.Ordinary
+                : ParseEnum<StoryConfiguration.ConversationKind>(data.kind, "characters.kind");
             if (data.sessions == null || data.sessions.Length == 0) throw new ArgumentException("角色 " + data.id + " 的 sessions 至少需要一次会话。");
             var result = new StoryConfiguration.UserStory
             {
-                UserId = data.id, DisplayName = string.IsNullOrWhiteSpace(data.name) ? data.id : data.name,
+                Kind = kind, UserId = data.id, DisplayName = string.IsNullOrWhiteSpace(data.name) ? data.id : data.name,
                 InitialHistory = data.initialHistory, Sessions = new StoryConfiguration.ConversationSession[data.sessions.Length]
             };
             for (int s = 0; s < data.sessions.Length; s++)
@@ -122,6 +123,7 @@ namespace CallmeCatgirl.EditorTools
             return new StoryConfiguration.ReplyChoice
             {
                 Label = choice.label, PlayerReply = string.IsNullOrEmpty(choice.reply) ? choice.label : choice.reply,
+                MinimumFunds = choice.minimumFunds, FundsReward = choice.fundsReward,
                 UserReply = choice.response, Requirement = string.IsNullOrEmpty(choice.requirement) ? StoryConfiguration.ReplyRequirement.Any
                     : ParseEnum<StoryConfiguration.ReplyRequirement>(choice.requirement, location + " requirement"), NextNodeId = next
             };

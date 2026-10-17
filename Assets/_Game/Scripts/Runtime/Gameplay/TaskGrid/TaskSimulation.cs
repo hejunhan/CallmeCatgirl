@@ -6,7 +6,7 @@ using System.Linq;
 namespace CallmeCatgirl.Gameplay.TaskGrid
 {
     /// <summary>Single owner of task state, time, occupancy and terminal events. No Unity dependency.</summary>
-    public sealed class TaskSimulation
+    public sealed partial class TaskSimulation
     {//整个游玩区域
         private const double Epsilon = 1e-9;
         private readonly HashSet<Cell> openCells;
@@ -154,6 +154,50 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
             return true;
         }
 
+        // Optional integration hook; leaves TaskGrid independent of Training assembly.
+        // A null/invalid profile is an atomic no-op. Canonical capacity is owned by the memory system.
+        public double TokenThroughput { get; private set; }
+        public bool TrySetTokenThroughput(double tokensPerSecond)
+        {
+            if (!Paused || double.IsNaN(tokensPerSecond) || double.IsInfinity(tokensPerSecond) || tokensPerSecond <= 0)
+                return false;
+            TokenThroughput = tokensPerSecond; return true;
+        }
+        public bool TryChangeExecutionProfile(ModelDefinition model, double tokensPerSecond, IEnumerable<Cell> cells)
+        {
+            if (!Paused || model == null || cells == null || double.IsNaN(tokensPerSecond)
+                || double.IsInfinity(tokensPerSecond) || tokensPerSecond <= 0) return false;
+            var next = cells.ToArray();
+            if (next.Length == 0 || next.Length != openCells.Count || next.Distinct().Count() != next.Length
+                || next.Any(c => !InBounds(c))) return false;
+            // Running and Ready modules BOTH leave the board. Never submit them as part of switching.
+            foreach (var task in tasks.Values)
+            {
+                if (task.State == RequestState.Running)
+                {
+                    Release(task); task.State = RequestState.Withdrawn;
+                    Emit(TaskEventKind.Withdrawn, task, GameTime);
+                }
+                else if (task.State == RequestState.Ready)
+                {
+                    Release(task); task.ReadyInCandidate = true;
+                    // Keep Ready, Result, FinishedAt, deadline and all produced values frozen.
+                }
+            }
+            // Preserve the existing fractional interval rule. No ability tick on switch.
+            TryChangeModel(model);
+            openCells.Clear(); openCells.UnionWith(next); TokenThroughput = tokensPerSecond;
+            return true;
+        }
+        private double EffectiveCalculationSpeed(TaskInstance task)
+        {
+            if (TokenThroughput <= 0) return task.Definition.Speed; // Legacy mode until explicitly activated.
+            // Current core separates calculation and BILLABLE tokens. Provisional migration uses their ratio.
+            // Zero-billing training defines Calculation as token-equivalent work, without generating income.
+            double ratio = task.Definition.Tokens > 0 ? task.Definition.Calculation / task.Definition.Tokens : 1;
+            return TokenThroughput * ratio;
+        }
+
         public void Advance(double delta)
         {//是让整个任务系统向前运行一段游戏时间的方法。
 
@@ -174,22 +218,18 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
 
                 {
                     //距离完成的时间 = 剩余计算量 ÷ 每秒计算速度
-                    finishAfter = (task.Definition.Calculation - task.Progress) / task.Definition.Speed;
+                    finishAfter = (task.Definition.Calculation - task.Progress) / EffectiveCalculationSpeed(task);
                     double runTime = Math.Min(available, finishAfter);
-                    task.Progress = Math.Min(task.Definition.Calculation, task.Progress + task.Definition.Speed * runTime);
+                    task.Progress = Math.Min(task.Definition.Calculation, task.Progress + EffectiveCalculationSpeed(task) * runTime);
                     AddAbilities(task, runTime);
                     // Completion wins when it coincides with timeout, even across a large frame.
                     if (finishAfter <= available + Epsilon)
                     //Epsilon 是一个很小的误差容许值，用来避免浮点计算导致的边界误判。
                     {
-                        task.Progress = task.Definition.Calculation;
+                        MarkReady(task, Math.Min(GameTime + finishAfter, task.Deadline));
                         //把进度明确设置为总计算量，避免浮点误差导致完成时间略晚于期限
-                        task.FinishedAt = Math.Min(GameTime + finishAfter, task.Deadline);
                         //记录真正的完成时间
-                        task.Result = QualityResult.Evaluate(task.Definition, task.Abilities);
                         //根据任务要求和已经获得的能力，确定最终质量
-                        task.State = RequestState.Ready;
-                        Emit(TaskEventKind.Ready, task, task.FinishedAt.Value);
                         //生成“任务算完”的事件，并使用准确的完成时间。
                         continue;
                     }
@@ -208,6 +248,16 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
 GameTime = end;
         }
 
+        private void MarkReady(TaskInstance task,double finishedAt)
+        {
+            task.Progress=task.Definition.Calculation;task.FinishedAt=finishedAt;
+#if (UNITY_EDITOR || DEVELOPMENT_BUILD) && !CATGIRL_DISABLE_DEBUG
+            task.Result=DebugResult(task);
+#else
+            task.Result=QualityResult.Evaluate(task.Definition,task.Abilities);
+#endif
+            task.State=RequestState.Ready;Emit(TaskEventKind.Ready,task,finishedAt);
+        }
         private void AddAbilities(TaskInstance task, double runTime)
         {//给任务赋予能力值
             double elapsed = task.AbilityRemainder + runTime;

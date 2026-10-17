@@ -36,6 +36,7 @@ namespace CallmeCatgirl.EditorTools
             var known = new HashSet<string>(requestIds ?? throw new ArgumentNullException(nameof(requestIds)));
             var names = nameIds ?? new Dictionary<string, string> { { "林小满", "A" }, { "周序", "B" }, { "苏禾", "C" } };
             string name = null, id = null, history = null;
+            var kind = StoryConfiguration.ConversationKind.Ordinary;
             var defaults = new Dictionary<string, string>(); var sessions = new List<Session>();
             Session session = null; Round round = null; StoryConfiguration.ReplyChoice choice = null;
             Func<string> currentText = null; Action<string> setText = null;
@@ -83,7 +84,7 @@ namespace CallmeCatgirl.EditorTools
                 int colon = line.IndexOfAny(new[] { '：', ':' });
                 string field = colon >= 0 ? line.Substring(0, colon).Trim() : null;
                 string value = colon >= 0 ? line.Substring(colon + 1).Trim() : null;
-                bool recognized = field != null && (Settings.Contains(field) || new[] { "角色", "角色ID", "过往对话", "用户", "玩家回复", "用户回应", "条件", "跳转到", "下一步" }.Contains(field));
+                bool recognized = field != null && (Settings.Contains(field) || new[] { "角色", "角色ID", "角色类型", "过往对话", "用户", "玩家回复", "用户回应", "条件", "跳转到", "下一步" }.Contains(field));
                 if (!recognized)
                 {
                     if (shape != null)
@@ -102,6 +103,11 @@ namespace CallmeCatgirl.EditorTools
                 }
                 else if (field == "角色ID")
                 { Require(session == null, where + "：角色ID必须在第一场会话之前填写。"); id = value; }
+                else if (field == "角色类型")
+                {
+                    Require(session == null && (value == "普通" || value == "剧情"), where + "：角色类型须在会话前填写普通或剧情。");
+                    kind = value == "剧情" ? StoryConfiguration.ConversationKind.Scripted : StoryConfiguration.ConversationKind.Ordinary;
+                }
                 else if (field == "过往对话")
                 {
                     Require(session == null, where + "：过往对话必须在第一场会话之前填写。");
@@ -135,7 +141,7 @@ namespace CallmeCatgirl.EditorTools
             Require(!string.IsNullOrWhiteSpace(name) && sessions.Count > 0, "文件需要角色名称和至少一次会话。");
             if (string.IsNullOrEmpty(id)) Require(names.TryGetValue(name, out id), "未知角色名称，请在文件开头填写角色ID：A（或主配置中对应的请求ID）。");
             Require(known.Contains(id), "角色ID没有对应任务模板：" + id);
-            var user = new StoryConfiguration.UserStory { UserId = id, DisplayName = name, InitialHistory = history,
+            var user = new StoryConfiguration.UserStory { Kind = kind, UserId = id, DisplayName = name, InitialHistory = history,
                 Sessions = new StoryConfiguration.ConversationSession[sessions.Count] };
             for (int s = 0; s < sessions.Count; s++)
             {

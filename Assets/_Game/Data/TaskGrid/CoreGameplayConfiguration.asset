@@ -57,7 +57,9 @@ MonoBehaviour:
   InitialFunds: 1500
   MemoryUpgrades: {fileID: 11400000, guid: d19834b4bb6a4df7b7fe6cb998f98fae, type: 2}
   Story: {fileID: 11400000, guid: 7097ee7307375ad4e88ce31b0180cfb9, type: 2}
+  OrdinaryDialoguePool: {fileID: 11400000, guid: 31136a355efd44ce95b340eb79406ce5, type: 2}
   TokenPrice: 1
   MonthlyMaintenanceFee: 50
   SecondsPerGameMonth: 30
   TaskGeneration: {fileID: 11400000, guid: 49bdc014938d4bc6a5609a1599f80ebf, type: 2}
+  OpeningBalance: {fileID: 11400000, guid: 5c8bd53485d576d47b3149310b2a098f, type: 2}

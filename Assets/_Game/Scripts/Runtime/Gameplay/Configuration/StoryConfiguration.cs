@@ -11,15 +11,21 @@ namespace CallmeCatgirl.Gameplay
     {
         [InspectorName("用户剧情")] public UserStory[] Users = Array.Empty<UserStory>();
         [InspectorName("默认回复选项")] public ReplyChoice[] DefaultChoices = { new ReplyChoice() };
+        [Tooltip("普通对话结束率：以下默认值均为暂定调参；优秀只减缓本轮增长，剧情不使用此规则。")]
+        public OrdinaryConversationPolicy OrdinaryLifecycle = new OrdinaryConversationPolicy();
 
         public void Validate(IEnumerable<string> requestIds)
         {
+            if (OrdinaryLifecycle == null) throw new InvalidOperationException("普通对话结束率配置缺失。");
+            OrdinaryLifecycle.Validate();
             var tasks = new HashSet<string>(requestIds);
             var ids = new HashSet<string>();
             foreach (var user in Users ?? Array.Empty<UserStory>())
             {
                 if (user == null || string.IsNullOrWhiteSpace(user.UserId) || !ids.Add(user.UserId))
                     throw new InvalidOperationException("剧情用户ID为空或重复。");
+                if (!Enum.IsDefined(typeof(ConversationKind), user.Kind))
+                    throw new InvalidOperationException("用户 " + user.UserId + " 的对话类型无效。");
                 var sessions = user.Sessions ?? Array.Empty<ConversationSession>();
                 if (sessions.Length == 0) throw new InvalidOperationException("用户 " + user.UserId + " 至少需要一次会话。");
                 var sessionIds = new HashSet<string>();
@@ -46,15 +52,20 @@ namespace CallmeCatgirl.Gameplay
                     .Concat(DefaultChoices ?? Array.Empty<ReplyChoice>());
                 foreach (var choice in choices.Where(c => c != null))
                 {
+                    if (choice.MinimumFunds < 0 || choice.FundsReward < 0)
+                        throw new InvalidOperationException("回复的余额条件和奖励必须为非负整数。");
                     if (!string.IsNullOrEmpty(choice.NextNodeId) && !nodes.Contains(choice.NextNodeId))
                         throw new InvalidOperationException("用户 " + user.UserId + " 的下一段剧情不存在：" + choice.NextNodeId);
                 }
             }
         }
 
+        // Existing ABC authoring format is ordinary unless the author explicitly marks a formal scripted route.
+        public enum ConversationKind { Ordinary = 0, Scripted = 1 }
         [Serializable] public sealed class UserStory
         {
-            [InspectorName("用户ID（对应请求ID）")] public string UserId;
+            [InspectorName("对话类型")] public ConversationKind Kind = ConversationKind.Ordinary;
+            [InspectorName("用户ID（内容池中为稳定内容ID）")] public string UserId;
             [InspectorName("显示姓名")] public string DisplayName;
             [TextArea(2, 6), InspectorName("开局对话记录")] public string InitialHistory;
             [InspectorName("会话列表（次数和轮数按各角色独立设置）")] public ConversationSession[] Sessions = Array.Empty<ConversationSession>();
@@ -129,6 +140,8 @@ namespace CallmeCatgirl.Gameplay
         public enum ReplyRequirement { Any, CompleteOrBetter, ExcellentOnly }
         [Serializable] public sealed class ReplyChoice
         {
+            [Min(0), InspectorName("最低余额（0为不限）")] public int MinimumFunds;
+            [Min(0), InspectorName("回复收益（占位效果，可替换）")] public int FundsReward;
             [InspectorName("按钮文字")] public string Label = "发送回复";
             [TextArea(2, 5), InspectorName("玩家回复")] public string PlayerReply = "回复已发送。";
             [TextArea(2, 5), InspectorName("用户回应")] public string UserReply;

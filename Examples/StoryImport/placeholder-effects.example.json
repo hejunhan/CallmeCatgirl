@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "characters": [
+    {
+      "id": "A",
+      "name": "占位联系人·折页",
+      "initialHistory": "【测试占位，非最终策划；不会覆盖同学文本】",
+      "sessions": [
+        {
+          "id": "s1",
+          "title": "占位验证1（非最终策划）",
+          "requestId": "A",
+          "task": {
+            "calculation": 1,
+            "patience": 120,
+            "shape": [
+              "#"
+            ]
+          },
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "【原创占位，可替换】请帮我整理书单。",
+              "choices": [
+                {
+                  "label": "直接交付",
+                  "reply": "已经整理好了。",
+                  "response": "收到，下次再聊。",
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "补充说明（验证奖励+5）",
+                  "reply": "还附上了使用说明。",
+                  "response": "谢谢补充说明。",
+                  "fundsReward": 5,
+                  "minimumFunds": 0,
+                  "nextRoundId": "END"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "占位验证2（非最终策划）",
+          "requestId": "A",
+          "task": {
+            "calculation": 1,
+            "patience": 120,
+            "shape": [
+              "#"
+            ]
+          },
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "【原创占位】上次完成了，这次再整理一份。",
+              "choices": [
+                {
+                  "label": "直接交付",
+                  "reply": "已经整理好了。",
+                  "response": "收到，下次再聊。",
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "补充说明（验证奖励+5）",
+                  "reply": "还附上了使用说明。",
+                  "response": "谢谢补充说明。",
+                  "fundsReward": 5,
+                  "minimumFunds": 0,
+                  "nextRoundId": "END"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "name": "占位联系人·拾音",
+      "initialHistory": "【测试占位，非最终策划；不会覆盖同学文本】",
+      "sessions": [
+        {
+          "id": "s1",
+          "title": "占位验证1（非最终策划）",
+          "requestId": "B",
+          "task": {
+            "calculation": 1,
+            "patience": 120,
+            "shape": [
+              "#"
+            ]
+          },
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "【原创占位，可替换】请帮我整理录音。",
+              "choices": [
+                {
+                  "label": "直接交付",
+                  "reply": "已经整理好了。",
+                  "response": "收到，下次再聊。",
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "补充说明（验证奖励+5）",
+                  "reply": "还附上了使用说明。",
+                  "response": "谢谢补充说明。",
+                  "fundsReward": 5,
+                  "minimumFunds": 0,
+                  "nextRoundId": "END"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "s2",
+          "title": "占位验证2（非最终策划）",
+          "requestId": "B",
+          "task": {
+            "calculation": 1,
+            "patience": 120,
+            "shape": [
+              "#"
+            ]
+          },
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "【原创占位】上次完成了，这次再整理一份。",
+              "choices": [
+                {
+                  "label": "直接交付",
+                  "reply": "已经整理好了。",
+                  "response": "收到，下次再聊。",
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "补充说明（验证奖励+5）",
+                  "reply": "还附上了使用说明。",
+                  "response": "谢谢补充说明。",
+                  "fundsReward": 5,
+                  "minimumFunds": 0,
+                  "nextRoundId": "END"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

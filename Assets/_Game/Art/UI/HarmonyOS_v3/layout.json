@@ -1,0 +1,121 @@
+{
+  "referenceSize": [
+    1920,
+    1080
+  ],
+  "origin": "top-left",
+  "units": "px",
+  "note": "Text coordinates are layout boxes, not glyph ink bounds. Scale entire UI uniformly.",
+  "text": [
+    {
+      "id": "node_label",
+      "text": "接入节点",
+      "x": 128,
+      "y": 430,
+      "font": "fonts/HarmonyOS_Sans_SC_Regular.ttf",
+      "size": 24,
+      "letterSpacing": 5,
+      "color": "#252729"
+    },
+    {
+      "id": "node_number",
+      "text": "01",
+      "x": 116,
+      "y": 458,
+      "font": "fonts/HarmonyOS_Sans_SC_Thin.ttf",
+      "size": 220,
+      "letterSpacing": 0,
+      "color": "#252729"
+    },
+    {
+      "id": "connect",
+      "text": "建立连接",
+      "x": 128,
+      "y": 690,
+      "font": "fonts/HarmonyOS_Sans_SC_Medium.ttf",
+      "size": 40,
+      "letterSpacing": 5,
+      "color": "#252729"
+    },
+    {
+      "id": "waiting",
+      "text": "等待接入",
+      "x": 128,
+      "y": 764,
+      "font": "fonts/HarmonyOS_Sans_SC_Light.ttf",
+      "size": 24,
+      "letterSpacing": 2,
+      "color": "#929597"
+    },
+    {
+      "id": "ready",
+      "text": "SYSTEM READY",
+      "x": 141,
+      "y": 960,
+      "font": "fonts/HarmonyOS_Sans_SC_Regular.ttf",
+      "size": 20,
+      "letterSpacing": 4,
+      "color": "#252729"
+    },
+    {
+      "id": "continue",
+      "text": "继续会话",
+      "x": 455,
+      "y": 960,
+      "font": "fonts/HarmonyOS_Sans_SC_Regular.ttf",
+      "size": 24,
+      "letterSpacing": 2,
+      "color": "#252729"
+    },
+    {
+      "id": "settings",
+      "text": "系统设置",
+      "x": 650,
+      "y": 960,
+      "font": "fonts/HarmonyOS_Sans_SC_Regular.ttf",
+      "size": 24,
+      "letterSpacing": 2,
+      "color": "#252729"
+    },
+    {
+      "id": "exit",
+      "text": "退出",
+      "x": 860,
+      "y": 960,
+      "font": "fonts/HarmonyOS_Sans_SC_Regular.ttf",
+      "size": 24,
+      "letterSpacing": 2,
+      "color": "#252729"
+    }
+  ],
+  "images": [
+    {
+      "file": "ui/button_normal.png",
+      "x": 336,
+      "y": 685,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "file": "ui/arrow_white.png",
+      "x": 352,
+      "y": 701,
+      "width": 32,
+      "height": 32
+    },
+    {
+      "file": "ui/status_ready.png",
+      "x": 104,
+      "y": 963,
+      "width": 24,
+      "height": 24
+    },
+    {
+      "file": "ui/rule_long.png",
+      "x": 410,
+      "y": 686,
+      "width": 610,
+      "height": 32
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # CallmeCatgirl
 
-Unity 游戏项目。当前处于工程搭建阶段，游戏类型与核心玩法尚待确定。
+Unity 游戏项目。当前可在编辑器验证任务调度、会话、语料训练、模型广场、原子存档和菜单继续；游戏内容仍在开发。
 
 ## 开发环境
 
@@ -13,8 +13,10 @@ Unity 游戏项目。当前处于工程搭建阶段，游戏类型与核心玩�
 
 1. 克隆仓库，在 Unity Hub 中选择「添加来自磁盘的项目」，选中仓库根目录。
 2. 使用上述 Unity 版本打开，等待包恢复和资源导入。
-3. 打开 `Assets/_Game/Scenes/Prototypes/SampleScene.unity`。
-4. 点击 Play。当前场景是保留的 URP 示例场景，尚未实现游戏玩法。
+3. 打开 `Assets/_Game/Scenes/Gameplay/MenuScene.unity`，点击 Play，再点击 Start Game 进入主玩法。
+4. 主玩法左下角可保存游戏、读取存档或返回菜单。菜单“继续游戏”读取已保存的 main 槽；Start Game 创建新局，不自动覆盖磁盘存档。
+
+也可直接打开 `Assets/_Game/Scenes/Prototypes/CoreGameplay.unity` 验证玩法。SampleScene 仅保留为模板。
 
 ## 文件放在哪里
 

@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85c17c0859f9007fc404fe0a5c38f4a9, type: 3}
+  m_Name: TrainingDefaults
+  m_EditorClassIdentifier:
+  DefaultsNotice: "可调默认；Transformer/MoE Transformer/协调状态架构在5阶段中的1/2/4解锁。倍率和轮廓暂定。无上下文空间玩法。所有模型可改名，ID稳定。"
+  Recipes:
+  - Id: dialogue-training
+    Title: "对话语料训练（暂定）"
+    Cost: 20
+    MinimumRecords: 1
+    WorkTokens: 120
+    AbilityInterval: 1
+    PointsPerScore: 1
+    Shape:
+    - {x: 0, y: 0}
+    - {x: 1, y: 0}
+    - {x: 2, y: 0}
+    - {x: 0, y: 1}
+    - {x: 1, y: 1}
+    - {x: 2, y: 1}
+  Architectures:
+  - Id: baseline
+    Title: "Transformer（倍率暂定）"
+    SpeedMultiplier: 1
+    Outline: 0
+    UnlockStage: 1
+    ContentReady: 1
+  - Id: alternate
+    Title: "MoE Transformer（倍率暂定）"
+    SpeedMultiplier: 0.8
+    Outline: 1
+    UnlockStage: 2
+    ContentReady: 1
+  - Id: architecture-slot-3
+    Title: "协调状态架构"
+    TechnicalDescription: "注意力/状态空间混合"
+    SpeedMultiplier: 1
+    Outline: 0
+    UnlockStage: 4
+    ContentReady: 1
+  Compute:
+  - Id: compute-1
+    TokensPerSecond: 10
+    UpgradeCost: 0
+  - Id: compute-2
+    TokensPerSecond: 15
+    UpgradeCost: 50
+  - Id: compute-3
+    TokensPerSecond: 22.5
+    UpgradeCost: 100
+  InitialArchitectureId: baseline
+  InitialModelName: "初始模型"

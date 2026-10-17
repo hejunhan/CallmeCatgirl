@@ -1,0 +1,70 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using CallmeCatgirl.Gameplay.TaskGrid;
+
+namespace CallmeCatgirl.Gameplay.Training
+{
+    [CreateAssetMenu(menuName = "CallmeCatgirl/Training/Training Configuration")]
+    public sealed class TrainingConfiguration : ScriptableObject
+    {
+        [Tooltip("以下为可调默认，历史架构研究结果由集成者替换，不表示确定的平衡参数。")]
+        public string DefaultsNotice = "暂定：语料一次消耗、无退款取消、能力不继承旧模型。速度为每任务token/s，并发不分摊。";
+        public RecipeEntry[] Recipes = { new RecipeEntry() };
+        public ArchitectureEntry[] Architectures = {
+            new ArchitectureEntry { Id = "baseline", Title = "Transformer（倍率暂定）", UnlockStage = 1, SpeedMultiplier = 1, Outline = OutlineTransform.Keep },
+            new ArchitectureEntry { Id = "alternate", Title = "MoE Transformer（倍率暂定）", UnlockStage = 2, SpeedMultiplier = .8, Outline = OutlineTransform.Transpose },
+            new ArchitectureEntry { Id = "architecture-slot-3", Title = "协调状态架构", TechnicalDescription = "注意力/状态空间混合", UnlockStage = 4, ContentReady = true, SpeedMultiplier = 1, Outline = OutlineTransform.Keep }
+        };
+        public ComputeEntry[] Compute = {
+            new ComputeEntry { Id = "compute-1", TokensPerSecond = 10, UpgradeCost = 0 },
+            new ComputeEntry { Id = "compute-2", TokensPerSecond = 15, UpgradeCost = 50 },
+            new ComputeEntry { Id = "compute-3", TokensPerSecond = 22.5, UpgradeCost = 100 }
+        };
+        public string InitialArchitectureId = "baseline";
+        public string InitialModelName = "初始模型";
+
+        [Serializable] public sealed class RecipeEntry
+        {
+            public string Id = "dialogue-training", Title = "对话语料训练（暂定）";
+            public int Cost = 20, MinimumRecords = 1;
+            public double WorkTokens = 120, AbilityInterval = 1, PointsPerScore = 1;
+            public Vector2Int[] Shape = { new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(2, 0),
+                new Vector2Int(0, 1), new Vector2Int(1, 1), new Vector2Int(2, 1) };
+            public TrainingRecipe Build() => new TrainingRecipe(Id, Title, Cost, MinimumRecords, WorkTokens,
+                AbilityInterval, PointsPerScore, Shape.Select(c => new Cell(c.x, c.y)));
+        }
+        [Serializable] public sealed class ArchitectureEntry
+        {
+            public string Id, Title;
+            public string TechnicalDescription;
+            public double SpeedMultiplier = 1;
+            public OutlineTransform Outline;
+            [Range(1, 5)] public int UnlockStage = 1;
+            public bool ContentReady = true;
+            public ArchitectureDefinition Build() => new ArchitectureDefinition(Id, Title, SpeedMultiplier, Outline, UnlockStage, ContentReady, TechnicalDescription);
+        }
+        [Serializable] public sealed class ComputeEntry
+        {
+            public string Id;
+            public double TokensPerSecond = 10;
+            public int UpgradeCost;
+            public ComputeTier Build() => new ComputeTier(Id, TokensPerSecond, UpgradeCost);
+        }
+        public TrainingSession Build(TaskSimulation simulation, EconomyManager wallet,
+            Func<ExecutionProfile, bool> apply, Func<double, bool> updateRate, Func<IEnumerable<Cell>> capacity,
+            Func<ModelDefinition, ModelDefinition> compose = null, Func<PolicyModifiers> policy = null,
+            ModelDefinition initialBaseDefinition = null, Func<int> currentStage = null, ModelIdentityRegistry identities = null)
+        {
+            if (compose != null && initialBaseDefinition == null)
+                throw new InvalidOperationException("Supplying permanent bonuses requires an explicit unmodified initial base model.");
+            identities = identities ?? new ModelIdentityRegistry();
+            var basis = initialBaseDefinition ?? simulation.Model;
+            return new TrainingSession(simulation,
+                new CatalogModel(InitialModelName, InitialArchitectureId, basis, Array.Empty<string>(), identities.ResolveOrCreate(basis.Id)),
+                Recipes.Select(r => r.Build()), Architectures.Select(a => a.Build()), Compute.Select(c => c.Build()),
+                wallet.TrySpendFunds, wallet.AddFunds, apply, updateRate, capacity, compose, policy, currentStage, identities);
+        }
+    }
+}

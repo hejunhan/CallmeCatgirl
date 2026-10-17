@@ -10,7 +10,11 @@ namespace CallmeCatgirl.UI
 {
     public sealed class CoreGameplayCanvasView : MonoBehaviour
     {
+        [SerializeField] private CallmeCatgirl.Presentation.PlanningPresentation planningPresentation;
+        public void SetManualPlanningVisual(bool paused) => planningPresentation?.SetPlanning(paused);
+        public void RevealConversation() => conversationPopup?.Reveal();
         [SerializeField] private UIFeedbackConfiguration feedback;
+        [SerializeField] private Font workspaceHeadingFont,workspaceNumberFont;
         public UIFeedbackConfiguration Feedback => feedback;
         public double VisualGameTime => controller == null ? 0 : controller.Simulation.GameTime;
         [SerializeField] private UIFeedbackLabel settlementFeedback;
@@ -62,6 +66,7 @@ namespace CallmeCatgirl.UI
         private Button pauseButton;
         private Color pauseIdleColor;
         [SerializeField] private GameObject infoPanel;
+        private LocalDebugFoldout taskDebug;
         [SerializeField] private Text infoTitle;
         [SerializeField] private Text infoStatus;
         [SerializeField] private Text abilitiesLabel;
@@ -87,6 +92,8 @@ namespace CallmeCatgirl.UI
         private readonly Dictionary<string, TaskCardView> cards = new Dictionary<string, TaskCardView>();
         private readonly Dictionary<string, TaskModuleView> modules = new Dictionary<string, TaskModuleView>();
         private CoreGameplayController controller;
+        private ConversationWorkspaceView conversationWorkspace;
+        public UIWindowLayers WindowLayers { get; private set; }
         private string draggedId;
         private int dragRotation;
         private Cell grabOffset;
@@ -106,6 +113,12 @@ namespace CallmeCatgirl.UI
                 messageIdle = messageLabel.color;
                 if (modelLabel != null) modelIdle = modelLabel.color;
             }
+            foreach(var text in new[]{modelLabel,memoryUpgradeLabel,clockLabel,infoStatus,abilitiesLabel,qualityLabel})
+                if(text!=null){text.fontSize=28;text.resizeTextForBestFit=false;}
+            if(memoryUpgradeLabel!=null)memoryUpgradeLabel.rectTransform.sizeDelta=new Vector2(500,44);
+            if(infoStatus!=null){infoStatus.fontSize=26;infoStatus.rectTransform.sizeDelta=new Vector2(640,72);}
+            if(abilitiesLabel!=null){abilitiesLabel.rectTransform.anchoredPosition=new Vector2(0,-108);abilitiesLabel.rectTransform.sizeDelta=new Vector2(740,102);}
+            if(qualityLabel!=null){qualityLabel.rectTransform.anchoredPosition=new Vector2(560,-176);qualityLabel.rectTransform.sizeDelta=new Vector2(180,36);}
             controller = owner; lastFunds = owner.Funds; fundsAt = rejectedAt = settlementAt = -100;
             if (settlementFeedback != null) settlementFeedback.Clear();
             if (speedIdleColors == null && speedButtons != null)
@@ -128,12 +141,87 @@ namespace CallmeCatgirl.UI
                     card.transform.SetParent(null, false); Destroy(card.gameObject);
                 }
             }
+            if(conversationWorkspace==null)conversationWorkspace=gameObject.AddComponent<ConversationWorkspaceView>();
+            conversationWorkspace.Bind(owner,this,(RectTransform)modelLabel.transform.parent,candidateContent,modelLabel.font);
+            logLabel.transform.parent.gameObject.SetActive(false);
+            foreach(var text in new[]{infoTitle,infoStatus,abilitiesLabel,qualityLabel})text.gameObject.SetActive(false);
+            var candidatePanel=candidateContent.GetComponentsInParent<RectTransform>().FirstOrDefault(r=>r.name=="CandidatePanel");
+            var candidateTitle=candidatePanel==null?null:candidatePanel.Find("Title");if(candidateTitle!=null)candidateTitle.GetComponent<Text>().text="候选";
+            ArrangeWorkspace(candidatePanel);
+            ApplyWorkspaceHierarchy(candidatePanel);
+            if(WindowLayers==null)WindowLayers=GetComponent<UIWindowLayers>()??gameObject.AddComponent<UIWindowLayers>();
+            WindowLayers.Configure(board.GetComponentsInParent<RectTransform>().First(r=>r.name=="BoardPanel"),planningPresentation,owner);
             Canvas.ForceUpdateCanvases(); Refresh();
+        }
+
+        private void ApplyWorkspaceHierarchy(RectTransform candidatePanel)
+        {
+            var boardPanel=board.GetComponentsInParent<RectTransform>().First(r=>r.name=="BoardPanel");
+            var boardPaper=boardPanel.GetComponent<Image>();boardPaper.sprite=null;boardPaper.color=new Color32(244,244,244,255);
+            if(candidatePanel!=null)
+            {
+                var paper=candidatePanel.GetComponent<Image>();paper.sprite=null;paper.color=new Color32(226,226,226,255);
+                SetColumnTitle(candidatePanel,"候选","CANDIDATES");
+                var scroll=(RectTransform)candidateContent.GetComponentInParent<ScrollRect>().transform;scroll.anchorMin=Vector2.zero;scroll.anchorMax=Vector2.one;scroll.offsetMin=new Vector2(8,8);scroll.offsetMax=new Vector2(-8,-104);
+            }
+            SetColumnTitle(boardPanel,"运算","COMPUTE");
+            var container=(RectTransform)board.parent;container.offsetMax=new Vector2(-24,-144);
+            occupancyLabel.font=workspaceNumberFont??occupancyLabel.font;occupancyLabel.fontSize=22;occupancyLabel.supportRichText=true;occupancyLabel.alignment=TextAnchor.UpperRight;
+            SetTopRect(occupancyLabel.rectTransform,new Vector2(1,1),new Vector2(-24,-16),new Vector2(300,64));
+            memoryUpgradeLabel.font=workspaceNumberFont??memoryUpgradeLabel.font;memoryUpgradeLabel.fontSize=22;memoryUpgradeLabel.supportRichText=true;memoryUpgradeLabel.alignment=TextAnchor.MiddleRight;
+            SetTopRect(memoryUpgradeLabel.rectTransform,new Vector2(1,1),new Vector2(-220,-76),new Vector2(580,60));
+            SetTopRect((RectTransform)memoryUpgradeButton.transform,new Vector2(1,1),new Vector2(-24,-88),new Vector2(180,40));
+            var controls=new List<Button>{pauseButton,rotateButton,withdrawButton,submitButton,nextRoundButton,memoryUpgradeButton};if(speedButtons!=null)controls.AddRange(speedButtons);
+            foreach(var button in transform.GetComponentsInChildren<Button>(true))if(new[]{"AddRequestButton","ResetButton","ReturnToMenu","OpenTraining","SaveRun","LoadRun"}.Contains(button.name))controls.Add(button);
+            foreach(var button in controls.Distinct())
+            {
+                if(button==null)continue;var artwork=button.GetComponent<ButtonArtwork>();if(artwork!=null)artwork.enabled=false;
+                var image=button.GetComponent<Image>();if(image==null)continue;image.sprite=null;image.color=Color.white;button.targetGraphic=image;button.transition=Selectable.Transition.ColorTint;
+                var colors=button.colors;colors.normalColor=colors.selectedColor=Color.white;colors.highlightedColor=new Color32(232,232,232,255);colors.pressedColor=new Color32(200,200,200,255);colors.disabledColor=new Color32(210,210,210,255);colors.fadeDuration=.08f;button.colors=colors;
+                var text=button.GetComponentInChildren<Text>(true);if(text!=null){text.enabled=true;text.font=workspaceNumberFont??text.font;text.fontStyle=FontStyle.Normal;text.color=new Color32(22,22,22,255);}
+            }
+        }
+        private void SetColumnTitle(RectTransform panel,string title,string english)
+        {
+            var label=panel.Find("Title")?.GetComponent<Text>();if(label==null)return;
+            label.text=title;label.font=workspaceHeadingFont??label.font;label.fontStyle=FontStyle.Normal;label.fontSize=44;label.alignment=TextAnchor.UpperLeft;
+            SetTopRect(label.rectTransform,new Vector2(0,1),new Vector2(20,-12),new Vector2(300,56));
+            var existing=panel.Find("ColumnLabel");var tag=existing==null?null:existing.GetComponent<Text>();
+            if(tag==null){var go=new GameObject("ColumnLabel",typeof(RectTransform),typeof(Text));go.transform.SetParent(panel,false);tag=go.GetComponent<Text>();}
+            tag.text=english;tag.font=modelLabel.font;tag.fontSize=22;tag.color=new Color32(82,82,82,255);tag.raycastTarget=false;
+            SetTopRect(tag.rectTransform,new Vector2(0,1),new Vector2(22,-68),new Vector2(240,30));
+        }
+        private static void SetTopRect(RectTransform r,Vector2 anchor,Vector2 position,Vector2 size){r.anchorMin=r.anchorMax=r.pivot=anchor;r.anchoredPosition=position;r.sizeDelta=size;}
+
+        private void ArrangeWorkspace(RectTransform candidatePanel)
+        {
+            if(candidatePanel!=null)
+            {
+                candidatePanel.anchorMin=new Vector2(0,0);candidatePanel.anchorMax=new Vector2(0,1);candidatePanel.pivot=new Vector2(0,1);
+                candidatePanel.offsetMin=new Vector2(432,80);candidatePanel.offsetMax=new Vector2(704,-120);
+                candidatePanel.GetComponent<CallmeCatgirl.Presentation.PlanningPaper>()?.CaptureHome();
+                var grid=candidateContent.GetComponent<GridLayoutGroup>();if(grid!=null)grid.cellSize=new Vector2(112,140);
+            }
+            var boardPanel=board.GetComponentsInParent<RectTransform>().First(r=>r.name=="BoardPanel");
+            boardPanel.anchorMin=Vector2.zero;boardPanel.anchorMax=Vector2.one;boardPanel.offsetMin=new Vector2(728,80);boardPanel.offsetMax=new Vector2(-32,-120);
+            var container=(RectTransform)board.parent;container.anchorMin=Vector2.zero;container.anchorMax=Vector2.one;container.offsetMin=new Vector2(24,96);container.offsetMax=new Vector2(-24,-112);
+            var actions=(RectTransform)infoPanel.transform;actions.anchorMin=new Vector2(0,0);actions.anchorMax=new Vector2(1,0);actions.anchoredPosition=new Vector2(0,48);actions.sizeDelta=new Vector2(-36,72);
+            var buttons=new[]{rotateButton,withdrawButton,submitButton,nextRoundButton};var names=new[]{"旋转","撤回","提交","下一轮"};float x=0;
+            for(int i=0;i<buttons.Length;i++)
+            {
+                var r=(RectTransform)buttons[i].transform;r.anchorMin=r.anchorMax=new Vector2(0,.5f);r.pivot=new Vector2(0,.5f);r.anchoredPosition=new Vector2(x,0);r.sizeDelta=new Vector2(r.sizeDelta.x,44);x+=r.sizeDelta.x+16;
+                var label=buttons[i].GetComponentInChildren<Text>(true);if(label!=null)label.text=names[i];
+            }
+            foreach(var text in transform.GetComponentsInChildren<Text>(true))
+                if(text.name=="Hint"||text.name=="BoardHint"||text.name=="CommunicationHint"||text.name=="CommunicationFooter"||(text.name=="Title"&&text.transform.parent.name=="Header"))text.gameObject.SetActive(false);
+            messageLabel.gameObject.SetActive(false);
+            var oldConversation=transform.Find("ConversationPanel");if(oldConversation!=null)oldConversation.gameObject.SetActive(false);
         }
 
         public void Refresh()
         {
             if (controller == null || controller.Simulation == null) return;
+            planningPresentation?.SetPresentationBlocked(controller.IsModalOpen);
             var sim = controller.Simulation;
             if (draggedId != null && (!sim.Tasks.TryGetValue(draggedId, out var dragging)
                 || (dragging.State != RequestState.Running && dragging.State != RequestState.Waiting && dragging.State != RequestState.Withdrawn))) CancelDrag();
@@ -145,9 +233,9 @@ namespace CallmeCatgirl.UI
             pauseButton.interactable = !controller.GameEnded && !controller.IsModalOpen;
             SetControlSelected(pauseButton, sim.Paused || controller.IsModalOpen, feedback != null ? feedback.PauseSelected : pauseActiveColor, pauseIdleColor);
             if (conversationPopup != null) conversationPopup.Refresh(controller, GetAvatar(controller.Story.UserId), feedback);
-            clockLabel.text = $"游戏时间 {sim.GameTime:0.0}s   模型周期 {sim.Model.Interval:0.#}s";
-            messageLabel.text = controller.Message; logLabel.text = string.Join("\n", controller.Logs);
-            pauseLabel.text = controller.IsMemoryUpgradeOpen ? "内存升级中" : controller.IsStoryOpen ? "剧情阅读中" : controller.GameEnded ? "经营结束" : sim.Paused ? (sim.GameTime == 0 ? "开始 [空格]" : "继续 [空格]") : "暂停 [空格]";
+            clockLabel.text = $"时间 {sim.GameTime:0.0}s · 周期 {sim.Model.Interval:0.#}s";
+            messageLabel.text = controller.Message.StartsWith("拖动请求") ? "R 旋转 · 空格 暂停 · Esc 取消" : controller.Message; logLabel.text = string.Join("\n", controller.Logs);
+            pauseLabel.text = controller.IsMemoryUpgradeOpen ? "内存升级中" : controller.GameEnded ? "经营结束" : sim.Paused ? (sim.GameTime == 0 ? "开始" : "继续") : "暂停";
 
             if (speedButtons != null && speedIdleColors != null)
                 for (int i = 0; i < speedButtons.Length && i < speedValues.Length; i++)
@@ -158,7 +246,7 @@ namespace CallmeCatgirl.UI
             {
                 memoryUpgradeButton.interactable = !controller.GameEnded && !controller.IsModalOpen;
                 memoryUpgradeButtonLabel.text = "内存 / 加点";
-                memoryUpgradeLabel.text = $"内存 Lv{controller.MemoryLevel} · 资金 {DisplayFunds} · 点数 {controller.AvailableAbilityPoints}";
+                memoryUpgradeLabel.text = $"内存 Lv{controller.MemoryLevel}   资金 <size=42>{DisplayFunds}</size>   点数 {controller.AvailableAbilityPoints}";
             }
             float width = board.rect.width / sim.Width, height = board.rect.height / sim.Height;
             int open = 0;
@@ -168,12 +256,14 @@ namespace CallmeCatgirl.UI
                 gridCells[i].Show(available, feedback); if (available) open++;
             }
             if (partitions != null) partitions.Show(sim);
-            if (occupancyLabel != null) occupancyLabel.text = $"已占用 {sim.Occupancy.Count} / {open} 格";
-            if (modelLabel != null) modelLabel.text = $"当前模型 · {controller.ModelName}\n\n每个请求独立，全速运算\n每 {sim.Model.Interval:0.#} 秒增加能力\n\n"
-                + string.Join("\n", sim.Model.Points.Select(p => $"{CoreGameplayController.AbilityText(p.Key)}  +{p.Value:0.##}"));
+            if (occupancyLabel != null) occupancyLabel.text = $"已用 <size=42>{sim.Occupancy.Count} / {open}</size> 格";
+            if (modelLabel != null) modelLabel.text = $"{controller.ModelName}\n"
+                + (controller.TrainingEnabled ? $"{controller.Training.Session.TokensPerSecond:0.##} token/s\n" : string.Empty)
+                + $"能力周期 {sim.Model.Interval:0.#}s\n\n"
+                + string.Join("\n", sim.Model.Points.Select(p => $"{CoreGameplayController.AbilityText(p.Key)}  {p.Value:0.##}"));
             foreach (var task in sim.Tasks.Values)
             {
-                bool candidate = task.State == RequestState.Waiting || task.State == RequestState.Withdrawn;
+                bool candidate = task.State == RequestState.Waiting || task.State == RequestState.Withdrawn || (task.State == RequestState.Ready && task.ReadyInCandidate);
                 if (candidate && !cards.ContainsKey(task.Id))
                 {
                     var card = Instantiate(candidatePrefab, candidateContent); card.name = "RequestCard_" + task.Id;
@@ -184,7 +274,7 @@ namespace CallmeCatgirl.UI
                     existingCard.gameObject.SetActive(candidate);
                     if (candidate) existingCard.Refresh(task, sim.GameTime, task.Id == controller.SelectedId);
                 }
-                bool onBoard = task.State == RequestState.Running || task.State == RequestState.Ready;
+                bool onBoard = task.State == RequestState.Running || (task.State == RequestState.Ready && !task.ReadyInCandidate);
                 if (onBoard && !modules.ContainsKey(task.Id))
                 {
                     var module = Instantiate(modulePrefab, boardModules); module.name = "RunningModule_" + task.Id;
@@ -196,20 +286,26 @@ namespace CallmeCatgirl.UI
                     if (onBoard)
                     {
                         existingModule.Rect.anchoredPosition = new Vector2(task.Origin.X * width, -task.Origin.Y * height);
-                        existingModule.Render(task, task.Rotation, width, height, task.Id == controller.SelectedId);
+                        existingModule.Render(task, task.Rotation, width, height, task.Id == controller.SelectedId || IsAssociationHighlighted(task.ConversationId));
                     }
                 }
             }
+            conversationWorkspace?.Refresh();
             RefreshSignals();
             RefreshInfo();
             if (IsDragging) RenderGhost();
+            WindowLayers?.Synchronize();
         }
 
         private static void SetControlSelected(Button button, bool selected, Color active, Color idle)
         {
             var artwork = button.GetComponent<ButtonArtwork>();
             if (artwork != null && artwork.enabled) artwork.SetSelected(selected);
-            else button.targetGraphic.color = selected ? active : idle;
+            else
+            {
+                button.targetGraphic.color=selected?active:idle;
+                var label=button.GetComponentInChildren<Text>(true);if(label!=null)label.color=selected?Color.white:new Color32(22,22,22,255);
+            }
         }
 
         private void RefreshSignals()
@@ -234,23 +330,32 @@ namespace CallmeCatgirl.UI
         private void RefreshInfo()
         {
             var task = controller.SelectedTask; infoPanel.SetActive(task != null);
+            if(taskDebug==null && controller.DebugCommands!=null && CallmeCatgirl.Debugging.DebugBuild.Enabled)
+            {
+                var slot=new GameObject("InlineTaskDebugSlot",typeof(RectTransform)).GetComponent<RectTransform>();slot.SetParent(infoPanel.transform,false);
+                slot.anchorMin=slot.anchorMax=new Vector2(1,1);slot.pivot=new Vector2(1,1);slot.anchoredPosition=new Vector2(-4,-42);slot.sizeDelta=new Vector2(350,270);slot.localScale=Vector3.one*.63f;
+                taskDebug=LocalDebugFoldout.Attach(slot,controller.DebugCommands,"task",task?.Id,infoTitle.font);
+            }
+            taskDebug?.SetTarget(task?.Id);
+            bool trainingTask = task != null && controller.TrainingEnabled && controller.Training.IsTrainingRequest(task.Id);
             if (conversationAvatar != null)
             { conversationAvatar.sprite = GetAvatar(task?.ConversationId); conversationAvatar.enabled = conversationAvatar.sprite != null; }
             if (conversationLabel != null) conversationLabel.text = task == null ? "选择用户查看通讯。"
+                : trainingTask ? "训练模块 / 模型产物\n不产生用户订单收入或剧情。"
                 : controller.Story.Name(task.ConversationId) + "\n" + CoreGameplayController.StateText(task.State)
                 + "\n\n" + controller.Story.Latest(task.ConversationId);
+            submitButton.gameObject.SetActive(trainingTask);
             if (task == null) return;
             infoTitle.text = "当前请求 / " + task.Id + " · " + task.Definition.Title;
             infoStatus.text = $"{CoreGameplayController.StateText(task.State)}  ·  计算 {task.Progress:0.#}/{task.Definition.Calculation:0.#}  ·  忍耐 {task.Remaining(controller.Simulation.GameTime):0.0}s · 达标奖励 {task.Definition.Tokens:0.#} Token";
             abilitiesLabel.text = string.Join("\n", task.Definition.Requirements.Select(req =>
                 $"{CoreGameplayController.AbilityText(req.Kind)}  {task.GetAbility(req.Kind):0.#} / 完成 {req.Minimum:0.#} / 优秀 {req.Excellent:0.#}"
                 + (task.Result == null ? "" : "  " + CoreGameplayController.QualityText(task.Result.ByAbility[req.Kind]))));
-            qualityLabel.text = task.Result == null ? "各项能力分别达标，超额不能补其他能力的短板。"
-                : "最终质量：" + CoreGameplayController.QualityText(task.Result.Overall) + "；结果已冻结，等待不会再增加能力。";
+            qualityLabel.text = task.Result == null ? string.Empty : "质量：" + CoreGameplayController.QualityText(task.Result.Overall);
             rotateButton.interactable = !controller.GameEnded && !controller.IsModalOpen && (task.State == RequestState.Waiting || task.State == RequestState.Withdrawn || task.State == RequestState.Running);
             withdrawButton.interactable = !controller.GameEnded && !controller.IsModalOpen && (task.State == RequestState.Running);
             submitButton.interactable = !controller.GameEnded && !controller.IsModalOpen && (task.State == RequestState.Ready);
-            nextRoundButton.interactable = !controller.GameEnded && !controller.IsModalOpen && !controller.Story.Finished(task.ConversationId) && (task.State == RequestState.Submitted || task.State == RequestState.TimedOut);
+            nextRoundButton.interactable = !trainingTask && !controller.GameEnded && !controller.IsModalOpen && !controller.Story.Finished(task.ConversationId) && (task.State == RequestState.Submitted || task.State == RequestState.TimedOut);
         }
 
         public Sprite GetAvatar(string conversationId)
@@ -261,6 +366,17 @@ namespace CallmeCatgirl.UI
                 index = (serial + 2) % userAvatars.Length;
             return userAvatars[index % userAvatars.Length];
         }
+        public bool IsAssociationHighlighted(string conversation)=>conversationWorkspace!=null&&conversationWorkspace.IsHighlighted(conversation);
+        public void HoverConversation(string id,UnityEngine.Object source)=>conversationWorkspace?.Hover(id,source);
+        public void HoverRequest(string id,UnityEngine.Object source){if(controller.Simulation.Tasks.TryGetValue(id,out var task))HoverConversation(task.ConversationId,source);}
+        public void ClearAssociationHover(UnityEngine.Object source)=>conversationWorkspace?.Clear(source);
+        public IEnumerable<RectTransform> AssociationTargets(string conversation)
+        {
+            foreach(var pair in cards)if(pair.Value.gameObject.activeInHierarchy&&controller.Simulation.Tasks[pair.Key].ConversationId==conversation)yield return pair.Value.ShapeRect;
+            foreach(var pair in modules)if(pair.Value.gameObject.activeInHierarchy&&controller.Simulation.Tasks[pair.Key].ConversationId==conversation)yield return pair.Value.Rect;
+        }
+        public void OpenRequestConversation(string id)
+        { controller.SelectRequest(id); controller.OpenConversationHistory(); }
         public void SelectRequest(string id) { controller.SelectRequest(id); RefreshInfo(); }
         public void BeginDrag(string id, PointerEventData data, bool fromBoard)
         {
@@ -282,11 +398,12 @@ namespace CallmeCatgirl.UI
         public void EndDrag(PointerEventData data)
         {
             if (!IsDragging) return;
+            if (WindowLayers!=null&&WindowLayers.CoversPointer(data.position,data.pressEventCamera)) { CancelDrag(); Refresh(); return; }
             lastPointer = data.position; pointerCamera = data.pressEventCamera;
             var cell = ScreenToCell(lastPointer, pointerCamera);
             var origin = new Cell(cell.X - grabOffset.X, cell.Y - grabOffset.Y);
-            bool success = controller.Simulation.TryPlace(draggedId, origin, dragRotation, out var failure);
-            controller.SetMessage(success ? "合法落位，任务独立运行。" : "落位失败：" + CoreGameplayController.FailureText(failure) + "，原位置与进度保留。");
+            bool success = controller.TryPlaceRequest(draggedId, origin, dragRotation, out var failure);
+            controller.SetMessage(success ? "已放置" : "落位失败：" + CoreGameplayController.FailureText(failure) + "，原位置与进度保留。");
             string dropped = draggedId;
             if (!success) rejectedAt = Time.unscaledTime;
             CancelDrag(); Refresh();

@@ -106,7 +106,7 @@ namespace CallmeCatgirl.Tests
                 Owner=owner; field=owner.GetType().GetField("configuration",BindingFlags.Instance|BindingFlags.NonPublic);
                 original=(ScriptableObject)field.GetValue(owner); Config=Object.Instantiate(original);
                 Generation=ScriptableObject.CreateInstance(GenerationType); SingleShape(Generation,new[]{"#"});
-                Set(Generation,"RandomSeed",5); Set(Config,"TaskGeneration",Generation); Set(Config,"Story",null);
+                Set(Generation,"RandomSeed",5); Set(Config,"TaskGeneration",Generation); Set(Config,"OrdinaryDialoguePool",null);Set(Config,"Story",null);
                 Set(Config,"SecondsPerGameMonth",30f); Set(Config,"InitialFunds",5000); Set(Config,"MonthlyMaintenanceFee",0);
                 var taskType=Config.GetType().GetNestedType("DemoTask"); var task=Activator.CreateInstance(taskType);
                 Set(task,"Id","A"); Set(task,"Title","fixture"); Set(task,"Shape",new[]{Vector2Int.zero});

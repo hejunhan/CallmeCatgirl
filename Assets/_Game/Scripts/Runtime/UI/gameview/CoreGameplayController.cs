@@ -3,28 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using CallmeCatgirl.Gameplay.TaskGrid;
 using CallmeCatgirl.UI;
+using CallmeCatgirl.Gameplay.Training;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace CallmeCatgirl.Gameplay
 {
     /// <summary>Owns the simulation and commands; visual layout is serialized in the Canvas scene.</summary>
-    public sealed class CoreGameplayController : MonoBehaviour
+    public sealed partial class CoreGameplayController : MonoBehaviour
     {
         [SerializeField] private GameplayConfiguration configuration;
         [SerializeField] private CoreGameplayCanvasView canvasView;
+        [SerializeField] private TrainingController training;
+        [SerializeField] private TrainingPanel trainingPanel;
+        public TrainingController Training => training;
+        public bool TrainingEnabled => training != null && training.IsBound;
+        public bool IsTrainingOpen => trainingPanel != null && trainingPanel.IsOpen;
         public TaskSimulation Simulation { get; private set; }
         public ConversationStory Story { get; private set; }
         public bool IsStoryOpen => Story != null && Story.IsOpen;
         public bool IsMemoryUpgradeOpen { get; private set; }
-        public bool IsModalOpen => IsStoryOpen || IsMemoryUpgradeOpen;
+        public bool IsModalOpen => IsMemoryUpgradeOpen || IsTrainingOpen || (canvasView!=null&&canvasView.WindowLayers!=null&&canvasView.WindowLayers.IsBlockingInput);
         public IReadOnlyList<Cell> NextMemoryCells => NextMemoryUpgrade == null ? Array.Empty<Cell>()
-            : configuration.MemoryUpgrades.GetOpenCells(NextMemoryUpgrade.TargetLevel);
+            : MemoryOutline(NextMemoryUpgrade.TargetLevel);
         public string SelectedId { get; private set; }
         public TaskInstance SelectedTask => SelectedId != null && Simulation.Tasks.TryGetValue(SelectedId, out var task) ? task : null;
         public float PlaybackSpeed { get; private set; }
         public int MemoryLevel { get; private set; }
-        public string ModelName => configuration.MemoryUpgrades.GetModelName(MemoryLevel, Simulation.Model.Id);
+        public string ModelName => TrainingEnabled ? training.Session.Models.First(m => m.Id == training.Session.ActiveModelId).Name
+            : configuration.MemoryUpgrades.GetModelName(MemoryLevel, Simulation.Model.Id);
         public EconomyManager Economy { get; private set; }
         public int Funds => Economy.CurrentFunds;
         public int CurrentMonth { get; private set; }
@@ -36,10 +43,10 @@ namespace CallmeCatgirl.Gameplay
         private double monthTimer;
         public int CompletedTasks { get; private set; }
         public int AvailableAbilityPoints { get; private set; }
-        public bool CanAllocateAbility => !GameEnded && IsMemoryUpgradeOpen && !IsStoryOpen && AvailableAbilityPoints > 0;
+        public bool CanAllocateAbility => !TrainingEnabled && !GameEnded && IsMemoryUpgradeOpen && AvailableAbilityPoints > 0;
         public MemoryUpgradeConfiguration.UpgradeStep NextMemoryUpgrade
             => configuration.MemoryUpgrades.TryGetNextLevel(MemoryLevel, out var step) ? step : null;
-        public bool CanUpgradeMemory => !GameEnded && !IsStoryOpen && NextMemoryUpgrade != null
+        public bool CanUpgradeMemory => !GameEnded && NextMemoryUpgrade != null
             && (NextMemoryUpgrade.TaskMultipliers == null || NextMemoryUpgrade.TaskMultipliers.IsValid) && NextMemoryUpgrade.Cost >= 0 && NextMemoryUpgrade.AbilityPoints >= 0
             && AvailableAbilityPoints <= int.MaxValue - NextMemoryUpgrade.AbilityPoints
             && Funds >= NextMemoryUpgrade.Cost && CompletedTasks >= NextMemoryUpgrade.RequiredCompletedTasks;
@@ -60,14 +67,20 @@ namespace CallmeCatgirl.Gameplay
         private TaskDefinition[] requestTemplates;
 
         private void Awake() => ResetSimulation();
-        private void Start() { if (canvasView != null && Simulation != null) canvasView.Initialize(this); }
+        private void Start()
+        {
+            if (canvasView != null && Simulation != null) canvasView.Initialize(this);
+            string slot=SceneNavigation.ConsumeContinueSlot();
+            if (slot != null) { ConfigureSaveSlot(slot); ContinueRun(); }
+            InitializeSaveButtons();
+        }
         private void Update()
         {
             if (Simulation == null) return;
-            AdvanceGame(Time.unscaledDeltaTime * PlaybackSpeed);
-            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame && IsMemoryUpgradeOpen)
+            if (!ManualCommandClock) AdvanceGame(Time.unscaledDeltaTime * PlaybackSpeed);
+            if (!CallmeCatgirl.Debugging.InlineDebugInput.IsEditing && Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame && IsMemoryUpgradeOpen)
                 CloseMemoryUpgrade();
-            if (!GameEnded && !IsModalOpen && Keyboard.current != null)
+            if (!GameEnded && !IsModalOpen && !CallmeCatgirl.Debugging.InlineDebugInput.IsEditing && Keyboard.current != null)
             {
                 if (Keyboard.current.rKey.wasPressedThisFrame) RotateSelected();
                 if (Keyboard.current.spaceKey.wasPressedThisFrame) TogglePause();
@@ -85,14 +98,17 @@ namespace CallmeCatgirl.Gameplay
                 IsMemoryUpgradeOpen = false;
                 configuration.MemoryUpgrades.ValidateTaskMultipliers();
                 configuration.TaskGeneration?.Validate(configuration.MemoryUpgrades.BoardWidth, configuration.MemoryUpgrades.BoardHeight);
-                requestRandom = configuration.TaskGeneration?.CreateRandom() ?? new System.Random();
-                Story = new ConversationStory(configuration.Story, configuration.TaskGeneration, requestRandom);
+                ManualCommandClock=false; runId=Guid.NewGuid().ToString("D"); saveService=null; saveContentRevision=null;
+                int seed=configuration.TaskGeneration == null ? -1 : configuration.TaskGeneration.RandomSeed;
+                requestRandom = new CallmeCatgirl.Persistence.SaveableRandom(seed < 0 ? Guid.NewGuid().GetHashCode() : seed);
+                Story = new ConversationStory(configuration.Story, configuration.TaskGeneration, requestRandom, configuration.OrdinaryDialoguePool);
                 Simulation = configuration.BuildSimulation(); Simulation.Paused = true; definitions.Clear(); taskBases.Clear(); logs.Clear(); serial = 0;
                 MemoryLevel = configuration.MemoryUpgrades.InitialLevel; CompletedTasks = 0; AvailableAbilityPoints = 0;
                 if (configuration.SecondsPerGameMonth <= 0 || float.IsNaN(configuration.SecondsPerGameMonth)
                     || float.IsInfinity(configuration.SecondsPerGameMonth)) throw new InvalidOperationException("每月游戏秒数必须是正的有限数值。");
                 if (Economy != null) Economy.OnEconomyLog -= AddEconomyLog;
                 Economy = configuration.BuildEconomyManager(); Economy.OnEconomyLog += AddEconomyLog;
+                Story.Economy = Economy;
                 CurrentMonth = 1; monthTimer = 0; GameEnded = false; EndingText = string.Empty;
                 foreach (var source in configuration.Requests)
                 {
@@ -100,11 +116,26 @@ namespace CallmeCatgirl.Gameplay
                 }
                 requestTemplates = definitions.Values.ToArray();
                 configuration.Story?.Validate(definitions.Keys);
+                configuration.OrdinaryDialoguePool?.Validate(definitions.Keys);
                 foreach (var definition in definitions.Values)
                     CreateTask(definition.Id + "-1", definition.Id, "1", definition);
                 SelectedId = Simulation.Tasks.Keys.FirstOrDefault(); PlaybackSpeed = configuration.PlaybackSpeed;
+                if (training != null)
+                {
+                    training.Changed -= RefreshTraining;
+                    trainingPanel?.Close();
+                    training.Bind(Simulation, Economy,
+                        p => Simulation.TryChangeExecutionProfile(p.Model, p.TokensPerSecond, p.OpenCells),
+                        rate => Simulation.TrySetTokenThroughput(rate),
+                        () => configuration.MemoryUpgrades.GetOpenCells(MemoryLevel),
+                        () => !GameEnded && !IsMemoryUpgradeOpen,
+                        currentStage: () => MemoryLevel);
+                    if (!Simulation.TrySetTokenThroughput(training.Session.TokensPerSecond)) throw new InvalidOperationException("Training speed initialization failed.");
+                    training.Changed += RefreshTraining;
+                }
                 Message = "拖动请求到同一背包内的格子，不能跨隔板。R旋转，空格暂停，Esc取消拖拽；撤回不重置忍耐。";
-                ReadEvents();
+                ReadEvents(); BindDebugCommands();
+                canvasView?.SetManualPlanningVisual(false);
                 if (canvasView != null && canvasView.IsInitialized) canvasView.Initialize(this);
             }
             catch (Exception exception) { Debug.LogException(exception, this); enabled = false; }
@@ -118,7 +149,7 @@ namespace CallmeCatgirl.Gameplay
         }
         public void CloseInfo() => SelectedId = null;
         public void SetMessage(string value) => Message = value;
-        public void TogglePause() { if (!GameEnded && !IsModalOpen) { Simulation.Paused = !Simulation.Paused; canvasView?.Refresh(); } }
+        public void TogglePause() { if (!GameEnded && !IsModalOpen) { Simulation.Paused = !Simulation.Paused; canvasView?.SetManualPlanningVisual(Simulation.Paused); canvasView?.Refresh(); } }
         public void CycleSpeed() => PlaybackSpeed = PlaybackSpeed == 0.5f ? 1f : PlaybackSpeed == 1 ? 0.25f : 0.5f;
         public void SetSpeed(float value) { PlaybackSpeed = value; canvasView?.Refresh(); }
         public void RotateSelected()
@@ -141,7 +172,12 @@ namespace CallmeCatgirl.Gameplay
         }
         public void SubmitSelected()
         {
-            if (GameEnded || IsModalOpen) return;
+            bool trainingRequest=SelectedTask!=null && TrainingEnabled && training.IsTrainingRequest(SelectedId);
+            if (GameEnded || (IsModalOpen && !(trainingRequest && training.CanManage))) return;
+            if (SelectedTask != null && TrainingEnabled && training.IsTrainingRequest(SelectedId))
+            {
+                training.CompleteTraining(SelectedId); ReadEvents(); RefreshTraining(); return;
+            }
             if (SelectedTask != null && Simulation.TrySubmit(SelectedId))
             { ReadEvents(); Message = "已提交：释放格子并完成结算。"; canvasView?.Refresh(); }
         }
@@ -162,6 +198,7 @@ namespace CallmeCatgirl.Gameplay
         private TaskInstance CreateTask(string requestId, string user, string round, TaskDefinition fallback)
         {
             var basis = Story.BuildNextTask(user, definitions, fallback);
+            if (configuration.OpeningBalance != null) basis = configuration.OpeningBalance.Apply(user, Story.SessionNumber(user), basis);
             var scaled = configuration.MemoryUpgrades.ScaleTask(MemoryLevel, basis, requestRandom);
             if (!Simulation.TryCreate(requestId, user, round, scaled, out var task)) return null;
             taskBases.Add(requestId, basis); // 保存未乘倍率的原始任务，下一会话不能拿已放大的值再乘。
@@ -181,6 +218,7 @@ namespace CallmeCatgirl.Gameplay
         {
             if (GameEnded || IsModalOpen) return;
             var previous = SelectedTask;
+            if (previous != null && TrainingEnabled && training.IsTrainingRequest(previous.Id)) return;
             if (previous == null || Story.Finished(previous.ConversationId) || !Simulation.TryCloseFeedback(previous.Id)) return;
             var basis = taskBases.TryGetValue(previous.Id, out var original) ? original : previous.Definition;
             string round = "round-" + (++serial);
@@ -190,13 +228,13 @@ namespace CallmeCatgirl.Gameplay
         }
         public void OpenMemoryUpgrade()
         {
-            if (GameEnded || IsStoryOpen) return;
+            if (GameEnded || IsTrainingOpen) return;
             IsMemoryUpgradeOpen = true; Message = "查看新增格子，点击确认后才会扣费。倍率只影响升级后新生成的请求。"; canvasView?.CancelDrag(); canvasView?.Refresh();
         }
         public void CloseMemoryUpgrade() { IsMemoryUpgradeOpen = false; canvasView?.Refresh(); }
         public void UpgradeMemory()
         {
-            if (GameEnded || IsStoryOpen) return;
+            if (GameEnded || IsTrainingOpen) return;
             ReadEvents();
             var next = NextMemoryUpgrade;
             if (next == null) { Message = "内存已满级。"; return; }
@@ -207,7 +245,7 @@ namespace CallmeCatgirl.Gameplay
             if (!CanUpgradeMemory)
             { Message = CompletedTasks < next.RequiredCompletedTasks ? $"需要累计达标提交 {next.RequiredCompletedTasks} 个任务。" : "升级资金不足。"; return; }
             int before = Simulation.OpenCellCount;
-            if (!Simulation.TryUnlockCells(configuration.MemoryUpgrades.GetOpenCells(next.TargetLevel)))
+            if (!Simulation.TryUnlockCells(MemoryOutline(next.TargetLevel)))
             { Message = "升级格子配置越界，未扣费。"; return; }
             Economy.TrySpendFunds(next.Cost);
             MemoryLevel = next.TargetLevel; AvailableAbilityPoints += next.AbilityPoints;
@@ -232,19 +270,44 @@ namespace CallmeCatgirl.Gameplay
             canvasView?.Refresh();
         }
 
-        public void ChooseReply(int index)
+        public TaskInstance ConversationTask => Story == null || string.IsNullOrEmpty(Story.UserId) ? null
+            : Simulation.Tasks.Values.LastOrDefault(t => t.ConversationId == Story.UserId);
+        public IReadOnlyList<StoryConfiguration.ReplyChoice> ConversationReplyChoices => Story.IsReply ? Story.Choices
+            : Story.PreviewReplyChoices(ConversationTask);
+        public void ChooseReply(int index) => ChooseReplyAtRevision(index, Story.Revision);
+        public void ChooseReplyAtRevision(int index, int expectedRevision)
         {
+            if (GameEnded || IsModalOpen || expectedRevision != Story.Revision) return;
+            var options = ConversationReplyChoices;
+            if (index < 0 || index >= options.Count) return;
+            var chosen = options[index];
+            if (!Story.IsReply)
+            {
+                var ready = ConversationTask;
+                if (ready == null || ready.State != RequestState.Ready || !Simulation.TrySubmit(ready.Id)) return;
+                ReadEvents(); // Normal quality, payment, lifecycle and reply preparation, exactly once.
+                if (!Story.IsReply || Story.RequestId != ready.Id) return;
+                index = Story.Choices.ToList().IndexOf(chosen);
+                if (index < 0 && Story.Choices.Count == 1 && string.IsNullOrEmpty(chosen.Label)
+                    && Story.Choices[0].NextNodeId == chosen.NextNodeId) index = 0;
+                if (index < 0) return;
+                expectedRevision = Story.Revision;
+            }
             string user = Story.UserId, request = Story.RequestId;
-            if (!Story.Choose(index)) return;
-            if (Story.Finished(user)) { Simulation.TryCloseFeedback(request); ReadEvents(); }
-            Message = Story.Finished(user) ? Story.Name(user) + "的剧情已完成。" :
-                Story.IsReply && Story.RequestId == request ? "请继续选择，完成本次会话。" : "本次会话结束，可开始下一次会话。";
+            string node = Story.CurrentCorpusNodeId, choice = Story.CorpusChoiceId(Story.Choices[index]);
+            if (!Story.ChooseAtRevision(index, expectedRevision)) return;
+            if (TrainingEnabled) training.RecordAcceptedReply(request, node, choice);
+            bool continuingRequest = Story.IsReply && Story.RequestId == request;
+            if (!continuingRequest && Story.Finished(user)) { Simulation.TryCloseFeedback(request); ReadEvents(); }
+            Message = continuingRequest ? "请继续选择，完成本次会话。" :
+                Story.Finished(user) ? Story.Name(user) + "的对话已结束。" : "本次会话结束，可开始下一次会话。";
             canvasView?.Refresh();
         }
         public void OpenConversationHistory()
         {
-            if (SelectedTask == null || GameEnded || IsMemoryUpgradeOpen) return;
-            Story.OpenHistory(SelectedTask.ConversationId); canvasView?.CancelDrag(); canvasView?.Refresh();
+            if (SelectedTask == null || GameEnded || IsModalOpen) return;
+            if (TrainingEnabled && training.IsTrainingRequest(SelectedId)) return;
+            Story.OpenConversation(SelectedTask, Story.RequestId != null && Simulation.Tasks.TryGetValue(Story.RequestId, out var activeReply) ? activeReply : null); canvasView?.RevealConversation(); canvasView?.CancelDrag(); canvasView?.Refresh();
         }
         public void CloseConversationHistory() { Story.CloseHistory(); canvasView?.Refresh(); }
         public void AddFunds(int amount) { Economy.AddFunds(amount); canvasView?.Refresh(); }
@@ -275,22 +338,56 @@ namespace CallmeCatgirl.Gameplay
         }
         private void ReadEvents()
         {
+            var notifications = new List<Action>();
             foreach (var item in Simulation.DrainEvents())
             {
+                if (TrainingEnabled && training.IsTrainingRequest(item.RequestId))
+                {
+                    notifications.Add(() => training.ObserveTaskEvent(item));
+                    QueueTaskObservers(item, notifications); continue;
+                }
                 if (item.Kind == TaskEventKind.Submitted && item.Result != null && item.Result.Overall != Quality.BelowStandard) CompletedTasks++;
                 int income = Economy.Settle(item);
                 if (Simulation.Tasks.TryGetValue(item.RequestId, out var task))
                 {
                     if (item.Kind == TaskEventKind.Arrived) Story.Arrived(task);
-                    if (item.Kind == TaskEventKind.Submitted) { IsMemoryUpgradeOpen = false; Story.Submitted(task); canvasView?.CancelDrag(); }
+                    if (item.Kind == TaskEventKind.Submitted) { IsMemoryUpgradeOpen = false; Story.Submitted(task); notifications.Add(() => canvasView?.CancelDrag()); }
                 }
                 logs.Insert(0, $"{item.GameTime:0.0}s  {item.RequestId}  {EventText(item.Kind)}"
                     + (item.Kind == TaskEventKind.Submitted || item.Kind == TaskEventKind.TimedOut ? $"  token={item.BillableTokens:0.##}" : ""));
                 if (logs.Count > 7) logs.RemoveAt(logs.Count - 1);
-                if (item.Kind == TaskEventKind.Submitted || item.Kind == TaskEventKind.TimedOut) canvasView?.ShowSettlement(item, income);
-                TaskEventRaised?.Invoke(item);
+                if (item.Kind == TaskEventKind.Submitted || item.Kind == TaskEventKind.TimedOut) notifications.Add(() => canvasView?.ShowSettlement(item, income));
+                QueueTaskObservers(item, notifications);
             }
+            foreach (var notify in notifications)
+                try { notify(); } catch (Exception error) { Debug.LogWarning("Task observer failed after settlement: " + error.Message); }
         }
+        private void QueueTaskObservers(TaskEvent item, List<Action> notifications)
+        {
+            if (TaskEventRaised == null) return;
+            foreach (Action<TaskEvent> observer in TaskEventRaised.GetInvocationList()) notifications.Add(() => observer(item));
+        }
+        public void OpenTraining()
+        {
+            if (!TrainingEnabled || GameEnded || IsModalOpen) return;
+            if (!Simulation.Paused) { Message = "请先暂停，再打开训练 / 模型。"; return; }
+            canvasView?.CancelDrag(); trainingPanel?.Open(); canvasView?.Refresh();
+        }
+        private void RefreshTraining() { canvasView?.CancelDrag(); canvasView?.Refresh(); }
+        private IReadOnlyList<Cell> MemoryOutline(int level)
+        {
+            var cells = configuration.MemoryUpgrades.GetOpenCells(level);
+            if (!TrainingEnabled) return cells;
+            var model = training.Session.Models.First(m => m.Id == training.Session.ActiveModelId);
+            return training.Session.Architectures.First(a => a.Id == model.ArchitectureId).Transform(cells, Simulation.Width, Simulation.Height);
+        }
+        public IReadOnlyList<Cell> ModelOutlineFor(string modelId)
+        {
+            if(!TrainingEnabled)return configuration.MemoryUpgrades.GetOpenCells(MemoryLevel);
+            var model=training.Session.Models.First(m=>m.Id==modelId);
+            return training.Session.Architectures.First(a=>a.Id==model.ArchitectureId).Transform(configuration.MemoryUpgrades.GetOpenCells(MemoryLevel),Simulation.Width,Simulation.Height);
+        }
+        private void OnDestroy() { if (training != null) training.Changed -= RefreshTraining; }
         public static string AbilityText(AbilityKind kind) => kind == AbilityKind.Writing ? "写作" : kind == AbilityKind.Code ? "代码" : kind == AbilityKind.Reasoning ? "推理" : "检索";
         public static string QualityText(Quality quality) => quality == Quality.Excellent ? "优秀" : quality == Quality.Complete ? "完成" : "未达标";
         public static string StateText(RequestState state) => new[] { "等待摆放", "运行中", "已撤回", "算完待确认", "已提交待回复", "超时失败", "反馈结束" }[(int)state];

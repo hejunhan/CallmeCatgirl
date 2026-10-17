@@ -42,17 +42,23 @@ MonoBehaviour:
       - Id: "s1/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u665A\u5B89\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s2/\u7B2C1\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s2/\u7B2C1\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -82,17 +88,23 @@ MonoBehaviour:
       - Id: "s2/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u4ECA\u5929\u7684\u70E6\u607C\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s3/\u7B2C1\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s3/\u7B2C1\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -122,17 +134,23 @@ MonoBehaviour:
       - Id: "s3/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u660E\u5929\u7684\u8BA1\u5212\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s3/\u7B2C2\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s3/\u7B2C2\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -140,12 +158,16 @@ MonoBehaviour:
       - Id: "s3/\u7B2C2\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u660E\u5929\u7684\u8BA1\u5212\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s4/\u7B2C1\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -175,12 +197,16 @@ MonoBehaviour:
       - Id: "s4/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u60F3\u5FF5\u670B\u53CB\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s4/\u7B2C2\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -188,22 +214,30 @@ MonoBehaviour:
       - Id: "s4/\u7B2C2\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u60F3\u5FF5\u670B\u53CB\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s5/\u7B2C1\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s5/\u7B2C1\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
           NextNodeId: "s5/\u7B2C1\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -233,22 +267,30 @@ MonoBehaviour:
       - Id: "s5/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u5DE5\u4F5C\u5931\u8BEF\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s5/\u7B2C2\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s5/\u7B2C2\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
           NextNodeId: "s5/\u7B2C2\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -256,12 +298,16 @@ MonoBehaviour:
       - Id: "s5/\u7B2C2\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u5DE5\u4F5C\u5931\u8BEF\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s5/\u7B2C3\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -269,17 +315,23 @@ MonoBehaviour:
       - Id: "s5/\u7B2C3\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u5DE5\u4F5C\u5931\u8BEF\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C3\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s6/\u7B2C1\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s6/\u7B2C1\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -309,12 +361,16 @@ MonoBehaviour:
       - Id: "s6/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u5B66\u4F1A\u62D2\u7EDD\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s6/\u7B2C2\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -322,17 +378,23 @@ MonoBehaviour:
       - Id: "s6/\u7B2C2\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u5B66\u4F1A\u62D2\u7EDD\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s6/\u7B2C3\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s6/\u7B2C3\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -340,17 +402,23 @@ MonoBehaviour:
       - Id: "s6/\u7B2C3\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u5B66\u4F1A\u62D2\u7EDD\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C3\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s7/\u7B2C1\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s7/\u7B2C1\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -380,17 +448,23 @@ MonoBehaviour:
       - Id: "s7/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u96E8\u5929\u6563\u6B65\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s7/\u7B2C2\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s7/\u7B2C2\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -398,17 +472,23 @@ MonoBehaviour:
       - Id: "s7/\u7B2C2\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u96E8\u5929\u6563\u6B65\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s7/\u7B2C3\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s7/\u7B2C3\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -416,17 +496,23 @@ MonoBehaviour:
       - Id: "s7/\u7B2C3\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u96E8\u5929\u6563\u6B65\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C3\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s7/\u7B2C4\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s7/\u7B2C4\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -434,12 +520,16 @@ MonoBehaviour:
       - Id: "s7/\u7B2C4\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u96E8\u5929\u6563\u6B65\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C4\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s8/\u7B2C1\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -469,17 +559,23 @@ MonoBehaviour:
       - Id: "s8/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u957F\u8FDC\u7684\u76EE\u6807\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s8/\u7B2C2\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s8/\u7B2C2\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -487,17 +583,23 @@ MonoBehaviour:
       - Id: "s8/\u7B2C2\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u957F\u8FDC\u7684\u76EE\u6807\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s8/\u7B2C3\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s8/\u7B2C3\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -505,12 +607,16 @@ MonoBehaviour:
       - Id: "s8/\u7B2C3\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u957F\u8FDC\u7684\u76EE\u6807\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C3\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s8/\u7B2C4\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -518,22 +624,30 @@ MonoBehaviour:
       - Id: "s8/\u7B2C4\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u957F\u8FDC\u7684\u76EE\u6807\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C4\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s9/\u7B2C1\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s9/\u7B2C1\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
           NextNodeId: "s9/\u7B2C1\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -563,17 +677,23 @@ MonoBehaviour:
       - Id: "s9/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u4E00\u4E2A\u91CD\u8981\u51B3\u5B9A\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s9/\u7B2C2\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s9/\u7B2C2\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -581,12 +701,16 @@ MonoBehaviour:
       - Id: "s9/\u7B2C2\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u4E00\u4E2A\u91CD\u8981\u51B3\u5B9A\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s9/\u7B2C3\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -594,22 +718,30 @@ MonoBehaviour:
       - Id: "s9/\u7B2C3\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u4E00\u4E2A\u91CD\u8981\u51B3\u5B9A\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C3\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s9/\u7B2C4\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s9/\u7B2C4\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
           NextNodeId: "s9/\u7B2C4\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -617,12 +749,16 @@ MonoBehaviour:
       - Id: "s9/\u7B2C4\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u4E00\u4E2A\u91CD\u8981\u51B3\u5B9A\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C4\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s9/\u7B2C5\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -630,17 +766,23 @@ MonoBehaviour:
       - Id: "s9/\u7B2C5\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u4E00\u4E2A\u91CD\u8981\u51B3\u5B9A\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C5\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s10/\u7B2C1\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s10/\u7B2C1\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -670,12 +812,16 @@ MonoBehaviour:
       - Id: "s10/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u91CD\u65B0\u8BA4\u8BC6\u81EA\u5DF1\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s10/\u7B2C2\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -683,22 +829,30 @@ MonoBehaviour:
       - Id: "s10/\u7B2C2\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u91CD\u65B0\u8BA4\u8BC6\u81EA\u5DF1\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s10/\u7B2C3\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s10/\u7B2C3\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
           NextNodeId: "s10/\u7B2C3\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -706,12 +860,16 @@ MonoBehaviour:
       - Id: "s10/\u7B2C3\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u91CD\u65B0\u8BA4\u8BC6\u81EA\u5DF1\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C3\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s10/\u7B2C4\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -719,17 +877,23 @@ MonoBehaviour:
       - Id: "s10/\u7B2C4\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u91CD\u65B0\u8BA4\u8BC6\u81EA\u5DF1\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C4\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s10/\u7B2C5\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s10/\u7B2C5\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -737,17 +901,23 @@ MonoBehaviour:
       - Id: "s10/\u7B2C5\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u91CD\u65B0\u8BA4\u8BC6\u81EA\u5DF1\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C5\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s10/\u7B2C6\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s10/\u7B2C6\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -755,17 +925,23 @@ MonoBehaviour:
       - Id: "s10/\u7B2C6\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u91CD\u65B0\u8BA4\u8BC6\u81EA\u5DF1\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C6\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u542C\u5979\u8BF4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: 
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: 
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -798,17 +974,23 @@ MonoBehaviour:
       - Id: "s1/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u8BA4\u8BC6\u52A9\u624B\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s2/\u7B2C1\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s2/\u7B2C1\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -838,17 +1020,23 @@ MonoBehaviour:
       - Id: "s2/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u6574\u7406\u5F85\u529E\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s2/\u7B2C2\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s2/\u7B2C2\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -856,17 +1044,23 @@ MonoBehaviour:
       - Id: "s2/\u7B2C2\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u6574\u7406\u5F85\u529E\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s3/\u7B2C1\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s3/\u7B2C1\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -895,17 +1089,23 @@ MonoBehaviour:
       - Id: "s3/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u68C0\u67E5\u4EE3\u7801\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s3/\u7B2C2\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s3/\u7B2C2\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -913,12 +1113,16 @@ MonoBehaviour:
       - Id: "s3/\u7B2C2\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u68C0\u67E5\u4EE3\u7801\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s4/\u7B2C1\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -948,12 +1152,16 @@ MonoBehaviour:
       - Id: "s4/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u89E3\u91CA\u9519\u8BEF\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s4/\u7B2C2\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -961,22 +1169,30 @@ MonoBehaviour:
       - Id: "s4/\u7B2C2\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u89E3\u91CA\u9519\u8BEF\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s4/\u7B2C3\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s4/\u7B2C3\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
           NextNodeId: "s4/\u7B2C3\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -984,12 +1200,16 @@ MonoBehaviour:
       - Id: "s4/\u7B2C3\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u89E3\u91CA\u9519\u8BEF\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C3\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s5/\u7B2C1\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -1018,22 +1238,30 @@ MonoBehaviour:
       - Id: "s5/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u65B9\u6848\u6BD4\u8F83\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s5/\u7B2C2\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s5/\u7B2C2\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
           NextNodeId: "s5/\u7B2C2\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -1041,12 +1269,16 @@ MonoBehaviour:
       - Id: "s5/\u7B2C2\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u65B9\u6848\u6BD4\u8F83\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s5/\u7B2C3\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -1054,17 +1286,23 @@ MonoBehaviour:
       - Id: "s5/\u7B2C3\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u65B9\u6848\u6BD4\u8F83\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C3\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s5/\u7B2C4\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s5/\u7B2C4\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -1072,17 +1310,23 @@ MonoBehaviour:
       - Id: "s5/\u7B2C4\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u65B9\u6848\u6BD4\u8F83\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C4\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s6/\u7B2C1\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s6/\u7B2C1\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -1112,12 +1356,16 @@ MonoBehaviour:
       - Id: "s6/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u62C6\u5206\u9879\u76EE\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s6/\u7B2C2\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -1125,17 +1373,23 @@ MonoBehaviour:
       - Id: "s6/\u7B2C2\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u62C6\u5206\u9879\u76EE\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s6/\u7B2C3\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s6/\u7B2C3\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -1143,17 +1397,23 @@ MonoBehaviour:
       - Id: "s6/\u7B2C3\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u62C6\u5206\u9879\u76EE\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C3\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s6/\u7B2C4\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s6/\u7B2C4\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -1161,17 +1421,23 @@ MonoBehaviour:
       - Id: "s6/\u7B2C4\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u62C6\u5206\u9879\u76EE\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C4\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s7/\u7B2C1\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s7/\u7B2C1\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -1200,17 +1466,23 @@ MonoBehaviour:
       - Id: "s7/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u8BC4\u4F30\u98CE\u9669\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s7/\u7B2C2\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s7/\u7B2C2\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -1218,17 +1490,23 @@ MonoBehaviour:
       - Id: "s7/\u7B2C2\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u8BC4\u4F30\u98CE\u9669\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s7/\u7B2C3\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s7/\u7B2C3\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -1236,17 +1514,23 @@ MonoBehaviour:
       - Id: "s7/\u7B2C3\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u8BC4\u4F30\u98CE\u9669\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C3\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s7/\u7B2C4\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s7/\u7B2C4\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -1254,12 +1538,16 @@ MonoBehaviour:
       - Id: "s7/\u7B2C4\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u8BC4\u4F30\u98CE\u9669\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C4\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s7/\u7B2C5\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -1267,22 +1555,30 @@ MonoBehaviour:
       - Id: "s7/\u7B2C5\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u8BC4\u4F30\u98CE\u9669\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C5\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s8/\u7B2C1\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s8/\u7B2C1\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
           NextNodeId: "s8/\u7B2C1\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -1312,17 +1608,23 @@ MonoBehaviour:
       - Id: "s8/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u8BA8\u8BBA\u534F\u4F5C\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s8/\u7B2C2\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s8/\u7B2C2\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -1330,17 +1632,23 @@ MonoBehaviour:
       - Id: "s8/\u7B2C2\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u8BA8\u8BBA\u534F\u4F5C\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s8/\u7B2C3\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s8/\u7B2C3\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -1348,12 +1656,16 @@ MonoBehaviour:
       - Id: "s8/\u7B2C3\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u8BA8\u8BBA\u534F\u4F5C\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C3\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s8/\u7B2C4\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -1361,22 +1673,30 @@ MonoBehaviour:
       - Id: "s8/\u7B2C4\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u8BA8\u8BBA\u534F\u4F5C\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C4\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s8/\u7B2C5\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s8/\u7B2C5\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
           NextNodeId: "s8/\u7B2C5\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -1384,12 +1704,16 @@ MonoBehaviour:
       - Id: "s8/\u7B2C5\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u8BA8\u8BBA\u534F\u4F5C\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C5\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s9/\u7B2C1\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -1418,17 +1742,23 @@ MonoBehaviour:
       - Id: "s9/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u8BBE\u8BA1\u9A8C\u8BC1\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s9/\u7B2C2\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s9/\u7B2C2\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -1436,12 +1766,16 @@ MonoBehaviour:
       - Id: "s9/\u7B2C2\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u8BBE\u8BA1\u9A8C\u8BC1\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s9/\u7B2C3\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -1449,22 +1783,30 @@ MonoBehaviour:
       - Id: "s9/\u7B2C3\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u8BBE\u8BA1\u9A8C\u8BC1\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C3\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s9/\u7B2C4\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s9/\u7B2C4\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
           NextNodeId: "s9/\u7B2C4\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -1472,12 +1814,16 @@ MonoBehaviour:
       - Id: "s9/\u7B2C4\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u8BBE\u8BA1\u9A8C\u8BC1\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C4\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s9/\u7B2C5\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -1485,17 +1831,23 @@ MonoBehaviour:
       - Id: "s9/\u7B2C5\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u8BBE\u8BA1\u9A8C\u8BC1\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C5\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s9/\u7B2C6\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s9/\u7B2C6\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -1503,17 +1855,23 @@ MonoBehaviour:
       - Id: "s9/\u7B2C6\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u8BBE\u8BA1\u9A8C\u8BC1\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C6\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s10/\u7B2C1\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s10/\u7B2C1\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -1543,12 +1901,16 @@ MonoBehaviour:
       - Id: "s10/\u7B2C1\u8F6E"
         UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u590D\u76D8\u6210\u679C\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s10/\u7B2C2\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -1556,22 +1918,30 @@ MonoBehaviour:
       - Id: "s10/\u7B2C2\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u590D\u76D8\u6210\u679C\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s10/\u7B2C3\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s10/\u7B2C3\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
           NextNodeId: "s10/\u7B2C3\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -1579,12 +1949,16 @@ MonoBehaviour:
       - Id: "s10/\u7B2C3\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u590D\u76D8\u6210\u679C\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C3\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s10/\u7B2C4\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -1592,17 +1966,23 @@ MonoBehaviour:
       - Id: "s10/\u7B2C4\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u590D\u76D8\u6210\u679C\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C4\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s10/\u7B2C5\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s10/\u7B2C5\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -1610,17 +1990,23 @@ MonoBehaviour:
       - Id: "s10/\u7B2C5\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u590D\u76D8\u6210\u679C\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C5\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s10/\u7B2C6\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s10/\u7B2C6\u8F6E"
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
@@ -1628,17 +2014,23 @@ MonoBehaviour:
       - Id: "s10/\u7B2C6\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u590D\u76D8\u6210\u679C\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C6\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s10/\u7B2C7\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: "s10/\u7B2C7\u8F6E"
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
@@ -1646,12 +2038,16 @@ MonoBehaviour:
       - Id: "s10/\u7B2C7\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u590D\u76D8\u6210\u679C\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C7\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: "s10/\u7B2C8\u8F6E"
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
@@ -1659,28 +2055,870 @@ MonoBehaviour:
       - Id: "s10/\u7B2C8\u8F6E"
         UserMessage: "\u5173\u4E8E\u201C\u590D\u76D8\u6210\u679C\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C8\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
         Choices:
-        - Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u4E86\u89E3\u60C5\u51B5"
           PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
           UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
           Requirement: 0
           NextNodeId: 
-        - Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
           PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
           UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
           Requirement: 1
           NextNodeId: 
-        - Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
           PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
           UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
           Requirement: 2
           NextNodeId: 
-        - Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+          PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
+          UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
+          Requirement: 0
+          NextNodeId: 
+  - UserId: C
+    DisplayName: "\u82CF\u79BE"
+    InitialHistory: "\u82CF\u79BE\uFF1A\u4F60\u597D\uFF0C\u6211\u60F3\u548C\u4F60\u6162\u6162\u804A\u804A\u3002"
+    Sessions:
+    - Id: s1
+      Title: "\u521D\u6B21\u95EE\u5019"
+      RequestId: C
+      Task:
+        Calculation: 30
+        Patience: 100
+        Speed: 10
+        Tokens: 100
+        Shape:
+        - "\u25A0\u25A1"
+        - "\u25A0\u25A1"
+        - "\u25A0\u25A0"
+        Abilities:
+        - Kind: 0
+          Minimum: 4
+          Excellent: 8
+        - Kind: 1
+          Minimum: 1
+          Excellent: 2
+        - Kind: 2
+          Minimum: 1
+          Excellent: 2
+      Rounds:
+      - Id: "s1/\u7B2C1\u8F6E"
+        UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u521D\u6B21\u95EE\u5019\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s2/\u7B2C1\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s2/\u7B2C1\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+          PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
+          UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
+          Requirement: 2
+          NextNodeId: "s2/\u7B2C1\u8F6E"
+    - Id: s2
+      Title: "\u8C08\u8C08\u559C\u6B22\u7684\u4E8B"
+      RequestId: C
+      Task:
+        Calculation: 30
+        Patience: 100
+        Speed: 10
+        Tokens: 100
+        Shape:
+        - "\u25A1\u25A0\u25A1"
+        - "\u25A0\u25A0\u25A0"
+        Abilities:
+        - Kind: 0
+          Minimum: 4
+          Excellent: 8
+        - Kind: 1
+          Minimum: 1
+          Excellent: 2
+        - Kind: 2
+          Minimum: 1
+          Excellent: 2
+      Rounds:
+      - Id: "s2/\u7B2C1\u8F6E"
+        UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u8C08\u8C08\u559C\u6B22\u7684\u4E8B\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s3/\u7B2C1\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s3/\u7B2C1\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+          PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
+          UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
+          Requirement: 0
+          NextNodeId: "s3/\u7B2C1\u8F6E"
+    - Id: s3
+      Title: "\u5BFB\u627E\u7075\u611F"
+      RequestId: C
+      Task:
+        Calculation: 30
+        Patience: 100
+        Speed: 10
+        Tokens: 100
+        Shape:
+        - "\u25A0\u25A1"
+        - "\u25A0\u25A1"
+        - "\u25A0\u25A0"
+        Abilities:
+        - Kind: 0
+          Minimum: 4
+          Excellent: 8
+        - Kind: 1
+          Minimum: 1
+          Excellent: 2
+        - Kind: 2
+          Minimum: 1
+          Excellent: 2
+      Rounds:
+      - Id: "s3/\u7B2C1\u8F6E"
+        UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u5BFB\u627E\u7075\u611F\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s4/\u7B2C1\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s4/\u7B2C1\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+          PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
+          UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
+          Requirement: 2
+          NextNodeId: "s4/\u7B2C1\u8F6E"
+    - Id: s4
+      Title: "\u63CF\u8FF0\u753B\u9762"
+      RequestId: C
+      Task:
+        Calculation: 60
+        Patience: 110
+        Speed: 10
+        Tokens: 100
+        Shape:
+        - "\u25A1\u25A0\u25A1"
+        - "\u25A0\u25A0\u25A0"
+        Abilities:
+        - Kind: 0
+          Minimum: 8
+          Excellent: 12
+        - Kind: 1
+          Minimum: 2
+          Excellent: 3
+        - Kind: 2
+          Minimum: 2
+          Excellent: 3
+      Rounds:
+      - Id: "s4/\u7B2C1\u8F6E"
+        UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u63CF\u8FF0\u753B\u9762\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s4/\u7B2C2\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s4/\u7B2C2\u8F6E"
+      - Id: "s4/\u7B2C2\u8F6E"
+        UserMessage: "\u5173\u4E8E\u201C\u63CF\u8FF0\u753B\u9762\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s5/\u7B2C1\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s5/\u7B2C1\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+          PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
+          UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
+          Requirement: 2
+          NextNodeId: "s5/\u7B2C1\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+          PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
+          UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
+          Requirement: 0
+          NextNodeId: "s5/\u7B2C1\u8F6E"
+    - Id: s5
+      Title: "\u53D6\u4E00\u4E2A\u540D\u5B57"
+      RequestId: C
+      Task:
+        Calculation: 60
+        Patience: 110
+        Speed: 10
+        Tokens: 100
+        Shape:
+        - "\u25A0\u25A1"
+        - "\u25A0\u25A1"
+        - "\u25A0\u25A0"
+        Abilities:
+        - Kind: 0
+          Minimum: 8
+          Excellent: 12
+        - Kind: 1
+          Minimum: 2
+          Excellent: 3
+        - Kind: 2
+          Minimum: 2
+          Excellent: 3
+      Rounds:
+      - Id: "s5/\u7B2C1\u8F6E"
+        UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u53D6\u4E00\u4E2A\u540D\u5B57\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s5/\u7B2C2\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s5/\u7B2C2\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+          PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
+          UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
+          Requirement: 2
+          NextNodeId: "s5/\u7B2C2\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+          PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
+          UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
+          Requirement: 0
+          NextNodeId: "s6/\u7B2C1\u8F6E"
+      - Id: "s5/\u7B2C2\u8F6E"
+        UserMessage: "\u5173\u4E8E\u201C\u53D6\u4E00\u4E2A\u540D\u5B57\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s6/\u7B2C1\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s6/\u7B2C1\u8F6E"
+    - Id: s6
+      Title: "\u5B89\u6392\u521B\u4F5C"
+      RequestId: C
+      Task:
+        Calculation: 90
+        Patience: 120
+        Speed: 10
+        Tokens: 100
+        Shape:
+        - "\u25A1\u25A0\u25A1"
+        - "\u25A0\u25A0\u25A0"
+        Abilities:
+        - Kind: 0
+          Minimum: 12
+          Excellent: 16
+        - Kind: 1
+          Minimum: 3
+          Excellent: 4
+        - Kind: 2
+          Minimum: 3
+          Excellent: 4
+      Rounds:
+      - Id: "s6/\u7B2C1\u8F6E"
+        UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u5B89\u6392\u521B\u4F5C\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s6/\u7B2C2\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s6/\u7B2C2\u8F6E"
+      - Id: "s6/\u7B2C2\u8F6E"
+        UserMessage: "\u5173\u4E8E\u201C\u5B89\u6392\u521B\u4F5C\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s6/\u7B2C3\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s6/\u7B2C3\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+          PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
+          UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
+          Requirement: 2
+          NextNodeId: "s6/\u7B2C3\u8F6E"
+      - Id: "s6/\u7B2C3\u8F6E"
+        UserMessage: "\u5173\u4E8E\u201C\u5B89\u6392\u521B\u4F5C\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C3\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s7/\u7B2C1\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s7/\u7B2C1\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+          PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
+          UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
+          Requirement: 0
+          NextNodeId: "s7/\u7B2C1\u8F6E"
+    - Id: s7
+      Title: "\u4FEE\u6539\u8349\u7A3F"
+      RequestId: C
+      Task:
+        Calculation: 90
+        Patience: 120
+        Speed: 10
+        Tokens: 100
+        Shape:
+        - "\u25A0\u25A1"
+        - "\u25A0\u25A1"
+        - "\u25A0\u25A0"
+        Abilities:
+        - Kind: 0
+          Minimum: 12
+          Excellent: 16
+        - Kind: 1
+          Minimum: 3
+          Excellent: 4
+        - Kind: 2
+          Minimum: 3
+          Excellent: 4
+      Rounds:
+      - Id: "s7/\u7B2C1\u8F6E"
+        UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u4FEE\u6539\u8349\u7A3F\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s7/\u7B2C2\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s7/\u7B2C2\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+          PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
+          UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
+          Requirement: 2
+          NextNodeId: "s7/\u7B2C2\u8F6E"
+      - Id: "s7/\u7B2C2\u8F6E"
+        UserMessage: "\u5173\u4E8E\u201C\u4FEE\u6539\u8349\u7A3F\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s7/\u7B2C3\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s7/\u7B2C3\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+          PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
+          UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
+          Requirement: 0
+          NextNodeId: "s8/\u7B2C1\u8F6E"
+      - Id: "s7/\u7B2C3\u8F6E"
+        UserMessage: "\u5173\u4E8E\u201C\u4FEE\u6539\u8349\u7A3F\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C3\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s8/\u7B2C1\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s8/\u7B2C1\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+          PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
+          UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
+          Requirement: 2
+          NextNodeId: "s8/\u7B2C1\u8F6E"
+    - Id: s8
+      Title: "\u6BD4\u8F83\u7248\u672C"
+      RequestId: C
+      Task:
+        Calculation: 120
+        Patience: 130
+        Speed: 10
+        Tokens: 100
+        Shape:
+        - "\u25A1\u25A0\u25A1"
+        - "\u25A0\u25A0\u25A0"
+        Abilities:
+        - Kind: 0
+          Minimum: 16
+          Excellent: 20
+        - Kind: 1
+          Minimum: 4
+          Excellent: 5
+        - Kind: 2
+          Minimum: 4
+          Excellent: 5
+      Rounds:
+      - Id: "s8/\u7B2C1\u8F6E"
+        UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u6BD4\u8F83\u7248\u672C\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s8/\u7B2C2\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s8/\u7B2C2\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+          PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
+          UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
+          Requirement: 0
+          NextNodeId: "s9/\u7B2C1\u8F6E"
+      - Id: "s8/\u7B2C2\u8F6E"
+        UserMessage: "\u5173\u4E8E\u201C\u6BD4\u8F83\u7248\u672C\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s8/\u7B2C3\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s8/\u7B2C3\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+          PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
+          UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
+          Requirement: 2
+          NextNodeId: "s8/\u7B2C3\u8F6E"
+      - Id: "s8/\u7B2C3\u8F6E"
+        UserMessage: "\u5173\u4E8E\u201C\u6BD4\u8F83\u7248\u672C\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C3\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s8/\u7B2C4\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s8/\u7B2C4\u8F6E"
+      - Id: "s8/\u7B2C4\u8F6E"
+        UserMessage: "\u5173\u4E8E\u201C\u6BD4\u8F83\u7248\u672C\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C4\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s9/\u7B2C1\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s9/\u7B2C1\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+          PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
+          UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
+          Requirement: 2
+          NextNodeId: "s9/\u7B2C1\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+          PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
+          UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
+          Requirement: 0
+          NextNodeId: "s9/\u7B2C1\u8F6E"
+    - Id: s9
+      Title: "\u51C6\u5907\u5C55\u793A"
+      RequestId: C
+      Task:
+        Calculation: 120
+        Patience: 130
+        Speed: 10
+        Tokens: 100
+        Shape:
+        - "\u25A0\u25A1"
+        - "\u25A0\u25A1"
+        - "\u25A0\u25A0"
+        Abilities:
+        - Kind: 0
+          Minimum: 16
+          Excellent: 20
+        - Kind: 1
+          Minimum: 4
+          Excellent: 5
+        - Kind: 2
+          Minimum: 4
+          Excellent: 5
+      Rounds:
+      - Id: "s9/\u7B2C1\u8F6E"
+        UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u51C6\u5907\u5C55\u793A\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s9/\u7B2C2\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s9/\u7B2C2\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+          PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
+          UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
+          Requirement: 2
+          NextNodeId: "s9/\u7B2C2\u8F6E"
+      - Id: "s9/\u7B2C2\u8F6E"
+        UserMessage: "\u5173\u4E8E\u201C\u51C6\u5907\u5C55\u793A\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s9/\u7B2C3\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s9/\u7B2C3\u8F6E"
+      - Id: "s9/\u7B2C3\u8F6E"
+        UserMessage: "\u5173\u4E8E\u201C\u51C6\u5907\u5C55\u793A\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C3\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s9/\u7B2C4\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s9/\u7B2C4\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+          PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
+          UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
+          Requirement: 2
+          NextNodeId: "s9/\u7B2C4\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+          PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
+          UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
+          Requirement: 0
+          NextNodeId: "s10/\u7B2C1\u8F6E"
+      - Id: "s9/\u7B2C4\u8F6E"
+        UserMessage: "\u5173\u4E8E\u201C\u51C6\u5907\u5C55\u793A\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C4\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s10/\u7B2C1\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s10/\u7B2C1\u8F6E"
+    - Id: s10
+      Title: "\u5206\u4EAB\u4F5C\u54C1"
+      RequestId: C
+      Task:
+        Calculation: 150
+        Patience: 140
+        Speed: 10
+        Tokens: 100
+        Shape:
+        - "\u25A1\u25A0\u25A1"
+        - "\u25A0\u25A0\u25A0"
+        Abilities:
+        - Kind: 0
+          Minimum: 20
+          Excellent: 24
+        - Kind: 1
+          Minimum: 5
+          Excellent: 6
+        - Kind: 2
+          Minimum: 5
+          Excellent: 6
+      Rounds:
+      - Id: "s10/\u7B2C1\u8F6E"
+        UserMessage: "\u4ECA\u5929\u60F3\u548C\u4F60\u804A\u804A\u201C\u5206\u4EAB\u4F5C\u54C1\u201D\u3002\u4F60\u613F\u610F\u5148\u542C\u6211\u8BF4\u5417\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s10/\u7B2C2\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s10/\u7B2C2\u8F6E"
+      - Id: "s10/\u7B2C2\u8F6E"
+        UserMessage: "\u5173\u4E8E\u201C\u5206\u4EAB\u4F5C\u54C1\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C2\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s10/\u7B2C3\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s10/\u7B2C3\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+          PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
+          UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
+          Requirement: 2
+          NextNodeId: "s10/\u7B2C3\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
+          PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
+          UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
+          Requirement: 0
+          NextNodeId: 
+      - Id: "s10/\u7B2C3\u8F6E"
+        UserMessage: "\u5173\u4E8E\u201C\u5206\u4EAB\u4F5C\u54C1\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C3\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s10/\u7B2C4\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s10/\u7B2C4\u8F6E"
+      - Id: "s10/\u7B2C4\u8F6E"
+        UserMessage: "\u5173\u4E8E\u201C\u5206\u4EAB\u4F5C\u54C1\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C4\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: "s10/\u7B2C5\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: "s10/\u7B2C5\u8F6E"
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5206\u6790\u4E24\u79CD\u53EF\u80FD"
+          PlayerReply: "\u6211\u4EEC\u6BD4\u8F83\u4E24\u79CD\u505A\u6CD5\u7684\u6536\u76CA\u548C\u98CE\u9669\uFF0C\u518D\u4E00\u8D77\u9009\u62E9\u3002"
+          UserReply: "\u4F60\u8003\u8651\u5F97\u5F88\u5468\u5230\uFF0C\u6211\u60F3\u7EE7\u7EED\u542C\u3002"
+          Requirement: 2
+          NextNodeId: "s10/\u7B2C5\u8F6E"
+      - Id: "s10/\u7B2C5\u8F6E"
+        UserMessage: "\u5173\u4E8E\u201C\u5206\u4EAB\u4F5C\u54C1\u201D\uFF0C\u6211\u4EEC\u5DF2\u7ECF\u6574\u7406\u4E86\u524D\u9762\u7684\u60F3\u6CD5\u3002\u7B2C5\u4E2A\u95EE\u9898\uFF1A\u63A5\u4E0B\u6765\u8BE5\u600E\u6837\u5177\u4F53\u884C\u52A8\uFF1F"
+        Choices:
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u5148\u542C\u5979\u8BF4"
+          PlayerReply: "\u5148\u8BF4\u8BF4\u73B0\u5728\u7684\u60C5\u51B5\uFF0C\u6211\u4F1A\u8BA4\u771F\u542C\u3002"
+          UserReply: "\u597D\uFF0C\u6211\u4EEC\u4ECE\u6700\u5177\u4F53\u7684\u4E00\u4EF6\u4E8B\u8BF4\u8D77\u3002"
+          Requirement: 0
+          NextNodeId: 
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u7ED9\u51FA\u4E00\u4E2A\u5C0F\u6B65\u9AA4"
+          PlayerReply: "\u5148\u627E\u4E00\u4E2A\u4ECA\u5929\u80FD\u5B8C\u6210\u7684\u5C0F\u6B65\u9AA4\uFF0C\u518D\u9010\u6B65\u63A8\u8FDB\u3002"
+          UserReply: "\u8FD9\u6837\u5BB9\u6613\u5F00\u59CB\uFF0C\u6211\u613F\u610F\u8BD5\u8BD5\u3002"
+          Requirement: 1
+          NextNodeId: 
+        - MinimumFunds: 0
+          FundsReward: 0
+          Label: "\u6682\u65F6\u7ED3\u675F\u672C\u6B21\u4F1A\u8BDD"
           PlayerReply: "\u4ECA\u5929\u5148\u6574\u7406\u5230\u8FD9\u91CC\uFF0C\u4E0B\u6B21\u518D\u7EE7\u7EED\u3002"
           UserReply: "\u8C22\u8C22\u4F60\u966A\u6211\uFF0C\u4E0B\u4E00\u6B21\u4F1A\u8BDD\u518D\u89C1\u3002"
           Requirement: 0
           NextNodeId: 
   DefaultChoices:
-  - Label: "\u53D1\u9001\u56DE\u590D"
+  - MinimumFunds: 0
+    FundsReward: 0
+    Label: "\u53D1\u9001\u56DE\u590D"
     PlayerReply: "\u8FD9\u662F\u6211\u7684\u56DE\u590D\uFF0C\u5E0C\u671B\u80FD\u5E2E\u5230\u4F60\u3002"
     UserReply: "\u8C22\u8C22\uFF0C\u6211\u6536\u5230\u4E86\u3002"
     Requirement: 0

@@ -1,0 +1,7 @@
+{
+  "name": "CallmeCatgirl.Persistence.Training",
+  "rootNamespace": "CallmeCatgirl.Persistence.Training",
+  "references": ["CallmeCatgirl.Persistence", "CallmeCatgirl.Training", "CallmeCatgirl.TaskGrid"],
+  "autoReferenced": true,
+  "noEngineReferences": true
+}

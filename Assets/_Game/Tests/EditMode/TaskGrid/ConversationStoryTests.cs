@@ -26,6 +26,12 @@ namespace CallmeCatgirl.Tests
             original = (ScriptableObject)field.GetValue(owner); fixtureConfig = Object.Instantiate(original);
             var importer = Type.GetType("CallmeCatgirl.EditorTools.StoryJsonImporter, Assembly-CSharp-Editor", true);
             fixtureStory = (ScriptableObject)importer.GetMethod("Parse").Invoke(null, new object[] { @"{""version"": 1, ""characters"": [{""id"": ""A"", ""name"": ""林小满"", ""initialHistory"": ""林小满：还醒着吗？"", ""sessions"": [{""id"": ""s1"", ""title"": ""一句晚安"", ""requestId"": ""A"", ""rounds"": [{""id"": ""r1"", ""message"": ""可以认真说一句晚安吗？"", ""choices"": [{""label"": ""温柔地说晚安"", ""reply"": ""辛苦啦，晚安喵。"", ""response"": """", ""requirement"": ""Any""}, {""label"": ""聊聊计划"", ""reply"": ""今天最让你担心的是什么？"", ""response"": """", ""requirement"": ""Any""}, {""label"": ""特别的晚安信"", ""reply"": ""愿你做个好梦。"", ""response"": """", ""requirement"": ""ExcellentOnly""}]}]}, {""id"": ""s2"", ""title"": ""聊聊明天"", ""requestId"": ""C"", ""rounds"": [{""id"": ""r1"", ""message"": ""我应该从哪里开始？"", ""choices"": [{""label"": ""从小事开始"", ""reply"": ""先完成最小的一件事。"", ""response"": """", ""requirement"": ""Any""}]}]}]}, {""id"": ""C"", ""name"": ""苏禾"", ""sessions"": [{""id"": ""s1"", ""title"": ""待办"", ""rounds"": [{""id"": ""r1"", ""message"": ""能帮我整理待办吗？"", ""choices"": [{""label"": ""开始整理"", ""reply"": ""先整理最紧急的事情。"", ""response"": """", ""requirement"": ""Any""}]}]}, {""id"": ""s2"", ""title"": ""复盘"", ""rounds"": [{""id"": ""r1"", ""message"": ""我们复盘一下吧。"", ""choices"": [{""label"": ""好的"", ""reply"": ""看看做了什么。"", ""response"": """", ""requirement"": ""Any""}]}]}]}]}", new[] { "A", "B", "C" } });
+            fixtureConfig.GetType().GetField("OrdinaryDialoguePool").SetValue(fixtureConfig, null);
+            foreach (var profile in (Array)fixtureStory.GetType().GetField("Users").GetValue(fixtureStory))
+            {
+                var kind = profile.GetType().GetField("Kind");
+                kind.SetValue(profile, Enum.Parse(kind.FieldType, "Scripted"));
+            }
             fixtureConfig.GetType().GetField("Story").SetValue(fixtureConfig, fixtureStory);
             field.SetValue(owner, fixtureConfig); Call(owner, "ResetSimulation");
         }

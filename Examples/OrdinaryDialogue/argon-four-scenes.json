@@ -1,0 +1,437 @@
+{
+  "version": 1,
+  "characters": [
+    {
+      "id": "sample-01",
+      "name": "晚到的人",
+      "kind": "Ordinary",
+      "initialHistory": "",
+      "sessions": [
+        {
+          "id": "sample-01-s1",
+          "title": "道歉别像客服",
+          "requestId": "A",
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "我记错时间晚到二十分钟，朋友在店外等。我写“因本人时间管理疏忽致您久候，深表歉意”，是不是太像客服了？",
+              "choices": [
+                {
+                  "label": "问平时语气",
+                  "reply": "确实像工单回复。你平时跟这位朋友聊天，认错一般怎么开口？",
+                  "response": "平时就直接说我搞错了。那我也照平时的说法写，不写检讨书了。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "直接压成一句",
+                  "reply": "把公文词全删掉，直接说“我记错时间了，害你在外面等这么久，真对不起”。",
+                  "response": "这句顺耳多了，比我那句像活人说的话。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "调整认错顺序",
+                  "reply": "解释放前面容易像辩解；先认让他久等，再说明记错时间，意思更清楚。",
+                  "response": "明白，先把歉意递过去，不整那些官方词了。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sample-01-s2",
+          "title": "道歉别像客服",
+          "requestId": "A",
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "我还是想顺便提一句“路上也有点堵”，虽然主要还是我记错了时间。加这句会不会好受点？",
+              "choices": [
+                {
+                  "label": "问想加的原因",
+                  "reply": "你是怕只说记错时间显得太粗心，想拿堵车缓冲一下？",
+                  "response": "对，就怕他觉得我不当回事。那还是照实说吧。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "建议只写主因",
+                  "reply": "只写记错时间就够了。堵车既然不是主因，加上去反而分散重点。",
+                  "response": "也是，真话最省事，我把堵车那句删了。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "点出混写后果",
+                  "reply": "把堵车和记错时间并列，对方可能分不清你在说明原因，还是把责任推给路况。",
+                  "response": "对，记错时间才是主要原因。我就说这件事。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sample-01-s3",
+          "title": "道歉别像客服",
+          "requestId": "A",
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "那我发这句：“我记错时间了，让你在外面等这么久，对不起。下次我提前到。”这语气行吗？",
+              "choices": [
+                {
+                  "label": "保留原话",
+                  "reply": "挺好的，原因和态度都清楚，也不端着，直接发这句就行。",
+                  "response": "好，那我复制发过去了，谢啦。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "稍调顺口",
+                  "reply": "可以把“这么久”换成“二十分钟”，更具体。其他不用动。",
+                  "response": "行，我稍微顺一下词就发给他。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "不用再加保证",
+                  "reply": "够用了，认错加一句下次提前刚刚好，再列一堆保证反而又像写检讨了。",
+                  "response": "懂了，不往下叠词了，这就发出去。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sample-02",
+      "name": "调试中的人",
+      "kind": "Ordinary",
+      "initialHistory": "",
+      "sessions": [
+        {
+          "id": "sample-02-s1",
+          "title": "报错没意见",
+          "requestId": "B",
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "熬夜调脚本快疯了，一直报 IndexError。我就取个列表第一个元素，语法明明没写错，怎么老跟我过不去？",
+              "choices": [
+                {
+                  "label": "确认输入是否空",
+                  "reply": "你取的是第一个，先看列表里有没有元素。空列表没有第一个，所以会报这个错。",
+                  "response": "啊，我还没查列表里有没有东西。先去看一下输入。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "空抽屉类比",
+                  "reply": "这像是伸手取抽屉第一件东西，却没确认抽屉里有没有。先查一下列表是不是空的。",
+                  "response": "懂了，我先看看抽屉里到底有没有东西。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "区分语法与运行",
+                  "reply": "语法可以是对的。IndexError 说的是下标超出了范围；空列表也不能取第一个。",
+                  "response": "明白，下标也得对应得上内容。我先查列表里到底有多少东西。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sample-02-s2",
+          "title": "报错没意见",
+          "requestId": "B",
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "查了，今天确实没有数据。我本来想没数据时显示“暂无记录”，结果直接崩了。",
+              "choices": [
+                {
+                  "label": "复述空输入事实",
+                  "reply": "问题位置找到了：空列表还走了取第一个元素的流程，没走到“暂无记录”。",
+                  "response": "对，破案了，总算知道为什么今晚突然报错了。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "先判空再取值",
+                  "reply": "取值前先加一步判断，有数据才拿第一个，空的就直接走“暂无记录”分支。",
+                  "response": "明白了，我先把空列表这条分支补上。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "区分两种排查",
+                  "reply": "允许没有记录，就处理空列表；如果今天本该有记录，还要查数据是在哪一步没进来的。",
+                  "response": "今天没记录是正常的，那我先补空列表这条分支。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sample-03",
+      "name": "拼单的人",
+      "kind": "Ordinary",
+      "initialHistory": "",
+      "sessions": [
+        {
+          "id": "sample-03-s1",
+          "title": "猫娘能开发票吗",
+          "requestId": "C",
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "猫娘在吗？帮我理一下部门拼单：三杯拿铁、两杯美式。别漏了，我一会儿去买。",
+              "choices": [
+                {
+                  "label": "接称呼并确认",
+                  "reply": "喵，听见了。一共五杯：三杯拿铁、两杯美式。你没给单价，金额我先空着。",
+                  "response": "行，数量对就行，价格我到店里再看。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "平静接单整理",
+                  "reply": "整理好了，共五杯：拿铁 3 杯，美式 2 杯。你没给价格，总价先空着。",
+                  "response": "够清楚了，我照着这个去点单。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "轻开玩笑列数",
+                  "reply": "五杯，记住了：拿铁三杯，美式两杯。猫娘今天先负责数杯子，金额等你看完价目表。",
+                  "response": "哈哈好，五杯记准就行，省得我数乱了。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sample-03-s2",
+          "title": "猫娘能开发票吗",
+          "requestId": "C",
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "所以猫娘能开发票吗？我是认真的，这单要拿回公司报销。",
+              "choices": [
+                {
+                  "label": "说明找商家",
+                  "reply": "发票得向卖咖啡的商家申请。可以先问店员怎么开，我这里能帮你整理拼单。",
+                  "response": "好，我到店里先问清楚，清单就用这份。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "确认开票信息",
+                  "reply": "我不能开票。你可以先问公司报销需要哪些开票信息，再跟店家确认办理方式。",
+                  "response": "那我先看一下公司的报销要求，省得到了店里现问。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "玩笑后说明边界",
+                  "reply": "猫娘能数咖啡，不能给咖啡开票。清单我理好了，发票还得找店家申请。",
+                  "response": "分工挺清楚。五杯我照单买，发票去问店员。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sample-04",
+      "name": "挑封面的人",
+      "kind": "Ordinary",
+      "initialHistory": "用户：帮我从这两张封面里挑一张。助手：都可以。",
+      "sessions": [
+        {
+          "id": "sample-04-s1",
+          "title": "随便不是答案",
+          "requestId": "A",
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "两张封面让你帮我挑，你回个“都可以”是什么意思？我要是自己选得出来还问你干嘛？",
+              "choices": [
+                {
+                  "label": "承认没给依据",
+                  "reply": "刚才只说了结论，没给依据，确实帮不上忙。先按你准备把封面发在哪儿来选。",
+                  "response": "这个思路有用，先看在哪儿发，我就知道该比什么了。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "问核心展示点",
+                  "reply": "是我说得太省事了。你最希望别人第一眼在封面上看清什么？字还是画面？",
+                  "response": "这么问还差不多，我主要还是怕别人看不清主题。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "给可读性标准",
+                  "reply": "可以先比标题的可读性：把两张缩小，看看哪张的主题一眼就认得出来。",
+                  "response": "这样就有个标准了，总比盯着两张图来回换强。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sample-04-s2",
+          "title": "随便不是答案",
+          "requestId": "A",
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "发给读书会群里的，发出去会缩成聊天小图。白底那张字大，黑底那张图好看。",
+              "choices": [
+                {
+                  "label": "建议看缩略图",
+                  "reply": "把两张图缩到群聊里显示的大小，比一比哪张标题更清楚。",
+                  "response": "试了一下，白底那张的标题确实更好认。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "建议白底大字",
+                  "reply": "选白底大字那张。群聊小图大家划得快，先让人看清是什么活动最要紧。",
+                  "response": "有道理，群里消息刷得快，字大确实更管用。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "比较两种用途",
+                  "reply": "小图先让人认出主题，白底大字更合适；黑底那张可以留给愿意点开细看的人。",
+                  "response": "这么一拆就明白了，群里还是先顾着认字吧。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sample-04-s3",
+          "title": "随便不是答案",
+          "requestId": "A",
+          "rounds": [
+            {
+              "id": "r1",
+              "message": "那就先用白底大字的。你刚才早这么说不就好了。",
+              "choices": [
+                {
+                  "label": "认领表达问题",
+                  "reply": "对，刚才该先问用途，再给选择理由。这次是群聊小图，所以先保住标题可读性。",
+                  "response": "行了，图定下来就行，我发群里去了。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "短句回收依据",
+                  "reply": "嗯，这次就按一个标准定：缩成聊天小图，还能看清标题。白底大字更合适。",
+                  "response": "总算敲定了，不纠结了。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                },
+                {
+                  "label": "克制自嘲",
+                  "reply": "我刚才把选择题又递回给你了。现在这票投白底，理由是小图里字清楚。",
+                  "response": "算你圆回来了，我去发图了。",
+                  "requirement": "Any",
+                  "minimumFunds": 0,
+                  "fundsReward": 0,
+                  "nextRoundId": "END"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
