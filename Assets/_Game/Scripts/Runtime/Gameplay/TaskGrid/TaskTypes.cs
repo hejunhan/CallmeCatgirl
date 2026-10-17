@@ -52,10 +52,11 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
         public double Speed { get; }
         public double Patience { get; }
         public double Tokens { get; }
+        public bool UsesCalculationBudget { get; }
         public IReadOnlyList<Cell> Shape { get; }
         public IReadOnlyList<AbilityRequirement> Requirements { get; }
         public TaskDefinition(string id, string title, IEnumerable<Cell> shape, double calculation,
-            double speed, double patience, double tokens, IEnumerable<AbilityRequirement> requirements)
+            double speed, double patience, double tokens, IEnumerable<AbilityRequirement> requirements, bool usesCalculationBudget = false)
         {
             if (string.IsNullOrWhiteSpace(id)) throw new ArgumentException("Task definition needs an ID.");
             Rules.Positive(calculation, nameof(calculation)); Rules.Positive(speed, nameof(speed));
@@ -67,7 +68,7 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
             if (req.Any(r => r == null) || req.Select(r => r.Kind).Distinct().Count() != req.Length)
                 throw new ArgumentException("Requirements must contain distinct abilities.");
             Id = id; Title = title ?? id; Calculation = calculation; Speed = speed;
-            Patience = patience; Tokens = tokens;
+            Patience = patience; Tokens = tokens; UsesCalculationBudget = usesCalculationBudget;
             Shape = Array.AsReadOnly(Normalize(cells)); Requirements = Array.AsReadOnly(req);
         }
 
@@ -115,6 +116,13 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
             ByAbility = new ReadOnlyDictionary<AbilityKind, Quality>(grades);
             Produced = new ReadOnlyDictionary<AbilityKind, double>(produced);
         }
+#if (UNITY_EDITOR || DEVELOPMENT_BUILD) && !CATGIRL_DISABLE_DEBUG
+        internal static QualityResult WithDebugOverride(QualityResult natural,Quality quality)
+        {
+            if(!Enum.IsDefined(typeof(Quality),quality)) throw new ArgumentException("Invalid debug quality.");
+            return new QualityResult(quality,natural.ByAbility.ToDictionary(p=>p.Key,p=>p.Value),natural.Produced.ToDictionary(p=>p.Key,p=>p.Value));
+        }
+#endif
         public static QualityResult Evaluate(TaskDefinition definition, IReadOnlyDictionary<AbilityKind, double> points)
         {
             var grades = new Dictionary<AbilityKind, Quality>();
@@ -147,6 +155,7 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
         public double Progress { get; internal set; }
         public double AbilityRemainder { get; internal set; }
         public double? FinishedAt { get; internal set; }
+        public bool ReadyInCandidate { get; internal set; }
         public Cell Origin { get; internal set; }
         public int Rotation { get; internal set; }
         public QualityResult Result { get; internal set; }

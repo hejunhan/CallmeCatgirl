@@ -1,0 +1,5 @@
+{
+  "name": "CallmeCatgirl.Presentation",
+  "rootNamespace": "CallmeCatgirl.Presentation",
+  "references": ["CallmeCatgirl.Presentation.Core", "UnityEngine.UI"]
+}

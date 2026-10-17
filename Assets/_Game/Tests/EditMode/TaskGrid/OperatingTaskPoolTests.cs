@@ -93,6 +93,7 @@ namespace CallmeCatgirl.Tests
             owner = Object.FindObjectsByType<MonoBehaviour>().Single(o => o.GetType().Name == "CoreGameplayController");
             var field = owner.GetType().GetField("configuration", BindingFlags.Instance | BindingFlags.NonPublic);
             original = (ScriptableObject)field.GetValue(owner); var config = Object.Instantiate(original); resources.Add(config);
+            Set(config, "OpeningBalance", null); Set(config, "OrdinaryDialoguePool", null);
             var g = Generation(); SingleShape(g); Pool(g); Set(config, "TaskGeneration", g);
             Set(config, "MonthlyMaintenanceFee", 0); Set(config, "SecondsPerGameMonth", 30f); Set(config, "TokenPrice", 1);
             Set(config, "InitialAffinity", 0f); Set(config, "SuccessAffinity", 1f); Set(config, "FailureAffinity", -.5f);
@@ -102,7 +103,7 @@ namespace CallmeCatgirl.Tests
             Set(task, "Patience", 300f); Set(task, "Tokens", 100f); Set(task, "Minimum", new Vector3(1, 0, 0));
             Set(task, "Excellent", new Vector3(2, 2, 2)); var tasks = Array.CreateInstance(type, 1); tasks.SetValue(task, 0); Set(config, "Requests", tasks);
             var ids = twoCharacters ? new[] { "A", "B" } : new[] { "A" };
-            var characters = ids.Select(id => "{\"id\":\"" + id + "\",\"name\":\"角色" + id + "\",\"sessions\":[{\"id\":\"s1\",\"title\":\"角色任务一\",\"requestId\":\"A\",\"rounds\":[{\"id\":\"r1\",\"message\":\"你好\",\"choices\":[{\"label\":\"回复\"}]}]}" + (twoCharacters ? ",{\"id\":\"s2\",\"title\":\"角色任务二\",\"requestId\":\"A\",\"rounds\":[{\"id\":\"r1\",\"message\":\"再聊\",\"choices\":[{\"label\":\"回复\"}]}]}" : "") + "]}");
+            var characters = ids.Select(id => "{\"id\":\"" + id + "\",\"kind\":\"Scripted\",\"name\":\"角色" + id + "\",\"sessions\":[{\"id\":\"s1\",\"title\":\"角色任务一\",\"requestId\":\"A\",\"rounds\":[{\"id\":\"r1\",\"message\":\"你好\",\"choices\":[{\"label\":\"回复\"}]}]}" + (twoCharacters ? ",{\"id\":\"s2\",\"title\":\"角色任务二\",\"requestId\":\"A\",\"rounds\":[{\"id\":\"r1\",\"message\":\"再聊\",\"choices\":[{\"label\":\"回复\"}]}]}" : "") + "]}");
             var importer = Type.GetType("CallmeCatgirl.EditorTools.StoryJsonImporter, Assembly-CSharp-Editor", true);
             var story = (ScriptableObject)importer.GetMethod("Parse").Invoke(null, new object[] { "{\"version\":1,\"characters\":[" + string.Join(",", characters) + "]}", new[] { "A", "B" } });
             resources.Add(story); Set(config, "Story", story);
@@ -110,7 +111,10 @@ namespace CallmeCatgirl.Tests
             var next = Field<Array>(memory, "Levels").GetValue(0); Set(next, "Cost", 0); Set(next, "RequiredCompletedTasks", 0);
             var multipliers = Field<object>(next, "TaskMultipliers"); Set(multipliers, "CalculationMin", 2d); Set(multipliers, "CalculationMax", 2d);
             Set(multipliers, "RewardMin", 3d); Set(multipliers, "RewardMax", 3d);
-            field.SetValue(owner, config); Call(owner, "ResetSimulation"); return config;
+            owner.GetType().GetField("training", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(owner, null);
+                config.GetType().GetField("OrdinaryDialoguePool").SetValue(config, null);
+                config.GetType().GetField("OpeningBalance").SetValue(config, null);
+                field.SetValue(owner, config); Call(owner, "ResetSimulation"); return config;
         }
         private static void Place(TaskSimulation sim, string id)
         {

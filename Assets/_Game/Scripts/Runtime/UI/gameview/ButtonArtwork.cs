@@ -39,13 +39,15 @@ namespace CallmeCatgirl.UI
             if (button == null) { button = GetComponent<Button>(); image = GetComponent<Image>(); }
             lastInteractable = button.IsInteractable();
             bool down = pressed && pressedSprite != null;
-            image.sprite = !lastInteractable && disabledSprite != null ? disabledSprite
+            image.sprite = !lastInteractable ? normalSprite
                 : down ? pressedSprite : selected && selectedSprite != null ? selectedSprite
                 : hovered && hoverSprite != null ? hoverSprite : normalSprite;
-            image.color = Color.white;
+            image.color = lastInteractable ? Color.white : new Color(.84f,.84f,.84f,1);
             if (label == null) return;
-            label.enabled = !hideLabel && (!lastInteractable || !(selected ? selectedIncludesText : normalIncludesText));
-            label.color = lastInteractable && (selected || down) ? Color.white : new Color(.16f, .16f, .16f, 1);
+            bool includesText = image.sprite == normalSprite ? normalIncludesText
+                : image.sprite == selectedSprite && selectedIncludesText;
+            label.enabled = !hideLabel && !includesText;
+            label.color = lastInteractable && (selected || down) ? Color.white : new Color(.086f, .086f, .086f, 1);
         }
     }
 }

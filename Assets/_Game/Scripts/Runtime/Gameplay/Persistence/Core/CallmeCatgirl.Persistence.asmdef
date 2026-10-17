@@ -1,0 +1,7 @@
+{
+  "name": "CallmeCatgirl.Persistence",
+  "rootNamespace": "CallmeCatgirl.Persistence",
+  "references": ["CallmeCatgirl.TaskGrid", "CallmeCatgirl.Progression"],
+  "autoReferenced": true,
+  "noEngineReferences": true
+}

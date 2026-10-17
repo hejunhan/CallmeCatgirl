@@ -36,7 +36,7 @@ namespace CallmeCatgirl.Tests
                 visualField=View.GetType().GetField("feedback",BindingFlags.NonPublic|BindingFlags.Instance);
                 oldConfig=(ScriptableObject)configField.GetValue(Owner);oldVisual=(ScriptableObject)visualField.GetValue(View);
                 Config=Object.Instantiate(oldConfig);Visual=Object.Instantiate(oldVisual);
-                Config.GetType().GetField("Story").SetValue(Config,null);Config.GetType().GetField("TokenPrice").SetValue(Config,3);
+                Config.GetType().GetField("OrdinaryDialoguePool").SetValue(Config,null);Config.GetType().GetField("Story").SetValue(Config,null);Config.GetType().GetField("TokenPrice").SetValue(Config,3);
                 configField.SetValue(Owner,Config);visualField.SetValue(View,Visual);Call(Owner,"ResetSimulation");
             }
             public TaskInstance Place(string id,double calculation=12,double patience=90,double tokens=11,bool fail=false)

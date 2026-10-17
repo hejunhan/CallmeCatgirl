@@ -1,0 +1,6 @@
+{
+  "name": "CallmeCatgirl.Debugging",
+  "rootNamespace": "CallmeCatgirl.Debugging",
+  "references": ["CallmeCatgirl.TaskGrid"],
+  "autoReferenced": true
+}

@@ -35,7 +35,15 @@ namespace CallmeCatgirl.Tests
         private static Array Sessions(object user) => Field<Array>(user, "Sessions");
         private static Array Rounds(object session) => Field<Array>(session, "Rounds");
         private static Array Choices(object node) => Field<Array>(node, "Choices");
-        private static object Story(object config) => Activator.CreateInstance(Type.GetType("CallmeCatgirl.Gameplay.ConversationStory, Assembly-CSharp", true), config);
+        private static object Story(object config) => CreateScriptedStory(config);
+        private static object CreateScriptedStory(object config)
+        {
+            foreach (var user in Users(config))
+            {
+                var field = user.GetType().GetField("Kind"); field.SetValue(user, Enum.Parse(field.FieldType, "Scripted"));
+            }
+            return Activator.CreateInstance(Type.GetType("CallmeCatgirl.Gameplay.ConversationStory, Assembly-CSharp", true), new object[] { config });
+        }
         private static TaskDefinition Template(string id = "A") => new TaskDefinition(id, "template", new[] { new Cell(0, 0) }, 100, 10, 90, 100,
             new[] { new AbilityRequirement(AbilityKind.Writing, 10, 16), new AbilityRequirement(AbilityKind.Code, 2, 4) });
         private static TaskDefinition Next(object story, string user = "A") => (TaskDefinition)Call(story, "BuildNextTask", user,
@@ -84,7 +92,7 @@ namespace CallmeCatgirl.Tests
         }
 
         [TestCase("\"version\": 1", "\"version\": 2")]
-        [TestCase("\"id\": \"A\"", "\"id\": \"D\"")]
+        [TestCase("\"id\": \"A\"", "\"id\": \"D/bad\"")]
         [TestCase("\"requestId\": \"A\"", "\"requestId\": \"missing\"")]
         [TestCase("\"id\": \"s2\"", "\"id\": \"s1\"")]
         [TestCase("\"id\": \"r2\"", "\"id\": \"r1\"")]
@@ -180,7 +188,10 @@ namespace CallmeCatgirl.Tests
                 cfg.GetType().GetField("ModelPoints").SetValue(cfg, new Vector4(4, 1, 1, 0));
                 cfg.GetType().GetField("AbilityInterval").SetValue(cfg, 3f);
                 cfg.GetType().GetField("TaskGeneration").SetValue(cfg, null);
-                cfg.GetType().GetField("Story").SetValue(cfg, Parse(Example("minimal.example.json")));
+                var scripted=Parse(Example("minimal.example.json"));CreateScriptedStory(scripted);
+                cfg.GetType().GetField("Story").SetValue(cfg, scripted);
+                cfg.GetType().GetField("OrdinaryDialoguePool").SetValue(cfg,null);cfg.GetType().GetField("OpeningBalance").SetValue(cfg,null);
+                owner.GetType().GetField("training",BindingFlags.NonPublic|BindingFlags.Instance).SetValue(owner,null);
                 field.SetValue(owner, cfg); Call(owner, "ResetSimulation");
                 var sim = Value<TaskSimulation>(owner, "Simulation");
                 Complete(owner, sim, "A-1"); Call(owner, "SubmitSelected"); Call(owner, "ChooseReply", 0);
@@ -194,7 +205,8 @@ namespace CallmeCatgirl.Tests
                 var button = GameObject.Find("ReplyChoice_0").GetComponent<Button>(); button.onClick.Invoke(); yield return null;
                 Assert.That(Value<bool>(owner, "IsStoryOpen"), Is.True);
                 Assert.That(GameObject.Find("Result").GetComponent<Text>().text, Does.Contain("第2/3轮"));
-                Assert.That(GameObject.Find("CloseHistory"), Is.Null);
+                Assert.That(GameObject.Find("CloseHistory"), Is.Not.Null);
+                Assert.That(Value<bool>(owner,"IsModalOpen"),Is.False);
                 Call(owner, "AdvanceGame", 100d); Call(owner, "NextRound"); Call(owner, "SubmitSelected");
                 Assert.That(sim.GameTime, Is.EqualTo(time)); Assert.That(sim.Tasks.Count, Is.EqualTo(4));
                 GameObject.Find("ReplyChoice_0").GetComponent<Button>().onClick.Invoke(); yield return null;

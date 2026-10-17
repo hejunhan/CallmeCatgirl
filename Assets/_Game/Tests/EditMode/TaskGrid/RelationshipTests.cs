@@ -26,7 +26,7 @@ namespace CallmeCatgirl.Tests
         private static Type StoryType => Type.GetType("CallmeCatgirl.Gameplay.ConversationStory, Assembly-CSharp", true);
         private ScriptableObject Profiles(params string[] ids)
         {
-            var profiles = ids.Select(id => "{\"id\":\"" + id + "\",\"name\":\"测试角色" + id + "\",\"sessions\":["
+            var profiles = ids.Select(id => "{\"id\":\"" + id + "\",\"kind\":\"Scripted\",\"name\":\"测试角色" + id + "\",\"sessions\":["
                 + "{\"id\":\"s1\",\"title\":\"任务一\",\"requestId\":\"A\",\"rounds\":["
                 + "{\"id\":\"r1\",\"message\":\"第一轮\",\"choices\":[{\"label\":\"继续\",\"reply\":\"好\"}]},"
                 + "{\"id\":\"r2\",\"message\":\"第二轮\",\"choices\":[{\"label\":\"结束会话\",\"reply\":\"再见\"}]}]},"
@@ -112,6 +112,7 @@ namespace CallmeCatgirl.Tests
             owner = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).Single(o => o.GetType().Name == "CoreGameplayController");
             var field = owner.GetType().GetField("configuration", BindingFlags.Instance | BindingFlags.NonPublic);
             original = (ScriptableObject)field.GetValue(owner); var config = Object.Instantiate(original); resources.Add(config);
+            Set(config, "OpeningBalance", null); Set(config, "OrdinaryDialoguePool", null);
             var generation = Object.Instantiate(Field<ScriptableObject>(config, "TaskGeneration")); resources.Add(generation);
             var presetType = generation.GetType().GetNestedType("ShapePreset");
             var preset = Activator.CreateInstance(presetType); Set(preset, "Name", "fixture"); Set(preset, "Pattern", new[] { "#" });
@@ -126,7 +127,10 @@ namespace CallmeCatgirl.Tests
             Set(config, "MonthlyMaintenanceFee", 0); Set(config, "SecondsPerGameMonth", 30f);
             Set(config, "ModelPoints", new Vector4(1, 0, 0, 0)); Set(config, "AbilityInterval", 3f);
             Set(config, "InitialAffinity", 0f); Set(config, "SuccessAffinity", 1f); Set(config, "FailureAffinity", -.5f);
-            field.SetValue(owner, config); Call(owner, "ResetSimulation");
+            owner.GetType().GetField("training", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(owner, null);
+                config.GetType().GetField("OrdinaryDialoguePool").SetValue(config, null);
+                config.GetType().GetField("OpeningBalance").SetValue(config, null);
+                field.SetValue(owner, config); Call(owner, "ResetSimulation");
         }
         private static void Place(TaskSimulation sim, string id)
         {

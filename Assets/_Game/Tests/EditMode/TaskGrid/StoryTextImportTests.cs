@@ -33,7 +33,20 @@ namespace CallmeCatgirl.Tests
         private static Array Sessions(object user) => Field<Array>(user, "Sessions");
         private static Array Rounds(object session) => Field<Array>(session, "Rounds");
         private static Array Choices(object node) => Field<Array>(node, "Choices");
-        private static object Story(object config) => Activator.CreateInstance(Type.GetType("CallmeCatgirl.Gameplay.ConversationStory, Assembly-CSharp", true), config);
+        private static void ScriptedFixture(object config)
+        {
+            foreach (var profile in Users(config))
+            {
+                var kind = profile.GetType().GetField("Kind");
+                kind.SetValue(profile, Enum.Parse(kind.FieldType, "Scripted"));
+            }
+        }
+        private object Story(object config)
+        {
+            // Keep the parsed/live asset Ordinary; isolate deterministic branch tests in a clone.
+            var fixture = Object.Instantiate((ScriptableObject)config); resources.Add(fixture); ScriptedFixture(fixture);
+            return Activator.CreateInstance(Type.GetType("CallmeCatgirl.Gameplay.ConversationStory, Assembly-CSharp", true), new object[] { fixture });
+        }
         private static TaskDefinition Template(string id = "A") => new TaskDefinition(id, "template", new[] { new Cell(0, 0) }, 100, 10, 90, 7,
             new[] { new AbilityRequirement(AbilityKind.Writing, 10, 16) });
         private static TaskDefinition Next(object story, TaskDefinition basis = null) => (TaskDefinition)Call(story, "BuildNextTask", "A",
@@ -200,7 +213,13 @@ namespace CallmeCatgirl.Tests
                 cfg.GetType().GetField("ModelPoints").SetValue(cfg, new Vector4(4, 1, 1, 0));
                 cfg.GetType().GetField("AbilityInterval").SetValue(cfg, 3f);
                 cfg.GetType().GetField("TaskGeneration").SetValue(cfg, null);
-                cfg.GetType().GetField("Story").SetValue(cfg, Parse(Sample)); field.SetValue(owner, cfg); Call(owner, "ResetSimulation");
+                cfg.GetType().GetField("OrdinaryDialoguePool").SetValue(cfg, null);
+                var scripted = Parse(Sample); ScriptedFixture(scripted);
+                cfg.GetType().GetField("Story").SetValue(cfg, scripted); owner.GetType().GetField("training", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(owner, null);
+                cfg.GetType().GetField("OrdinaryDialoguePool").SetValue(cfg, null);
+                cfg.GetType().GetField("OpeningBalance").SetValue(cfg, null);
+                field.SetValue(owner, cfg); Call(owner, "ResetSimulation");
+                Call(owner,"ExecuteCommandJson","{\"kind\":\"clock\",\"paused\":true}");
                 var sim = Value<TaskSimulation>(owner, "Simulation");
                 Assert.That(sim.Tasks["A-1"].Definition.Shape.Count, Is.EqualTo(4));
                 Complete(owner, sim, "A-1"); Call(owner, "SubmitSelected"); Call(owner, "ChooseReply", 0); Call(owner, "NextRound");
@@ -214,7 +233,7 @@ namespace CallmeCatgirl.Tests
                 Assert.That(Value<bool>(owner, "IsStoryOpen"), Is.True);
                 Assert.That(GameObject.Find("Result").GetComponent<Text>().text, Does.Contain("第2/3轮"));
                 Assert.That(GameObject.Find("HistoryScroll").GetComponentInChildren<Text>().text, Does.Contain("我怕做不完"));
-                double time = sim.GameTime; Call(owner, "AdvanceGame", 50d); Assert.That(sim.GameTime, Is.EqualTo(time));
+                double time = sim.GameTime; Call(owner, "AdvanceGame", .25d); Assert.That(sim.GameTime, Is.EqualTo(time + .25d));
                 GameObject.Find("ReplyChoice_0").GetComponent<Button>().onClick.Invoke(); yield return null;
                 sim.Paused = true; GameObject.Find("ReplyChoice_0").GetComponent<Button>().onClick.Invoke(); yield return null;
                 Assert.That(Value<bool>(owner, "IsStoryOpen"), Is.False); Assert.That(task.State, Is.EqualTo(RequestState.Closed));

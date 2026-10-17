@@ -5,7 +5,7 @@ using CallmeCatgirl.Gameplay.TaskGrid;
 namespace CallmeCatgirl.Gameplay
 {
     /// <summary>Single wallet for task income, upgrades and monthly maintenance.</summary>
-    public sealed class EconomyManager
+    public sealed partial class EconomyManager
     {
         public int CurrentFunds { get; private set; }
         public int TokenPricePerUnit { get; }

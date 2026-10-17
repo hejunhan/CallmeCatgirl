@@ -113,7 +113,10 @@ namespace CallmeCatgirl.Tests
                 var demoType=Config.GetType().GetNestedType("DemoTask");var demo=Activator.CreateInstance(demoType);
                 Set(demo,"Id","A");Set(demo,"Title","fixture");Set(demo,"Shape",new[]{Vector2Int.zero,new Vector2Int(1,0)});
                 Set(demo,"Calculation",100f);Set(demo,"Speed",10f);Set(demo,"Patience",90f);Set(demo,"Tokens",100f);Set(demo,"Minimum",Vector3.zero);
-                var tasks=Array.CreateInstance(demoType,1);tasks.SetValue(demo,0);Set(Config,"Requests",tasks);field.SetValue(Owner,Config);Reset();
+                var tasks=Array.CreateInstance(demoType,1);tasks.SetValue(demo,0);Set(Config,"Requests",tasks);Owner.GetType().GetField("training", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(Owner, null);
+                Config.GetType().GetField("OrdinaryDialoguePool").SetValue(Config, null);
+                Config.GetType().GetField("OpeningBalance").SetValue(Config, null);
+                field.SetValue(Owner,Config);Reset();
             }
             public void Reset()=>Call(Owner,"ResetSimulation");
             public void Advance(double seconds){Sim.Paused=false;Sim.Advance(seconds);Sim.Paused=true;Refresh();}

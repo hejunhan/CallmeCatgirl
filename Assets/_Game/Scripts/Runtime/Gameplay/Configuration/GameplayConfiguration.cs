@@ -15,7 +15,8 @@ namespace CallmeCatgirl.Gameplay
         [Min(0), InspectorName("初始资金"), Tooltip("新开局或重开时读取，可在主配置资源中调整。")] public int InitialFunds = 1500;
         [InspectorName("内存配置"), Tooltip("棋盘布局、初始开放格子及升级规则都在这份配置中。")]
         public MemoryUpgradeConfiguration MemoryUpgrades;
-        [InspectorName("剧情配置")] public StoryConfiguration Story;
+        [InspectorName("原有会话配置（由角色类型区分普通与剧情）")] public StoryConfiguration Story;
+        [InspectorName("普通随机对话池（替换普通试玩内容，剧情不受影响）")] public StoryConfiguration OrdinaryDialoguePool;
         [Min(0), InspectorName("每Token收入单价")] public int TokenPrice = 1;
         [Min(0), InspectorName("每月维护费")] public int MonthlyMaintenanceFee = 50;
         [Min(0.1f), InspectorName("每月游戏秒数")] public float SecondsPerGameMonth = 30;
@@ -24,6 +25,7 @@ namespace CallmeCatgirl.Gameplay
         [InspectorName("初始亲密度")] public float InitialAffinity = 0;
         [InspectorName("达标提交亲密度变化")] public float SuccessAffinity = 1;
         [InspectorName("失败亲密度变化")] public float FailureAffinity = -0.5f;
+        [InspectorName("开局难度曲线（独立覆盖）")] public OpeningBalanceConfiguration OpeningBalance;
         public EconomyManager BuildEconomyManager() => new EconomyManager(InitialFunds, TokenPrice);
 
         public ModelDefinition BuildModel() => new ModelDefinition("test-model", AbilityInterval,

@@ -1,0 +1,6 @@
+{
+  "name": "CallmeCatgirl.Progression",
+  "references": ["CallmeCatgirl.TaskGrid"],
+  "autoReferenced": true,
+  "noEngineReferences": true
+}

@@ -123,7 +123,7 @@ namespace CallmeCatgirl.Gameplay
                 double calculation = basis.Calculation * (CalculationMin + ((double)CalculationMax-CalculationMin)*roll);
                 double tokens = basis.Tokens * (RewardMin + ((double)RewardMax-RewardMin)*roll);
                 return new TaskDefinition(basis.Id, basis.Title, basis.Shape, calculation, basis.Speed,
-                    basis.Patience, tokens, basis.Requirements);
+                    basis.Patience, tokens, basis.Requirements, basis.UsesCalculationBudget);
             }
         }
 

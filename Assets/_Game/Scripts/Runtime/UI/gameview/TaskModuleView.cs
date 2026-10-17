@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace CallmeCatgirl.UI
 {
-    public sealed class TaskModuleView : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public sealed class TaskModuleView : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] private RectTransform shapeRoot;
         [SerializeField] private TaskCellView cellPrefab;
@@ -128,7 +128,14 @@ namespace CallmeCatgirl.UI
             if (progressFill.sprite == null)
                 progressFill.rectTransform.sizeDelta = new Vector2(Mathf.Max(0, width - 8) * progressFill.fillAmount, 5);
         }
-        public void OnPointerClick(PointerEventData data) => owner?.SelectRequest(requestId);
+        public void OnPointerEnter(PointerEventData data)=>owner?.HoverRequest(requestId,this);
+        public void OnPointerExit(PointerEventData data)=>owner?.ClearAssociationHover(this);
+        public void OnPointerClick(PointerEventData data)
+        {
+            if (data.button != PointerEventData.InputButton.Left || data.dragging || !data.eligibleForClick) return;
+            owner?.SelectRequest(requestId);
+            if (data.clickCount >= 2) owner?.OpenRequestConversation(requestId);
+        }
         public void OnBeginDrag(PointerEventData data) { if (data.button == PointerEventData.InputButton.Left) owner?.BeginDrag(requestId, data, true); }
         public void OnDrag(PointerEventData data) => owner?.UpdateDrag(data);
         public void OnEndDrag(PointerEventData data) => owner?.EndDrag(data);

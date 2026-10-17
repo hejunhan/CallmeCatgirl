@@ -24,7 +24,7 @@ namespace CallmeCatgirl.Gameplay
             if (!HasOperatingTasks) return null;
             var source = OperatingTasks[random.Next(OperatingTasks.Length)].Build();
             return new TaskDefinition(source.Id, "经营 · " + source.Title, PickShape(random), source.Calculation,
-                source.Speed, source.Patience, source.Tokens, source.Requirements);
+                source.Speed, source.Patience, source.Tokens, source.Requirements, usesCalculationBudget: true);
         }
         [HideInInspector] public ShapePreset[] Shapes =
         {

@@ -1,0 +1,7 @@
+{
+  "name": "CallmeCatgirl.Progression.Tests",
+  "references": ["CallmeCatgirl.TaskGrid", "CallmeCatgirl.Progression"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

@@ -73,7 +73,7 @@ namespace CallmeCatgirl.Tests
             Assert.That(Selected(Button(names[0])), Is.True);
             Assert.That(Selected(Button("PauseButton")), Is.True);
             Assert.That(Button("PauseButton").GetComponentInChildren<Text>().enabled, Is.True);
-            Assert.That(Button("PauseButton").GetComponentInChildren<Text>().text, Is.EqualTo("开始 [空格]"));
+            Assert.That(Button("PauseButton").GetComponentInChildren<Text>().text, Is.EqualTo("开始"));
             Capture("ArtworkInitial.png");
             for (int i = 0; i < names.Length; i++)
             {
@@ -82,12 +82,12 @@ namespace CallmeCatgirl.Tests
                 yield return null;
                 Assert.That(owner.GetType().GetProperty("PlaybackSpeed").GetValue(owner), Is.EqualTo(values[i]));
                 for (int j = 0; j < names.Length; j++) Assert.That(Selected(Button(names[j])), Is.EqualTo(j == i));
-                Assert.That(Sprite(Button(names[i])), Is.EqualTo(i == 0 ? "button_speed_0.5x_selected" : "button_speed_" + (int)values[i] + "x_selected"));
+                Assert.That(Sprite(Button(names[i])), Is.EqualTo(i == 0 ? "button_speed_0.5x_selected" : "button_selected"));
             }
             Button("PauseButton").onClick.Invoke();
             Assert.That(Selected(Button("PauseButton")), Is.False);
-            Assert.That(Button("PauseButton").GetComponentInChildren<Text>().enabled, Is.False, "Baked pause text must not overlap a second label.");
-            Assert.That(Sprite(Button("PauseButton")), Is.EqualTo("button_pause"));
+            Assert.That(Button("PauseButton").GetComponentInChildren<Text>().enabled, Is.True, "The generic pause backing needs its separate text label.");
+            Assert.That(Sprite(Button("PauseButton")), Is.EqualTo("button_normal"));
             Button("PauseButton").onClick.Invoke();
             Call(owner, "ResetSimulation"); yield return null;
             Assert.That(Selected(Button(names[0])), Is.True);
