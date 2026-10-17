@@ -32,7 +32,7 @@ namespace CallmeCatgirl.UI
         {
             if (!homeCaptured) { shapeHome = shapeRoot.anchoredPosition; homeCaptured = true; }
             owner = view; requestId = task.Id; arrivedAt = Time.unscaledTime;
-            if (avatar != null) { avatar.sprite = view.GetAvatar(task.ConversationId); avatar.enabled = avatar.sprite != null; }
+            if (avatar != null) { avatar.sprite = view.GetAvatar(task.ConversationId); avatar.enabled = avatar.sprite != null && !view.IsOperatingRequest(task.Id); }
             if (shapeCells.Count == 0) shapeCells.AddRange(shapeRoot.GetComponentsInChildren<TaskCellView>(true));
         }
         public void Refresh(TaskInstance task, double now, bool selected)
@@ -40,7 +40,7 @@ namespace CallmeCatgirl.UI
             titleLabel.text = task.Id + " · " + task.Definition.Title;
             statusLabel.text = CoreGameplayController.StateText(task.State) + $"  忍耐 {task.Remaining(now):0.0}s";
             progressLabel.text = $"计算 {task.Progress:0.#}/{task.Definition.Calculation:0.#}  {task.Definition.Shape.Count}格\n达标奖 {task.Definition.Tokens:0.#} Token";
-            progressLabel.resizeTextForBestFit = true; progressLabel.resizeTextMinSize = 10; progressLabel.resizeTextMaxSize = progressLabel.fontSize;
+            progressLabel.resizeTextForBestFit = true; progressLabel.resizeTextMinSize = 14; progressLabel.resizeTextMaxSize = progressLabel.fontSize;
             var feedback = owner != null ? owner.Feedback : null;
             float shake = 0;
             if (feedback != null && feedback.Animate)

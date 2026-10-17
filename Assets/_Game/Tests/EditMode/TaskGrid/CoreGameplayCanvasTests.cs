@@ -174,11 +174,11 @@ namespace CallmeCatgirl.Tests
             }
             controller.GetType().GetMethod("AddRequest").Invoke(controller, null);
             view.GetType().GetMethod("Refresh").Invoke(view, null);
-            Assert.That(portrait.sprite.name, Is.EqualTo("Avatar_Male_GrayHair_Glasses"));
+            Assert.That(portrait.enabled, Is.False, "Operating requests must not impersonate story characters.");
             var newCard = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
                 .Single(b => b.GetType().FullName == "CallmeCatgirl.UI.TaskCardView"
                     && (string)b.GetType().GetProperty("RequestId").GetValue(b) == "new-1");
-            Assert.That(newCard.transform.Find("Avatar").GetComponent<Image>().sprite, Is.EqualTo(portrait.sprite));
+            Assert.That(newCard.transform.Find("Avatar").GetComponent<Image>().enabled, Is.False);
             controller.GetType().GetMethod("CloseInfo").Invoke(controller, null);
             view.GetType().GetMethod("Refresh").Invoke(view, null);
             Assert.That(portrait.enabled, Is.False);

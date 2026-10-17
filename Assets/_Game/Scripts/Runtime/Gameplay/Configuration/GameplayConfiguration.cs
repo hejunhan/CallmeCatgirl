@@ -20,6 +20,10 @@ namespace CallmeCatgirl.Gameplay
         [Min(0), InspectorName("每月维护费")] public int MonthlyMaintenanceFee = 50;
         [Min(0.1f), InspectorName("每月游戏秒数")] public float SecondsPerGameMonth = 30;
         [InspectorName("任务生成与方块配置")] public TaskGenerationConfiguration TaskGeneration;
+        [Header("角色亲密度（重开生效，允许负值）")]
+        [InspectorName("初始亲密度")] public float InitialAffinity = 0;
+        [InspectorName("达标提交亲密度变化")] public float SuccessAffinity = 1;
+        [InspectorName("失败亲密度变化")] public float FailureAffinity = -0.5f;
         public EconomyManager BuildEconomyManager() => new EconomyManager(InitialFunds, TokenPrice);
 
         public ModelDefinition BuildModel() => new ModelDefinition("test-model", AbilityInterval,

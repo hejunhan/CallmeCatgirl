@@ -197,6 +197,9 @@ namespace CallmeCatgirl.Tests
             var original = (ScriptableObject)field.GetValue(owner); var cfg = Object.Instantiate(original); resources.Add(cfg);
             try
             {
+                cfg.GetType().GetField("ModelPoints").SetValue(cfg, new Vector4(4, 1, 1, 0));
+                cfg.GetType().GetField("AbilityInterval").SetValue(cfg, 3f);
+                cfg.GetType().GetField("TaskGeneration").SetValue(cfg, null);
                 cfg.GetType().GetField("Story").SetValue(cfg, Parse(Sample)); field.SetValue(owner, cfg); Call(owner, "ResetSimulation");
                 var sim = Value<TaskSimulation>(owner, "Simulation");
                 Assert.That(sim.Tasks["A-1"].Definition.Shape.Count, Is.EqualTo(4));

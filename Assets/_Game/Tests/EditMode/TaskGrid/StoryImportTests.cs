@@ -177,6 +177,9 @@ namespace CallmeCatgirl.Tests
             resources.Add(cfg);
             try
             {
+                cfg.GetType().GetField("ModelPoints").SetValue(cfg, new Vector4(4, 1, 1, 0));
+                cfg.GetType().GetField("AbilityInterval").SetValue(cfg, 3f);
+                cfg.GetType().GetField("TaskGeneration").SetValue(cfg, null);
                 cfg.GetType().GetField("Story").SetValue(cfg, Parse(Example("minimal.example.json")));
                 field.SetValue(owner, cfg); Call(owner, "ResetSimulation");
                 var sim = Value<TaskSimulation>(owner, "Simulation");

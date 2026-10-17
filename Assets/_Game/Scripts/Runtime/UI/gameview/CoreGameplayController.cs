@@ -55,6 +55,8 @@ namespace CallmeCatgirl.Gameplay
         private readonly List<string> logs = new List<string>();
         private readonly Dictionary<string, TaskDefinition> taskBases = new Dictionary<string, TaskDefinition>();
         private readonly Dictionary<string, TaskDefinition> definitions = new Dictionary<string, TaskDefinition>();
+        private readonly HashSet<string> operatingTasks = new HashSet<string>();
+        public bool IsOperatingTask(string requestId) => requestId != null && operatingTasks.Contains(requestId);
         private int serial;
         private System.Random requestRandom;
         private TaskDefinition[] requestTemplates;
@@ -86,8 +88,9 @@ namespace CallmeCatgirl.Gameplay
                 configuration.MemoryUpgrades.ValidateTaskMultipliers();
                 configuration.TaskGeneration?.Validate(configuration.MemoryUpgrades.BoardWidth, configuration.MemoryUpgrades.BoardHeight);
                 requestRandom = configuration.TaskGeneration?.CreateRandom() ?? new System.Random();
-                Story = new ConversationStory(configuration.Story, configuration.TaskGeneration, requestRandom);
-                Simulation = configuration.BuildSimulation(); Simulation.Paused = true; definitions.Clear(); taskBases.Clear(); logs.Clear(); serial = 0;
+                Story = new ConversationStory(configuration.Story, configuration.TaskGeneration, requestRandom,
+                    configuration.InitialAffinity, configuration.SuccessAffinity, configuration.FailureAffinity);
+                Simulation = configuration.BuildSimulation(); Simulation.Paused = true; definitions.Clear(); taskBases.Clear(); operatingTasks.Clear(); logs.Clear(); serial = 0;
                 MemoryLevel = configuration.MemoryUpgrades.InitialLevel; CompletedTasks = 0; AvailableAbilityPoints = 0;
                 if (configuration.SecondsPerGameMonth <= 0 || float.IsNaN(configuration.SecondsPerGameMonth)
                     || float.IsInfinity(configuration.SecondsPerGameMonth)) throw new InvalidOperationException("每月游戏秒数必须是正的有限数值。");
@@ -154,16 +157,37 @@ namespace CallmeCatgirl.Gameplay
         }
         private TaskInstance CreateRandomRequest()
         {
-            if (requestTemplates.Length == 0) return null;
+            var operating = configuration.TaskGeneration?.PickOperatingTask(requestRandom);
+            if (operating == null && requestTemplates.Length == 0) return null;
             string suffix = (++serial).ToString(), user = "new-user-" + suffix;
-            var basis = requestTemplates[requestRandom.Next(requestTemplates.Length)];
-            return CreateTask("new-" + suffix, user, "extra-" + suffix, basis);
+            var basis = operating ?? requestTemplates[requestRandom.Next(requestTemplates.Length)];
+            return CreateTask("new-" + suffix, user, "extra-" + suffix, basis, operating != null);
         }
-        private TaskInstance CreateTask(string requestId, string user, string round, TaskDefinition fallback)
+        // 有剧情时按角色派发；每个角色至多一个请求，候选不足不复制已完成会话凑数。
+        private TaskInstance CreateMonthlyRequest()
         {
-            var basis = Story.BuildNextTask(user, definitions, fallback);
+            var profiles = configuration.Story?.Users;
+            if (profiles == null || profiles.Length == 0) return CreateRandomRequest();
+            if (requestTemplates.Length == 0) return null;
+            var eligible = profiles.Where(p => !Story.Finished(p.UserId))
+                .Select(p => new { User = p.UserId, Last = Simulation.Tasks.Values.LastOrDefault(t => t.ConversationId == p.UserId) })
+                .Where(p => p.Last == null || ((p.Last.State == RequestState.Submitted || p.Last.State == RequestState.TimedOut
+                    || p.Last.State == RequestState.Closed) && !Story.AwaitingReply(p.Last.Id)))
+                .OrderBy(p => p.Last?.ArrivedAt ?? double.NegativeInfinity).FirstOrDefault();
+            if (eligible == null) return configuration.TaskGeneration?.HasOperatingTasks == true ? CreateRandomRequest() : null;
+            var previous = eligible.Last;
+            if (previous != null && previous.State != RequestState.Closed && !Simulation.TryCloseFeedback(previous.Id)) return null;
+            var fallback = previous != null && taskBases.TryGetValue(previous.Id, out var original) ? original : requestTemplates[0];
+            string round = "month-" + (++serial);
+            return CreateTask(eligible.User + "-" + round, eligible.User, round, fallback);
+        }
+        private TaskInstance CreateTask(string requestId, string user, string round, TaskDefinition fallback, bool operating = false)
+        {
+            var basis = operating ? fallback : Story.BuildNextTask(user, definitions, fallback);
+            if (basis == null) return null;
             var scaled = configuration.MemoryUpgrades.ScaleTask(MemoryLevel, basis, requestRandom);
             if (!Simulation.TryCreate(requestId, user, round, scaled, out var task)) return null;
+            if (operating) operatingTasks.Add(requestId);
             taskBases.Add(requestId, basis); // 保存未乘倍率的原始任务，下一会话不能拿已放大的值再乘。
             return task;
         }
@@ -172,7 +196,11 @@ namespace CallmeCatgirl.Gameplay
             var generation = configuration.TaskGeneration;
             if (generation == null || !generation.ShouldRefresh(CurrentMonth)) return;
             int count = 0;
-            for (int i = 0; i < generation.RequestsPerRefresh; i++) if (CreateRandomRequest() != null) count++;
+            for (int i = 0; i < generation.RequestsPerRefresh; i++)
+            {
+                if (CreateMonthlyRequest() == null) break;
+                count++;
+            }
             ReadEvents();
             Message = $"第{CurrentMonth}月：新增{count}个请求，已有请求继续保留。";
             AddEconomyLog(Message);
@@ -181,7 +209,7 @@ namespace CallmeCatgirl.Gameplay
         {
             if (GameEnded || IsModalOpen) return;
             var previous = SelectedTask;
-            if (previous == null || Story.Finished(previous.ConversationId) || !Simulation.TryCloseFeedback(previous.Id)) return;
+            if (previous == null || IsOperatingTask(previous.Id) || Story.Finished(previous.ConversationId) || Story.AwaitingReply(previous.Id) || !Simulation.TryCloseFeedback(previous.Id)) return;
             var basis = taskBases.TryGetValue(previous.Id, out var original) ? original : previous.Definition;
             string round = "round-" + (++serial);
             var next = CreateTask(previous.ConversationId + "-" + round, previous.ConversationId, round, basis);
@@ -238,12 +266,14 @@ namespace CallmeCatgirl.Gameplay
             if (!Story.Choose(index)) return;
             if (Story.Finished(user)) { Simulation.TryCloseFeedback(request); ReadEvents(); }
             Message = Story.Finished(user) ? Story.Name(user) + "的剧情已完成。" :
-                Story.IsReply && Story.RequestId == request ? "请继续选择，完成本次会话。" : "本次会话结束，可开始下一次会话。";
+                Story.IsReply && Story.RequestId == request ? "请继续选择，完成本次会话。" : "本次会话结束；达标推进，失败重试，下一次月刷新会自动派发。";
             canvasView?.Refresh();
         }
         public void OpenConversationHistory()
         {
             if (SelectedTask == null || GameEnded || IsMemoryUpgradeOpen) return;
+            if (IsOperatingTask(SelectedId))
+            { Message = "经营委托只做任务结算，不包含角色剧情或亲密度。"; canvasView?.Refresh(); return; }
             Story.OpenHistory(SelectedTask.ConversationId); canvasView?.CancelDrag(); canvasView?.Refresh();
         }
         public void CloseConversationHistory() { Story.CloseHistory(); canvasView?.Refresh(); }
@@ -281,8 +311,18 @@ namespace CallmeCatgirl.Gameplay
                 int income = Economy.Settle(item);
                 if (Simulation.Tasks.TryGetValue(item.RequestId, out var task))
                 {
-                    if (item.Kind == TaskEventKind.Arrived) Story.Arrived(task);
-                    if (item.Kind == TaskEventKind.Submitted) { IsMemoryUpgradeOpen = false; Story.Submitted(task); canvasView?.CancelDrag(); }
+                    if (IsOperatingTask(task.Id))
+                    {
+                        // 经营任务直接完成反馈，不占剧情，不创建角色亲密度记录。
+                        if (item.Kind == TaskEventKind.Submitted || item.Kind == TaskEventKind.TimedOut)
+                            Simulation.TryCloseFeedback(task.Id);
+                    }
+                    else
+                    {
+                        if (item.Kind == TaskEventKind.Arrived) Story.Arrived(task);
+                        if (item.Kind == TaskEventKind.TimedOut) Story.TimedOut(task);
+                        if (item.Kind == TaskEventKind.Submitted) { IsMemoryUpgradeOpen = false; Story.Submitted(task); canvasView?.CancelDrag(); }
+                    }
                 }
                 logs.Insert(0, $"{item.GameTime:0.0}s  {item.RequestId}  {EventText(item.Kind)}"
                     + (item.Kind == TaskEventKind.Submitted || item.Kind == TaskEventKind.TimedOut ? $"  token={item.BillableTokens:0.##}" : ""));

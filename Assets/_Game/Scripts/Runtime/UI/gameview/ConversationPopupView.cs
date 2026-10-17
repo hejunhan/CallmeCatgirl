@@ -35,11 +35,11 @@ namespace CallmeCatgirl.UI
             resultLabel.color = Color.Lerp(resultIdle,feedback == null ? resultIdle : feedback.ResultColor(story.Result),flash);
             if (!changed) return;
             displayed = story; revision = story.Revision;
-            userLabel.text = story.Name(story.UserId);
+            userLabel.text = story.Name(story.UserId) + $" · 亲密度 {story.Affinity(story.UserId):0.##}";
             resultLabel.text = story.IsReply ? $"{story.RequestId} · {CoreGameplayController.QualityText(story.Result)} · 请选择回复（时间已冻结）" : "过往对话记录 · 时间已冻结";
             string progress = story.Progress(story.UserId);
             if (!string.IsNullOrEmpty(progress)) resultLabel.text += "\n" + progress;
-            resultLabel.resizeTextForBestFit = true; resultLabel.resizeTextMinSize = 12; resultLabel.resizeTextMaxSize = 17;
+            resultLabel.resizeTextForBestFit = true; resultLabel.resizeTextMinSize = 16; resultLabel.resizeTextMaxSize = resultLabel.fontSize;
             historyLabel.text = story.History(story.UserId);
             avatar.sprite = portrait; avatar.enabled = portrait != null;
             closeButton.gameObject.SetActive(!story.IsReply);

@@ -27,6 +27,10 @@ namespace CallmeCatgirl.Tests
             var importer = Type.GetType("CallmeCatgirl.EditorTools.StoryJsonImporter, Assembly-CSharp-Editor", true);
             fixtureStory = (ScriptableObject)importer.GetMethod("Parse").Invoke(null, new object[] { @"{""version"": 1, ""characters"": [{""id"": ""A"", ""name"": ""林小满"", ""initialHistory"": ""林小满：还醒着吗？"", ""sessions"": [{""id"": ""s1"", ""title"": ""一句晚安"", ""requestId"": ""A"", ""rounds"": [{""id"": ""r1"", ""message"": ""可以认真说一句晚安吗？"", ""choices"": [{""label"": ""温柔地说晚安"", ""reply"": ""辛苦啦，晚安喵。"", ""response"": """", ""requirement"": ""Any""}, {""label"": ""聊聊计划"", ""reply"": ""今天最让你担心的是什么？"", ""response"": """", ""requirement"": ""Any""}, {""label"": ""特别的晚安信"", ""reply"": ""愿你做个好梦。"", ""response"": """", ""requirement"": ""ExcellentOnly""}]}]}, {""id"": ""s2"", ""title"": ""聊聊明天"", ""requestId"": ""C"", ""rounds"": [{""id"": ""r1"", ""message"": ""我应该从哪里开始？"", ""choices"": [{""label"": ""从小事开始"", ""reply"": ""先完成最小的一件事。"", ""response"": """", ""requirement"": ""Any""}]}]}]}, {""id"": ""C"", ""name"": ""苏禾"", ""sessions"": [{""id"": ""s1"", ""title"": ""待办"", ""rounds"": [{""id"": ""r1"", ""message"": ""能帮我整理待办吗？"", ""choices"": [{""label"": ""开始整理"", ""reply"": ""先整理最紧急的事情。"", ""response"": """", ""requirement"": ""Any""}]}]}, {""id"": ""s2"", ""title"": ""复盘"", ""rounds"": [{""id"": ""r1"", ""message"": ""我们复盘一下吧。"", ""choices"": [{""label"": ""好的"", ""reply"": ""看看做了什么。"", ""response"": """", ""requirement"": ""Any""}]}]}]}]}", new[] { "A", "B", "C" } });
             fixtureConfig.GetType().GetField("Story").SetValue(fixtureConfig, fixtureStory);
+            // 固定测试模型，避免策划调整主配置后使质量条件测试失去前提。
+            fixtureConfig.GetType().GetField("ModelPoints").SetValue(fixtureConfig, new Vector4(4, 1, 1, 0));
+            fixtureConfig.GetType().GetField("AbilityInterval").SetValue(fixtureConfig, 3f);
+            fixtureConfig.GetType().GetField("TaskGeneration").SetValue(fixtureConfig, null);
             field.SetValue(owner, fixtureConfig); Call(owner, "ResetSimulation");
         }
         private const string Scene = "Assets/_Game/Scenes/Prototypes/CoreGameplay.unity";
@@ -62,7 +66,7 @@ namespace CallmeCatgirl.Tests
             var story = Value<object>(owner, "Story");
             Assert.That(Value<bool>(owner, "IsStoryOpen"), Is.True);
             Assert.That(GameObject.Find("ConversationPopup"), Is.Not.Null);
-            Assert.That(GameObject.Find("UserName").GetComponent<Text>().text, Is.EqualTo("林小满"));
+            Assert.That(GameObject.Find("UserName").GetComponent<Text>().text, Does.StartWith("林小满 · 亲密度"));
             Assert.That(GameObject.Find("HistoryScroll").GetComponentInChildren<Text>().text, Does.Contain("还醒着吗"));
             Assert.That(GameObject.Find("Result").GetComponent<Text>().text, Does.Contain("完成"));
             Assert.That(Button("CloseHistory").gameObject.activeSelf, Is.False, "Reply must be chosen before closing.");

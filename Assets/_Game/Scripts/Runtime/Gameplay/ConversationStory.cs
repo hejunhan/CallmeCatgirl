@@ -12,8 +12,12 @@ namespace CallmeCatgirl.Gameplay
         {
             public StoryConfiguration.UserStory Profile;
             public string NodeId;
+            public double Affinity;
+            public readonly HashSet<string> CompletedSessions = new HashSet<string>();
             public readonly List<string> History = new List<string>();
         }
+        private readonly double initialAffinity, successAffinity, failureAffinity;
+        private readonly HashSet<string> settled = new HashSet<string>();
         private readonly StoryConfiguration configuration;
         private readonly TaskGenerationConfiguration generation;
         private readonly System.Random shapeRandom;
@@ -28,20 +32,43 @@ namespace CallmeCatgirl.Gameplay
         public int Revision { get; private set; }
         public IReadOnlyList<StoryConfiguration.ReplyChoice> Choices { get; private set; }
             = Array.Empty<StoryConfiguration.ReplyChoice>();
-        public ConversationStory(StoryConfiguration config) => configuration = config;
-        public ConversationStory(StoryConfiguration config, TaskGenerationConfiguration taskGeneration, System.Random random) : this(config)
-        { generation = taskGeneration; shapeRandom = random; }
+        public ConversationStory(StoryConfiguration config) : this(config, null, null) { }
+        public ConversationStory(StoryConfiguration config, TaskGenerationConfiguration taskGeneration, System.Random random)
+            : this(config, taskGeneration, random, 0, 1, -0.5) { }
+        public ConversationStory(StoryConfiguration config, TaskGenerationConfiguration taskGeneration, System.Random random,
+            double initial, double success, double failure)
+        {
+            if (new[] { initial, success, failure }.Any(n => double.IsNaN(n) || double.IsInfinity(n)))
+                throw new ArgumentException("亲密度配置必须是有限数值。");
+            configuration = config; generation = taskGeneration; shapeRandom = random;
+            initialAffinity = initial; successAffinity = success; failureAffinity = failure;
+        }
         private UserState User(string id)
         {
             if (users.TryGetValue(id, out var state)) return state;
             var profile = configuration?.Users?.FirstOrDefault(p => p != null && p.UserId == id);
-            state = new UserState { Profile = profile, NodeId = profile?.FirstNodeId };
+            state = new UserState { Profile = profile, NodeId = profile?.FirstNodeId, Affinity = initialAffinity };
             if (!string.IsNullOrWhiteSpace(profile?.InitialHistory)) state.History.Add(profile.InitialHistory);
             users.Add(id, state); return state;
         }
         public string Name(string id) => User(id).Profile?.DisplayName is string name && !string.IsNullOrWhiteSpace(name) ? name : "用户 " + id;
         public string History(string id) => string.Join("\n\n", User(id).History);
         public string Latest(string id) => User(id).History.LastOrDefault() ?? "还没有对话记录。";
+        public double Affinity(string id) => User(id).Affinity;
+        public bool AwaitingReply(string request) => (IsReply && RequestId == request) || pending.Any(t => t.Id == request);
+        // 以请求ID去重；多轮选项、查看历史、关闭反馈均不重复结算。
+        private void Settle(TaskInstance task, bool success)
+        {
+            if (!settled.Add(task.Id)) return;
+            var state = User(task.ConversationId); double change = success ? successAffinity : failureAffinity;
+            state.Affinity += change;
+            state.History.Add($"[亲密度 {change:+0.##;-0.##;0} → {state.Affinity:0.##} · {(success ? "任务达标" : "任务失败，下次重试当前会话")}]");
+            Revision++;
+        }
+        public void TimedOut(TaskInstance task)
+        {
+            if (task.State == RequestState.TimedOut) Settle(task, false);
+        }
         public void Arrived(TaskInstance task)
         {
             var state = User(task.ConversationId); var node = state.Profile?.FindNode(state.NodeId);
@@ -55,7 +82,8 @@ namespace CallmeCatgirl.Gameplay
         }
         public void Submitted(TaskInstance task)
         {
-            if (!submitted.Add(task.Id)) return;
+            if (task.State != RequestState.Submitted || !submitted.Add(task.Id)) return;
+            Settle(task, task.Result.Overall != Quality.BelowStandard);
             if (IsReply) { pending.Enqueue(task); return; }
             OpenReply(task);
         }
@@ -93,6 +121,18 @@ namespace CallmeCatgirl.Gameplay
                 state.History.Add(Name(UserId) + "：" + next.UserMessage);
                 LoadChoices(state, next); return true;
             }
+            if (session != null)
+            {
+                if (Result == Quality.BelowStandard) state.NodeId = session.Rounds[0].Id;
+                else
+                {
+                    state.CompletedSessions.Add(session.Id);
+                    var target = state.Profile.FindSession(state.NodeId);
+                    // 分支可以跳转，但已达标的会话不会作为新任务再次派发。
+                    if (target != null && state.CompletedSessions.Contains(target.Id))
+                        state.NodeId = state.Profile.Sessions.FirstOrDefault(s => !state.CompletedSessions.Contains(s.Id))?.Rounds[0].Id;
+                }
+            }
             if (Finished(UserId)) state.History.Add("[" + Progress(UserId) + "]");
             Choices = Array.Empty<StoryConfiguration.ReplyChoice>(); IsOpen = IsReply = false; Revision++;
             if (pending.Count > 0) OpenReply(pending.Dequeue());
@@ -102,6 +142,7 @@ namespace CallmeCatgirl.Gameplay
         public string Progress(string id) => User(id).Profile?.Progress(User(id).NodeId) ?? string.Empty;
         public TaskDefinition BuildNextTask(string id, IReadOnlyDictionary<string, TaskDefinition> templates, TaskDefinition fallback)
         {
+            if (Finished(id)) return null;
             var state = User(id); var session = state.Profile?.FindSession(state.NodeId);
             string templateId = session?.RequestId;
             var basis = !string.IsNullOrEmpty(templateId) && templates.TryGetValue(templateId, out var template) ? template : fallback;

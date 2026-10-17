@@ -14,6 +14,18 @@ namespace CallmeCatgirl.Gameplay
         public int MonthsPerRefresh = 1;
         [InspectorName("随机种子"), Tooltip("负数每次开局随机；非负数便于复现测试。")]
         public int RandomSeed = -1;
+        [Header("经营任务池")]
+        [InspectorName("经营任务模板"), Tooltip("按月补齐请求，主动新增时优先抽取。低能力门槛、大计算量、低奖励；空列表兼容原随机任务。形状共用下方形状库。")]
+        public GameplayConfiguration.DemoTask[] OperatingTasks = Array.Empty<GameplayConfiguration.DemoTask>();
+        public bool HasOperatingTasks => OperatingTasks != null && OperatingTasks.Length > 0;
+        public TaskDefinition PickOperatingTask(System.Random random)
+        {
+            if (random == null) throw new ArgumentNullException(nameof(random));
+            if (!HasOperatingTasks) return null;
+            var source = OperatingTasks[random.Next(OperatingTasks.Length)].Build();
+            return new TaskDefinition(source.Id, "经营 · " + source.Title, PickShape(random), source.Calculation,
+                source.Speed, source.Patience, source.Tokens, source.Requirements);
+        }
         [HideInInspector] public ShapePreset[] Shapes =
         {
             new ShapePreset { Name = "单格", Pattern = new[] { "#" } },
@@ -40,6 +52,15 @@ namespace CallmeCatgirl.Gameplay
         {
             if (RequestsPerRefresh < 0 || MonthsPerRefresh < 1 || Shapes == null || Shapes.Length == 0)
                 throw new InvalidOperationException("每次请求数不能为负，刷新月份间隔至少为1，形状库不能为空。");
+            var ids = new System.Collections.Generic.HashSet<string>();
+            foreach (var task in OperatingTasks ?? Array.Empty<GameplayConfiguration.DemoTask>())
+            {
+                if (task == null || string.IsNullOrWhiteSpace(task.Id) || !ids.Add(task.Id) || string.IsNullOrWhiteSpace(task.Title))
+                    throw new InvalidOperationException("经营任务模板ID/标题为空，或ID重复。");
+                task.Build(); // 复用任务数值与能力门槛校验。
+                if (new[] { task.Minimum.x, task.Minimum.y, task.Minimum.z }.Any(n => float.IsNaN(n) || float.IsInfinity(n) || n < 0))
+                    throw new InvalidOperationException("经营任务能力门槛必须是非负有限数值。");
+            }
             foreach (var preset in Shapes)
             {
                 if (preset == null) throw new InvalidOperationException("任务形状库包含空预设。");

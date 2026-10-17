@@ -49,7 +49,7 @@ namespace CallmeCatgirl.UI
                 + $"资金：{owner.Funds} / {next.Cost}（{(owner.Funds >= next.Cost ? "满足" : "不足")}）\n"
                 + $"达标提交：{owner.CompletedTasks} / {next.RequiredCompletedTasks}（{(owner.CompletedTasks >= next.RequiredCompletedTasks ? "满足" : "不足")}）\n"
                 + owner.NextMemoryPointRewardText + "\n新请求：" + owner.NextTaskMultiplierText;
-            conditionsLabel.resizeTextForBestFit = true; conditionsLabel.resizeTextMinSize = 12; conditionsLabel.resizeTextMaxSize = conditionsLabel.fontSize;
+            conditionsLabel.resizeTextForBestFit = true; conditionsLabel.resizeTextMinSize = 16; conditionsLabel.resizeTextMaxSize = conditionsLabel.fontSize;
             if (abilityPointsLabel != null) abilityPointsLabel.text = $"可分配点数：{owner.AvailableAbilityPoints} · 每{sim.Model.Interval:0.##}秒产出";
             if (allocationButtons != null)
                 for (int i = 0; i < allocationButtons.Length; i++)

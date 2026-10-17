@@ -94,6 +94,7 @@ namespace CallmeCatgirl.UI
         private Camera pointerCamera;
         private TaskModuleView ghost;
         public bool IsInitialized => controller != null;
+        public bool IsOperatingRequest(string id) => controller != null && controller.IsOperatingTask(id);
         public bool IsDragging => draggedId != null;
         public RectTransform Board => board;
 
@@ -158,7 +159,7 @@ namespace CallmeCatgirl.UI
             {
                 memoryUpgradeButton.interactable = !controller.GameEnded && !controller.IsModalOpen;
                 memoryUpgradeButtonLabel.text = "内存 / 加点";
-                memoryUpgradeLabel.text = $"内存 Lv{controller.MemoryLevel} · 资金 {DisplayFunds} · 点数 {controller.AvailableAbilityPoints}";
+                memoryUpgradeLabel.text = $"内存 Lv{controller.MemoryLevel} · 资金 {DisplayFunds}\n可分配点数 {controller.AvailableAbilityPoints}";
             }
             float width = board.rect.width / sim.Width, height = board.rect.height / sim.Height;
             int open = 0;
@@ -235,12 +236,13 @@ namespace CallmeCatgirl.UI
         {
             var task = controller.SelectedTask; infoPanel.SetActive(task != null);
             if (conversationAvatar != null)
-            { conversationAvatar.sprite = GetAvatar(task?.ConversationId); conversationAvatar.enabled = conversationAvatar.sprite != null; }
+            { conversationAvatar.sprite = IsOperatingRequest(task?.Id) ? null : GetAvatar(task?.ConversationId); conversationAvatar.enabled = conversationAvatar.sprite != null; }
             if (conversationLabel != null) conversationLabel.text = task == null ? "选择用户查看通讯。"
-                : controller.Story.Name(task.ConversationId) + "\n" + CoreGameplayController.StateText(task.State)
+                : IsOperatingRequest(task.Id) ? "经营委托 · 不含角色剧情，不计亲密度" : controller.Story.Name(task.ConversationId) + $" · 亲密度 {controller.Story.Affinity(task.ConversationId):0.##}\n" + CoreGameplayController.StateText(task.State)
                 + "\n\n" + controller.Story.Latest(task.ConversationId);
             if (task == null) return;
-            infoTitle.text = "当前请求 / " + task.Id + " · " + task.Definition.Title;
+            infoTitle.text = "当前请求 / " + task.Id + " · " + task.Definition.Title
+                + (IsOperatingRequest(task.Id) ? " · 经营委托" : $" · 亲密度 {controller.Story.Affinity(task.ConversationId):0.##}");
             infoStatus.text = $"{CoreGameplayController.StateText(task.State)}  ·  计算 {task.Progress:0.#}/{task.Definition.Calculation:0.#}  ·  忍耐 {task.Remaining(controller.Simulation.GameTime):0.0}s · 达标奖励 {task.Definition.Tokens:0.#} Token";
             abilitiesLabel.text = string.Join("\n", task.Definition.Requirements.Select(req =>
                 $"{CoreGameplayController.AbilityText(req.Kind)}  {task.GetAbility(req.Kind):0.#} / 完成 {req.Minimum:0.#} / 优秀 {req.Excellent:0.#}"
@@ -250,7 +252,7 @@ namespace CallmeCatgirl.UI
             rotateButton.interactable = !controller.GameEnded && !controller.IsModalOpen && (task.State == RequestState.Waiting || task.State == RequestState.Withdrawn || task.State == RequestState.Running);
             withdrawButton.interactable = !controller.GameEnded && !controller.IsModalOpen && (task.State == RequestState.Running);
             submitButton.interactable = !controller.GameEnded && !controller.IsModalOpen && (task.State == RequestState.Ready);
-            nextRoundButton.interactable = !controller.GameEnded && !controller.IsModalOpen && !controller.Story.Finished(task.ConversationId) && (task.State == RequestState.Submitted || task.State == RequestState.TimedOut);
+            nextRoundButton.interactable = !IsOperatingRequest(task.Id) && !controller.GameEnded && !controller.IsModalOpen && !controller.Story.Finished(task.ConversationId) && (task.State == RequestState.Submitted || task.State == RequestState.TimedOut);
         }
 
         public Sprite GetAvatar(string conversationId)

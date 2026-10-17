@@ -82,7 +82,7 @@ namespace CallmeCatgirl.Tests
                 yield return null;
                 Assert.That(owner.GetType().GetProperty("PlaybackSpeed").GetValue(owner), Is.EqualTo(values[i]));
                 for (int j = 0; j < names.Length; j++) Assert.That(Selected(Button(names[j])), Is.EqualTo(j == i));
-                Assert.That(Sprite(Button(names[i])), Is.EqualTo(i == 0 ? "button_speed_selected" : "button_speed_" + (int)values[i] + "x_selected"));
+                Assert.That(Sprite(Button(names[i])), Is.EqualTo(i == 0 ? "button_speed_0.5x_selected" : "button_speed_" + (int)values[i] + "x_selected"));
             }
             Button("PauseButton").onClick.Invoke();
             Assert.That(Selected(Button("PauseButton")), Is.False);

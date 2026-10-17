@@ -97,6 +97,8 @@ namespace CallmeCatgirl.Tests
                 field=Owner.GetType().GetField("configuration",BindingFlags.NonPublic|BindingFlags.Instance);original=(ScriptableObject)field.GetValue(Owner);
                 Config=Object.Instantiate(original);Memory=Object.Instantiate((ScriptableObject)Field(Config,"MemoryUpgrades"));
                 var originalGeneration=(ScriptableObject)Field(Config,"TaskGeneration"); Generation=originalGeneration != null ? Object.Instantiate(originalGeneration) : ScriptableObject.CreateInstance(Type.GetType("CallmeCatgirl.Gameplay.TaskGenerationConfiguration, Assembly-CSharp",true));
+                var poolType=Generation.GetType().GetField("OperatingTasks").FieldType.GetElementType();
+                Set(Generation,"OperatingTasks",Array.CreateInstance(poolType,0)); // 本组隔离经营池，仅测试原任务倍率。
                 Set(Config,"MemoryUpgrades",Memory);Set(Config,"TaskGeneration",Generation);Set(Config,"Story",null);
                 Set(Config,"InitialFunds",10000);Set(Config,"MonthlyMaintenanceFee",0);Set(Config,"SecondsPerGameMonth",30f);Set(Config,"TokenPrice",2);
                 Set(Memory,"InitialLevel",1);Range(Field(Memory,"InitialTaskMultipliers"),1,1,1,1);

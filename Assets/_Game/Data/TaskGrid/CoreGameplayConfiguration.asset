@@ -61,3 +61,6 @@ MonoBehaviour:
   MonthlyMaintenanceFee: 50
   SecondsPerGameMonth: 30
   TaskGeneration: {fileID: 11400000, guid: 49bdc014938d4bc6a5609a1599f80ebf, type: 2}
+  InitialAffinity: 0
+  SuccessAffinity: 1
+  FailureAffinity: -0.5
