@@ -1,0 +1,6 @@
+{
+  "name": "CallmeCatgirl.SystemMenu",
+  "rootNamespace": "CallmeCatgirl.UI.SystemMenu",
+  "references": ["UnityEngine.UI"],
+  "autoReferenced": true
+}

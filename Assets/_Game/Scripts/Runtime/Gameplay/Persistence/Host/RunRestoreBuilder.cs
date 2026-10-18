@@ -24,9 +24,10 @@ namespace CallmeCatgirl.Persistence
             TaskGenerationConfiguration generation, IEnumerable<ProgressionNode> policyNodes,
             Func<RandomStreamState, System.Random> restoreRandom, int previousStoryRevision,
             IEnumerable<IRunSaveExtension> extensions = null, string legacyStoryV1Revision = null,
-            StoryConfiguration ordinaryDialoguePool = null, double initialAffinity = 0, double successAffinity = 1, double failureAffinity = -0.5)
+            StoryConfiguration ordinaryDialoguePool = null, double initialAffinity = 0, double successAffinity = 1, double failureAffinity = -0.5,
+            IEnumerable<string> compatiblePresentationRevisions = null)
         {
-            RunSaveValidation.Validate(data, contentRevision, extensions, legacyStoryV1Revision);
+            RunSaveValidation.Validate(data, contentRevision, extensions, legacyStoryV1Revision, compatiblePresentationRevisions);
             var simulation = TaskSimulation.RestoreState(data.Simulation);
             var economy = EconomyManager.RestoreState(data.Economy);
             if (restoreRandom == null) throw new ArgumentNullException(nameof(restoreRandom));

@@ -1,0 +1,7 @@
+{
+  "name": "CallmeCatgirl.Persistence.Tests",
+  "references": ["CallmeCatgirl.Persistence"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

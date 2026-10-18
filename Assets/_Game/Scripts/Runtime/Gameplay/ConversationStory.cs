@@ -169,7 +169,8 @@ namespace CallmeCatgirl.Gameplay
                     }
                 }
                 if (Finished(UserId)) state.History.Add("[" + Progress(UserId) + "]");
-                Choices = Array.Empty<StoryConfiguration.ReplyChoice>(); IsOpen = IsReply = false; Revision++;
+                // Completing a request leaves its history readable; only explicit close hides the window.
+                Choices = Array.Empty<StoryConfiguration.ReplyChoice>(); IsOpen = true; IsReply = false; Revision++;
                 if (pending.Count > 0) OpenReply(pending.Dequeue());
                 return true;
             }

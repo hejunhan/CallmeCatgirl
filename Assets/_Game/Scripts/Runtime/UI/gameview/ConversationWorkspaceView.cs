@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CallmeCatgirl.Gameplay.Narrative;
 using System.Linq;
 using CallmeCatgirl.Gameplay;
 using CallmeCatgirl.Gameplay.TaskGrid;
@@ -82,12 +83,14 @@ namespace CallmeCatgirl.UI
             if(owner==null||list==null)return;
             var tasks=owner.Simulation.Tasks.Values.Where(t=>!owner.IsOperatingTask(t.Id) && (!owner.TrainingEnabled||!owner.Training.IsTrainingRequest(t.Id))).ToArray();
             var corpus=owner.TrainingEnabled?owner.Training.Session.ConversationCorpora.ToArray():new CallmeCatgirl.Gameplay.Training.ConversationCorpusSummary[0];
-            string key=string.Join("|",tasks.Select(t=>t.ConversationId+":"+t.Id))+"#"+string.Join("|",corpus.Select(c=>c.ConversationId+":"+c.RecordCount+":"+c.AvailablePoints));
+            var pinned=owner.Narrative==null?new Dictionary<string,NarrativeContact>():owner.Narrative.PinnedContacts.ToDictionary(c=>c.Id);
+            string key=string.Join("|",tasks.Select(t=>t.ConversationId+":"+t.Id))+"#"+string.Join("|",corpus.Select(c=>c.ConversationId+":"+c.RecordCount+":"+c.AvailablePoints))
+                +"#"+string.Join("|",pinned.Values.Select(c=>c.Id+":"+c.Summary+":"+c.HasUnread));
             if(key!=fingerprint)
             {
                 fingerprint=key;hovered=null;hoverSource=null;
                 foreach(Transform child in list){child.gameObject.SetActive(false);Destroy(child.gameObject);}rows.Clear();
-                var ids=tasks.Select(t=>t.ConversationId).Concat(corpus.Select(c=>c.ConversationId)).Distinct();
+                var ids=pinned.Keys.Concat(tasks.Select(t=>t.ConversationId)).Concat(corpus.Select(c=>c.ConversationId)).Distinct();
                 foreach(var id in ids)
                 {
                     var summary=corpus.FirstOrDefault(c=>c.ConversationId==id);
@@ -97,7 +100,7 @@ namespace CallmeCatgirl.UI
                     {
                         r=Instantiate(contactTemplate,list);r.name="Conversation_"+id;r.gameObject.SetActive(true);
                         border=r.Find("InnerBorder").GetComponent<InnerBorderGraphic>();button=r.GetComponent<Button>();
-                        r.Find("Name").GetComponent<Text>().text=owner.Story.Name(id);
+                        r.Find("Name").GetComponent<Text>().text=owner.ConversationDisplayName(id);
                         info=r.Find("Summary").GetComponent<Text>();badge=r.Find("Corpus").GetComponent<Image>();
                         corpusBorder=badge.transform.Find("InnerBorder").GetComponent<InnerBorderGraphic>();
                     }
@@ -107,7 +110,7 @@ namespace CallmeCatgirl.UI
                     r.gameObject.AddComponent<Image>().color=new Color32(244,244,244,255);
                     border=InnerBorderGraphic.Attach(r,1,BorderEdges.Bottom,new Color32(111,111,111,255));
                     button=r.gameObject.AddComponent<Button>();button.onClick.AddListener(()=>SelectConversation(conversation,false));
-                    Label(r,owner.Story.Name(id),12,10,220,58,26).name="Name";
+                    Label(r,owner.ConversationDisplayName(id),12,10,220,58,26).name="Name";
                     info=Label(r,"",12,76,272,30,20);info.color=new Color32(82,82,82,255);
                     badge=Rect("Corpus_"+id,r,244,18,36,36).gameObject.AddComponent<Image>();badge.color=new Color32(211,197,167,255);badge.gameObject.SetActive(records>0);
                     corpusBorder=InnerBorderGraphic.Attach(badge.rectTransform,1,BorderEdges.All,new Color32(82,82,82,255));
@@ -121,7 +124,10 @@ namespace CallmeCatgirl.UI
             }
             foreach(var pair in rows)
             {
-                pair.Value.Summary.text=$"亲密度 {owner.Story.Affinity(pair.Key):0.##} · {pair.Value.Requests} 请求 · {(owner.TrainingEnabled?owner.Training.Session.GetConversationCorpus(pair.Key).AvailablePoints:0):0.###} 语料点";
+                double available=owner.TrainingEnabled?owner.Training.Session.GetConversationCorpus(pair.Key).AvailablePoints:0;
+                if(pinned.TryGetValue(pair.Key,out var contact))pair.Value.Summary.text=(contact.HasUnread?"● ":"")+contact.Summary;
+                else if(!tasks.Any(t=>t.ConversationId==pair.Key))pair.Value.Summary.text=$"语料来源 · {available:0.###} 点可用";
+                else pair.Value.Summary.text=$"亲密度 {owner.Story.Affinity(pair.Key):0.##} · {pair.Value.Requests} 请求 · {available:0.###} 语料点";
                 bool linked=pair.Key==hovered;
                 bool selected=owner.SelectedTask?.ConversationId==pair.Key;
                 pair.Value.Border.Configure(selected?2:1,selected||linked?BorderEdges.All:BorderEdges.Bottom,selected||linked?new Color32(22,22,22,255):new Color32(111,111,111,255));
@@ -133,7 +139,8 @@ namespace CallmeCatgirl.UI
         public void SelectConversation(string id,bool open)
         {
             if(owner.IsModalOpen)return;
-            var task=owner.SelectedTask?.ConversationId==id?owner.SelectedTask:owner.Simulation.Tasks.Values.FirstOrDefault(t=>t.ConversationId==id);
+            if(owner.IsNarrativeContact(id)){owner.OpenNarrativeContact(id);return;}
+            var task=owner.LatestConversationTask(id);
             if(task==null)return;
             owner.SelectRequest(task.Id);if(open)owner.OpenConversationHistory();
         }

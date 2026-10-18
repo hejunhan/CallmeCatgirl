@@ -199,6 +199,7 @@ namespace CallmeCatgirl.Tests
             yield return WaitForScene("CoreGameplay");
             yield return null;
             var owner = Owner(); var first = Get<TaskSimulation>(owner, "Simulation");
+            Call(owner, "ConfigureSaveSlot", "menu-lifecycle-qa-" + Guid.NewGuid().ToString("N"));
             var initialFunds = Get<int>(owner, "Funds");
             var wallet = Get<object>(owner, "Economy");
             Call(wallet, "TrySpendFunds", 100);

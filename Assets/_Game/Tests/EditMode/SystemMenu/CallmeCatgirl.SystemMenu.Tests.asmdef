@@ -1,0 +1,7 @@
+{
+  "name": "CallmeCatgirl.SystemMenu.Tests",
+  "references": ["CallmeCatgirl.SystemMenu", "UnityEngine.UI"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

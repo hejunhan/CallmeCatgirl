@@ -8,6 +8,8 @@ namespace CallmeCatgirl.Persistence
         public string RequestId, RoundId;
         public Quality Quality;
         public double EndProbability, Roll;
+        // Zero is the legacy sentinel (no policy modifier); new settlements save the applied multiplier.
+        public double PolicyEndMultiplier;
         public bool Ended;
     }
     [Serializable] public sealed class OrdinaryConversationState

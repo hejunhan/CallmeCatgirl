@@ -3,242 +3,283 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using CallmeCatgirl.Gameplay;
 using CallmeCatgirl.Gameplay.Training;
+using CallmeCatgirl.Gameplay.TaskGrid;
+
 namespace CallmeCatgirl.UI
 {
+    // Inventory is a view of the ledger. The arrangement is a draft, independent of compute occupancy.
     public sealed class TrainingWorkspaceView : MonoBehaviour
     {
-        private const float DesignScale=1000f/720f;
-        private const float DesignWidthScale=1600f/1280f;
         [SerializeField] private Font font;
-        [SerializeField] private RectTransform records,jobs,architectures,recordTemplate,jobTemplate;
-        [SerializeField] private Button architectureTemplate,trainButton,computeButton;
-        [SerializeField] private InputField modelName;
-        [SerializeField] private Text recipeLabel,emptyHint;
-        private CoreGameplayController owner;
+        [SerializeField,Min(1)] private int arrangementColumns=3,arrangementRows=3;
+        private readonly CorpusArrangement draft=new CorpusArrangement();
         private TrainingController controller;
-        [SerializeField] private Slider corpusAmount;
-        [SerializeField] private Text investmentLabel, investmentScores;
-        [SerializeField] private CorpusShapeGraphic shapePreview;
-        [SerializeField] private Button removeCorpusButton;
-        private readonly Dictionary<string,double> investments=new Dictionary<string,double>(StringComparer.Ordinal);
-        public IReadOnlyList<ConversationInvestment> Investments => investments.Where(p=>p.Value>1e-9)
-            .Select(p=>new ConversationInvestment {ConversationId=p.Key,Points=p.Value}).ToArray();
-        private string selectedConversation;
-        private double investedPoints;
-        private string sessionModel;
-        public string SelectedConversation => selectedConversation;
-        public double InvestedPoints => investedPoints;
-        private string recipe,architecture;
+        private TrainingSession session;
+        private CoreGameplayController owner;
+        private RectTransform page,inventory,board;
+        private InputField query,modelName;
+        private Dropdown filter,recipes,architectures;
+        private Slider amount;
+        private Text summary,detail,message,selection;
+        private Button start,remove;
+        private readonly List<Button> slots=new List<Button>();
+        private TrainingRecipe[] recipeOptions;
+        private ArchitectureDefinition[] architectureOptions;
+        private string selected,recipe,architecture,search="";
+        private AbilityKind? domain;
+        private bool submitting;
+        private Action returnToModels;
+        public IReadOnlyList<ConversationInvestment> Investments=>draft.Investments;
+        public string SelectedConversation=>selected;
+        public double InvestedPoints=>Investments.FirstOrDefault(i=>i.ConversationId==selected)?.Points??0;
+        public event Action TrainingStarted;
+        public void ConfigureNavigation(Action models)=>returnToModels=models;
+        private void OnEnable(){if(query!=null)EventSystem.current?.SetSelectedGameObject(query.gameObject);}
+        private void OnDisable(){draft.Clear();selected=null;}
+
+        public void ConfigureArrangement(int columns,int rows)
+        {
+            draft.Configure(columns,rows);arrangementColumns=columns;arrangementRows=rows;
+            if(page!=null){board.GetComponent<AspectRatioFitter>().aspectRatio=(float)columns/rows;BuildSlots();RefreshDraft();}
+        }
         public void Bind(TrainingController source)
         {
+            if(source==null||!source.IsBound)return;
             controller=source;owner=source.GetComponent<CoreGameplayController>();
-            var session=source.Session;recipe=session.Recipes[0].Id;
-            if(sessionModel!=session.ActiveModelId){investments.Clear();selectedConversation=null;investedPoints=0;sessionModel=session.ActiveModelId;}
-            foreach(var id in investments.Keys.ToArray())
+            if(!ReferenceEquals(session,source.Session))
+            {session=source.Session;draft.Clear();selected=null;recipe=null;architecture=null;}
+            EnsurePage();
+            foreach(var item in Investments)
             {
-                double available=session.GetConversationCorpus(id).AvailablePoints;
-                if(available<=1e-9)investments.Remove(id);else investments[id]=Math.Min(investments[id],available);
+                double available=session.GetConversationCorpus(item.ConversationId).AvailablePoints;
+                if(available<=1e-9)draft.Remove(item.ConversationId);
+                else draft.SetPoints(item.ConversationId,Math.Min(item.Points,available));
             }
-            if(selectedConversation!=null&&!investments.ContainsKey(selectedConversation))selectedConversation=investments.Keys.FirstOrDefault();
-            if(architecture==null||!session.Architectures.Any(a=>a.Id==architecture&&a.ContentReady&&a.UnlockStage<=session.CurrentStage))architecture=session.Architectures[0].Id;
-            var rule=session.Recipes[0];
-            recipeLabel.text="计算量："+rule.WorkTokens+" + "+rule.WorkGrowthCoefficient+" × 总语料点数^"+rule.WorkGrowthExponent+" · 上限 "+rule.MaximumCorpusPoints+" 点";
-            recipeLabel.resizeTextForBestFit=true;recipeLabel.resizeTextMinSize=12;recipeLabel.resizeTextMaxSize=22;
-            trainButton.onClick.RemoveAllListeners();trainButton.onClick.AddListener(()=>{
-                var result=owner.ExecuteCommand(new GameCommand{kind="train",recipe=recipe,architecture=architecture,displayName=modelName.text,investments=Investments.ToArray()});
-                if(result.ok){investments.Clear();selectedConversation=null;investedPoints=0;Bind(controller);}
-            });
-            if(removeCorpusButton!=null)
-            {removeCorpusButton.onClick.RemoveAllListeners();removeCorpusButton.onClick.AddListener(RemoveSelectedConversation);}
-            computeButton.onClick.RemoveAllListeners();computeButton.onClick.AddListener(()=>owner.ExecuteCommand(new GameCommand{kind="upgradeCompute"}));
-            trainButton.interactable=controller.CanManage;computeButton.interactable=controller.CanManage&&session.NextCompute!=null;
-            Clear(records,emptyHint.transform);Clear(jobs);Clear(architectures);
-            emptyHint.gameObject.SetActive(session.ConversationCorpora.Count==0);
-            foreach(var arch in session.Architectures)
+            if(recipe==null||!session.Recipes.Any(r=>r.Id==recipe)||(recipe==TrainingSession.StarterRecipeId&&!session.StarterTrainingAvailable))
+                recipe=session.StarterTrainingAvailable?TrainingSession.StarterRecipeId:session.Recipes.First(r=>r.Id!=TrainingSession.StarterRecipeId).Id;
+            if(architecture==null||session.ArchitectureAvailability(architecture)!=TrainingResult.Success)
+                architecture=session.Architectures.First(a=>session.ArchitectureAvailability(a.Id)==TrainingResult.Success).Id;
+            RefreshPickers();RefreshInventory();RefreshDraft();
+        }
+        private void EnsurePage()
+        {
+            if(page!=null)return;
+            if(font==null)font=GetComponentsInChildren<Text>(true).Select(t=>t.font).FirstOrDefault(f=>f!=null);
+            if(font==null)font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            foreach(Transform child in transform)child.gameObject.SetActive(false);
+            draft.Configure(arrangementColumns,arrangementRows);
+            page=Area(transform,"TrainingFullPage",0,0,1,1);Background(page,new Color32(239,239,234,255));
+            Label(Area(page,"Title",.025f,.935f,.60f,.99f),"语料与训练 / CORPUS LAB",26);
+            MakeButton(Area(page,"Models",.63f,.935f,.825f,.99f),"模型目录",()=>{if(returnToModels!=null)returnToModels();else Cancel();});
+            MakeButton(Area(page,"Close",.85f,.935f,.975f,.99f),"取消并返回",Cancel);
+            var left=Area(page,"InventoryPanel",.025f,.155f,.485f,.92f);Background(left,Color.white);
+            Label(Area(left,"InventoryTitle",.025f,.92f,.975f,.99f),"库存 · 筛选不改变已选投入",20);
+            query=MakeInput(Area(left,"Search",.025f,.83f,.61f,.91f),"搜索联系人或来源");
+            query.onValueChanged.AddListener(value=>{search=value;RefreshInventory();});
+            filter=MakeDropdown(Area(left,"Filter",.63f,.83f,.975f,.91f),new[]{"全部领域","写作","代码","推理","检索"});
+            filter.onValueChanged.AddListener(value=>{domain=value==0?(AbilityKind?)null:(AbilityKind)(value-1);RefreshInventory();});
+            Label(Area(left,"RecommendationTitle",.025f,.77f,.975f,.825f),"四域推荐 · 仅取当前剩余库存",16);
+            for(int i=0;i<4;i++)
             {
-                var a=arch;var button=Instantiate(architectureTemplate,architectures);button.name=a.Id;button.gameObject.SetActive(true);
-                button.GetComponent<Image>().color=a.Id==architecture?new Color(.65f,.82f,.82f):new Color(.87f,.9f,.91f);
-                var label=button.GetComponentInChildren<Text>(true);
-                label.text=a.Title+" · 内存"+a.UnlockStage+"级\n语料×"+a.CorpusMultiplier.ToString("0.###")+" / 速度×"+a.SpeedMultiplier.ToString("0.###");
-                label.resizeTextForBestFit=true;label.resizeTextMinSize=11;label.resizeTextMaxSize=18;button.interactable=controller.CanManage&&a.ContentReady&&a.UnlockStage<=session.CurrentStage;
-                button.onClick.RemoveAllListeners();button.onClick.AddListener(()=>{architecture=a.Id;Bind(controller);});
+                var kind=(AbilityKind)i;
+                MakeButton(Area(left,"Recommend_"+kind,.025f+i*.24f,.70f,.245f+i*.24f,.765f),CoreGameplayController.AbilityText(kind),()=>Recommend(kind));
             }
-            foreach(var conversation in session.ConversationCorpora)
+            inventory=MakeList(Area(left,"InventoryScroll",.025f,.02f,.975f,.685f));
+            var right=Area(page,"ArrangementPanel",.51f,.155f,.975f,.92f);Background(right,new Color32(225,229,225,255));
+            Label(Area(right,"BoardTitle",.025f,.925f,.975f,.99f),"训练编排 · 点击添加 / 按住拖放",20);
+            Label(Area(right,"BoardHint",.025f,.865f,.975f,.925f),"编排格整理投入；实际运算占格见底部。",15);
+            modelName=MakeInput(Area(right,"ModelName",.025f,.80f,.48f,.86f),"模型名称");modelName.text="我的模型";modelName.characterLimit=40;
+            modelName.onValueChanged.AddListener(_=>RefreshDraft());
+            recipes=MakeDropdown(Area(right,"Recipe",.50f,.80f,.975f,.86f),Array.Empty<string>());
+            recipes.onValueChanged.AddListener(index=>{if(recipeOptions==null||index>=recipeOptions.Length)return;recipe=recipeOptions[index].Id;RefreshDraft();});
+            architectures=MakeDropdown(Area(right,"Architecture",.025f,.73f,.975f,.79f),Array.Empty<string>());
+            architectures.onValueChanged.AddListener(index=>{if(architectureOptions==null||index>=architectureOptions.Length)return;architecture=architectureOptions[index].Id;RefreshDraft();});
+            var boardArea=Area(right,"ArrangementGridArea",.025f,.42f,.975f,.72f);
+            board=Area(boardArea,"ArrangementGrid",0,0,1,1);var aspect=board.gameObject.AddComponent<AspectRatioFitter>();
+            aspect.aspectMode=AspectRatioFitter.AspectMode.FitInParent;aspect.aspectRatio=(float)draft.Columns/draft.Rows;BuildSlots();
+            selection=Label(Area(right,"Selected",.025f,.355f,.79f,.415f),"先添加一份语料",16);
+            remove=MakeButton(Area(right,"Remove",.80f,.355f,.975f,.415f),"移除",RemoveSelectedConversation);
+            amount=MakeSlider(Area(right,"Amount",.04f,.295f,.96f,.345f));amount.onValueChanged.AddListener(ChangeAmount);
+            var details=MakeList(Area(right,"DetailsScroll",.025f,.025f,.975f,.285f));
+            detail=Label(Area(details,"Detail",0,0,1,1),"悬停、键盘聚焦或点击库存卡片查看数值。",17);
+            detail.gameObject.AddComponent<LayoutElement>().preferredHeight=160;
+            var footer=Area(page,"Footer",.025f,.015f,.975f,.105f);Background(footer,new Color32(30,38,39,255));
+            summary=Label(Area(footer,"Summary",.015f,.05f,.63f,.95f),"尚未投入语料",17,Color.white);
+            start=MakeButton(Area(footer,"Start",.66f,.18f,.835f,.82f),"开始训练",StartTraining);
+            MakeButton(Area(footer,"Cancel",.85f,.18f,.985f,.82f),"取消",Cancel);
+            message=Label(Area(page,"Message",.025f,.105f,.975f,.145f),"",15);
+            EventSystem.current?.SetSelectedGameObject(query.gameObject);
+        }
+        private void RefreshPickers()
+        {
+            recipeOptions=session.Recipes.Where(r=>r.Id!=TrainingSession.StarterRecipeId||session.StarterTrainingAvailable).ToArray();
+            recipes.ClearOptions();recipes.AddOptions(recipeOptions.Select(r=>r.Title).ToList());recipes.SetValueWithoutNotify(Array.FindIndex(recipeOptions,r=>r.Id==recipe));
+            architectureOptions=session.Architectures.ToArray();architectures.ClearOptions();
+            architectures.AddOptions(architectureOptions.Select(a=>a.Title+" · "+(session.ArchitectureAvailability(a.Id)==TrainingResult.Success?"可用":"需"+a.UnlockStage+"条内存")+" · 语料×"+a.CorpusMultiplier.ToString("0.##")+" / 速度×"+a.SpeedMultiplier.ToString("0.##")).ToList());
+            architectures.SetValueWithoutNotify(Array.FindIndex(architectureOptions,a=>a.Id==architecture));
+        }
+        public void SetInventoryFilter(AbilityKind? ability,string text)
+        {domain=ability;search=text??"";if(page==null)return;query.SetTextWithoutNotify(search);filter.SetValueWithoutNotify(ability.HasValue?(int)ability.Value+1:0);RefreshInventory();}
+        private string CorpusName(string id)
+        {
+            var record=session.GetConversationCorpus(id).Records.FirstOrDefault();
+            return owner!=null?owner.ConversationDisplayName(id):record!=null&&record.SourceKind==CorpusSourceKind.ScriptedReward?record.ScoreSource:id;
+        }
+        private void RefreshInventory()
+        {
+            if(inventory==null||session==null)return;Clear(inventory);
+            var entries=session.QueryConversationCorpora(domain,search,displayName:CorpusName);
+            if(entries.Count==0){ListText(inventory,"没有符合筛选的剩余语料。\n已选配方仍保留在右侧。",100);return;}
+            foreach(var entry in entries)
             {
-                var id=conversation.ConversationId;
-                var row=Instantiate(recordTemplate,records);row.name="ConversationCorpus_"+id;row.gameObject.SetActive(true);
-                bool used=conversation.AvailablePoints<=1e-9;
-                row.Find("Title").GetComponent<Text>().text=owner.Story.Name(id)+" · 可用 "+conversation.AvailablePoints.ToString("0.###")+" / 累计 "+conversation.TotalPoints.ToString("0.###")+" 点";
-                row.Find("Scores").GetComponent<Text>().text=string.Join("  ",conversation.AvailableScores.Select(pair=>CoreGameplayController.AbilityText(pair.Key)+" "+pair.Value.ToString("0.###")));
-                var button=row.Find("Action").GetComponent<Button>();button.interactable=!used&&controller.CanManage;
-                button.GetComponentInChildren<Text>(true).resizeTextForBestFit=true;
-                button.GetComponentInChildren<Text>(true).resizeTextMinSize=12;
-                button.GetComponentInChildren<Text>(true).resizeTextMaxSize=22;
-                button.onClick.RemoveAllListeners();button.onClick.AddListener(()=>SelectConversation(id));
-                var drag=button.gameObject.AddComponent<ConversationCorpusDrag>();drag.Bind(this,id);
-                var debugRecord=conversation.Records.FirstOrDefault(r=>!session.IsConsumed(r.Id))??conversation.Records[0];
-                DebugDock(row,"corpus",debugRecord.Id);
-            }
-            RefreshInvestment();
-            foreach(var job in session.Jobs)
-            {
-                var row=Instantiate(jobTemplate,jobs);row.name="Training_"+job.RequestId;row.gameObject.SetActive(true);var task=controller.Simulation.Tasks[job.RequestId];
-                row.Find("Title").GetComponent<Text>().text=job.Output.Name+" · "+CoreGameplayController.StateText(task.State)+" · "+(task.Progress/task.Definition.Calculation*100).ToString("0")+"%";
-                var button=row.Find("Action").GetComponent<Button>();button.interactable=controller.CanManage&&!job.Completed&&task.State==CallmeCatgirl.Gameplay.TaskGrid.RequestState.Ready;
-                button.onClick.RemoveAllListeners();button.onClick.AddListener(()=>owner.ExecuteCommand(new GameCommand{kind="submit",id=job.RequestId}));DebugDock(row,"training",job.RequestId);
+                string id=entry.ConversationId;
+                var card=Area(inventory,"Corpus_"+id,0,0,1,1);Background(card,new Color32(242,244,240,255));card.gameObject.AddComponent<LayoutElement>().minHeight=146;
+                var layout=card.gameObject.AddComponent<VerticalLayoutGroup>();layout.padding=new RectOffset(8,8,8,8);layout.spacing=6;
+                layout.childControlWidth=layout.childControlHeight=true;layout.childForceExpandHeight=false;
+                Label(Area(card,"Title",.025f,.64f,.975f,.98f),CorpusName(id)+" · 可用 "+entry.AvailablePoints.ToString("0.###")+" 点",18).gameObject.AddComponent<LayoutElement>().minHeight=42;
+                Label(Area(card,"Scores",.025f,.30f,.975f,.64f),Scores(entry.AvailableScores),16).gameObject.AddComponent<LayoutElement>().minHeight=40;
+                var button=MakeButton(Area(card,"Action",.025f,.035f,.975f,.28f),draft.Find(id)>=0?"已编排 · 查看 / 调整":"点击添加 / 按住拖入右侧",()=>SelectConversation(id));
+                button.gameObject.AddComponent<LayoutElement>().preferredHeight=36;
+                button.interactable=controller.CanManage;button.gameObject.AddComponent<ConversationCorpusDrag>().Bind(this,id);
+                card.gameObject.AddComponent<ConversationCorpusDrag>().Bind(this,id);
+                card.gameObject.AddComponent<CorpusCardDetails>().Bind(this,id);button.gameObject.AddComponent<CorpusCardDetails>().Bind(this,id);
             }
         }
+        private void Recommend(AbilityKind kind)
+        {
+            var best=session.QueryConversationCorpora(kind).FirstOrDefault();
+            if(best==null){message.text="当前没有可用的"+CoreGameplayController.AbilityText(kind)+"语料。";return;}
+            SetInventoryFilter(kind,"");SelectConversation(best.ConversationId);
+        }
+        private TrainingRecipe Rule=>session.Recipes.First(r=>r.Id==recipe);
         public void SelectConversation(string id)
         {
             if(controller==null||!controller.CanManage)return;
-            double available=controller.Session.GetConversationCorpus(id).AvailablePoints;
-            if(available<=1e-9)return;
-            if(!investments.ContainsKey(id))
-                investments[id]=Math.Min(available,Math.Max(0,controller.Session.Recipes[0].MaximumCorpusPoints-investments.Values.Sum()));
-            selectedConversation=id;RefreshInvestment();
+            int slot=draft.Find(id);if(slot<0)slot=draft.FirstFree;
+            if(slot<0){ShowCorpusDetails(id);message.text="编排板已满，请先移除一份。";return;}
+            TryPlaceConversation(id,slot);ShowCorpusDetails(id);
+        }
+        public bool CanDropConversation(string id,int slot)
+            =>controller!=null&&controller.CanManage&&draft.CanPlace(id,slot)&&session.GetConversationCorpus(id).AvailablePoints>1e-9
+                && Rule.MaximumCorpusPoints-Investments.Where(i=>i.ConversationId!=id).Sum(i=>i.Points)>1e-9;
+        public bool TryPlaceConversation(string id,int slot)
+        {
+            if(!CanDropConversation(id,slot))return false;
+            double available=session.GetConversationCorpus(id).AvailablePoints;
+            double other=Investments.Where(i=>i.ConversationId!=id).Sum(i=>i.Points);
+            double limit=Math.Min(available,Math.Max(0,Rule.MaximumCorpusPoints-other));
+            double existing=Investments.FirstOrDefault(i=>i.ConversationId==id)?.Points??Math.Min(1,limit);
+            if(limit<=1e-9){message.text="已达到当前配方点数上限。";return false;}
+            if(!draft.TryPlace(id,slot,Math.Min(existing,limit)))return false;
+            selected=id;message.text="已放入草稿，尚未消耗语料。";RefreshDraft();return true;
+        }
+        public void ShowCorpusDetails(string id)
+        {
+            if(detail==null||session==null)return;var entry=session.GetConversationCorpus(id);
+            detail.text=CorpusName(id)+"\n"+Scores(entry.AvailableScores)+"\n可用 "+entry.AvailablePoints.ToString("0.###")+" / 累计 "+entry.TotalPoints.ToString("0.###")+" 点\n"+
+                string.Join("\n",entry.Records.Select(r=>r.ScoreSource+" · "+(r.SourceKind==CorpusSourceKind.ScriptedReward?"剧情奖励":"已完成对话")+" · 剩余 "+session.RemainingPoints(r.Id).ToString("0.###")));
+            detail.GetComponent<LayoutElement>().preferredHeight=Math.Max(160,detail.preferredHeight+20);
         }
         public void RemoveSelectedConversation()
+        {if(!controller.CanManage||selected==null)return;draft.Remove(selected);selected=Investments.FirstOrDefault()?.ConversationId;RefreshDraft();}
+        private void ChangeAmount(float value)
         {
-            if(controller==null||!controller.CanManage||selectedConversation==null)return;
-            investments.Remove(selectedConversation);selectedConversation=investments.Keys.FirstOrDefault();RefreshInvestment();
+            if(selected==null)return;if(value<=.001f){RemoveSelectedConversation();return;}
+            draft.SetPoints(selected,Math.Round(value,3));RefreshDraft();
         }
-        private void RefreshInvestment()
+        private void RefreshDraft()
         {
-            if(corpusAmount==null||investmentLabel==null)return;
-            var session=controller.Session;var rule=session.Recipes[0];
-            double available=selectedConversation==null?0:session.GetConversationCorpus(selectedConversation).AvailablePoints;
-            double other=investments.Where(p=>p.Key!=selectedConversation).Sum(p=>p.Value);
-            double limit=Math.Min(available,Math.Max(0,rule.MaximumCorpusPoints-other));
-            investedPoints=selectedConversation!=null&&investments.TryGetValue(selectedConversation,out var current)?Math.Min(current,limit):0;
-            if(selectedConversation!=null)investments[selectedConversation]=investedPoints;
-            corpusAmount.onValueChanged.RemoveAllListeners();
-            corpusAmount.minValue=0;corpusAmount.maxValue=(float)limit;
-            corpusAmount.SetValueWithoutNotify((float)investedPoints);corpusAmount.interactable=limit>0&&controller.CanManage;
-            corpusAmount.onValueChanged.AddListener(value=>{
-                double amount=value>=corpusAmount.maxValue-1e-6f?limit:Math.Round(value,1);
-                investments[selectedConversation]=Math.Max(0,Math.Min(limit,amount));RefreshInvestment();
-            });
-            investmentLabel.text=selectedConversation==null?"可连续拖入多段对话，分别选择点数":owner.Story.Name(selectedConversation)+" · 本段 "+investedPoints.ToString("0.###")+" / 可用 "+available.ToString("0.###")+" 点";
-            if(removeCorpusButton!=null)removeCorpusButton.interactable=controller.CanManage&&selectedConversation!=null;
-            foreach(Transform row in records)
+            if(session==null||page==null||recipe==null||start==null)return;
+            if(selected!=null&&draft.Find(selected)<0)selected=Investments.FirstOrDefault()?.ConversationId;
+            for(int i=0;i<slots.Count;i++)
             {
-                if(!row.name.StartsWith("ConversationCorpus_",StringComparison.Ordinal))continue;
-                var id=row.name.Substring("ConversationCorpus_".Length);var button=row.Find("Action").GetComponent<Button>();
-                button.GetComponentInChildren<Text>(true).text=investments.TryGetValue(id,out var amount)?"投入 "+amount.ToString("0.###")+" 点 / 调整":"拖入训练 / 添加";
-                button.GetComponent<Image>().color=id==selectedConversation?new Color(.65f,.82f,.82f):new Color(.87f,.9f,.91f);
+                draft.Slots.TryGetValue(i,out var item);
+                var name=item==null?"":CorpusName(item.ConversationId);
+                slots[i].GetComponentInChildren<Text>().text=item==null?"＋\n空位":(name.Length>8?name.Substring(0,8)+"…":name)+"\n"+item.Points.ToString("0.###")+" 点";
+                slots[i].GetComponent<Image>().color=item?.ConversationId==selected?new Color32(179,208,202,255):new Color32(248,249,246,255);
             }
-            var inputs=Investments; bool valid=inputs.Count>0;
-            if(valid)
+            double available=selected==null?0:session.GetConversationCorpus(selected).AvailablePoints;
+            double other=Investments.Where(i=>i.ConversationId!=selected).Sum(i=>i.Points);
+            double limit=Math.Min(available,Math.Max(0,Rule.MaximumCorpusPoints-other));
+            if(selected!=null&&InvestedPoints>limit+1e-9)
+            {if(limit<=1e-9)draft.Remove(selected);else draft.SetPoints(selected,limit);}
+            amount.minValue=0;amount.maxValue=(float)limit;amount.SetValueWithoutNotify((float)InvestedPoints);amount.interactable=controller.CanManage&&limit>0;
+            remove.interactable=controller.CanManage&&selected!=null;
+            selection.text=selected==null?"点击库存卡片添加，或拖入空位":CorpusName(selected)+" · 投入 "+InvestedPoints.ToString("0.###")+" / "+available.ToString("0.###")+" 点";
+            bool valid=false;
+            try
             {
-                try
-                {
-                    var preview=session.PreviewTraining(recipe,inputs);shapePreview.SetCells(preview.Shape);
-                    investmentScores.text=inputs.Count+" 段 · 共 "+preview.TotalPoints.ToString("0.###")+" 点 · 占 "+preview.Shape.Count+" 格 · 费用 "+preview.Cost+
-                        "\n计算量 "+preview.WorkTokens.ToString("0.##")+" · 约 "+preview.EstimatedSeconds.ToString("0.#")+" 游戏秒"+
-                        "\n"+string.Join("  ",preview.Abilities.Select(pair=>CoreGameplayController.AbilityText(pair.Key)+" "+pair.Value.ToString("0.###")));
-                }
-                catch(ArgumentException){valid=false;investmentScores.text="投入量或形状无效，请减少点数；不会扣除语料。";shapePreview.SetCells(Array.Empty<CallmeCatgirl.Gameplay.TaskGrid.Cell>());}
-                catch(OverflowException){valid=false;investmentScores.text="计算量超出范围，请减少点数。";shapePreview.SetCells(Array.Empty<CallmeCatgirl.Gameplay.TaskGrid.Cell>());}
+                var preview=session.PreviewTraining(recipe,Investments);
+                valid=session.ArchitectureAvailability(architecture)==TrainingResult.Success&&preview.Shape.Count<=controller.Simulation.OpenCellCount;
+                summary.text="共 "+Investments.Count+" 份 / "+preview.TotalPoints.ToString("0.###")+" 点 · 费用 "+preview.Cost+" · 实际占 "+preview.Shape.Count+" 格\n"+Scores(preview.Abilities)+" · 约 "+preview.EstimatedSeconds.ToString("0.#")+" 游戏秒";
+                if(!valid)message.text=session.ArchitectureAvailability(architecture)!=TrainingResult.Success?"此架构尚未解锁。":"实际运算区不足；请减少投入或升级内存。";
             }
-            else{investmentScores.text="添加多段对话 → 逐段调节 → 合并训练\n确认生成时扣除投入量，剩余语料保留。\n耗时按当前架构和算力估算，暂停时不训练。";shapePreview.SetCells(Array.Empty<CallmeCatgirl.Gameplay.TaskGrid.Cell>());}
-            trainButton.interactable=controller.CanManage&&valid;
+            catch(ArgumentException){summary.text="尚未形成有效配方 · 草稿不扣款、不消耗\n首训选免费配方并投入准确 1 点；普通训练可调节。";}
+            catch(OverflowException){summary.text="投入过大，请减少语料点数。";}
+            start.interactable=valid&&controller.CanManage&&!submitting&&ModelNames.TryNormalize(modelName.text,out _);
         }
-        private static void Clear(RectTransform parent,Transform keep=null)
+        private void StartTraining()
         {
-            foreach(var child in parent.Cast<Transform>().Where(c=>c!=keep).ToArray())
-            {child.gameObject.SetActive(false);if(Application.isPlaying)Destroy(child.gameObject);else DestroyImmediate(child.gameObject);}
+            if(submitting||!start.interactable)return;submitting=true;start.interactable=false;var frozen=Investments.ToArray();
+            bool ok=owner!=null?owner.ExecuteCommand(new GameCommand{kind="train",recipe=recipe,architecture=architecture,displayName=modelName.text,investments=frozen}).ok
+                :controller.StartConversationsTraining(recipe,architecture,modelName.text,frozen)==TrainingResult.Success;
+            submitting=false;if(!ok){message.text=controller.Message;RefreshDraft();return;}
+            draft.Clear();selected=null;TrainingStarted?.Invoke();controller.GetComponent<TrainingPanel>()?.Close();
         }
-        private void DebugDock(RectTransform row,string kind,string id)
+        public void Cancel(){if(submitting)return;draft.Clear();selected=null;controller?.GetComponent<TrainingPanel>()?.Close();}
+        private void BuildSlots()
         {
-            if(!Application.isPlaying||!CallmeCatgirl.Debugging.DebugBuild.Enabled)return;
-            var slot=(RectTransform)row.Find("InlineDebugSlot");
-            var fold=LocalDebugFoldout.Attach(slot,owner.DebugCommands,kind,id,font);
-            if(fold!=null)slot.GetComponentInChildren<Button>().onClick.AddListener(()=>row.GetComponent<LayoutElement>().preferredHeight=-slot.anchoredPosition.y+slot.GetComponent<LayoutElement>().preferredHeight);
+            Clear(board);slots.Clear();
+            for(int i=0;i<draft.Columns*draft.Rows;i++)
+            {
+                int index=i,x=i%draft.Columns,y=i/draft.Columns;
+                var cell=Area(board,"Slot_"+i,(float)x/draft.Columns,1f-(float)(y+1)/draft.Rows,(float)(x+1)/draft.Columns,1f-(float)y/draft.Rows,3);
+                var button=MakeButton(cell,"＋",()=>{if(draft.Slots.TryGetValue(index,out var item)){selected=item.ConversationId;ShowCorpusDetails(selected);RefreshDraft();}});
+                button.GetComponentInChildren<Text>().fontSize=16;
+                var drop=cell.gameObject.AddComponent<ConversationCorpusDrop>();drop.View=this;drop.Slot=index;slots.Add(button);
+            }
         }
+        private static string Scores(IReadOnlyDictionary<AbilityKind,double> scores)
+            =>string.Join("  ",Enum.GetValues(typeof(AbilityKind)).Cast<AbilityKind>().Select(k=>CoreGameplayController.AbilityText(k)+" "+(scores.TryGetValue(k,out var value)?value:0).ToString("0.###")));
+        private static void Clear(Transform parent)
+        {if(parent==null)return;foreach(var child in parent.Cast<Transform>().ToArray()){child.gameObject.SetActive(false);if(Application.isPlaying)Destroy(child.gameObject);else DestroyImmediate(child.gameObject);}}
+        private static RectTransform Area(Transform parent,string name,float x0,float y0,float x1,float y1,float inset=0)
+        {
+            var r=new GameObject(name,typeof(RectTransform)).GetComponent<RectTransform>();r.SetParent(parent,false);r.anchorMin=new Vector2(x0,y0);r.anchorMax=new Vector2(x1,y1);r.offsetMin=Vector2.one*inset;r.offsetMax=-Vector2.one*inset;return r;
+        }
+        private static Image Background(RectTransform r,Color color){var image=r.gameObject.AddComponent<Image>();image.color=color;return image;}
+        private Text Label(RectTransform r,string value,int size,Color? color=null)
+        {var t=r.gameObject.AddComponent<Text>();t.font=font;t.text=value;t.fontSize=size;t.color=color??new Color32(23,32,33,255);t.raycastTarget=false;t.horizontalOverflow=HorizontalWrapMode.Wrap;t.verticalOverflow=VerticalWrapMode.Overflow;return t;}
+        private Button MakeButton(RectTransform r,string title,Action click)
+        {Background(r,new Color32(223,230,226,255));var b=r.gameObject.AddComponent<Button>();Label(Area(r,"Label",0,0,1,1,4),title,18).alignment=TextAnchor.MiddleCenter;b.onClick.AddListener(()=>click());return b;}
+        private InputField MakeInput(RectTransform r,string placeholder)
+        {Background(r,Color.white);var input=r.gameObject.AddComponent<InputField>();input.textComponent=Label(Area(r,"Value",0,0,1,1,6),"",18);input.placeholder=Label(Area(r,"Placeholder",0,0,1,1,6),placeholder,16,new Color(.35f,.4f,.4f));return input;}
+        private Dropdown MakeDropdown(RectTransform r,IEnumerable<string> options)
+        {
+            Background(r,new Color32(223,230,226,255));var dropdown=r.gameObject.AddComponent<Dropdown>();dropdown.captionText=Label(Area(r,"Caption",0,0,1,1,5),"",16);
+            var template=Area(r,"Template",0,0,1,0);template.pivot=new Vector2(.5f,1);template.sizeDelta=new Vector2(0,200);Background(template,Color.white);
+            var viewport=Area(template,"Viewport",0,0,1,1,3);viewport.gameObject.AddComponent<RectMask2D>();
+            var content=Area(viewport,"Content",0,1,1,1);content.pivot=new Vector2(.5f,1);content.sizeDelta=new Vector2(0,42);
+            var item=Area(content,"Item",0,0,1,1);Background(item,new Color32(230,236,231,255));var toggle=item.gameObject.AddComponent<Toggle>();toggle.targetGraphic=item.GetComponent<Image>();
+            dropdown.itemText=Label(Area(item,"Label",0,0,1,1,6),"",16);
+            var scroll=template.gameObject.AddComponent<ScrollRect>();scroll.viewport=viewport;scroll.content=content;scroll.horizontal=false;
+            dropdown.template=template;dropdown.AddOptions(options.ToList());template.gameObject.SetActive(false);return dropdown;
+        }
+        private static RectTransform MakeList(RectTransform viewport)
+        {
+            Background(viewport,new Color32(249,249,245,255));viewport.gameObject.AddComponent<RectMask2D>();var content=Area(viewport,"Content",0,1,1,1);content.pivot=new Vector2(.5f,1);content.sizeDelta=Vector2.zero;
+            var layout=content.gameObject.AddComponent<VerticalLayoutGroup>();layout.padding=new RectOffset(8,8,8,8);layout.spacing=8;layout.childControlHeight=true;layout.childControlWidth=true;layout.childForceExpandHeight=false;
+            content.gameObject.AddComponent<ContentSizeFitter>().verticalFit=ContentSizeFitter.FitMode.PreferredSize;var scroll=viewport.gameObject.AddComponent<ScrollRect>();scroll.horizontal=false;scroll.viewport=viewport;scroll.content=content;return content;
+        }
+        private void ListText(RectTransform parent,string text,float height){var label=Label(Area(parent,"Empty",0,0,1,1),text,18);label.gameObject.AddComponent<LayoutElement>().preferredHeight=height;}
+        private static Slider MakeSlider(RectTransform r)
+        {Background(r,new Color32(182,195,190,255));var s=r.gameObject.AddComponent<Slider>();var handle=Area(r,"Handle",0,0,0,1);handle.sizeDelta=new Vector2(20,0);Background(handle,new Color32(38,78,73,255));s.handleRect=handle;s.targetGraphic=handle.GetComponent<Image>();return s;}
 #if UNITY_EDITOR
-        public void PrepareSceneLayout(Font sourceFont)
-        {
-            if(modelName!=null)return;font=sourceFont;
-            Text(transform,"语料库存",28,126,520,30,22);
-            records=List(transform,"Corpus",28,166,550,460);
-            emptyHint=Text(records,"完成订单并接受回复后，合格语料会出现在这里。",0,0,510,80);
-            emptyHint.gameObject.AddComponent<LayoutElement>().preferredHeight=80*DesignScale;
-            Text(transform,"训练新模型",610,126,550,30,22);Text(transform,"新模型名称",610,166,500,24);
-            var input=Rect(transform,"NewModelName",610,194,550,34);input.gameObject.AddComponent<Image>().color=new Color(.94f,.94f,.94f);
-            modelName=input.gameObject.AddComponent<InputField>();modelName.textComponent=Text(input,"我的模型",8,5,530,28);modelName.characterLimit=40;modelName.text="我的模型";
-            recipeLabel=Text(transform,"配方与费用",610,238,550,36);
-            architectures=Rect(transform,"ArchitectureOptions",610,278,550,32);var horizontal=architectures.gameObject.AddComponent<HorizontalLayoutGroup>();horizontal.spacing=6*DesignScale;horizontal.childControlWidth=false;horizontal.childControlHeight=false;horizontal.childForceExpandWidth=false;
-            trainButton=Button(transform,"生成训练模块",610,322,240);computeButton=Button(transform,"升级算力",880,322,200);
-            Text(transform,"将训练模块放入棋盘运行",610,362,550,28);jobs=List(transform,"TrainingJobs",610,398,550,228);
-            var templates=Rect(transform,"TrainingTemplates",0,0,550,200);templates.gameObject.SetActive(false);
-            architectureTemplate=Button(templates,"ArchitectureButtonTemplate",0,0,178);
-            recordTemplate=Rect(templates,"CorpusRowTemplate",0,0,520,138);recordTemplate.gameObject.AddComponent<LayoutElement>().preferredHeight=138*DesignScale;
-            Text(recordTemplate,"联系人 / 对话轮次",0,0,500,28).name="Title";Text(recordTemplate,"能力分数",0,30,500,28).name="Scores";
-            Button(recordTemplate,"Action",0,62,160).GetComponentInChildren<Text>().text="选择此语料";DebugSlot(recordTemplate,102);
-            jobTemplate=Rect(templates,"TrainingJobTemplate",0,0,520,128);jobTemplate.gameObject.AddComponent<LayoutElement>().preferredHeight=128*DesignScale;
-            Text(jobTemplate,"训练进度",0,0,500,50).name="Title";Button(jobTemplate,"Action",0,54,220).GetComponentInChildren<Text>().text="确认训练产物";DebugSlot(jobTemplate,96);
-        }
-        public void PrepareCorpusInvestment()
-        {
-            if(corpusAmount!=null)
-            {
-                if(shapePreview!=null&&shapePreview.GetComponent<CanvasRenderer>()==null)shapePreview.gameObject.AddComponent<CanvasRenderer>();
-                if(corpusAmount.handleRect!=null)corpusAmount.handleRect.sizeDelta=new Vector2(corpusAmount.handleRect.sizeDelta.x,0);
-                PrepareMultiCorpusInvestment();return;
-            }
-            var drop=Rect(transform,"ConversationCorpusInvestment",610,318,550,152);
-            drop.gameObject.AddComponent<Image>().color=new Color(.91f,.93f,.93f);
-            drop.gameObject.AddComponent<ConversationCorpusDrop>().View=this;
-            investmentLabel=Text(drop,"将左侧对话拖到这里，选择投入点数",8,4,530,30,15);
-            var sliderRect=Rect(drop,"CorpusPoints",12,40,500,26);
-            sliderRect.gameObject.AddComponent<Image>().color=new Color(.75f,.78f,.79f);
-            corpusAmount=sliderRect.gameObject.AddComponent<Slider>();
-            var handle=Rect(sliderRect,"Handle",0,0,20,26);handle.gameObject.AddComponent<Image>().color=new Color(.2f,.35f,.4f);
-            corpusAmount.handleRect=handle;handle.sizeDelta=new Vector2(20*DesignWidthScale,0);corpusAmount.targetGraphic=handle.GetComponent<Image>();
-            investmentScores=Text(drop,"投入预览",8,78,400,68,15);
-            shapePreview=Rect(drop,"ShapePreview",420,78,120,68).gameObject.AddComponent<CorpusShapeGraphic>();
-            shapePreview.color=new Color(.22f,.48f,.48f);shapePreview.raycastTarget=false;
-            trainButton.GetComponent<RectTransform>().anchoredPosition=new Vector2(610*DesignWidthScale,-480*DesignScale);
-            computeButton.GetComponent<RectTransform>().anchoredPosition=new Vector2(880*DesignWidthScale,-480*DesignScale);
-            var tip=transform.Cast<Transform>().FirstOrDefault(t=>t.GetComponent<Text>()?.text=="将训练模块放入棋盘运行");
-            if(tip!=null)((RectTransform)tip).anchoredPosition=new Vector2(610*DesignWidthScale,-520*DesignScale);
-            var viewport=(RectTransform)jobs.parent;viewport.anchoredPosition=new Vector2(610*DesignWidthScale,-554*DesignScale);viewport.sizeDelta=new Vector2(550*DesignWidthScale,85*DesignScale);
-            emptyHint.text="完成合格请求的全部对白后，语料点数会计入对应对话。拖入对话后选择本次投入量。";
-            PrepareMultiCorpusInvestment();
-        }
-        private void PrepareMultiCorpusInvestment()
-        {
-            investmentScores.resizeTextForBestFit=true;investmentScores.resizeTextMinSize=12;investmentScores.resizeTextMaxSize=21;
-            if(removeCorpusButton!=null)return;
-            var drop=investmentLabel.transform.parent;
-            investmentLabel.rectTransform.sizeDelta=new Vector2(420*DesignWidthScale,30*DesignScale);
-            investmentLabel.resizeTextForBestFit=true;investmentLabel.resizeTextMinSize=12;investmentLabel.resizeTextMaxSize=21;
-            investmentLabel.text="可连续拖入多段对话，分别选择点数";
-            removeCorpusButton=Button(drop,"移除此段",436,4,106);
-            removeCorpusButton.GetComponentInChildren<Text>().fontSize=Mathf.RoundToInt(14*DesignScale);
-            removeCorpusButton.GetComponentInChildren<Text>().rectTransform.sizeDelta=new Vector2(98*DesignWidthScale,28*DesignScale);
-            investmentScores.resizeTextForBestFit=true;investmentScores.resizeTextMinSize=12;investmentScores.resizeTextMaxSize=21;
-            investmentScores.text="添加多段对话 → 逐段调节 → 合并训练";
-            foreach(Transform child in transform)
-                if(child.GetComponent<Text>()?.text=="语料库存")child.GetComponent<Text>().text="语料库存 · 可添加多段对话";
-        }
-        private void DebugSlot(RectTransform row,float y){var slot=Rect(row,"InlineDebugSlot",0,y,500,270);slot.sizeDelta=new Vector2(500*DesignWidthScale,270*DesignScale);}
-        private RectTransform Rect(Transform parent,string name,float x,float y,float w,float h)
-        {var r=new GameObject(name,typeof(RectTransform)).GetComponent<RectTransform>();r.SetParent(parent,false);r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);r.anchoredPosition=new Vector2(x*DesignWidthScale,-y*DesignScale);r.sizeDelta=new Vector2(w*DesignWidthScale,h*DesignScale);return r;}
-        private Text Text(Transform parent,string value,float x,float y,float w,float h,int size=16)
-        {var t=Rect(parent,"Text",x,y,w,h).gameObject.AddComponent<Text>();t.font=font;t.fontSize=Mathf.RoundToInt(size*DesignScale);t.color=Color.black;t.text=value;t.raycastTarget=false;return t;}
-        private Button Button(Transform parent,string title,float x,float y,float width)
-        {var r=Rect(parent,title,x,y,width,32);r.gameObject.AddComponent<Image>().color=new Color(.87f,.9f,.91f);var b=r.gameObject.AddComponent<Button>();Text(r,title,8,5,width-12,28);return b;}
-        private RectTransform List(Transform parent,string name,float x,float y,float w,float h)
-        {
-            var viewport=Rect(parent,name,x,y,w,h);viewport.gameObject.AddComponent<Image>().color=new Color(.96f,.96f,.96f);viewport.gameObject.AddComponent<RectMask2D>();
-            var scroll=viewport.gameObject.AddComponent<ScrollRect>();scroll.horizontal=false;
-            var list=Rect(viewport,"Rows",0,0,w,0);list.anchorMin=new Vector2(0,1);list.anchorMax=new Vector2(1,1);list.sizeDelta=Vector2.zero;
-            var layout=list.gameObject.AddComponent<VerticalLayoutGroup>();layout.spacing=14;layout.padding=new RectOffset(11,11,11,11);layout.childControlWidth=layout.childControlHeight=true;layout.childForceExpandHeight=false;
-            list.gameObject.AddComponent<ContentSizeFitter>().verticalFit=ContentSizeFitter.FitMode.PreferredSize;scroll.viewport=viewport;scroll.content=list;return list;
-        }
+        public void PrepareSceneLayout(Font sourceFont){font=sourceFont;}
+        public void PrepareCorpusInvestment(){ }
 #endif
     }
 }

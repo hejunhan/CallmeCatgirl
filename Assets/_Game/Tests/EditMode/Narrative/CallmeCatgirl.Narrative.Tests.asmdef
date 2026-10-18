@@ -1,0 +1,6 @@
+{
+  "name": "CallmeCatgirl.Narrative.Tests",
+  "references": ["CallmeCatgirl.Narrative"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"]
+}

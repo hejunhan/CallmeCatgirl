@@ -41,7 +41,7 @@ namespace CallmeCatgirl.Gameplay
             => Math.Min(maximum, current + growth * (quality == Quality.Excellent ? excellentMultiplier : 1));
 
         /// <returns>True only when a new ordinary settlement was recorded. Scripted/repeated calls never draw.</returns>
-        public bool ObserveSettlement(TaskInstance task, bool authoredStory, Random existingRandom)
+        public bool ObserveSettlement(TaskInstance task, bool authoredStory, Random existingRandom, double endProbabilityMultiplier = 1)
         {
             if (authoredStory || task == null || task.Result == null
                 || (task.State != RequestState.Submitted && task.State != RequestState.Closed)) return false;
@@ -49,14 +49,17 @@ namespace CallmeCatgirl.Gameplay
             conversations.TryGetValue(task.ConversationId, out var prior);
             if (prior?.Ended == true) throw new InvalidOperationException("An ended ordinary conversation cannot settle a new request.");
             if (existingRandom == null) throw new ArgumentNullException(nameof(existingRandom), "Use the host's saved requestRandom stream.");
+            Require(!double.IsNaN(endProbabilityMultiplier) && !double.IsInfinity(endProbabilityMultiplier)
+                && endProbabilityMultiplier > 0 && endProbabilityMultiplier <= 1000000, "policy multiplier");
             int count = checked((prior?.CompletedRequestCount ?? 0) + 1);
             var quality = task.Result.Overall;
             double probability = NextProbability(prior?.EndProbability ?? initial, quality);
             double roll = existingRandom.NextDouble(); // Exactly one draw, including probability 0 or 1.
             if (double.IsNaN(roll) || roll < 0 || roll >= 1) throw new ArgumentException("Random.NextDouble must return [0,1).");
-            bool ended = roll < probability;
+            double effectiveProbability = Math.Min(1, probability * endProbabilityMultiplier);
+            bool ended = roll < effectiveProbability;
             var entry = new OrdinarySettlementState { RequestId = task.Id, RoundId = task.RoundId, Quality = quality,
-                EndProbability = probability, Roll = roll, Ended = ended };
+                EndProbability = effectiveProbability, Roll = roll, Ended = ended, PolicyEndMultiplier = endProbabilityMultiplier };
             conversations[task.ConversationId] = new OrdinaryConversationState {
                 ConversationId = task.ConversationId, CompletedRequestCount = count,
                 ExcellentRequestCount = (prior?.ExcellentRequestCount ?? 0) + (quality == Quality.Excellent ? 1 : 0),
@@ -83,7 +86,7 @@ namespace CallmeCatgirl.Gameplay
             LegacySettledRequestIds = (state.LegacySettledRequestIds ?? Array.Empty<string>()).ToArray(),
             Settlements = state.Settlements.Select(r => new OrdinarySettlementState {
                 RequestId = r.RequestId, RoundId = r.RoundId, Quality = r.Quality,
-                EndProbability = r.EndProbability, Roll = r.Roll, Ended = r.Ended
+                EndProbability = r.EndProbability, Roll = r.Roll, Ended = r.Ended, PolicyEndMultiplier = r.PolicyEndMultiplier
             }).ToArray()
         };
 
@@ -142,8 +145,11 @@ namespace CallmeCatgirl.Gameplay
                         && task.RoundId == item.RoundId && task.Result != null && task.Result.Overall == item.Quality
                         && (task.State == RequestState.Submitted || task.State == RequestState.Closed), "request source/duplicate/order");
                     probability = restored.NextProbability(probability, item.Quality);
+                    double multiplier = item.PolicyEndMultiplier == 0 ? 1 : item.PolicyEndMultiplier;
+                    Require(!double.IsNaN(multiplier) && !double.IsInfinity(multiplier) && multiplier > 0 && multiplier <= 1000000, "saved policy multiplier");
+                    double effectiveProbability = Math.Min(1, probability * multiplier);
                     Require(!double.IsNaN(item.Roll) && item.Roll >= 0 && item.Roll < 1
-                        && item.EndProbability == probability && item.Ended == (item.Roll < probability), "probability/draw");
+                        && item.EndProbability == effectiveProbability && item.Ended == (item.Roll < effectiveProbability), "probability/draw");
                     ended = item.Ended; if (item.Quality == Quality.Excellent) excellent++;
                 }
                 Require(state.CompletedRequestCount == legacyIds.Length + state.Settlements.Length && state.ExcellentRequestCount == excellent

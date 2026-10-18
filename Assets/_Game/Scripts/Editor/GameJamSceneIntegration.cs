@@ -1,3 +1,4 @@
+using System.Linq;
 using CallmeCatgirl.Gameplay;
 using CallmeCatgirl.Gameplay.Progression;
 using UnityEditor;
@@ -68,7 +69,7 @@ namespace CallmeCatgirl.EditorTools
             var close = Button("CloseProgression", overlay, "关闭 ×", font, new Vector2(130, 36));
             close.GetComponent<RectTransform>().anchoredPosition = new Vector2(435, 181);
             UnityEventTools.AddBoolPersistentListener(close.onClick, overlay.gameObject.SetActive, false);
-            var open = Button("OpenProgression", canvas.transform, "政策 / 能力专精", font, new Vector2(170, 38));
+            var open = Button("OpenProgression", canvas.transform, "政策", font, new Vector2(170, 44));
             var entry = open.GetComponent<RectTransform>();
             entry.anchorMin = entry.anchorMax = new Vector2(1, 0);
             entry.anchoredPosition = new Vector2(-105, 25);
@@ -213,9 +214,14 @@ namespace CallmeCatgirl.EditorTools
             var rect = button.GetComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = Vector2.zero; rect.anchoredPosition = new Vector2(285, 25);
             for (int i = button.onClick.GetPersistentEventCount() - 1; i >= 0; i--) UnityEventTools.RemovePersistentListener(button.onClick, i);
             UnityEventTools.AddPersistentListener(button.onClick, owner.OpenTraining);
-            var legacy = canvas.transform.Find("OpenProgression"); if (legacy != null) legacy.gameObject.SetActive(false);
+            var policyEntry = canvas.GetComponentsInChildren<Button>(true).FirstOrDefault(b => b.name == "OpenProgression");
+            if (policyEntry != null)
+            {
+                policyEntry.gameObject.SetActive(true);
+                var label = policyEntry.GetComponentInChildren<Text>(true); if (label != null) label.text = "政策";
+            }
             EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene); AssetDatabase.SaveAssets();
-            Debug.Log("Training scene integration installed; legacy direct attribute purchase disabled.");
+            Debug.Log("Training scene integration installed; the policy tree remains available through its HUD entry.");
         }
 
         [MenuItem("CallmeCatgirl/Integrate Opening Balance")]

@@ -3,7 +3,10 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using System.IO;
+using System.Linq;
 using CallmeCatgirl.Gameplay;
+using CallmeCatgirl.UI.SystemMenu;
+using UnityEngine.InputSystem;
 
 namespace CallmeCatgirl.UI
 {
@@ -15,6 +18,7 @@ namespace CallmeCatgirl.UI
         public bool IsTransitioning { get; private set; }
         [SerializeField] private Button continueButton;
         private static string pendingContinueSlot;
+        private SystemMenuHost menuSettings;
         public static string ConsumeContinueSlot() { string value=pendingContinueSlot; pendingContinueSlot=null; return value; }
         public void ContinueGame() => ContinueSlot("main");
         public void ContinueSlot(string slot)
@@ -24,11 +28,37 @@ namespace CallmeCatgirl.UI
         }
         private void Start()
         {
-            if(gameObject.scene.path != MenuPath || continueButton==null) return;
+            if(gameObject.scene.path != MenuPath) return;
+            CreateMenuSettings();
+            if(continueButton==null) return;
             continueButton.interactable=File.Exists(Path.Combine(CoreGameplayController.SlotDirectory("main"),"run.json"));
             continueButton.onClick.AddListener(ContinueGame);
             var caption=continueButton.GetComponentInChildren<TMP_Text>();
             if(caption!=null)caption.color=continueButton.interactable?new Color32(37,39,41,255):new Color32(82,82,82,255);
+        }
+        private void Update()
+        {
+            if (gameObject.scene.path == MenuPath && Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+                menuSettings?.HandleEscape();
+        }
+        private void CreateMenuSettings()
+        {
+            var canvas = FindFirstObjectByType<Canvas>();
+            if (canvas == null) return;
+            var font = Resources.FindObjectsOfTypeAll<Font>().FirstOrDefault(f => f.name.Contains("Harmony"))
+                ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            menuSettings = SystemMenuHost.Create((RectTransform)canvas.transform, font, false, null, null, null);
+            var go = new GameObject("OpenSystemSettings", typeof(RectTransform), typeof(Image), typeof(Button));
+            go.transform.SetParent(canvas.transform, false);
+            var rect = (RectTransform)go.transform; rect.anchorMin = rect.anchorMax = new Vector2(1, 0);
+            rect.pivot = new Vector2(1, 0); rect.anchoredPosition = new Vector2(-32, 28); rect.sizeDelta = new Vector2(180, 48);
+            go.GetComponent<Image>().color = new Color32(232,232,232,255);
+            go.GetComponent<Button>().onClick.AddListener(menuSettings.OpenSettings);
+            var label = new GameObject("Label", typeof(RectTransform), typeof(Text)); label.transform.SetParent(go.transform, false);
+            var text = label.GetComponent<Text>(); text.font = font; text.text = "系统设置"; text.fontSize = 22;
+            text.alignment = TextAnchor.MiddleCenter; text.color = Color.black; text.raycastTarget = false;
+            text.rectTransform.anchorMin = Vector2.zero; text.rectTransform.anchorMax = Vector2.one;
+            text.rectTransform.offsetMin = text.rectTransform.offsetMax = Vector2.zero;
         }
         public void QuitGame()
         {
@@ -40,7 +70,14 @@ namespace CallmeCatgirl.UI
         }
 
         public void StartNewGame() { pendingContinueSlot=null; Load(GameplayPath); }
-        public void ReturnToMenu() => Load(MenuPath);
+        public void ReturnToMenu()
+        {
+            if (IsTransitioning) return;
+            var game = FindFirstObjectByType<CoreGameplayController>();
+            if (game != null && !game.SaveRun()) return;
+            ReturnToMenuAfterSave();
+        }
+        public void ReturnToMenuAfterSave() => Load(MenuPath);
 
         private void Load(string path)
         {

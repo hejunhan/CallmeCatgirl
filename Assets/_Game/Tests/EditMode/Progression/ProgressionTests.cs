@@ -54,7 +54,7 @@ namespace CallmeCatgirl.Tests
             Assert.That(tree.TryRestore(new ProgressionState { UnlockedIds = new[] { "Writing-2" } }), Is.False);
             Assert.That(tree.TryRestore(new ProgressionState { UnlockedIds = new[] { "Writing-1", "Writing-1" } }), Is.False);
             Assert.That(tree.TryRestore(new ProgressionState { UnlockedIds = new[] { "unknown" } }), Is.False);
-            Assert.That(tree.TryRestore(new ProgressionState { Version = 2 }), Is.False);
+            Assert.That(tree.TryRestore(new ProgressionState { Version = 99 }), Is.False);
             Assert.That(tree.Capture().UnlockedIds, Is.Empty);
         }
         [TestCase(false)] [TestCase(true)] public void PurchasePreservesPauseAndActuallyChangesTaskQuality(bool paused)

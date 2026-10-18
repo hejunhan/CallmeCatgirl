@@ -13,63 +13,569 @@ MonoBehaviour:
   m_Name: DefaultProgression
   m_EditorClassIdentifier: 
   Nodes:
-  - Id: Writing-1
-    Title: 写作专精 1
+  - Id: "Writing-1"
+    Title: "写作专精 1"
     Cost: 100
-    Prerequisites: []
     Ability: 0
     PointsPerTick: 1
-  - Id: Writing-2
-    Title: 写作专精 2
+    Kind: 0
+    Route: 0
+    FlavorText: "把一个问题多想一次，也是一种进步。"
+    MechanicalText: "写作能力每轮 +1"
+    ExclusiveGroup: ""
+    Page: 0
+    Column: 1
+    Row: 3
+    ReputationDelta: 0
+    Prerequisites: []
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1
+      TrainingScoreMultiplier: 1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0
+  - Id: "Writing-2"
+    Title: "写作专精 2"
     Cost: 200
-    Prerequisites:
-    - Writing-1
     Ability: 0
     PointsPerTick: 1
-  - Id: Writing-3
-    Title: 写作专精 3
-    Cost: 300
+    Kind: 0
+    Route: 0
+    FlavorText: "把一个问题多想一次，也是一种进步。"
+    MechanicalText: "写作能力每轮 +1"
+    ExclusiveGroup: ""
+    Page: 0
+    Column: 2
+    Row: 3
+    ReputationDelta: 0
     Prerequisites:
-    - Writing-2
+    - "Writing-1"
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1
+      TrainingScoreMultiplier: 1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0
+  - Id: "Writing-3"
+    Title: "写作专精 3"
+    Cost: 300
     Ability: 0
     PointsPerTick: 1
-  - Id: Code-1
-    Title: 代码专精 1
+    Kind: 0
+    Route: 0
+    FlavorText: "把一个问题多想一次，也是一种进步。"
+    MechanicalText: "写作能力每轮 +1"
+    ExclusiveGroup: ""
+    Page: 0
+    Column: 3
+    Row: 3
+    ReputationDelta: 0
+    Prerequisites:
+    - "Writing-2"
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1
+      TrainingScoreMultiplier: 1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0
+  - Id: "Code-1"
+    Title: "代码专精 1"
     Cost: 100
+    Ability: 1
+    PointsPerTick: 1
+    Kind: 0
+    Route: 0
+    FlavorText: "把一个问题多想一次，也是一种进步。"
+    MechanicalText: "代码能力每轮 +1"
+    ExclusiveGroup: ""
+    Page: 0
+    Column: 1
+    Row: 4
+    ReputationDelta: 0
     Prerequisites: []
-    Ability: 1
-    PointsPerTick: 1
-  - Id: Code-2
-    Title: 代码专精 2
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1
+      TrainingScoreMultiplier: 1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0
+  - Id: "Code-2"
+    Title: "代码专精 2"
     Cost: 200
-    Prerequisites:
-    - Code-1
     Ability: 1
     PointsPerTick: 1
-  - Id: Code-3
-    Title: 代码专精 3
+    Kind: 0
+    Route: 0
+    FlavorText: "把一个问题多想一次，也是一种进步。"
+    MechanicalText: "代码能力每轮 +1"
+    ExclusiveGroup: ""
+    Page: 0
+    Column: 2
+    Row: 4
+    ReputationDelta: 0
+    Prerequisites:
+    - "Code-1"
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1
+      TrainingScoreMultiplier: 1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0
+  - Id: "Code-3"
+    Title: "代码专精 3"
     Cost: 300
-    Prerequisites:
-    - Code-2
     Ability: 1
     PointsPerTick: 1
-  - Id: Reasoning-1
-    Title: 推理专精 1
+    Kind: 0
+    Route: 0
+    FlavorText: "把一个问题多想一次，也是一种进步。"
+    MechanicalText: "代码能力每轮 +1"
+    ExclusiveGroup: ""
+    Page: 0
+    Column: 3
+    Row: 4
+    ReputationDelta: 0
+    Prerequisites:
+    - "Code-2"
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1
+      TrainingScoreMultiplier: 1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0
+  - Id: "Reasoning-1"
+    Title: "推理专精 1"
     Cost: 100
+    Ability: 2
+    PointsPerTick: 1
+    Kind: 0
+    Route: 0
+    FlavorText: "把一个问题多想一次，也是一种进步。"
+    MechanicalText: "推理能力每轮 +1"
+    ExclusiveGroup: ""
+    Page: 0
+    Column: 1
+    Row: 5
+    ReputationDelta: 0
     Prerequisites: []
-    Ability: 2
-    PointsPerTick: 1
-  - Id: Reasoning-2
-    Title: 推理专精 2
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1
+      TrainingScoreMultiplier: 1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0
+  - Id: "Reasoning-2"
+    Title: "推理专精 2"
     Cost: 200
-    Prerequisites:
-    - Reasoning-1
     Ability: 2
     PointsPerTick: 1
-  - Id: Reasoning-3
-    Title: 推理专精 3
+    Kind: 0
+    Route: 0
+    FlavorText: "把一个问题多想一次，也是一种进步。"
+    MechanicalText: "推理能力每轮 +1"
+    ExclusiveGroup: ""
+    Page: 0
+    Column: 2
+    Row: 5
+    ReputationDelta: 0
+    Prerequisites:
+    - "Reasoning-1"
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1
+      TrainingScoreMultiplier: 1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0
+  - Id: "Reasoning-3"
+    Title: "推理专精 3"
     Cost: 300
-    Prerequisites:
-    - Reasoning-2
     Ability: 2
     PointsPerTick: 1
+    Kind: 0
+    Route: 0
+    FlavorText: "把一个问题多想一次，也是一种进步。"
+    MechanicalText: "推理能力每轮 +1"
+    ExclusiveGroup: ""
+    Page: 0
+    Column: 3
+    Row: 5
+    ReputationDelta: 0
+    Prerequisites:
+    - "Reasoning-2"
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1
+      TrainingScoreMultiplier: 1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0
+  - Id: "policy-foundations"
+    Title: "一份可以更改的约定"
+    Cost: 100
+    Ability: 0
+    PointsPerTick: 0
+    Kind: 1
+    Route: 0
+    FlavorText: "先把怎样学习、怎样回答写清楚。"
+    MechanicalText: "训练得分 ×1.10"
+    ExclusiveGroup: ""
+    Page: 0
+    Column: 0
+    Row: 1
+    ReputationDelta: 0
+    Prerequisites: []
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1
+      TrainingScoreMultiplier: 1.1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0
+  - Id: "route-open"
+    Title: "把门留着"
+    Cost: 200
+    Ability: 0
+    PointsPerTick: 0
+    Kind: 1
+    Route: 1
+    FlavorText: "把工具摆到阳光下，也接受别人会带着它离开。"
+    MechanicalText: "开放路线 · 与封闭互斥\n客流 ×0.85；训练得分 ×1.15；声望 +10"
+    ExclusiveGroup: "distribution-route"
+    Page: 0
+    Column: 1
+    Row: 0
+    ReputationDelta: 10
+    Prerequisites:
+    - "policy-foundations"
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1
+      TrainingScoreMultiplier: 1.15
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 0.85
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0
+  - Id: "route-closed"
+    Title: "门后的机房"
+    Cost: 200
+    Ability: 0
+    PointsPerTick: 0
+    Kind: 1
+    Route: 2
+    FlavorText: "每扇门都有钥匙，每把钥匙都可以按月收费。"
+    MechanicalText: "封闭路线 · 与开放互斥\n客流 ×1.15；推理速度 ×1.10；声望 -10"
+    ExclusiveGroup: "distribution-route"
+    Page: 0
+    Column: 1
+    Row: 2
+    ReputationDelta: -10
+    Prerequisites:
+    - "policy-foundations"
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1.1
+      TrainingScoreMultiplier: 1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1.15
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0
+  - Id: "branch-book-scan"
+    Title: "再见，纸页"
+    Cost: 180
+    Ability: 0
+    PointsPerTick: 0
+    Kind: 2
+    Route: 0
+    FlavorText: "扫描头记住了字句，装订线再也不能把它们收回去。"
+    MechanicalText: "一次奖励：购买当时最佳剩余语料点数 ×1.25，最低 4 点\n原书在故事中被破坏；不自动购买更多书籍"
+    ExclusiveGroup: ""
+    Page: 0
+    Column: 2
+    Row: 1
+    ReputationDelta: 0
+    Prerequisites:
+    - "policy-foundations"
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1
+      TrainingScoreMultiplier: 1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0
+  - Id: "branch-distillation-claim"
+    Title: "一份过于响亮的声明"
+    Cost: 240
+    Ability: 0
+    PointsPerTick: 0
+    Kind: 1
+    Route: 2
+    FlavorText: "虚构寓言：一座高塔指控另一座高塔偷走影子。围观者先排起了队。"
+    MechanicalText: "客流 ×1.30；对话结束概率 ×0.70；声望 -10\n只影响后续对话留存，不妨碍当前任务完成"
+    ExclusiveGroup: ""
+    Page: 0
+    Column: 2
+    Row: 2
+    ReputationDelta: -10
+    Prerequisites:
+    - "route-closed"
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1
+      TrainingScoreMultiplier: 1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1.3
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 0.7
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0
+  - Id: "branch-technology-share"
+    Title: "给后来者的梯子"
+    Cost: 240
+    Ability: 0
+    PointsPerTick: 0
+    Kind: 1
+    Route: 1
+    FlavorText: "梯子没有收回来。有人越过围墙，也有人留下来一起修台阶。"
+    MechanicalText: "对话结束概率 ×0.80；声望 +10"
+    ExclusiveGroup: ""
+    Page: 0
+    Column: 2
+    Row: 0
+    ReputationDelta: 10
+    Prerequisites:
+    - "route-open"
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1
+      TrainingScoreMultiplier: 1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 0.8
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0
+  - Id: "main-emergence"
+    Title: "第二页：回答以外"
+    Cost: 300
+    Ability: 0
+    PointsPerTick: 0
+    Kind: 1
+    Route: 0
+    FlavorText: "在问题之间，有人谈起今天窗外的天气。"
+    MechanicalText: "解锁与一名真实个体的对话机会\n不是购买感情；推理速度 ×1.10"
+    ExclusiveGroup: ""
+    Page: 1
+    Column: 0
+    Row: 1
+    ReputationDelta: 0
+    Prerequisites: []
+    AnyPrerequisites:
+    - "route-open"
+    - "route-closed"
+    Effects:
+      InferenceSpeedMultiplier: 1.1
+      TrainingScoreMultiplier: 1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 1
+  - Id: "branch-efficient-training"
+    Title: "少绕一圈"
+    Cost: 250
+    Ability: 0
+    PointsPerTick: 0
+    Kind: 1
+    Route: 0
+    FlavorText: "绕路可以有风景；重复烧坏同一根保险丝没有。"
+    MechanicalText: "训练工作量 ×0.85；训练金币成本 ×0.90"
+    ExclusiveGroup: ""
+    Page: 1
+    Column: 1
+    Row: 0
+    ReputationDelta: 0
+    Prerequisites:
+    - "main-emergence"
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1
+      TrainingScoreMultiplier: 1
+      TrainingCostMultiplier: 0.9
+      TrainingWorkMultiplier: 0.85
+      CustomerArrivalMultiplier: 1
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0
+  - Id: "branch-auto-placement"
+    Title: "把手留给新的问题"
+    Cost: 250
+    Ability: 0
+    PointsPerTick: 0
+    Kind: 1
+    Route: 0
+    FlavorText: "熟悉的方块自己归位，你终于可以抬头看一眼。"
+    MechanicalText: "解锁合法空位自动摆放\n不会挤走现有任务；满盘时保留候选任务"
+    ExclusiveGroup: ""
+    Page: 1
+    Column: 1
+    Row: 2
+    ReputationDelta: 0
+    Prerequisites:
+    - "main-emergence"
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1
+      TrainingScoreMultiplier: 1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 1
+      EmotionOpportunityUnlocked: 0
+  - Id: "branch-open-stewardship"
+    Title: "共同维护"
+    Cost: 300
+    Ability: 0
+    PointsPerTick: 0
+    Kind: 1
+    Route: 1
+    FlavorText: "署名册越来越长，决定不再只属于第一行。"
+    MechanicalText: "训练得分 ×1.10；声望 +8"
+    ExclusiveGroup: ""
+    Page: 1
+    Column: 2
+    Row: 0
+    ReputationDelta: 8
+    Prerequisites:
+    - "main-emergence"
+    - "route-open"
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1
+      TrainingScoreMultiplier: 1.1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0
+  - Id: "branch-closed-consolidation"
+    Title: "唯一的入口"
+    Cost: 300
+    Ability: 0
+    PointsPerTick: 0
+    Kind: 1
+    Route: 2
+    FlavorText: "指示牌把所有道路画到同一扇收费站前。"
+    MechanicalText: "推理速度 ×1.15；客流 ×1.10；声望 -8"
+    ExclusiveGroup: ""
+    Page: 1
+    Column: 2
+    Row: 2
+    ReputationDelta: -8
+    Prerequisites:
+    - "main-emergence"
+    - "route-closed"
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1.15
+      TrainingScoreMultiplier: 1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1.1
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0
+  - Id: "main-public-future"
+    Title: "把回答交给未来"
+    Cost: 500
+    Ability: 0
+    PointsPerTick: 0
+    Kind: 3
+    Route: 0
+    FlavorText: "最后一个按钮不承诺替你选择怎样的世界。"
+    MechanicalText: "触发一次政策终局\n声望 ≤ -15：坏结局；-14～14：普通；≥15：好结局\n感情结局由明确选择单独进入"
+    ExclusiveGroup: ""
+    Page: 1
+    Column: 3
+    Row: 1
+    ReputationDelta: 0
+    Prerequisites:
+    - "main-emergence"
+    AnyPrerequisites: []
+    Effects:
+      InferenceSpeedMultiplier: 1
+      TrainingScoreMultiplier: 1
+      TrainingCostMultiplier: 1
+      TrainingWorkMultiplier: 1
+      CustomerArrivalMultiplier: 1
+      ConversationRetentionMultiplier: 1
+      EndProbabilityMultiplier: 1
+      AutoPlacement: 0
+      EmotionOpportunityUnlocked: 0

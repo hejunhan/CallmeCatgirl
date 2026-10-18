@@ -9,6 +9,7 @@ using CallmeCatgirl.Gameplay.Training;
 using CallmeCatgirl.Gameplay.Progression;
 using CallmeCatgirl.Persistence;
 using CallmeCatgirl.Persistence.Training;
+using CallmeCatgirl.Gameplay.Narrative;
 using UnityEngine;
 
 namespace CallmeCatgirl.Gameplay
@@ -57,7 +58,8 @@ namespace CallmeCatgirl.Gameplay
         public void ConfigureSaveSlot(string slot) { SlotDirectory(slot); saveSlot=slot; saveService=null; }
         public string ContentRevision => saveContentRevision ?? (saveContentRevision = CalculateContentRevision(false));
         private string LegacyStoryV1ContentRevision => CalculateContentRevision(true);
-        private string CalculateContentRevision(bool legacyStoryV1)
+        private string[] CompatiblePresentationRevisions => new[] { CalculateContentRevision(false, true), CalculateContentRevision(true, true) };
+        private string CalculateContentRevision(bool legacyStoryV1, bool formerArchitectureTitles = false)
         {
             string content="gamejam-state-v1-xorshift32|";
             UnityEngine.Object[] sources={configuration,configuration.Story,configuration.OrdinaryDialoguePool,configuration.TaskGeneration,configuration.MemoryUpgrades,configuration.OpeningBalance,training?.Configuration};
@@ -65,7 +67,12 @@ namespace CallmeCatgirl.Gameplay
             {
                 string json=JsonUtility.ToJson(source);
                 if(source==training?.Configuration)
+                {
                     json=Regex.Replace(json,@",""PointsPerExtraCell"":2(?:\.0+)?,""MaximumCorpusPoints"":20(?:\.0+)?","");
+                    if (formerArchitectureTitles)
+                        foreach (var pair in new[] { new[] { "baseline", "学习型" }, new[] { "alternate", "高速型" }, new[] { "architecture-slot-3", "均衡型" } })
+                            json = Regex.Replace(json, "(\\\"Id\\\"\\s*:\\s*\\\"" + pair[0] + "\\\"\\s*,\\s*\\\"Title\\\"\\s*:\\s*)\\\"[^\\\"]*\\\"", "$1\"" + pair[1] + "\"");
+                }
                 if(legacyStoryV1 && source==configuration.Story) json=RunSaveValidation.LegacyStoryV1ConfigurationJson(json);
                 content+=Regex.Replace(json,@"""instanceID""\s*:\s*-?\d+","\"instanceID\":0");
             }
@@ -77,8 +84,13 @@ namespace CallmeCatgirl.Gameplay
             if(!TrainingEnabled) throw new InvalidOperationException("Training must be bound before saving.");
             var codec=new UnitySaveJsonCodec(); var session=training.Session;
             trainingSave=new TrainingSaveExtension(codec,()=>training.Session,session.Recipes,session.Architectures,session.ComputeTiers);
-            var handlers=new IRunSaveExtension[]{trainingSave};
-            saveService=new RunSaveService(this,new AtomicRunSaveStore(SlotDirectory(saveSlot),codec,ContentRevision,handlers,LegacyStoryV1ContentRevision),handlers);
+            narrativeSave = new StateSaveExtension<NarrativeSaveData>(NarrativeExtensionId, 1, false, codec,
+                () => Narrative.Capture(), state => {
+                    if (state != null && state.Version > 1) throw new SaveCompatibilityException("Unsupported narrative state version.");
+                    if (!NarrativeSession.Validate(state, out var error)) throw new ArgumentException(error);
+                });
+            runExtensions=new IRunSaveExtension[]{trainingSave,narrativeSave};
+            saveService=new RunSaveService(this,new AtomicRunSaveStore(SlotDirectory(saveSlot),codec,ContentRevision,runExtensions,LegacyStoryV1ContentRevision,CompatiblePresentationRevisions),runExtensions);
         }
         public bool SaveRun()
         {
@@ -96,9 +108,9 @@ namespace CallmeCatgirl.Gameplay
             var policy=GetComponent<ProgressionController>(); policy.EnsureBound();
             return new RunSaveData {SchemaVersion=1,RunId=runId,ContentRevision=ContentRevision,SavedAtUtc=DateTimeOffset.UtcNow.ToString("O"),
                 Simulation=Simulation.CaptureState(),Economy=Economy.CaptureState(),Story=Story.CaptureState(),Policies=policy.Tree.Capture(),Extensions=Array.Empty<SaveExtensionState>(),
-                Host=new HostState {Version=2,CurrentMonth=CurrentMonth,MonthElapsed=monthTimer,SecondsPerMonth=configuration.SecondsPerGameMonth,
+                Host=new HostState {Version=3,CurrentMonth=CurrentMonth,MonthElapsed=monthTimer,SecondsPerMonth=configuration.SecondsPerGameMonth,
                     MonthlyMaintenanceFee=configuration.MonthlyMaintenanceFee,PlaybackSpeed=PlaybackSpeed,MemoryLevel=MemoryLevel,CompletedTasks=CompletedTasks,
-                    AvailableAbilityPoints=AvailableAbilityPoints,RequestSerial=serial,SelectedRequestId=SelectedId,GameEnded=GameEnded,EndingText=EndingText,
+                    AvailableAbilityPoints=AvailableAbilityPoints,RequestSerial=serial,SelectedRequestId=SelectedId,GameEnded=GameEnded,EndingText=EndingText,EndReason=EndReason,
                     OperatingRequestIds=operatingTasks.OrderBy(id=>id,StringComparer.Ordinal).ToArray(),
                     MemoryUpgradeOpen=IsMemoryUpgradeOpen,GenerationRandom=((SaveableRandom)requestRandom).Capture(),
                     TaskBases=taskBases.Select(p=>new TaskBasisState{RequestId=p.Key,Definition=DefinitionState.Capture(p.Value)}).ToArray()}};
@@ -109,14 +121,23 @@ namespace CallmeCatgirl.Gameplay
             if(host == null || host.SecondsPerMonth != configuration.SecondsPerGameMonth || host.MonthlyMaintenanceFee != configuration.MonthlyMaintenanceFee)
                 throw new SaveCompatibilityException("Clock configuration differs.");
             var policy=GetComponent<ProgressionController>();
-            var restored=RunRestoreBuilder.Build(data,ContentRevision,configuration.Story,configuration.TaskGeneration,policy.Nodes,SaveableRandom.Restore,Story.Revision,new[]{trainingSave},LegacyStoryV1ContentRevision,configuration.OrdinaryDialoguePool,configuration.InitialAffinity,configuration.SuccessAffinity,configuration.FailureAffinity);
-            if(host.MemoryLevel<configuration.MemoryUpgrades.InitialLevel || host.MemoryLevel>5) throw new ArgumentException("Invalid stage.");
+            var narrativePayload = data.Extensions.FirstOrDefault(e => e.Id == NarrativeExtensionId);
+            if (host.Version >= 3 && narrativePayload == null) throw new ArgumentException("Current run is missing its narrative ledger.");
+            var restoredNarrative = narrativePayload == null ? NarrativeSession.AdoptLegacy(host.MemoryLevel)
+                : NarrativeSession.Restore(narrativeSave.DecodeForRestore(narrativePayload));
+            var restored=RunRestoreBuilder.Build(data,ContentRevision,configuration.Story,configuration.TaskGeneration,policy.Nodes,SaveableRandom.Restore,Story.Revision,runExtensions,LegacyStoryV1ContentRevision,configuration.OrdinaryDialoguePool,configuration.InitialAffinity,configuration.SuccessAffinity,configuration.FailureAffinity,CompatiblePresentationRevisions);
+            if(host.MemoryLevel<0 || host.MemoryLevel>5 || (host.Version<3 && host.MemoryLevel<1)) throw new ArgumentException("Invalid stage.");
+            if (restoredNarrative.MemoryCount != host.MemoryLevel) throw new ArgumentException("Narrative memory milestone differs from installed memory.");
+            if (RunEndReasons.IsNarrative(RunSaveValidation.ResolveEndReason(host)) && (!restoredNarrative.EndingClosed
+                || NarrativeSession.HostEndReason(restoredNarrative.EndingReason) != host.EndReason)) throw new ArgumentException("Narrative ending ledger differs from the host ending.");
             var session=trainingSave.PrepareRestore(data.Extensions.Single(e=>e.Id==TrainingSaveExtension.ExtensionId),restored.Simulation,
                 restored.Economy.TrySpendFunds,restored.Economy.AddFunds,
-                ()=>configuration.MemoryUpgrades.GetOpenCells(ReferenceEquals(Simulation,restored.Simulation)?MemoryLevel:host.MemoryLevel),
-                restoredStage:()=>ReferenceEquals(Simulation,restored.Simulation)?MemoryLevel:host.MemoryLevel);
+                ()=>CapacityForNarrative(ReferenceEquals(Simulation,restored.Simulation)?Narrative:restoredNarrative,ReferenceEquals(Simulation,restored.Simulation)?MemoryLevel:host.MemoryLevel),
+                composePermanentBonuses:model=>ComposePolicyAbilities(model,ReferenceEquals(Simulation,restored.Simulation)?PolicyTree:restored.Policies),
+                policies:()=>TrainingModifiers(ReferenceEquals(Simulation,restored.Simulation)?PolicyTree:restored.Policies),
+                restoredStage:()=>Math.Max(1,ReferenceEquals(Simulation,restored.Simulation)?MemoryLevel:host.MemoryLevel));
             var active=session.Models.Single(m=>m.Id==session.ActiveModelId);
-            var expected=session.Architectures.Single(a=>a.Id==active.ArchitectureId).Transform(configuration.MemoryUpgrades.GetOpenCells(host.MemoryLevel),restored.Simulation.Width,restored.Simulation.Height);
+            var expected=session.Architectures.Single(a=>a.Id==active.ArchitectureId).Transform(CapacityForNarrative(restoredNarrative,host.MemoryLevel),restored.Simulation.Width,restored.Simulation.Height);
             var actual=Enumerable.Range(0,restored.Simulation.Width*restored.Simulation.Height).Select(i=>new Cell(i%restored.Simulation.Width,i/restored.Simulation.Width)).Where(restored.Simulation.IsOpen).ToArray();
             if(!new System.Collections.Generic.HashSet<Cell>(expected).SetEquals(actual)) throw new ArgumentException("Saved model outline differs from stage capacity.");
             foreach(string id in restored.Simulation.Tasks.Keys)
@@ -131,7 +152,9 @@ namespace CallmeCatgirl.Gameplay
                 taskBases.Clear(); foreach(var pair in restored.TaskBases) taskBases.Add(pair.Key,pair.Value);
                 CurrentMonth=host.CurrentMonth;monthTimer=host.MonthElapsed;PlaybackSpeed=host.PlaybackSpeed;MemoryLevel=host.MemoryLevel;
                 CompletedTasks=host.CompletedTasks;AvailableAbilityPoints=host.AvailableAbilityPoints;serial=host.RequestSerial;SelectedId=host.SelectedRequestId;
-                GameEnded=host.GameEnded;EndingText=host.EndingText;IsMemoryUpgradeOpen=host.MemoryUpgradeOpen;runId=data.RunId;
+                GameEnded=host.GameEnded;EndingText=host.EndingText;EndReason=RunSaveValidation.ResolveEndReason(host);IsMemoryUpgradeOpen=host.MemoryUpgradeOpen;runId=data.RunId;
+                Narrative=restoredNarrative;appliedPolicySpeed=-1;
+                if(narrativePanel!=null)narrativePanel.Bind(Narrative,CompletionFont());
                 policy.BindRestoredTree(Simulation,restored.Policies);
                 try { training.BindRestoredSession(Simulation,session,()=>!GameEnded&&!IsMemoryUpgradeOpen&&!IsMemoryInstallOpen); }
                 catch(Exception error){Debug.LogWarning("Restored training observer: "+error.Message);}

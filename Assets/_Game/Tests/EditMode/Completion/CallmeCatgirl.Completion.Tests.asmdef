@@ -1,0 +1,7 @@
+{
+  "name": "CallmeCatgirl.Completion.Tests",
+  "references": ["CallmeCatgirl.TaskGrid", "CallmeCatgirl.Training", "CallmeCatgirl.Narrative", "CallmeCatgirl.Persistence", "UnityEngine.UI"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

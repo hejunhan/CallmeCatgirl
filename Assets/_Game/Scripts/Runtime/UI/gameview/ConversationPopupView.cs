@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using CallmeCatgirl.Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 namespace CallmeCatgirl.UI
 {
  public sealed class ConversationPopupView:MonoBehaviour
@@ -23,13 +24,18 @@ namespace CallmeCatgirl.UI
   private int revision=-1;
   private bool dismissed;
   private bool readyChoices;
+  private bool interactionReady;
+  private Vector2 lastWindowSize;
+  public bool IsVisible => panel != null && panel.activeInHierarchy;
   public void Reveal(){dismissed=false;}
+  public void Dismiss(){dismissed=true;if(panel!=null)panel.SetActive(false);if(EventSystem.current!=null)EventSystem.current.SetSelectedGameObject(null);}
   public void Refresh(CoreGameplayController owner,Sprite portrait,UIFeedbackConfiguration feedback=null)
   {
    var story=owner.Story;var options=owner.ConversationReplyChoices;bool ready=options.Count>0;bool changed=story!=displayed||revision!=story.Revision||ready!=readyChoices;
    if(changed)dismissed=false;
    panel.SetActive(story.IsOpen&&!dismissed);
    if(!story.IsOpen||dismissed)return;
+   EnsureWindowInteraction();
    choiceScroll.gameObject.SetActive(ready);Canvas.ForceUpdateCanvases();if(!changed)return;
    displayed=story;revision=story.Revision;readyChoices=ready;
    userLabel.text=story.Name(story.UserId)+$" · 亲密度 {story.Affinity(story.UserId):0.##}";
@@ -37,15 +43,50 @@ namespace CallmeCatgirl.UI
    avatar.sprite=portrait;avatar.gameObject.SetActive(false);
    historyLabel.text=story.History(story.UserId);RenderHistory(historyLabel.text,portrait);
    closeButton.onClick.RemoveAllListeners();closeButton.onClick.AddListener(()=>{if(story.IsReply){dismissed=true;panel.SetActive(false);}else owner.CloseConversationHistory();});
+   if(EventSystem.current!=null && buttons.Any(b=>EventSystem.current.currentSelectedGameObject!=null && EventSystem.current.currentSelectedGameObject.transform.IsChildOf(b.transform)))EventSystem.current.SetSelectedGameObject(null);
    foreach(var b in buttons){b.gameObject.SetActive(false);Destroy(b.gameObject);}buttons.Clear();choiceTemplate.gameObject.SetActive(false);
    if(ready)for(int i=0;i<options.Count;i++)
    {
     int index=i,expected=story.Revision;var b=Instantiate(choiceTemplate,choiceContent);b.name="ReplyChoice_"+i;
-    var text=b.GetComponentInChildren<Text>(true);text.text=options[i].Label;
+    var text=b.GetComponentInChildren<Text>(true);text.text=options[i].Label;text.horizontalOverflow=HorizontalWrapMode.Wrap;text.verticalOverflow=VerticalWrapMode.Overflow;text.resizeTextForBestFit=false;
     var element=b.GetComponent<LayoutElement>();if(element==null)element=b.gameObject.AddComponent<LayoutElement>();element.preferredHeight=Mathf.Max(choiceTemplate.GetComponent<LayoutElement>().preferredHeight,text.preferredHeight+24);
     b.onClick.RemoveAllListeners();b.onClick.AddListener(()=>owner.ChooseReplyAtRevision(index,expected));b.gameObject.SetActive(true);buttons.Add(b);
    }
-   Canvas.ForceUpdateCanvases();historyScroll.verticalNormalizedPosition=0;choiceScroll.verticalNormalizedPosition=1;
+   Canvas.ForceUpdateCanvases();ReflowText();historyScroll.verticalNormalizedPosition=0;choiceScroll.verticalNormalizedPosition=1;
+  }
+  private void EnsureWindowInteraction()
+  {
+   if(interactionReady)return;interactionReady=true;
+   var window=(RectTransform)userLabel.transform.parent;
+   userLabel.raycastTarget=true;
+   (userLabel.gameObject.GetComponent<FloatingWindowGesture>()??userLabel.gameObject.AddComponent<FloatingWindowGesture>()).Bind(window,false);
+   var corner=Rect("ResizeCorner",window);corner.anchorMin=corner.anchorMax=corner.pivot=new Vector2(1,0);corner.anchoredPosition=Vector2.zero;corner.sizeDelta=new Vector2(28,28);
+   var image=corner.gameObject.AddComponent<Image>();image.color=new Color32(120,120,120,110);
+   corner.gameObject.AddComponent<FloatingWindowGesture>().Bind(window,true);
+   var layout=choiceContent.GetComponent<VerticalLayoutGroup>()??choiceContent.gameObject.AddComponent<VerticalLayoutGroup>();layout.childControlHeight=layout.childControlWidth=true;layout.childForceExpandHeight=false;layout.spacing=8;
+   var fit=choiceContent.GetComponent<ContentSizeFitter>()??choiceContent.gameObject.AddComponent<ContentSizeFitter>();fit.verticalFit=ContentSizeFitter.FitMode.PreferredSize;
+   FloatingWindowGesture.ClampToParent(window);
+  }
+  private void LateUpdate()
+  {
+   if(!interactionReady||!panel.activeInHierarchy)return;
+   var window=(RectTransform)userLabel.transform.parent;
+   if(lastWindowSize==window.rect.size)return;
+   lastWindowSize=window.rect.size;FloatingWindowGesture.ClampToParent(window);Canvas.ForceUpdateCanvases();ReflowText();
+  }
+  private void ReflowText()
+  {
+   foreach(var b in buttons)
+   {
+    var t=b.GetComponentInChildren<Text>(true);var element=b.GetComponent<LayoutElement>();
+    element.preferredHeight=Mathf.Max(64,t.preferredHeight+28);
+   }
+   foreach(Transform row in historyScroll.content)
+   {
+    var t=row.GetComponentInChildren<Text>(true);var size=row.GetComponent<LayoutElement>();
+    if(t!=null&&size!=null)size.preferredHeight=Mathf.Max(size.minHeight,t.preferredHeight+24);
+   }
+   LayoutRebuilder.MarkLayoutForRebuild(choiceContent);LayoutRebuilder.MarkLayoutForRebuild(historyScroll.content);
   }
 #if UNITY_EDITOR
   public void PrepareSceneLayout()

@@ -97,7 +97,16 @@ namespace CallmeCatgirl.UI
             pageButton.onClick.RemoveAllListeners();pageButton.onClick.AddListener(()=>{trainingPage=!trainingPage;Redraw();});
             closeButton.onClick.RemoveAllListeners();closeButton.onClick.AddListener(()=>panel.Close());
             cataloguePage.SetActive(!trainingPage);trainingView.gameObject.SetActive(trainingPage);
-            if(trainingPage){trainingView.Bind(controller);return;}
+            if(trainingPage)
+            {
+                // The corpus workspace is a full Canvas page; the catalogue retains its authored frame/reveal.
+                var trainingRect=(RectTransform)trainingView.transform;
+                trainingRect.SetParent(root.transform,false);
+                trainingRect.anchorMin=Vector2.zero;trainingRect.anchorMax=Vector2.one;
+                trainingRect.offsetMin=trainingRect.offsetMax=Vector2.zero;trainingRect.SetAsLastSibling();
+                trainingView.ConfigureNavigation(()=>{trainingPage=false;Redraw();});
+                trainingView.Bind(controller);return;
+            }
             query.SetTextWithoutNotify(search);query.onValueChanged.RemoveAllListeners();query.onValueChanged.AddListener(value=>{search=value;RebuildCards();});
             filterButton.GetComponentInChildren<Text>(true).text="架构："+FilterTitle();
             filterButton.onClick.RemoveAllListeners();filterButton.onClick.AddListener(()=>{

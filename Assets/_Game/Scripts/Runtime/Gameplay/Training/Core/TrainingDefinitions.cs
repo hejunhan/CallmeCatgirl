@@ -31,7 +31,9 @@ namespace CallmeCatgirl.Gameplay.Training
         }
     }
 
-    /// <summary>One accepted dialogue fragment; source key is request + stable node ID, never UI index.</summary>
+    public enum CorpusSourceKind { Dialogue = 0, ScriptedReward = 1 }
+
+    /// <summary>An immutable accepted dialogue fragment or explicitly identified story reward.</summary>
     public sealed class CorpusRecord
     {
         public string Id { get; }
@@ -41,6 +43,8 @@ namespace CallmeCatgirl.Gameplay.Training
         public string NodeId { get; }
         public string ChoiceId { get; }
         public string ScoreSource { get; }
+        public CorpusSourceKind SourceKind { get; }
+        public string EventId { get; }
         public Quality Quality { get; }
         public IReadOnlyDictionary<AbilityKind, double> Scores { get; }
         public CorpusRecord(string id, TaskInstance task, string nodeId, string choiceId,
@@ -53,11 +57,14 @@ namespace CallmeCatgirl.Gameplay.Training
             if (!Scores.Values.Any(v => v > 0)) throw new ArgumentException("Corpus must contain a positive score.");
         }
         internal CorpusRecord(string id, string requestId, string conversationId, string roundId, string nodeId,
-            string choiceId, string scoreSource, Quality quality, IDictionary<AbilityKind,double> scores)
+            string choiceId, string scoreSource, Quality quality, IDictionary<AbilityKind,double> scores,
+            CorpusSourceKind sourceKind = CorpusSourceKind.Dialogue, string eventId = null)
         {
             Id=Check.Id(id);RequestId=Check.Id(requestId);ConversationId=Check.Id(conversationId);RoundId=Check.Id(roundId);
             NodeId=Check.Id(nodeId);ChoiceId=Check.Id(choiceId);ScoreSource=Check.Id(scoreSource);
             if (!Enum.IsDefined(typeof(Quality),quality) || quality<Quality.Complete) throw new ArgumentException("Ineligible corpus quality.");
+            if (!Enum.IsDefined(typeof(CorpusSourceKind),sourceKind)) throw new ArgumentException("Unknown corpus source.");
+            SourceKind=sourceKind;EventId=sourceKind==CorpusSourceKind.ScriptedReward?Check.Id(eventId):null;
             Quality=quality;Scores=Check.Scores(scores);
             if (!Scores.Values.Any(v=>v>0)) throw new ArgumentException("Corpus must have positive scores.");
         }
@@ -92,7 +99,7 @@ namespace CallmeCatgirl.Gameplay.Training
             if (width <= 0 || height <= 0 || (Outline == OutlineTransform.Transpose && width != height))
                 throw new ArgumentException("Transpose requires a square board.");
             var source = capacityCells?.ToArray() ?? throw new ArgumentNullException(nameof(capacityCells));
-            if (source.Length == 0 || source.Distinct().Count() != source.Length
+            if (source.Distinct().Count() != source.Length
                 || source.Any(c => c.X < 0 || c.Y < 0 || c.X >= width || c.Y >= height))
                 throw new ArgumentException("Invalid capacity cells.");
             return source.Select(c => Outline == OutlineTransform.Transpose ? new Cell(c.Y, c.X)
@@ -235,7 +242,7 @@ namespace CallmeCatgirl.Gameplay.Training
             Model = model ?? throw new ArgumentNullException(nameof(model)); Check.Number(tokensPerSecond, true);
             TokensPerSecond = tokensPerSecond; Architecture = architecture ?? ArchitectureRuntime.Neutral;
             OpenCells = Array.AsReadOnly((openCells ?? throw new ArgumentNullException(nameof(openCells))).ToArray());
-            if (OpenCells.Count == 0 || OpenCells.Distinct().Count() != OpenCells.Count) throw new ArgumentException("Invalid outline.");
+            if (OpenCells.Distinct().Count() != OpenCells.Count) throw new ArgumentException("Invalid outline.");
         }
     }
 

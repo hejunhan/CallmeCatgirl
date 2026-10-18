@@ -12,7 +12,8 @@ namespace CallmeCatgirl.UI
         public void Bind(TrainingWorkspaceView view,string id){View=view;ConversationId=id;}
         public void OnBeginDrag(PointerEventData e)
         {
-            if(!GetComponent<Button>().interactable){e.pointerDrag=null;return;}
+            var button=GetComponent<Button>()??GetComponentInChildren<Button>();
+            if(button==null||!button.interactable){e.pointerDrag=null;return;}
             var canvas=GetComponentInParent<Canvas>().rootCanvas;
             var source=GetComponentInChildren<Text>();
             ghost=new GameObject("DraggedConversation",typeof(RectTransform),typeof(CanvasGroup)).GetComponent<RectTransform>();
@@ -21,7 +22,7 @@ namespace CallmeCatgirl.UI
             var image=ghost.gameObject.AddComponent<Image>();image.color=new Color(.8f,.93f,.94f,.95f);image.raycastTarget=false;
             var label=new GameObject("Label",typeof(RectTransform)).AddComponent<Text>();label.transform.SetParent(ghost,false);
             label.rectTransform.anchorMin=Vector2.zero;label.rectTransform.anchorMax=Vector2.one;label.rectTransform.sizeDelta=Vector2.zero;
-            label.font=source.font;label.fontSize=20;label.color=Color.black;label.text="拖入训练："+ConversationId;label.raycastTarget=false;
+            label.font=source.font;label.fontSize=18;label.color=Color.black;label.text="放入空位 / 占用位置不可替换";label.raycastTarget=false;
             OnDrag(e);
         }
         public void OnDrag(PointerEventData e)

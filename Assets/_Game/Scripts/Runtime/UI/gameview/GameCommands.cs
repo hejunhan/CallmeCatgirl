@@ -29,7 +29,8 @@ namespace CallmeCatgirl.Gameplay
         public double gameTime, tokenPerSecond, monthRemaining, dayRemaining, secondsPerDay;
         public bool paused, modal, ended;
         public int funds, month, day, daysPerMonth, monthlyMaintenanceFee, stage, completed, storyRevision;
-        public string selectedId, activeModelId, storyRequestId;
+        public string selectedId, activeModelId, storyRequestId, endReason, tutorial;
+        public bool centerCellRevealed;
         public string[] choices, corpusIds;
         public int boardWidth,boardHeight;
         public GameCellSnapshot[] openCells;
@@ -68,6 +69,7 @@ namespace CallmeCatgirl.Gameplay
             var s = new GameSnapshot {
                 gameTime = Simulation.GameTime, paused = Simulation.Paused, modal = IsModalOpen, ended = GameEnded,
                 funds = Funds, month = CurrentMonth, stage = MemoryLevel, completed = CompletedTasks,
+                endReason = EndReason, tutorial = Narrative?.Tutorial.ToString(), centerCellRevealed = Narrative?.CenterCellRevealed == true,
                 monthRemaining = MonthTimeRemaining, day=CurrentDay, daysPerMonth=DaysPerMonth, dayRemaining=DayTimeRemaining, secondsPerDay=SecondsPerDay, monthlyMaintenanceFee=MonthlyMaintenanceFee, tokenPerSecond = Simulation.TokenThroughput, selectedId = SelectedId,
                 storyRevision = Story.Revision, storyRequestId = Story.RequestId,
                 choices = Story.Choices.Select(c => c.Label).ToArray(),
@@ -76,7 +78,7 @@ namespace CallmeCatgirl.Gameplay
                 openCells=Enumerable.Range(0,Simulation.Width*Simulation.Height).Select(i=>new Cell(i%Simulation.Width,i/Simulation.Width))
                     .Where(Simulation.IsOpen).Select(cell=>new GameCellSnapshot {x=cell.X,y=cell.Y,compartment=Simulation.CompartmentAt(cell)}).ToArray(),
                 recipes=TrainingEnabled?training.Session.Recipes.Select(r=>r.Id).ToArray():Array.Empty<string>(),
-                architectures=TrainingEnabled?training.Session.Architectures.Where(a=>a.UnlockStage<=MemoryLevel && a.ContentReady).Select(a=>a.Id).ToArray():Array.Empty<string>(),
+                architectures=TrainingEnabled?training.Session.Architectures.Where(a=>a.UnlockStage<=Math.Max(1,MemoryLevel) && a.ContentReady).Select(a=>a.Id).ToArray():Array.Empty<string>(),
                 architectureDetails=TrainingEnabled?training.Session.Architectures.Select(a=>new GameArchitectureSnapshot{id=a.Id,title=a.Title,outline=a.Outline.ToString(),unlockStage=a.UnlockStage,speedMultiplier=a.SpeedMultiplier,corpusMultiplier=a.CorpusMultiplier,contentReady=a.ContentReady}).ToArray():Array.Empty<GameArchitectureSnapshot>(),
                 recipeDetails=TrainingEnabled?training.Session.Recipes.Select(r=>new GameRecipeSnapshot {id=r.Id,cost=r.Cost,minimumRecords=r.MinimumRecords,workTokens=r.WorkTokens,pointsPerExtraCell=r.PointsPerExtraCell,maximumCorpusPoints=r.MaximumCorpusPoints,workGrowthCoefficient=r.WorkGrowthCoefficient,workGrowthExponent=r.WorkGrowthExponent,shape=r.Shape.Select(cell=>new GameCellSnapshot{x=cell.X,y=cell.Y}).ToArray()}).ToArray():Array.Empty<GameRecipeSnapshot>(),
                 corpus=TrainingEnabled?training.Session.Corpus.Select(r=>new GameCorpusSnapshot {id=r.Id,conversationId=r.ConversationId,requestId=r.RequestId,roundId=r.RoundId,nodeId=r.NodeId,choiceId=r.ChoiceId,consumed=training.Session.IsConsumed(r.Id),remainingPoints=training.Session.RemainingPoints(r.Id),scores=r.Scores.Select(p=>new GameAbilitySnapshot{kind=p.Key.ToString(),value=p.Value}).ToArray()}).ToArray():Array.Empty<GameCorpusSnapshot>(),
@@ -124,6 +126,8 @@ namespace CallmeCatgirl.Gameplay
             var before = QueryGame();
             if (c.expectedVersion >= 0 && c.expectedVersion != before.version) return CommandResult(false,"StaleVersion");
             if (c.kind == "query") return CommandResult(true,"Success");
+            // Selecting the deterministic command clock changes no simulation or UI state.
+            if (c.kind == "clock") { ManualCommandClock=c.paused; return CommandResult(true,"Success"); }
             bool savingCommand=c.kind=="save" || c.kind=="restore";
             if (GameEnded && !savingCommand) return CommandResult(false,"GameEnded");
             bool storyCommand = c.kind == "reply" || c.kind == "closeHistory";

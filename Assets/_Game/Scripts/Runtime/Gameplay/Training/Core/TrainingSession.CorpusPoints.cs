@@ -57,7 +57,7 @@ namespace CallmeCatgirl.Gameplay.Training
         {
             var r = corpus[use.CorpusId]; double ratio = use.Points / r.Scores.Values.Sum();
             return new CorpusRecord(r.Id, r.RequestId, r.ConversationId, r.RoundId, r.NodeId, r.ChoiceId,
-                r.ScoreSource, r.Quality, r.Scores.ToDictionary(p => p.Key, p => p.Value * ratio));
+                r.ScoreSource, r.Quality, r.Scores.ToDictionary(p => p.Key, p => p.Value * ratio),r.SourceKind,r.EventId);
         }
 
         public IReadOnlyDictionary<AbilityKind,double> PreviewCorpus(string conversationId, double points)
@@ -107,6 +107,8 @@ namespace CallmeCatgirl.Gameplay.Training
 
         private TrainingPreview BuildPreview(TrainingRecipe rule, CorpusUse[] uses)
         {
+            if (rule.Id == StarterRecipeId && (!StarterTrainingAvailable || Math.Abs(uses.Sum(u=>u.Points)-1)>1e-9))
+                throw new ArgumentException("First training requires exactly one corpus point and can only be created once.");
             if (uses.Length < rule.MinimumRecords) throw new ArgumentException("Insufficient corpus records.");
             double total=uses.Sum(u=>u.Points); Check.Number(total,true);
             var modifiers=policyModifiers();

@@ -9,6 +9,8 @@ namespace CallmeCatgirl.Gameplay.Training
     [Serializable] public sealed class CorpusRecordState
     {
         public string Id, RequestId, ConversationId, RoundId, NodeId, ChoiceId, ScoreSource;
+        public CorpusSourceKind SourceKind;
+        public string EventId;
         public Quality Quality;
         public ModelAbilityState[] Scores = Array.Empty<ModelAbilityState>();
     }
@@ -39,7 +41,7 @@ namespace CallmeCatgirl.Gameplay.Training
     public sealed partial class TrainingSession
     {
         public const int StateVersion = 1;
-        public const string ModuleRevision = "2.0-session-state-v1";
+        public const string ModuleRevision = "2.1-scripted-corpus-compatible-v1";
 
         public TrainingSessionState CaptureState()
         {
@@ -50,6 +52,7 @@ namespace CallmeCatgirl.Gameplay.Training
                 Corpus=corpus.Values.Select(r=>new CorpusRecordState {
                     Id=r.Id,RequestId=r.RequestId,ConversationId=r.ConversationId,RoundId=r.RoundId,NodeId=r.NodeId,
                     ChoiceId=r.ChoiceId,ScoreSource=r.ScoreSource,Quality=r.Quality,
+                    SourceKind=r.SourceKind,EventId=r.EventId,
                     Scores=r.Scores.Select(p=>new ModelAbilityState{Kind=p.Key,Points=p.Value}).ToArray()
                 }).ToArray(),
                 ConsumedCorpusIds=consumed.OrderBy(id=>id,StringComparer.Ordinal).ToArray(),
@@ -93,6 +96,8 @@ namespace CallmeCatgirl.Gameplay.Training
         {
             RequireState(s!=null && s.Version==StateVersion && s.Serial>=0 && s.Stage>=1 && s.Stage<=5,"schema/header");
             var recipeMap=recipeSource?.ToDictionary(r=>r.Id,StringComparer.Ordinal) ?? throw new ArgumentNullException(nameof(recipeSource));
+            RequireState(recipeMap.Count>0,"training configuration has no normal recipes");
+            AddStarterRecipe(recipeMap);
             var archMap=architectureSource?.ToDictionary(a=>a.Id,StringComparer.Ordinal) ?? throw new ArgumentNullException(nameof(architectureSource));
             var tiers=computeSource?.ToArray() ?? throw new ArgumentNullException(nameof(computeSource));
             RequireState(recipeMap.Count>0 && archMap.Count>0 && s.ComputeIndex>=0 && s.ComputeIndex<tiers.Length
@@ -101,12 +106,17 @@ namespace CallmeCatgirl.Gameplay.Training
             RequireState(s.Corpus!=null && s.Corpus.Length<=100000 && s.Models!=null && s.Models.Length>0 && s.Models.Length<=10000
                 && s.Jobs!=null && s.Jobs.Length<=100000 && s.ConsumedCorpusIds!=null && s.RecordedFragments!=null,"collections");
             var decoded=new DecodedState();RequireState(decoded.Identities.TryRestore(s.Identities),"identity map");
+            var rewardEvents=new HashSet<string>(StringComparer.Ordinal);
             foreach(var item in s.Corpus)
             {
                 RequireState(item!=null && item.Scores!=null && item.Scores.All(p=>p!=null),"corpus fields");
                 var r=new CorpusRecord(item.Id,item.RequestId,item.ConversationId,item.RoundId,item.NodeId,item.ChoiceId,
-                    item.ScoreSource,item.Quality,item.Scores.ToDictionary(p=>p.Kind,p=>p.Points));
-                RequireState(!decoded.Corpus.ContainsKey(r.Id) && decoded.Fragments.Add(Tuple.Create(r.RequestId,r.NodeId)),"corpus/fragment duplicate");
+                    item.ScoreSource,item.Quality,item.Scores.ToDictionary(p=>p.Kind,p=>p.Points),item.SourceKind,item.EventId);
+                RequireState(!decoded.Corpus.ContainsKey(r.Id),"corpus duplicate");
+                if(r.SourceKind==CorpusSourceKind.Dialogue)
+                    RequireState(decoded.Fragments.Add(Tuple.Create(r.RequestId,r.NodeId)),"fragment duplicate");
+                else RequireState(rewardEvents.Add(r.EventId) && r.RequestId=="scripted:"+r.EventId
+                    && r.RoundId==r.EventId && r.NodeId==r.EventId && r.ChoiceId=="grant","scripted reward identity");
                 decoded.Corpus.Add(r.Id,r);
             }
             RequireState(Enumerable.Range(1,decoded.Corpus.Count).All(i=>decoded.Corpus.ContainsKey("corpus-"+i)),"corpus ID sequence");
@@ -189,6 +199,7 @@ namespace CallmeCatgirl.Gameplay.Training
             foreach(var p in decoded.Jobs)restored.jobs.Add(p.Key,p.Value);
             restored.consumed.UnionWith(decoded.Consumed);restored.recordedFragments.UnionWith(decoded.Fragments);
             foreach(var r in restored.corpus.Values)
+                if(r.SourceKind==CorpusSourceKind.Dialogue)
                 RequireState(restoredSimulation.Tasks.TryGetValue(r.RequestId,out var task) && task.Result!=null
                     && (task.State==RequestState.Submitted || task.State==RequestState.Closed) && task.Result.Overall==r.Quality
                     && task.ConversationId==r.ConversationId && task.RoundId==r.RoundId && !restored.jobs.ContainsKey(r.RequestId),"corpus/task source mismatch");

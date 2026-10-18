@@ -37,16 +37,19 @@ namespace CallmeCatgirl.Persistence
         private readonly ISaveJsonCodec codec;
         private readonly string revision;
         private readonly string legacyStoryV1Revision;
+        private readonly string[] compatiblePresentationRevisions;
         private readonly IRunSaveExtension[] extensions;
         public string ActivePath => Path.Combine(directory, "run.json");
         // A test seam for power-loss before commit. An exception leaves the last active file intact.
         public Action BeforeAtomicCommit { private get; set; }
         public AtomicRunSaveStore(string slotDirectory, ISaveJsonCodec codec, string contentRevision,
-            IEnumerable<IRunSaveExtension> extensions = null, string legacyStoryV1Revision = null)
+            IEnumerable<IRunSaveExtension> extensions = null, string legacyStoryV1Revision = null,
+            IEnumerable<string> compatiblePresentationRevisions = null)
         {
             if (string.IsNullOrWhiteSpace(slotDirectory) || string.IsNullOrWhiteSpace(contentRevision)) throw new ArgumentException("Explicit slot directory/content revision required.");
             directory = Path.GetFullPath(slotDirectory); this.codec = codec ?? throw new ArgumentNullException(nameof(codec));
             revision = contentRevision; this.legacyStoryV1Revision = legacyStoryV1Revision; this.extensions = (extensions ?? Array.Empty<IRunSaveExtension>()).ToArray();
+            this.compatiblePresentationRevisions = (compatiblePresentationRevisions ?? Array.Empty<string>()).ToArray();
         }
         private FileStream LockSlot()
         {
@@ -56,7 +59,7 @@ namespace CallmeCatgirl.Persistence
         }
         public SaveWriteResult Save(RunSaveData data)
         {
-            RunSaveValidation.Validate(data, revision, extensions, legacyStoryV1Revision);
+            RunSaveValidation.Validate(data, revision, extensions, legacyStoryV1Revision, compatiblePresentationRevisions);
             string payload = codec.Encode(data);
             string json = codec.Encode(new SaveEnvelope { Format = Format, Version = 1, PayloadJson = payload, PayloadSha256 = Hash(payload) });
             byte[] bytes = Utf8.GetBytes(json);
@@ -124,7 +127,7 @@ namespace CallmeCatgirl.Persistence
             RunSaveData data;
             try { data = codec.Decode<RunSaveData>(envelope.PayloadJson); }
             catch (Exception ex) when (IsJsonFailure(ex)) { throw new InvalidDataException("Invalid run JSON.", ex); }
-            RunSaveValidation.Validate(data, revision, extensions, legacyStoryV1Revision); return data;
+            RunSaveValidation.Validate(data, revision, extensions, legacyStoryV1Revision, compatiblePresentationRevisions); return data;
         }
         private static bool IsJsonFailure(Exception ex) => ex is ArgumentException || ex is FormatException || ex.GetType().Name == "JsonException";
         private static string Hash(string text)

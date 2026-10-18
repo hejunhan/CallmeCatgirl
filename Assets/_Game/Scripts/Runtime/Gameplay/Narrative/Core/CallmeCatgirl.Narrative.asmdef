@@ -1,0 +1,7 @@
+{
+  "name": "CallmeCatgirl.Narrative",
+  "rootNamespace": "CallmeCatgirl.Gameplay.Narrative",
+  "references": [],
+  "autoReferenced": true,
+  "noEngineReferences": true
+}

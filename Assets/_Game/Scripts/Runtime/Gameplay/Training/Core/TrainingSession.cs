@@ -91,6 +91,7 @@ namespace CallmeCatgirl.Gameplay.Training
             this.compute = compute?.ToArray() ?? throw new ArgumentNullException(nameof(compute));
             if (this.recipes.Count == 0 || this.compute.Length == 0 || this.architectures.Count == 0)
                 throw new ArgumentException("Incomplete training configuration.");
+            AddStarterRecipe(this.recipes);
             for (int i = 0; i < this.compute.Length; i++)
                 if (this.compute[i] == null || (i > 0 && this.compute[i].TokensPerSecond <= this.compute[i-1].TokensPerSecond))
                     throw new ArgumentException("Compute tiers must strictly increase.");
@@ -184,6 +185,8 @@ namespace CallmeCatgirl.Gameplay.Training
         {
             job = null;
             var recipe = recipes[recipeId];
+            if (recipeId == StarterRecipeId && (!StarterTrainingAvailable || Math.Abs(uses.Sum(u=>u.Points)-1)>1e-9))
+                return TrainingResult.InvalidInput;
             var availability = ArchitectureAvailability(architectureId);
             if (availability != TrainingResult.Success) return availability;
             if (!ModelNames.TryNormalize(name, out name) || uses.Length == 0) return TrainingResult.InvalidInput;

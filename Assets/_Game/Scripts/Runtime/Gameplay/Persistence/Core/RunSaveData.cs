@@ -59,6 +59,18 @@ namespace CallmeCatgirl.Persistence
         // Exact state owned by a serializable System.Random subclass; do not serialize private runtime fields.
         public string StateJson;
     }
+    public static class RunEndReasons
+    {
+        public const string Bankruptcy = "bankruptcy";
+        public const string PolicyBad = "policy.bad";
+        public const string PolicyNormal = "policy.normal";
+        public const string PolicyGood = "policy.good";
+        public const string Emotion = "emotion";
+
+        public static bool IsNarrative(string reason) => reason == PolicyBad || reason == PolicyNormal
+            || reason == PolicyGood || reason == Emotion;
+    }
+
     [Serializable] public sealed class HostState
     {
         public int Version;
@@ -74,6 +86,9 @@ namespace CallmeCatgirl.Persistence
         public string SelectedRequestId;
         public bool GameEnded;
         public string EndingText;
+        // Host v3 distinguishes an authored ending from the wallet's bankruptcy state.
+        // In v1/v2 a finished run could only mean bankruptcy.
+        public string EndReason;
         public bool MemoryUpgradeOpen;
         public TaskBasisState[] TaskBases;
         public string[] OperatingRequestIds;

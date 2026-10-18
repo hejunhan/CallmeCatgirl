@@ -13,6 +13,8 @@ namespace CallmeCatgirl.UI
         [SerializeField] private CallmeCatgirl.Presentation.PlanningPresentation planningPresentation;
         public void SetManualPlanningVisual(bool paused) => planningPresentation?.SetPlanning(paused);
         public void RevealConversation() => conversationPopup?.Reveal();
+        public void DismissConversation() => conversationPopup?.Dismiss();
+        public bool IsConversationVisible => conversationPopup != null && conversationPopup.IsVisible;
         [SerializeField] private UIFeedbackConfiguration feedback;
         [SerializeField] private Font workspaceHeadingFont,workspaceNumberFont;
         public UIFeedbackConfiguration Feedback => feedback;
@@ -128,6 +130,7 @@ namespace CallmeCatgirl.UI
             if(qualityLabel!=null){qualityLabel.rectTransform.anchoredPosition=new Vector2(560,-176);qualityLabel.rectTransform.sizeDelta=new Vector2(180,36);}
             }
             controller = owner; lastFunds = owner.Funds; fundsAt = rejectedAt = settlementAt = -100;
+            AlignSpeedLabels();
             if (settlementFeedback != null) settlementFeedback.Clear();
             if (speedIdleColors == null && speedButtons != null)
                 speedIdleColors = speedButtons.Select(b => b.targetGraphic.color).ToArray();
@@ -205,7 +208,7 @@ namespace CallmeCatgirl.UI
             SetTopRect(memoryUpgradeLabel.rectTransform,new Vector2(1,1),new Vector2(-220,-76),new Vector2(580,60));
             SetTopRect((RectTransform)memoryUpgradeButton.transform,new Vector2(1,1),new Vector2(-24,-88),new Vector2(180,40));
             var controls=new List<Button>{pauseButton,rotateButton,withdrawButton,submitButton,nextRoundButton,memoryUpgradeButton};if(speedButtons!=null)controls.AddRange(speedButtons);
-            foreach(var button in transform.GetComponentsInChildren<Button>(true))if(new[]{"AddRequestButton","ResetButton","ReturnToMenu","OpenTraining","SaveRun","LoadRun"}.Contains(button.name))controls.Add(button);
+            foreach(var button in transform.GetComponentsInChildren<Button>(true))if(new[]{"AddRequestButton","ResetButton","ReturnToMenu","OpenTraining","OpenProgression","SaveRun","LoadRun"}.Contains(button.name))controls.Add(button);
             foreach(var button in controls.Distinct())
             {
                 if(button==null)continue;
@@ -300,7 +303,7 @@ namespace CallmeCatgirl.UI
                 + (controller.TrainingEnabled ? $"{controller.Training.Session.TokensPerSecond:0.##} token/s\n" : string.Empty)
                 + $"能力周期 {sim.Model.Interval / sim.Architecture.AbilityRateMultiplier:0.##}s\n\n"
                 + string.Join("\n", sim.Model.Points.Select(p => $"{CoreGameplayController.AbilityText(p.Key)}  {p.Value:0.##}"));
-            foreach (var task in sim.Tasks.Values)
+            foreach (var task in sim.Tasks.Values.OrderByDescending(t => controller.TrainingEnabled && controller.Training.IsTrainingRequest(t.Id)))
             {
                 bool candidate = task.State == RequestState.Waiting || task.State == RequestState.Withdrawn || (task.State == RequestState.Ready && task.ReadyInCandidate);
                 if (candidate && !cards.ContainsKey(task.Id))
@@ -312,6 +315,7 @@ namespace CallmeCatgirl.UI
                 {
                     existingCard.gameObject.SetActive(candidate);
                     if (candidate) existingCard.Refresh(task, sim.GameTime, task.Id == controller.SelectedId);
+                    if (candidate) existingCard.transform.SetAsLastSibling();
                 }
                 bool onBoard = task.State == RequestState.Running || (task.State == RequestState.Ready && !task.ReadyInCandidate);
                 if (onBoard && !modules.ContainsKey(task.Id))
@@ -344,6 +348,29 @@ namespace CallmeCatgirl.UI
             {
                 button.targetGraphic.color=selected?active:idle;
                 var label=button.GetComponentInChildren<Text>(true);if(label!=null)label.color=selected?Color.white:new Color32(22,22,22,255);
+            }
+        }
+
+        private void AlignSpeedLabels()
+        {
+            if (speedButtons == null) return;
+            foreach (var button in speedButtons)
+            {
+                if (button == null) continue;
+                foreach (var label in button.GetComponentsInChildren<Text>(true))
+                {
+                    label.fontSize = 22; label.resizeTextForBestFit = false;
+                    label.alignment = TextAnchor.MiddleCenter; label.horizontalOverflow = HorizontalWrapMode.Overflow;
+                    label.rectTransform.anchorMin = Vector2.zero; label.rectTransform.anchorMax = Vector2.one;
+                    label.rectTransform.offsetMin = label.rectTransform.offsetMax = Vector2.zero;
+                }
+                foreach (var label in button.GetComponentsInChildren<TMPro.TMP_Text>(true))
+                {
+                    label.fontSize = 22; label.enableAutoSizing = false; label.alignment = TMPro.TextAlignmentOptions.Center;
+                    label.rectTransform.anchorMin = Vector2.zero; label.rectTransform.anchorMax = Vector2.one;
+                    label.rectTransform.offsetMin = label.rectTransform.offsetMax = Vector2.zero;
+                    label.margin = Vector4.zero;
+                }
             }
         }
 

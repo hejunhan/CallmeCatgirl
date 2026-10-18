@@ -31,7 +31,7 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
             Height = height; 
             Model = model ?? throw new ArgumentNullException(nameof(model));
             openCells = new HashSet<Cell>(availableCells ?? throw new ArgumentNullException(nameof(availableCells)));
-            if (openCells.Count == 0 || openCells.Any(c => !InBounds(c)))
+            if (openCells.Any(c => !InBounds(c)))
                 throw new ArgumentException("Open cells must be inside the board.");
             if (cellCompartments != null && (cellCompartments.Length != width * height || cellCompartments.Any(id => id < 0)))
                 throw new ArgumentException("Compartment IDs must be nonnegative and cover the entire board.", nameof(cellCompartments));
@@ -175,7 +175,7 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
             if (!Paused || model == null || cells == null || double.IsNaN(tokensPerSecond)
                 || double.IsInfinity(tokensPerSecond) || tokensPerSecond <= 0) return false;
             var next = cells.ToArray();
-            if (next.Length == 0 || next.Length != openCells.Count || next.Distinct().Count() != next.Length
+            if (next.Length != openCells.Count || next.Distinct().Count() != next.Length
                 || next.Any(c => !InBounds(c))) return false;
             // Running and Ready modules BOTH leave the board. Never submit them as part of switching.
             foreach (var task in tasks.Values)

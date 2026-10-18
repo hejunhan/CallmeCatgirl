@@ -34,21 +34,21 @@ MonoBehaviour:
     - {x: 2, y: 1}
   Architectures:
   - Id: baseline
-    Title: "学习型"
+    Title: "Transformer"
     CorpusMultiplier: 1.6
     SpeedMultiplier: 1
     Outline: 0
     UnlockStage: 1
     ContentReady: 1
   - Id: alternate
-    Title: "高速型"
+    Title: "MoE Transformer"
     CorpusMultiplier: 1
     SpeedMultiplier: 1.6
     Outline: 0
     UnlockStage: 2
     ContentReady: 1
   - Id: architecture-slot-3
-    Title: "均衡型"
+    Title: "协调状态架构"
     TechnicalDescription: "语料与速度均衡"
     CorpusMultiplier: 1.25
     SpeedMultiplier: 1.25

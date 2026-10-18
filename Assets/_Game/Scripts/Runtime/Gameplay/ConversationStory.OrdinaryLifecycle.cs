@@ -5,6 +5,7 @@ namespace CallmeCatgirl.Gameplay
 {
     public sealed partial class ConversationStory
     {
+        public System.Func<double> OrdinaryEndProbabilityMultiplier { get; set; }
         private OrdinaryConversationLifecycle ordinaryLifecycle;
         private OrdinaryConversationLifecycle OrdinaryLifecycle => ordinaryLifecycle
             ?? (ordinaryLifecycle = new OrdinaryConversationLifecycle(configuration?.OrdinaryLifecycle ?? new OrdinaryConversationPolicy()));
@@ -15,7 +16,8 @@ namespace CallmeCatgirl.Gameplay
 
         /// <summary>Called by Submitted after actual settlement, once per request; no corpus mutation.</summary>
         public bool ObserveRequestSettlement(TaskInstance task)
-            => OrdinaryLifecycle.ObserveSettlement(task, task != null && IsScriptedConversation(task.ConversationId), shapeRandom);
+            => OrdinaryLifecycle.ObserveSettlement(task, task != null && IsScriptedConversation(task.ConversationId), shapeRandom,
+                OrdinaryEndProbabilityMultiplier?.Invoke() ?? 1);
 
         /// <summary>Detached query copy. Changing it cannot alter the running conversation.</summary>
         public OrdinaryConversationState GetOrdinaryConversation(string conversationId) => OrdinaryLifecycle.Get(conversationId);

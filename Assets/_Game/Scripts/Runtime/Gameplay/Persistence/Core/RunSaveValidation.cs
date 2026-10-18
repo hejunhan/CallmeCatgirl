@@ -12,18 +12,21 @@ namespace CallmeCatgirl.Persistence
     public static class RunSaveValidation
     {
         public const int CurrentSchema = 1;
-        public static void Validate(RunSaveData d, string contentRevision, IEnumerable<IRunSaveExtension> extensions, string legacyStoryV1Revision = null)
+        public static void Validate(RunSaveData d, string contentRevision, IEnumerable<IRunSaveExtension> extensions, string legacyStoryV1Revision = null,
+            IEnumerable<string> compatiblePresentationRevisions = null)
         {
             StateRules.Require(d != null, "Missing run payload.");
             if (d.SchemaVersion != CurrentSchema) throw new SaveCompatibilityException("Unsupported run schema: " + d.SchemaVersion);
             bool legacyRevision = d.Story?.Version == 1 && !string.IsNullOrEmpty(legacyStoryV1Revision) && d.ContentRevision == legacyStoryV1Revision;
-            if (d.ContentRevision != contentRevision && !legacyRevision) throw new SaveCompatibilityException("Save content revision differs from installed content.");
-            if (d.Host?.Version > 2 || d.Economy?.Version > 1 || d.Story?.Version > 4 || d.Simulation?.Version > 1
-                || d.Policies?.Version > 1 || d.Host?.GenerationRandom?.Version > 1 || d.Simulation?.ExecutionProfileVersion > 2)
+            bool presentationOnlyMigration = d.Host?.Version <= 2
+                && (compatiblePresentationRevisions ?? Array.Empty<string>()).Contains(d.ContentRevision, StringComparer.Ordinal);
+            if (d.ContentRevision != contentRevision && !legacyRevision && !presentationOnlyMigration) throw new SaveCompatibilityException("Save content revision differs from installed content.");
+            if (d.Host?.Version > 3 || d.Economy?.Version > 1 || d.Story?.Version > 4 || d.Simulation?.Version > 1
+                || d.Policies?.Version > 2 || d.Host?.GenerationRandom?.Version > 1 || d.Simulation?.ExecutionProfileVersion > 2)
                 throw new SaveCompatibilityException("Unsupported component state version.");
             StateRules.Require(Guid.TryParse(d.RunId, out _) && DateTimeOffset.TryParse(d.SavedAtUtc, out _)
                 && !string.IsNullOrWhiteSpace(d.ContentRevision) && d.Host != null && d.Economy != null && d.Story != null
-                && d.Policies != null && d.Policies.Version == 1 && d.Policies.UnlockedIds != null && d.Extensions != null, "Incomplete run payload.");
+                && d.Policies != null && (d.Policies.Version == 1 || d.Policies.Version == 2) && d.Policies.UnlockedIds != null && d.Extensions != null, "Incomplete run payload.");
             var nonCustomerIds = ValidateExtensions(d.Extensions, extensions);
             var s = TaskSimulation.RestoreState(d.Simulation); // The production simulator validates its own state.
             StateRules.Require(nonCustomerIds.All(s.Tasks.ContainsKey), "Extension refers to a missing non-customer task.");
@@ -32,16 +35,16 @@ namespace CallmeCatgirl.Persistence
             StateRules.Require(operating.All(id => s.Tasks.ContainsKey(id) && !nonCustomerIds.Contains(id)), "Invalid operating task role.");
             var storyTasks = customerTasks.Where(t => !operating.Contains(t.Id)).ToArray();
             var h = d.Host; var e = d.Economy; var story = d.Story;
-            StateRules.Require((h.Version == 1 || h.Version == 2) && h.CurrentMonth >= 1 && StateRules.Finite(h.MonthElapsed) && h.MonthElapsed >= 0
+            StateRules.Require((h.Version == 1 || h.Version == 2 || h.Version == 3) && h.CurrentMonth >= 1 && StateRules.Finite(h.MonthElapsed) && h.MonthElapsed >= 0
                 && StateRules.Finite(h.SecondsPerMonth) && h.SecondsPerMonth > 0 && h.MonthElapsed < h.SecondsPerMonth
                 && h.MonthlyMaintenanceFee >= 0 && StateRules.Finite(h.PlaybackSpeed) && h.PlaybackSpeed > 0
-                && h.MemoryLevel >= 1 && h.CompletedTasks >= 0 && h.AvailableAbilityPoints >= 0 && h.RequestSerial >= 0
+                && h.MemoryLevel >= (h.Version >= 3 ? 0 : 1) && h.MemoryLevel <= 5 && h.CompletedTasks >= 0 && h.AvailableAbilityPoints >= 0 && h.RequestSerial >= 0
                 && h.TaskBases != null && h.GenerationRandom != null && h.GenerationRandom.Version == 1
                 && !string.IsNullOrWhiteSpace(h.GenerationRandom.AlgorithmId) && !string.IsNullOrWhiteSpace(h.GenerationRandom.StateJson)
                 && (string.IsNullOrEmpty(h.SelectedRequestId) || s.Tasks.ContainsKey(h.SelectedRequestId)), "Invalid host clock/memory/selection/random state.");
             StateRules.Require(e.Version == 1 && e.Funds >= 0 && e.TokenPricePerUnit >= 0 && e.Debt >= 0
-                && (e.GracePeriod || (e.Debt == 0 && !e.Bankrupt)) && h.GameEnded == e.Bankrupt
-                && (!h.GameEnded || (s.Paused && !string.IsNullOrEmpty(h.EndingText))), "Invalid wallet/end state.");
+                && (e.GracePeriod || (e.Debt == 0 && !e.Bankrupt)), "Invalid wallet state.");
+            ValidateEndState(h, e, s.Paused);
             var settled = Ids(e.SettledRequestIds);
             StateRules.Require(settled.SetEquals(customerTasks.Where(t => t.State == RequestState.Submitted || t.State == RequestState.TimedOut || t.State == RequestState.Closed).Select(t => t.Id)), "Wallet settlement ledger differs from terminal customer tasks.");
             StateRules.Require(h.CompletedTasks == customerTasks.Count(t => (t.State == RequestState.Submitted || t.State == RequestState.Closed)
@@ -81,6 +84,29 @@ namespace CallmeCatgirl.Persistence
                     t.State == RequestState.Submitted || t.State == RequestState.TimedOut || t.State == RequestState.Closed).Select(t => t.Id)),
                     "Affinity settlement ledger differs from role tasks.");
             Ids(d.Policies.UnlockedIds);
+        }
+
+        public static string ResolveEndReason(HostState host)
+        {
+            if (host == null) throw new ArgumentNullException(nameof(host));
+            return host.Version < 3 ? (host.GameEnded ? RunEndReasons.Bankruptcy : string.Empty)
+                : host.EndReason ?? string.Empty;
+        }
+
+        /// <summary>Validate authored endings without manufacturing a bankrupt wallet.</summary>
+        public static void ValidateEndState(HostState host, EconomyState economy, bool simulationPaused)
+        {
+            StateRules.Require(host != null && economy != null && host.Version >= 1 && host.Version <= 3,
+                "Invalid ending header.");
+            string reason = ResolveEndReason(host);
+            if (!host.GameEnded)
+            {
+                StateRules.Require(!economy.Bankrupt && string.IsNullOrEmpty(reason), "Unfinished run has an ending or bankrupt wallet.");
+                return;
+            }
+            StateRules.Require(simulationPaused && !string.IsNullOrWhiteSpace(host.EndingText), "Finished run must be paused with an ending.");
+            StateRules.Require(reason == RunEndReasons.Bankruptcy || RunEndReasons.IsNarrative(reason), "Unknown ending reason.");
+            StateRules.Require(economy.Bankrupt == (reason == RunEndReasons.Bankruptcy), "Ending reason differs from wallet bankruptcy.");
         }
         // Story v1 fingerprint predates this one newly appended, flat configuration field.
         // Remove only it; all existing story/configuration values keep their original fingerprint.
