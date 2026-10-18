@@ -22,8 +22,10 @@ namespace CallmeCatgirl.Gameplay
         public TaskSimulation Simulation { get; private set; }
         public ConversationStory Story { get; private set; }
         public bool IsStoryOpen => Story != null && Story.IsOpen;
+        [SerializeField] private MemoryInstallGame memoryInstallGame;
+        public bool IsMemoryInstallOpen => memoryInstallGame != null && memoryInstallGame.IsOpen;
         public bool IsMemoryUpgradeOpen { get; private set; }
-        public bool IsModalOpen => IsMemoryUpgradeOpen || IsTrainingOpen || (canvasView!=null&&canvasView.WindowLayers!=null&&canvasView.WindowLayers.IsBlockingInput);
+        public bool IsModalOpen => IsMemoryInstallOpen || IsMemoryUpgradeOpen || IsTrainingOpen || (canvasView!=null&&canvasView.WindowLayers!=null&&canvasView.WindowLayers.IsBlockingInput);
         public IReadOnlyList<Cell> NextMemoryCells => NextMemoryUpgrade == null ? Array.Empty<Cell>()
             : MemoryOutline(NextMemoryUpgrade.TargetLevel);
         public string SelectedId { get; private set; }
@@ -43,10 +45,10 @@ namespace CallmeCatgirl.Gameplay
         private double monthTimer;
         public int CompletedTasks { get; private set; }
         public int AvailableAbilityPoints { get; private set; }
-        public bool CanAllocateAbility => !TrainingEnabled && !GameEnded && IsMemoryUpgradeOpen && AvailableAbilityPoints > 0;
+        public bool CanAllocateAbility => !TrainingEnabled && !GameEnded && !IsMemoryInstallOpen && IsMemoryUpgradeOpen && AvailableAbilityPoints > 0;
         public MemoryUpgradeConfiguration.UpgradeStep NextMemoryUpgrade
             => configuration.MemoryUpgrades.TryGetNextLevel(MemoryLevel, out var step) ? step : null;
-        public bool CanUpgradeMemory => !GameEnded && NextMemoryUpgrade != null
+        public bool CanUpgradeMemory => !GameEnded && !IsMemoryInstallOpen && NextMemoryUpgrade != null
             && (NextMemoryUpgrade.TaskMultipliers == null || NextMemoryUpgrade.TaskMultipliers.IsValid) && NextMemoryUpgrade.Cost >= 0 && NextMemoryUpgrade.AbilityPoints >= 0
             && AvailableAbilityPoints <= int.MaxValue - NextMemoryUpgrade.AbilityPoints
             && Funds >= NextMemoryUpgrade.Cost && CompletedTasks >= NextMemoryUpgrade.RequiredCompletedTasks;
@@ -97,6 +99,7 @@ namespace CallmeCatgirl.Gameplay
             if (configuration == null) { Debug.LogError("CoreGameplayController requires a GameplayConfiguration.", this); enabled = false; return; }
             try
             {
+                memoryInstallGame?.ResetGame();
                 IsMemoryUpgradeOpen = false;
                 configuration.MemoryUpgrades.ValidateTaskMultipliers();
                 configuration.TaskGeneration?.Validate(configuration.MemoryUpgrades.BoardWidth, configuration.MemoryUpgrades.BoardHeight);
@@ -131,7 +134,7 @@ namespace CallmeCatgirl.Gameplay
                         p => Simulation.TryChangeExecutionProfile(p.Model, p.TokensPerSecond, p.OpenCells),
                         rate => Simulation.TrySetTokenThroughput(rate),
                         () => configuration.MemoryUpgrades.GetOpenCells(MemoryLevel),
-                        () => !GameEnded && !IsMemoryUpgradeOpen,
+                        () => !GameEnded && !IsMemoryUpgradeOpen && !IsMemoryInstallOpen,
                         currentStage: () => MemoryLevel);
                     if (!Simulation.TrySetTokenThroughput(training.Session.TokensPerSecond)) throw new InvalidOperationException("Training speed initialization failed.");
                     training.Changed += RefreshTraining;
@@ -256,13 +259,13 @@ namespace CallmeCatgirl.Gameplay
         }
         public void OpenMemoryUpgrade()
         {
-            if (GameEnded || IsTrainingOpen) return;
+            if (GameEnded || IsTrainingOpen || IsMemoryInstallOpen) return;
             IsMemoryUpgradeOpen = true; Message = "查看新增格子，点击确认后才会扣费。倍率只影响升级后新生成的请求。"; canvasView?.CancelDrag(); canvasView?.Refresh();
         }
-        public void CloseMemoryUpgrade() { IsMemoryUpgradeOpen = false; canvasView?.Refresh(); }
+        public void CloseMemoryUpgrade() { if (IsMemoryInstallOpen) return; IsMemoryUpgradeOpen = false; canvasView?.Refresh(); }
         public void UpgradeMemory()
         {
-            if (GameEnded || IsTrainingOpen) return;
+            if (GameEnded || IsTrainingOpen || IsMemoryInstallOpen) return;
             ReadEvents();
             var next = NextMemoryUpgrade;
             if (next == null) { Message = "内存已满级。"; return; }
@@ -280,6 +283,17 @@ namespace CallmeCatgirl.Gameplay
             Message = $"内存升级至 Lv{MemoryLevel}：新增 {Simulation.OpenCellCount - before} 格，花费 {next.Cost}，获得 {next.AbilityPoints} 点（剩余 {AvailableAbilityPoints} 点）";
             logs.Insert(0, Message);
             if (logs.Count > 7) logs.RemoveAt(logs.Count - 1);
+            if (Application.isPlaying && memoryInstallGame != null)
+            {
+                memoryInstallGame.InstallCompleted -= FinishMemoryInstall;
+                memoryInstallGame.InstallCompleted += FinishMemoryInstall;
+                memoryInstallGame.OpenGame();
+            }
+            canvasView?.Refresh();
+        }
+        private void FinishMemoryInstall()
+        {
+            Message = $"内存 Lv{MemoryLevel} 安装完成，可继续查看升级或关闭返回经营。";
             canvasView?.Refresh();
         }
         public void AllocateAbility(AbilityKind ability)

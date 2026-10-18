@@ -275,7 +275,7 @@ namespace CallmeCatgirl.UI
             if (conversationPopup != null) conversationPopup.Refresh(controller, GetAvatar(controller.Story.UserId), feedback);
             clockLabel.text = $"时间 {sim.GameTime:0.0}s · 周期 {sim.Model.Interval:0.#}s";
             messageLabel.text = controller.Message.StartsWith("拖动请求") ? "R 旋转 · 空格 暂停 · Esc 取消" : controller.Message; logLabel.text = string.Join("\n", controller.Logs);
-            pauseLabel.text = controller.IsMemoryUpgradeOpen ? "内存升级中" : controller.GameEnded ? "经营结束" : sim.Paused ? (sim.GameTime == 0 ? "开始" : "继续") : "暂停";
+            pauseLabel.text = controller.IsMemoryInstallOpen ? "安装中" : controller.IsMemoryUpgradeOpen ? "内存升级中" : controller.GameEnded ? "经营结束" : sim.Paused ? (sim.GameTime == 0 ? "开始" : "继续") : "暂停";
 
             if (speedButtons != null && speedIdleColors != null)
                 for (int i = 0; i < speedButtons.Length && i < speedValues.Length; i++)

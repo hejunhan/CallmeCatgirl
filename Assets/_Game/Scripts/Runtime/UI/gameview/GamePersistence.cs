@@ -80,6 +80,7 @@ namespace CallmeCatgirl.Gameplay
         }
         public bool SaveRun()
         {
+            if (IsMemoryInstallOpen) { Message="请先完成或跳过内存安装，再保存。"; return false; }
             try { ReadEvents(); EnsureSaveService(); saveService.Save(); Message="游戏已保存。"; return true; }
             catch(Exception error) { Message="保存失败："+error.Message; return false; }
         }
@@ -120,6 +121,7 @@ namespace CallmeCatgirl.Gameplay
                 if((id.StartsWith("new-") || id.StartsWith("round-")) && int.TryParse(id.Substring(id.IndexOf('-')+1),out int number) && number>host.RequestSerial)
                     throw new ArgumentException("Request serial would reuse an existing ID.");
             return new PreparedRestore(()=>{
+                memoryInstallGame?.ResetGame();
                 Economy.OnEconomyLog-=AddEconomyLog; training.Changed-=RefreshTraining;
                 Simulation=restored.Simulation; Economy=restored.Economy; Story=restored.Story; requestRandom=restored.GenerationRandom;
                 Economy.OnEconomyLog+=AddEconomyLog;
@@ -129,7 +131,7 @@ namespace CallmeCatgirl.Gameplay
                 CompletedTasks=host.CompletedTasks;AvailableAbilityPoints=host.AvailableAbilityPoints;serial=host.RequestSerial;SelectedId=host.SelectedRequestId;
                 GameEnded=host.GameEnded;EndingText=host.EndingText;IsMemoryUpgradeOpen=host.MemoryUpgradeOpen;runId=data.RunId;
                 policy.BindRestoredTree(Simulation,restored.Policies);
-                try { training.BindRestoredSession(Simulation,session,()=>!GameEnded&&!IsMemoryUpgradeOpen); }
+                try { training.BindRestoredSession(Simulation,session,()=>!GameEnded&&!IsMemoryUpgradeOpen&&!IsMemoryInstallOpen); }
                 catch(Exception error){Debug.LogWarning("Restored training observer: "+error.Message);}
                 training.Changed+=RefreshTraining; observedState=null; BindDebugCommands();
                 try {trainingPanel?.Close();canvasView?.CancelDrag();canvasView?.Initialize(this);canvasView?.SetManualPlanningVisual(Simulation.Paused);canvasView?.Refresh();}

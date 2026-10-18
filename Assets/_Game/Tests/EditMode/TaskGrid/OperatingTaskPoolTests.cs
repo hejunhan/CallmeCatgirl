@@ -160,7 +160,10 @@ namespace CallmeCatgirl.Tests
             Configure(false); FinishRole(); Assert.That(Call(Value<object>(owner, "Story"), "Finished", "A"), Is.True);
             Call(owner, "AddRequest"); var old = Value<TaskInstance>(owner, "SelectedTask"); var definition = old.Definition;
             Assert.That(Call(owner, "IsOperatingTask", old.Id), Is.True); Assert.That(old.Definition.Calculation, Is.EqualTo(6));
-            Call(owner, "OpenMemoryUpgrade"); Call(owner, "UpgradeMemory"); Call(owner, "CloseMemoryUpgrade");
+            Call(owner, "OpenMemoryUpgrade"); Call(owner, "UpgradeMemory");
+            Assert.That(Value<bool>(owner,"IsMemoryInstallOpen"),Is.True);
+            Call(Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).Single(o=>o.GetType().Name=="StandaloneMemoryInstall"),"SkipInstall");
+            Call(owner, "CloseMemoryUpgrade");
             Assert.That(Value<int>(owner, "MemoryLevel"), Is.EqualTo(2)); Assert.That(old.Definition, Is.SameAs(definition));
             Call(owner, "AddRequest"); var next = Value<TaskInstance>(owner, "SelectedTask");
             Assert.That(next.Definition.Calculation, Is.EqualTo(12)); Assert.That(next.Definition.Tokens, Is.EqualTo(6));
