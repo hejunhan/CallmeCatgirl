@@ -21,6 +21,8 @@ namespace CallmeCatgirl.Presentation
         [SerializeField] private Material materialTemplate = null;
         [SerializeField] private PlanningPaper[] papers = new PlanningPaper[0];
         [SerializeField] private bool reducedMotion;
+        [SerializeField, Tooltip("暂停差异反色与窗口浮动特效；默认关闭。既有场景未保存该字段时反序列化为 false，无需重新烘焙。")]
+        private bool pauseVisualsEnabled = false;
         private readonly Vector4[] pair01 = new Vector4[MaxSheets], pair23 = new Vector4[MaxSheets], strengths = new Vector4[MaxSheets];
         private readonly Vector4[] front01 = new Vector4[MaxPapers], front23 = new Vector4[MaxPapers];
         private readonly Vector4[] rear01 = new Vector4[MaxPapers], rear23 = new Vector4[MaxPapers];
@@ -38,6 +40,17 @@ namespace CallmeCatgirl.Presentation
         public bool PlanningRequested => wipe.Requested;
         public float WipeProgress => wipe.Value;
         public bool ReducedMotion { get => reducedMotion; set => reducedMotion = value; }
+        /// <summary>暂停视觉特效开关，默认关闭：擦除/反色保持隐藏，纸张不漂移并复位到捕获的基准位姿；逻辑暂停状态不受影响。</summary>
+        public bool PauseVisualsEnabled
+        {
+            get => pauseVisualsEnabled;
+            set
+            {
+                if (pauseVisualsEnabled == value) return;
+                pauseVisualsEnabled = value;
+                if (!value) SuppressVisuals();
+            }
+        }
         public void SetColorCoverage(RectTransform compute,IReadOnlyList<RectTransform> windows)
         {
             computeSurface=compute;windowSurfaces.Clear();
@@ -62,7 +75,14 @@ namespace CallmeCatgirl.Presentation
             instance = new Material(materialTemplate) { name = materialTemplate.name + " (runtime)", hideFlags = HideFlags.DontSave };
             overlay.material = instance; overlay.raycastTarget = false;
             overlay.enabled = false; // First render callback supplies the complete uniform set.
-            foreach (var paper in papers) if (paper != null) paper.Request(wipe.Requested);
+            if (pauseVisualsEnabled)
+            {
+                foreach (var paper in papers) if (paper != null) paper.Request(wipe.Requested);
+            }
+            else
+            {
+                SuppressVisuals(); // 默认关闭：启用组件时一次性复位，不做逐帧覆写。
+            }
             focused = Application.isFocused; skipDelta = true;
             Canvas.willRenderCanvases += BeforeRender;
         }
@@ -84,8 +104,16 @@ namespace CallmeCatgirl.Presentation
         // Call ONLY for manual pause changes. Modal/presence changes have their own input.
         public void SetPlanning(bool requested)
         {
-            if (!wipe.Request(requested)) return;
+            if (!wipe.Request(requested)) return; // 逻辑请求状态始终记录，PlanningRequested 不受影响。
+            if (!pauseVisualsEnabled) return; // 视觉输出被抑制：不驱动擦除或纸张漂移。
             foreach (var paper in papers) if (paper != null) paper.Request(requested);
+        }
+        // 关闭视觉的一次性复位：擦除归零、隐藏覆盖层、纸张回到捕获的基准位姿，之后不再逐帧覆写。
+        private void SuppressVisuals()
+        {
+            wipe.Snap(0);
+            if (overlay != null) overlay.enabled = false;
+            foreach (var paper in papers) if (paper != null) paper.RestoreHome();
         }
         public void SetPresentationBlocked(bool value)
         {
@@ -98,6 +126,13 @@ namespace CallmeCatgirl.Presentation
         private void LateUpdate()
         {
             if (instance == null) return;
+            if (!pauseVisualsEnabled)
+            {
+                // 抑制期间：擦除保持为 0，不调用 paper.Advance，纸张位姿不被逐帧覆写。
+                if (wipe.Value != 0) wipe.Snap(0);
+                skipDelta = false;
+                return;
+            }
             float wipeDelta=Available&&!skipDelta?Time.unscaledDeltaTime:0;
             frameDelta = !blocked?wipeDelta:0;
             skipDelta = false;
@@ -111,6 +146,7 @@ namespace CallmeCatgirl.Presentation
         {
             if (instance == null || sampledFrame == Time.frameCount) return;
             sampledFrame = Time.frameCount; // Unity may invoke willRenderCanvases several times.
+            if (!pauseVisualsEnabled) { overlay.enabled = false; return; }
             Vector2 viewport = new Vector2(Screen.width, Screen.height);
             int count = 0;
             for (int i = 0; i < papers.Length; i++)

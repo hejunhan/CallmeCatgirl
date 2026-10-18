@@ -51,6 +51,8 @@ namespace CallmeCatgirl.Presentation
         }
         public void Tick(float delta, float seconds, bool reduced = false)
             => Value = reduced ? (Requested ? 1 : 0) : MotionMath.Approach(Value, Requested ? 1 : 0, delta, seconds);
+        /// <summary>只改变可见进度，不改变请求的目标状态。</summary>
+        public void Snap(float value) => Value = MotionMath.Clamp01(value);
     }
 
     public readonly struct MotionPose
@@ -82,6 +84,8 @@ namespace CallmeCatgirl.Presentation
             if (!planning) Begin(default, .6f);
         }
         public void MarkCovered(bool covered) { if (Planning && covered) Swept = true; }
+        /// <summary>立即回到基准姿态并清除规划/扫过状态；用于关闭视觉时一次性复位。</summary>
+        public void SnapHome() { Planning = false; Swept = false; segment = false; Pose = default; }
         public void Tick(float delta, bool engaged, bool reduced, MotionPose limits)
         {
             if (reduced) { Pose = default; segment = false; Swept = false; return; }

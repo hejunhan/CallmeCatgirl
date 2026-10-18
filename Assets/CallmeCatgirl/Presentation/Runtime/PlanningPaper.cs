@@ -42,7 +42,17 @@ namespace CallmeCatgirl.Presentation
         }
         public void OnPointerEnter(PointerEventData eventData) => pointers.Add(eventData.pointerId);
         public void OnPointerExit(PointerEventData eventData) => pointers.Remove(eventData.pointerId);
-        private void OnDisable() { pointers.Clear(); restoration = 0; }
+        private void OnDisable() { pointers.Clear(); RestoreHome(); }
+        /// <summary>一次性复位到 CaptureHome 记录的位置与旋转；之后不再逐帧覆写，避免覆盖合法布局变更或其他显示动画。不产生累积偏移。</summary>
+        internal void RestoreHome()
+        {
+            if (drift == null) CaptureHome();
+            drift?.SnapHome();
+            restoration = 0;
+            if (motionRoot == null) return;
+            motionRoot.anchoredPosition = home;
+            motionRoot.localRotation = homeRotation;
+        }
         internal void Request(bool planning)
         {
             if (drift == null) CaptureHome();
