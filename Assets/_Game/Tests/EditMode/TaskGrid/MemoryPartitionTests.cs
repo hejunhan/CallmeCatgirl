@@ -154,7 +154,9 @@ namespace CallmeCatgirl.Tests
                 var def = new TaskDefinition("line", "line", Line, 100, 10, 60, 100, Array.Empty<AbilityRequirement>());
                 Assert.That(sim.TryCreate("line", "line", "1", def, out var task), Is.True);
                 Assert.That(sim.Preview(task.Id, new Cell(2, 4), 1), Is.EqualTo(PlacementFailure.LockedCell));
-                Call(owner, "OpenMemoryUpgrade"); Call(owner, "UpgradeMemory"); Call(owner, "UpgradeMemory"); yield return null;
+                Call(owner, "OpenMemoryUpgrade");
+                Call(owner, "UpgradeMemory"); MemoryUpgradeTestActions.Skip(owner);
+                Call(owner, "UpgradeMemory"); MemoryUpgradeTestActions.Skip(owner); yield return null;
                 Assert.That(sim.Preview(task.Id, new Cell(2, 4), 1), Is.EqualTo(PlacementFailure.CrossesPartition));
                 Assert.That(Partition("PreviewPartitions").raycastTarget, Is.False);
                 Assert.That(VertexCount(Partition("PreviewPartitions")), Is.GreaterThan(0));
@@ -177,6 +179,7 @@ namespace CallmeCatgirl.Tests
                 Assert.That(sim.TryPlace(task.Id, new Cell(2, 5), 0, out _), Is.True);
                 sim.Paused = false; sim.Advance(4); sim.Paused = true;
                 Call(owner, "OpenMemoryUpgrade"); Call(owner, "UpgradeMemory");
+                MemoryUpgradeTestActions.Skip(owner);
                 Assert.That(task.Progress, Is.EqualTo(40)); Assert.That(sim.CompartmentAt(task.Origin), Is.EqualTo(1));
                 Assert.That(sim.TaskAt(new Cell(3, 5)), Is.EqualTo(task.Id));
                 Call(owner, "CloseMemoryUpgrade"); yield return null; Capture("PartitionBoard.png");

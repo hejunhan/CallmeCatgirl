@@ -239,6 +239,8 @@ namespace CallmeCatgirl.Tests
             int nextCells = ((System.Collections.Generic.IReadOnlyList<Cell>)controller.GetType().GetProperty("NextMemoryCells").GetValue(controller)).Count;
             var button = ButtonNamed("ConfirmMemoryUpgradeButton");
             button.onClick.Invoke();
+            Assert.That(Value("MemoryLevel"), Is.EqualTo(1)); Assert.That(Value("Funds"), Is.EqualTo(1500));
+            MemoryUpgradeTestActions.Skip(controller);
             Assert.That(Value("MemoryLevel"), Is.EqualTo(2));
             Assert.That(Value("Funds"), Is.EqualTo(1400));
             Assert.That(sim.OpenCellCount, Is.EqualTo(nextCells));
@@ -279,6 +281,7 @@ namespace CallmeCatgirl.Tests
                     Command("OpenMemoryUpgrade");
                     Assert.That(button.interactable, Is.True);
                     button.onClick.Invoke();
+                    MemoryUpgradeTestActions.Skip(controller);
                     Command("CloseMemoryUpgrade");
                 }
             }

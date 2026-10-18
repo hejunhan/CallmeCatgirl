@@ -58,22 +58,28 @@ namespace CallmeCatgirl.Tests
             var capture = typeof(SystemFeedbackTests).GetMethod("Capture", BindingFlags.NonPublic | BindingFlags.Static);
             capture.Invoke(null, new object[] { file }); capture.Invoke(null, new object[] { file });
         }
-        [UnityTest] public IEnumerator UpgradeChargesOnceThenRequiresInstallationAndPreservesTime()
+        [UnityTest] public IEnumerator UpgradeStartsMinigameAndFinishingAppliesChargeLevelCellsAndPointsExactlyOnce()
         {
             EditorSceneManager.OpenScene(Core); yield return new EnterPlayMode(); yield return null;
             var owner = Owner(); ManualClock(owner);
             var sim = Get<CallmeCatgirl.Gameplay.TaskGrid.TaskSimulation>(owner, "Simulation"); sim.Paused = false;
-            int funds = Get<int>(owner, "Funds"), level = Get<int>(owner, "MemoryLevel"), cells = sim.OpenCellCount;
-            var next = Get<object>(owner, "NextMemoryUpgrade"); int cost = (int)next.GetType().GetField("Cost").GetValue(next);
+            int funds = Get<int>(owner, "Funds"), level = Get<int>(owner, "MemoryLevel"), cells = sim.OpenCellCount, points = Get<int>(owner, "AvailableAbilityPoints");
+            var next = Get<object>(owner, "NextMemoryUpgrade");
+            int cost = (int)next.GetType().GetField("Cost").GetValue(next), reward = (int)next.GetType().GetField("AbilityPoints").GetValue(next);
             double time = sim.GameTime, month = Get<double>(owner, "MonthTimeRemaining");
             Call(owner, "OpenMemoryUpgrade"); Call(owner, "UpgradeMemory");
-            var game = Game(); Assert.That(Get<bool>(owner, "IsMemoryInstallOpen"), Is.True);
-            Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(level + 1)); Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds - cost));
-            Assert.That(sim.OpenCellCount, Is.GreaterThan(cells)); Assert.That(Get<bool>(owner, "IsModalOpen"), Is.True);
+            var game = Game();
+            // 场景1：开始升级只打开小游戏，资金、等级、格子、点数全部保持不变。
+            Assert.That(Get<bool>(owner, "IsMemoryInstallOpen"), Is.True);
+            Assert.That(Get<bool>(owner, "IsMemoryInstallPending"), Is.True);
+            Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds)); Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(level));
+            Assert.That(sim.OpenCellCount, Is.EqualTo(cells)); Assert.That(Get<int>(owner, "AvailableAbilityPoints"), Is.EqualTo(points));
+            Assert.That(Get<bool>(owner, "IsModalOpen"), Is.True);
             Assert.That(Get<bool>(owner, "CanUpgradeMemory"), Is.False);
-            Call(owner, "UpgradeMemory"); Call(owner, "CloseMemoryUpgrade"); Call(owner, "AdvanceGame", 100d); Call(owner, "TogglePause");
+            // 场景7：挂起期间重复开始、推进时间、切换暂停、保存均为无操作，暂停状态保持。
+            Call(owner, "UpgradeMemory"); Call(owner, "AdvanceGame", 100d); Call(owner, "TogglePause");
             Assert.That(sim.GameTime, Is.EqualTo(time)); Assert.That(Get<double>(owner, "MonthTimeRemaining"), Is.EqualTo(month)); Assert.That(sim.Paused, Is.False);
-            Assert.That(Call(owner, "SaveRun"), Is.EqualTo(false)); Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds - cost));
+            Assert.That(Call(owner, "SaveRun"), Is.EqualTo(false)); Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds));
             ((Button)Field(game, "finishButton")).onClick.Invoke(); Assert.That(Get<bool>(game, "IsOpen"), Is.True, "Finish must not bypass the installation.");
             Capture("MemoryInstallInitial.png");
             Click(game, "pressRightButton"); Assert.That(((Button)Field(game, "finishButton")).gameObject.activeSelf, Is.False);
@@ -83,32 +89,146 @@ namespace CallmeCatgirl.Tests
             Assert.That(((RectTransform)Field(game, "rightClip")).localEulerAngles.z, Is.EqualTo(0).Within(.01));
             Capture("MemoryInstallReady.png");
             var completions = new CompletionCounter(); Subscribe(game, completions.Increment);
-            Click(game, "finishButton"); ((Button)Field(game, "finishButton")).onClick.Invoke();
+            Click(game, "finishButton"); ((Button)Field(game, "finishButton")).onClick.Invoke(); ((Button)Field(game, "skipButton")).onClick.Invoke();
+            // 场景2：恰好扣费一次、升一级、开放格子与奖励点数；重复 Finish/Skip 回调不再产生效果。
             Assert.That(completions.Count, Is.EqualTo(1)); Assert.That(Get<bool>(game, "IsOpen"), Is.False);
-            Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds - cost)); Assert.That(Get<bool>(owner, "IsMemoryUpgradeOpen"), Is.True);
+            Assert.That(Get<bool>(owner, "IsMemoryInstallPending"), Is.False);
+            Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds - cost)); Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(level + 1));
+            Assert.That(sim.OpenCellCount, Is.GreaterThan(cells)); Assert.That(Get<int>(owner, "AvailableAbilityPoints"), Is.EqualTo(points + reward));
+            Assert.That(Get<bool>(owner, "IsMemoryUpgradeOpen"), Is.True);
             Call(owner, "CloseMemoryUpgrade"); Assert.That(Get<bool>(owner, "IsModalOpen"), Is.False);
             Call(owner, "AdvanceGame", .25d); Assert.That(sim.GameTime, Is.GreaterThan(time));
             yield return new ExitPlayMode();
         }
-        [UnityTest] public IEnumerator SkipAndRestartDoNotDuplicatePaymentOrListeners()
+        [UnityTest] public IEnumerator SkipAppliesTheSameTransactionOnceAndResetCancelsPendingInstall()
         {
             EditorSceneManager.OpenScene(Core); yield return new EnterPlayMode(); yield return null;
-            var owner = Owner(); ManualClock(owner); var game = Game(); int funds = Get<int>(owner, "Funds");
+            var owner = Owner(); ManualClock(owner); var game = Game();
+            var sim = Get<CallmeCatgirl.Gameplay.TaskGrid.TaskSimulation>(owner, "Simulation");
+            int funds = Get<int>(owner, "Funds"), cells = sim.OpenCellCount;
+            var next = Get<object>(owner, "NextMemoryUpgrade"); int cost = (int)next.GetType().GetField("Cost").GetValue(next);
+            // 场景3：显式跳过与完成走同一事务，结果完全一致且只生效一次。
             Call(owner, "OpenMemoryUpgrade"); Call(owner, "UpgradeMemory"); yield return null; Click(game, "skipButton");
-            Assert.That(Get<bool>(game, "IsOpen"), Is.False); int charged = Get<int>(owner, "Funds");
-            ((Button)Field(game, "skipButton")).onClick.Invoke(); Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(charged));
+            Assert.That(Get<bool>(game, "IsOpen"), Is.False);
+            Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds - cost)); Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(2));
+            Assert.That(sim.OpenCellCount, Is.GreaterThan(cells));
+            ((Button)Field(game, "skipButton")).onClick.Invoke(); Call(game, "SkipInstall");
+            Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds - cost)); Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(2));
+            // 每次成功升级都会开启一次全新安装，且提交前不扣费。
             owner.GetType().GetProperty("CompletedTasks").SetValue(owner, 100);
             Call(owner, "UpgradeMemory");
-            Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(3));
+            Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(2), "Completion, not start, applies the upgrade.");
             Assert.That(Get<bool>(game, "IsOpen"), Is.True, "Every successful level must start a fresh installation.");
             Assert.That(((Button)Field(game, "finishButton")).gameObject.activeSelf, Is.False);
+            Click(game, "skipButton"); Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(3));
+            // 场景6：重置中止未完成的安装意图，不扣费、不升级；旧回调不能提交之后的意图。
+            Call(owner, "UpgradeMemory"); Assert.That(Get<bool>(owner, "IsMemoryInstallPending"), Is.True);
             Call(owner, "ResetSimulation"); ManualClock(owner);
-            Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds)); Assert.That(Get<bool>(game, "IsOpen"), Is.False);
+            Assert.That(Get<bool>(owner, "IsMemoryInstallPending"), Is.False); Assert.That(Get<bool>(game, "IsOpen"), Is.False);
+            Assert.That(Get<bool>(owner, "IsModalOpen"), Is.False);
+            Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds)); Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(1));
+            ((Button)Field(game, "skipButton")).onClick.Invoke(); ((Button)Field(game, "finishButton")).onClick.Invoke();
+            Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds)); Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(1));
             Call(owner, "OpenMemoryUpgrade"); Call(owner, "UpgradeMemory");
             Assert.That(((Button)Field(game, "finishButton")).gameObject.activeSelf, Is.False);
             var count = new CompletionCounter(); Subscribe(game, count.Increment);
             yield return null; Click(game, "skipButton"); Assert.That(count.Count, Is.EqualTo(1));
+            Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds - cost)); Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(2));
             Call(owner, "ResetSimulation"); Assert.That(Get<bool>(owner, "IsModalOpen"), Is.False);
+            yield return new ExitPlayMode();
+        }
+        [UnityTest] public IEnumerator FundsSpentDuringPendingInstallFailCommitWithoutChargeAndAllowRetry()
+        {
+            EditorSceneManager.OpenScene(Core); yield return new EnterPlayMode(); yield return null;
+            var owner = Owner(); ManualClock(owner); var game = Game();
+            var sim = Get<CallmeCatgirl.Gameplay.TaskGrid.TaskSimulation>(owner, "Simulation");
+            int funds = Get<int>(owner, "Funds"), level = Get<int>(owner, "MemoryLevel"), cells = sim.OpenCellCount;
+            var next = Get<object>(owner, "NextMemoryUpgrade"); int cost = (int)next.GetType().GetField("Cost").GetValue(next);
+            Call(owner, "OpenMemoryUpgrade"); Call(owner, "UpgradeMemory");
+            Assert.That(Get<bool>(owner, "IsMemoryInstallPending"), Is.True);
+            // 场景5：挂起期间资金被其他钱包命令花掉，提交时重校验失败。
+            Call(Get<object>(owner, "Economy"), "TrySpendFunds", funds);
+            Assert.That(Get<int>(owner, "Funds"), Is.Zero);
+            Call(game, "SkipInstall");
+            Assert.That(Get<int>(owner, "Funds"), Is.Zero, "No charge and no negative balance.");
+            Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(level)); Assert.That(sim.OpenCellCount, Is.EqualTo(cells));
+            Assert.That(Get<bool>(owner, "IsMemoryInstallPending"), Is.False);
+            Assert.That(Get<bool>(owner, "IsMemoryInstallOpen"), Is.False, "Failed commit must not leave a modal lock.");
+            Call(owner, "AddFunds", cost); Call(owner, "UpgradeMemory");
+            Assert.That(Get<bool>(owner, "IsMemoryInstallOpen"), Is.True, "Retry once funded starts a fresh install.");
+            Call(game, "SkipInstall");
+            Assert.That(Get<int>(owner, "Funds"), Is.Zero); Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(level + 1));
+            Assert.That(sim.OpenCellCount, Is.GreaterThan(cells));
+            yield return new ExitPlayMode();
+        }
+        [UnityTest] public IEnumerator CloseOrDisableInterruptsPendingInstallWithoutEffects()
+        {
+            EditorSceneManager.OpenScene(Core); yield return new EnterPlayMode(); yield return null;
+            var owner = Owner(); ManualClock(owner); var game = Game();
+            var sim = Get<CallmeCatgirl.Gameplay.TaskGrid.TaskSimulation>(owner, "Simulation");
+            int funds = Get<int>(owner, "Funds"), level = Get<int>(owner, "MemoryLevel"), cells = sim.OpenCellCount;
+            // 场景6：关闭升级窗口取消未完成的安装意图。
+            Call(owner, "OpenMemoryUpgrade"); Call(owner, "UpgradeMemory");
+            Assert.That(Get<bool>(owner, "IsMemoryInstallPending"), Is.True);
+            Call(owner, "CloseMemoryUpgrade");
+            Assert.That(Get<bool>(owner, "IsMemoryInstallPending"), Is.False); Assert.That(Get<bool>(owner, "IsMemoryInstallOpen"), Is.False);
+            Assert.That(Get<bool>(owner, "IsModalOpen"), Is.False);
+            Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds)); Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(level));
+            Assert.That(sim.OpenCellCount, Is.EqualTo(cells));
+            ((Button)Field(game, "skipButton")).onClick.Invoke(); ((Button)Field(game, "finishButton")).onClick.Invoke();
+            Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds)); Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(level));
+            // 重新打开是一次全新的有效安装；外部禁用面板同样中止意图（看门狗），且不留下模态锁。
+            Call(owner, "OpenMemoryUpgrade"); Call(owner, "UpgradeMemory");
+            Assert.That(Get<bool>(game, "IsOpen"), Is.True);
+            game.gameObject.SetActive(false); yield return null;
+            Assert.That(Get<bool>(owner, "IsMemoryInstallPending"), Is.False, "Watchdog cancels an externally disabled install.");
+            Assert.That(Get<bool>(owner, "IsMemoryInstallOpen"), Is.False); Assert.That(Get<bool>(owner, "IsModalOpen"), Is.True, "Upgrade window stays open but no install lock remains.");
+            Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds)); Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(level));
+            game.gameObject.SetActive(true); Call(owner, "UpgradeMemory");
+            Assert.That(Get<bool>(game, "IsOpen"), Is.True, "Reopening starts a fresh valid install.");
+            Call(game, "SkipInstall");
+            Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(level + 1));
+            yield return new ExitPlayMode();
+        }
+        [UnityTest] public IEnumerator InvalidGeometryOrMissingInstallUiFailSafely()
+        {
+            EditorSceneManager.OpenScene(Core); yield return new EnterPlayMode(); yield return null;
+            var owner = Owner(); ManualClock(owner); var game = Game();
+            var sim = Get<CallmeCatgirl.Gameplay.TaskGrid.TaskSimulation>(owner, "Simulation");
+            int funds = Get<int>(owner, "Funds"), level = Get<int>(owner, "MemoryLevel"), cells = sim.OpenCellCount;
+            var config = owner.GetType().GetField("configuration", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(owner);
+            var memory = config.GetType().GetField("MemoryUpgrades").GetValue(config);
+            var unlockField = memory.GetType().GetField("CellUnlockLevels");
+            var validCells = (int[])unlockField.GetValue(memory);
+            var gameField = owner.GetType().GetField("memoryInstallGame", BindingFlags.Instance | BindingFlags.NonPublic);
+            try
+            {
+                // 场景8：开始时几何配置无效，不打开小游戏、不产生任何变化。
+                unlockField.SetValue(memory, new int[3]);
+                Call(owner, "UpgradeMemory");
+                Assert.That(Get<bool>(owner, "IsMemoryInstallPending"), Is.False); Assert.That(Get<bool>(owner, "IsMemoryInstallOpen"), Is.False);
+                Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds)); Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(level));
+                Assert.That(sim.OpenCellCount, Is.EqualTo(cells));
+                unlockField.SetValue(memory, validCells);
+                // 缺少安装界面时安全失败，而不是立即升级。
+                gameField.SetValue(owner, null);
+                Call(owner, "UpgradeMemory");
+                Assert.That(Get<bool>(owner, "IsMemoryInstallPending"), Is.False);
+                Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds)); Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(level));
+                gameField.SetValue(owner, game);
+                // 提交时几何配置损坏：不扣费、不升级、意图清除、可重试。
+                Call(owner, "UpgradeMemory"); Assert.That(Get<bool>(owner, "IsMemoryInstallPending"), Is.True);
+                unlockField.SetValue(memory, new int[3]);
+                Call(game, "SkipInstall");
+                Assert.That(Get<bool>(owner, "IsMemoryInstallPending"), Is.False); Assert.That(Get<bool>(owner, "IsMemoryInstallOpen"), Is.False);
+                Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds)); Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(level));
+                Assert.That(sim.OpenCellCount, Is.EqualTo(cells));
+                unlockField.SetValue(memory, validCells);
+                Call(owner, "UpgradeMemory"); Call(game, "SkipInstall");
+                Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(level + 1));
+                Assert.That(Get<int>(owner, "Funds"), Is.LessThan(funds)); Assert.That(sim.OpenCellCount, Is.GreaterThan(cells));
+            }
+            finally { unlockField.SetValue(memory, validCells); gameField.SetValue(owner, game); }
             yield return new ExitPlayMode();
         }
         [UnityTest] public IEnumerator FailedUpgradeDoesNotOpenInstallation()

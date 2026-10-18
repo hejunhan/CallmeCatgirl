@@ -18,6 +18,7 @@ namespace CallmeCatgirl.Tests
     {
         private MonoBehaviour owner;
         private ScriptableObject original, config, memory;
+        private object originalTraining;
         private static object Call(object o, string name, params object[] args) => o.GetType().GetMethod(name).Invoke(o, args);
         private static T Value<T>(object o, string name) => (T)o.GetType().GetProperty(name).GetValue(o);
         private static void Set(object o, string name, object value) => o.GetType().GetField(name).SetValue(o, value);
@@ -31,8 +32,12 @@ namespace CallmeCatgirl.Tests
             original = (ScriptableObject)field.GetValue(owner); config = Object.Instantiate(original);
             memory = Object.Instantiate((ScriptableObject)config.GetType().GetField("MemoryUpgrades").GetValue(config));
             Set(config, "MemoryUpgrades", memory); Set(config, "Story", null); Set(config, "ModelPoints", new Vector4(4, 1, 1, 0));
+            Set(config, "TaskGeneration", null); Set(config, "OrdinaryDialoguePool", null); Set(config, "OpeningBalance", null);
             Set(config, "InitialFunds", 1500); Set(memory, "InitialLevel", 1);
             Set(FirstStep, "AbilityPoints", 3); Set(FirstStep, "RequiredCompletedTasks", 0); Set(FirstStep, "Cost", 100);
+            // These scenarios exercise the manual point-allocation mode, which is disabled while training is bound.
+            var trainingField = owner.GetType().GetField("training", BindingFlags.Instance | BindingFlags.NonPublic);
+            originalTraining = trainingField.GetValue(owner); trainingField.SetValue(owner, null);
             field.SetValue(owner, config); Call(owner, "ResetSimulation");
         }
         private static void Place(TaskSimulation sim, string id)
@@ -59,6 +64,9 @@ namespace CallmeCatgirl.Tests
             EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity"); yield return new EnterPlayMode(); yield return null; Prepare();
             var sim = Value<TaskSimulation>(owner, "Simulation"); var old = sim.Model; Call(owner, "OpenMemoryUpgrade"); yield return null;
             Assert.That(Button("AllocateWritingButton").interactable, Is.False); Click("ConfirmMemoryUpgradeButton");
+            Assert.That(Value<int>(owner, "AvailableAbilityPoints"), Is.Zero);
+            Assert.That(Value<int>(owner, "Funds"), Is.EqualTo(1500));
+            MemoryUpgradeTestActions.Skip(owner);
             Assert.That(Value<int>(owner, "AvailableAbilityPoints"), Is.EqualTo(3)); Assert.That(sim.Model, Is.SameAs(old));
             Assert.That(Value<int>(owner, "Funds"), Is.EqualTo(1400)); Assert.That(Value<int>(owner, "MemoryLevel"), Is.EqualTo(2));
             Assert.That(GameObject.Find("AbilityPointsLabel").GetComponent<Text>().text, Does.Contain("3"));
@@ -76,12 +84,12 @@ namespace CallmeCatgirl.Tests
             EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity"); yield return new EnterPlayMode(); yield return null; Prepare();
             var levels = (Array)memory.GetType().GetField("Levels").GetValue(memory);
             for (int i = 1; i < levels.Length; i++) { Set(levels.GetValue(i), "AbilityPoints", 2); Set(levels.GetValue(i), "RequiredCompletedTasks", 0); Set(levels.GetValue(i), "Cost", 0); }
-            Call(owner, "OpenMemoryUpgrade"); Call(owner, "UpgradeMemory"); Call(owner, "CloseMemoryUpgrade");
+            Call(owner, "OpenMemoryUpgrade"); Call(owner, "UpgradeMemory"); MemoryUpgradeTestActions.Skip(owner); Call(owner, "CloseMemoryUpgrade");
             Assert.That(Value<int>(owner, "AvailableAbilityPoints"), Is.EqualTo(3)); Call(owner, "AllocateAbility", AbilityKind.Writing);
             Assert.That(Value<int>(owner, "AvailableAbilityPoints"), Is.EqualTo(3));
             Call(owner, "OpenMemoryUpgrade"); Call(owner, "AllocateAbility", AbilityKind.Writing); Call(owner, "AllocateAbility", AbilityKind.Writing);
             Assert.That(Value<TaskSimulation>(owner, "Simulation").Model.Points[AbilityKind.Writing], Is.EqualTo(6));
-            Call(owner, "UpgradeMemory"); Call(owner, "UpgradeMemory"); Call(owner, "UpgradeMemory");
+            for (int i = 0; i < 3; i++) { Call(owner, "UpgradeMemory"); MemoryUpgradeTestActions.Skip(owner); }
             Assert.That(Value<int>(owner, "MemoryLevel"), Is.EqualTo(5)); Assert.That(Value<int>(owner, "AvailableAbilityPoints"), Is.EqualTo(7));
             Assert.That(Button("ConfirmMemoryUpgradeButton").interactable, Is.False); Assert.That(Button("AllocateRetrievalButton").interactable, Is.True);
             yield return null; Click("AllocateRetrievalButton"); Assert.That(Value<TaskSimulation>(owner, "Simulation").Model.Points[AbilityKind.Retrieval], Is.EqualTo(1));
@@ -93,7 +101,7 @@ namespace CallmeCatgirl.Tests
             EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity"); yield return new EnterPlayMode(); yield return null; Prepare();
             var sim = Value<TaskSimulation>(owner, "Simulation"); Place(sim, "A-1"); sim.Paused = false; sim.Advance(4);
             var task = sim.Tasks["A-1"]; var origin = task.Origin; double time = sim.GameTime;
-            Call(owner, "OpenMemoryUpgrade"); Call(owner, "UpgradeMemory"); Call(owner, "AllocateAbility", AbilityKind.Writing);
+            Call(owner, "OpenMemoryUpgrade"); Call(owner, "UpgradeMemory"); MemoryUpgradeTestActions.Skip(owner); Call(owner, "AllocateAbility", AbilityKind.Writing);
             Assert.That(sim.Paused, Is.False); Assert.That(sim.GameTime, Is.EqualTo(time)); Assert.That(task.Progress, Is.EqualTo(40));
             Assert.That(task.GetAbility(AbilityKind.Writing), Is.EqualTo(4)); Assert.That(task.Origin, Is.EqualTo(origin));
             Call(owner, "AdvanceGame", 50d); Assert.That(sim.GameTime, Is.EqualTo(time));
@@ -113,6 +121,7 @@ namespace CallmeCatgirl.Tests
             Assert.That(Value<int>(owner, "AvailableAbilityPoints"), Is.Zero); Assert.That(Value<int>(owner, "Funds"), Is.EqualTo(1500)); Assert.That(sim.OpenCellCount, Is.EqualTo(cells));
             Set(FirstStep, "AbilityPoints", 3); Set(FirstStep, "Cost", 1600); Call(owner, "UpgradeMemory"); Assert.That(Value<int>(owner, "AvailableAbilityPoints"), Is.Zero);
             Set(FirstStep, "Cost", 100); Call(owner, "OpenMemoryUpgrade"); Call(owner, "UpgradeMemory");
+            MemoryUpgradeTestActions.Skip(owner);
             Call(owner, "AllocateAbility", (AbilityKind)999); Assert.That(Value<int>(owner, "AvailableAbilityPoints"), Is.EqualTo(3)); Assert.That(sim.Model, Is.SameAs(old));
             yield return new ExitPlayMode();
         }
@@ -121,6 +130,7 @@ namespace CallmeCatgirl.Tests
             EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity"); yield return new EnterPlayMode(); yield return null; Prepare();
             Set(FirstStep, "AbilityPoints", 0); var sim = Value<TaskSimulation>(owner, "Simulation"); var model = sim.Model; int cells = sim.OpenCellCount;
             Call(owner, "OpenMemoryUpgrade"); Call(owner, "UpgradeMemory");
+            MemoryUpgradeTestActions.Skip(owner);
             Assert.That(sim.OpenCellCount, Is.GreaterThan(cells)); Assert.That(sim.Model, Is.SameAs(model)); Assert.That(sim.Paused, Is.True);
             Assert.That(Value<int>(owner, "AvailableAbilityPoints"), Is.Zero); Assert.That(Value<int>(owner, "Funds"), Is.EqualTo(1400));
             yield return new ExitPlayMode();
@@ -136,7 +146,11 @@ namespace CallmeCatgirl.Tests
         }
         [TearDown] public void Restore()
         {
-            if (owner != null) owner.GetType().GetField("configuration", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(owner, original);
+            if (owner != null)
+            {
+                owner.GetType().GetField("configuration", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(owner, original);
+                owner.GetType().GetField("training", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(owner, originalTraining);
+            }
             if (config != null) Object.DestroyImmediate(config); if (memory != null) Object.DestroyImmediate(memory);
         }
         [UnityTearDown] public IEnumerator ExitIfNeeded() { if (EditorApplication.isPlaying) yield return new ExitPlayMode(); }

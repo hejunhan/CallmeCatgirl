@@ -69,6 +69,7 @@ namespace CallmeCatgirl.Tests
             EditorSceneManager.OpenScene(Scene); yield return new EnterPlayMode(); yield return null;
             var owner = Controller(); var sim = Value<TaskSimulation>(owner, "Simulation"); Place(sim, "A-1");
             sim.Paused = false; sim.Advance(4); sim.Paused = true;
+            double progressBeforeUpgrade = sim.Tasks["A-1"].Progress;
             var task = sim.Tasks["A-1"]; var abilities = task.Abilities.ToArray(); var origin = task.Origin;
             int funds = Value<int>(owner, "Funds"), before = sim.OpenCellCount;
             var next = Value<object>(owner, "NextMemoryUpgrade"); int cost = (int)next.GetType().GetField("Cost").GetValue(next);
@@ -78,9 +79,11 @@ namespace CallmeCatgirl.Tests
             int colored = GameObject.Find("GridPreview").GetComponentsInChildren<Image>().Count(i => i.color.r > .4f);
             Assert.That(colored, Is.EqualTo(count)); Assert.That(GameObject.Find("UpgradeConditions").GetComponent<Text>().text, Does.Contain("满足"));
             Click("ConfirmMemoryUpgradeButton");
+            Assert.That(Value<int>(owner, "Funds"), Is.EqualTo(funds)); Assert.That(sim.OpenCellCount, Is.EqualTo(before));
+            MemoryUpgradeTestActions.Skip(owner);
             Assert.That(Value<int>(owner, "Funds"), Is.EqualTo(funds - cost)); Assert.That(sim.OpenCellCount, Is.EqualTo(before + count));
             Assert.That(cells.All(sim.IsOpen), Is.True); Assert.That(Value<bool>(owner, "IsMemoryUpgradeOpen"), Is.True);
-            Assert.That(task.Progress, Is.EqualTo(40)); Assert.That(task.Origin, Is.EqualTo(origin));
+            Assert.That(task.Progress, Is.EqualTo(progressBeforeUpgrade)); Assert.That(task.Origin, Is.EqualTo(origin));
             Assert.That(task.Abilities.ToArray(), Is.EqualTo(abilities)); Assert.That(sim.Occupancy.Count, Is.EqualTo(4));
             Assert.That(GameObject.Find("UpgradeFeedback").GetComponent<Text>().text, Does.Contain("内存升级至"));
             Assert.That(Button("ConfirmMemoryUpgradeButton").interactable, Is.False, "The next level needs more completed submissions.");
@@ -104,7 +107,8 @@ namespace CallmeCatgirl.Tests
                 Assert.That(GameObject.Find("UpgradeConditions").GetComponent<Text>().text, Does.Contain("不足"));
                 Button("ConfirmMemoryUpgradeButton").onClick.Invoke(); Assert.That(Value<int>(owner, "Funds"), Is.Zero);
                 Call(owner, "AddFunds", 100); Assert.That(Button("ConfirmMemoryUpgradeButton").interactable, Is.True);
-                Click("ConfirmMemoryUpgradeButton"); Assert.That(Value<int>(owner, "Funds"), Is.Zero);
+                Click("ConfirmMemoryUpgradeButton"); Assert.That(Value<int>(owner, "Funds"), Is.EqualTo(100));
+                MemoryUpgradeTestActions.Skip(owner); Assert.That(Value<int>(owner, "Funds"), Is.Zero);
                 int max = ((Array)memory.GetType().GetField("Levels").GetValue(memory)).Cast<object>()
                     .Max(o => (int)o.GetType().GetField("TargetLevel").GetValue(o));
                 memory.GetType().GetField("InitialLevel").SetValue(memory, max); Call(owner, "ResetSimulation");

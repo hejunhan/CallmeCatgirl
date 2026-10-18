@@ -23,9 +23,13 @@ namespace CallmeCatgirl.Gameplay
         public ConversationStory Story { get; private set; }
         public bool IsStoryOpen => Story != null && Story.IsOpen;
         [SerializeField] private MemoryInstallGame memoryInstallGame;
+        private MemoryUpgradeConfiguration.UpgradeStep pendingMemoryUpgrade;
+        private int installAttempt;
+        private Action installCompletionHandler;
+        public bool IsMemoryInstallPending => pendingMemoryUpgrade != null;
         public bool IsMemoryInstallOpen => memoryInstallGame != null && memoryInstallGame.IsOpen;
         public bool IsMemoryUpgradeOpen { get; private set; }
-        public bool IsModalOpen => IsMemoryInstallOpen || IsMemoryUpgradeOpen || IsTrainingOpen || (canvasView!=null&&canvasView.WindowLayers!=null&&canvasView.WindowLayers.IsBlockingInput);
+        public bool IsModalOpen => IsMemoryInstallPending || IsMemoryInstallOpen || IsMemoryUpgradeOpen || IsTrainingOpen || (canvasView!=null&&canvasView.WindowLayers!=null&&canvasView.WindowLayers.IsBlockingInput);
         public IReadOnlyList<Cell> NextMemoryCells => NextMemoryUpgrade == null ? Array.Empty<Cell>()
             : MemoryOutline(NextMemoryUpgrade.TargetLevel);
         public string SelectedId { get; private set; }
@@ -50,10 +54,11 @@ namespace CallmeCatgirl.Gameplay
         private double monthTimer;
         public int CompletedTasks { get; private set; }
         public int AvailableAbilityPoints { get; private set; }
-        public bool CanAllocateAbility => !TrainingEnabled && !GameEnded && !IsMemoryInstallOpen && IsMemoryUpgradeOpen && AvailableAbilityPoints > 0;
+        public bool CanAllocateAbility => !TrainingEnabled && !GameEnded && !IsMemoryInstallPending && !IsMemoryInstallOpen && IsMemoryUpgradeOpen && AvailableAbilityPoints > 0;
         public MemoryUpgradeConfiguration.UpgradeStep NextMemoryUpgrade
             => configuration.MemoryUpgrades.TryGetNextLevel(MemoryLevel, out var step) ? step : null;
-        public bool CanUpgradeMemory => !GameEnded && !IsMemoryInstallOpen && NextMemoryUpgrade != null
+        public bool CanUpgradeMemory => isActiveAndEnabled && !GameEnded && Economy != null && !Economy.IsBankrupt
+            && !IsMemoryInstallPending && !IsMemoryInstallOpen && NextMemoryUpgrade != null
             && (NextMemoryUpgrade.TaskMultipliers == null || NextMemoryUpgrade.TaskMultipliers.IsValid) && NextMemoryUpgrade.Cost >= 0 && NextMemoryUpgrade.AbilityPoints >= 0
             && AvailableAbilityPoints <= int.MaxValue - NextMemoryUpgrade.AbilityPoints
             && Funds >= NextMemoryUpgrade.Cost && CompletedTasks >= NextMemoryUpgrade.RequiredCompletedTasks;
@@ -86,6 +91,10 @@ namespace CallmeCatgirl.Gameplay
         private void Update()
         {
             if (Simulation == null) return;
+            // 看门狗：安装面板被外部关闭/禁用或引用丢失时，中止挂起的升级意图，不产生任何效果。
+            if (pendingMemoryUpgrade != null && (memoryInstallGame == null || !memoryInstallGame.enabled
+                || !memoryInstallGame.IsOpen || !memoryInstallGame.gameObject.activeInHierarchy))
+                CancelPendingMemoryInstall();
             if (!ManualCommandClock) AdvanceGame(Time.unscaledDeltaTime * PlaybackSpeed);
             if (!CallmeCatgirl.Debugging.InlineDebugInput.IsEditing && Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame && IsMemoryUpgradeOpen)
                 CloseMemoryUpgrade();
@@ -104,7 +113,7 @@ namespace CallmeCatgirl.Gameplay
             if (configuration == null) { Debug.LogError("CoreGameplayController requires a GameplayConfiguration.", this); enabled = false; return; }
             try
             {
-                memoryInstallGame?.ResetGame();
+                CancelPendingMemoryInstall();
                 IsMemoryUpgradeOpen = false;
                 configuration.MemoryUpgrades.ValidateTaskMultipliers();
                 configuration.TaskGeneration?.Validate(configuration.MemoryUpgrades.BoardWidth, configuration.MemoryUpgrades.BoardHeight);
@@ -267,13 +276,18 @@ namespace CallmeCatgirl.Gameplay
         }
         public void OpenMemoryUpgrade()
         {
-            if (GameEnded || IsTrainingOpen || IsMemoryInstallOpen) return;
-            IsMemoryUpgradeOpen = true; Message = "查看新增格子，点击确认后才会扣费。倍率只影响升级后新生成的请求。"; canvasView?.CancelDrag(); canvasView?.Refresh();
+            if (!isActiveAndEnabled || GameEnded || IsTrainingOpen || IsMemoryInstallOpen) return;
+            IsMemoryUpgradeOpen = true; Message = "查看新增格子，确认后完成或跳过安装小游戏才会扣费。倍率只影响升级后新生成的请求。"; canvasView?.CancelDrag(); canvasView?.Refresh();
         }
-        public void CloseMemoryUpgrade() { if (IsMemoryInstallOpen) return; IsMemoryUpgradeOpen = false; canvasView?.Refresh(); }
+        public void CloseMemoryUpgrade()
+        {
+            if (pendingMemoryUpgrade != null) CancelPendingMemoryInstall();
+            else if (IsMemoryInstallOpen) return;
+            IsMemoryUpgradeOpen = false; canvasView?.Refresh();
+        }
         public void UpgradeMemory()
         {
-            if (GameEnded || IsTrainingOpen || IsMemoryInstallOpen) return;
+            if (!isActiveAndEnabled || GameEnded || IsTrainingOpen || IsMemoryInstallOpen || pendingMemoryUpgrade != null) return;
             ReadEvents();
             var next = NextMemoryUpgrade;
             if (next == null) { Message = "内存已满级。"; return; }
@@ -283,26 +297,93 @@ namespace CallmeCatgirl.Gameplay
             { Message = "奖励点数配置无效或超过上限，未升级或扣费。"; canvasView?.Refresh(); return; }
             if (!CanUpgradeMemory)
             { Message = CompletedTasks < next.RequiredCompletedTasks ? $"需要累计达标提交 {next.RequiredCompletedTasks} 个任务。" : "升级资金不足。"; return; }
-            int before = Simulation.OpenCellCount;
-            if (!Simulation.TryUnlockCells(MemoryOutline(next.TargetLevel)))
-            { Message = "升级格子配置越界，未扣费。"; return; }
-            Economy.TrySpendFunds(next.Cost);
-            MemoryLevel = next.TargetLevel; AvailableAbilityPoints += next.AbilityPoints;
-            Message = $"内存升级至 Lv{MemoryLevel}：新增 {Simulation.OpenCellCount - before} 格，花费 {next.Cost}，获得 {next.AbilityPoints} 点（剩余 {AvailableAbilityPoints} 点）";
-            logs.Insert(0, Message);
-            if (logs.Count > 7) logs.RemoveAt(logs.Count - 1);
-            if (Application.isPlaying && memoryInstallGame != null)
+            IReadOnlyList<Cell> outline;
+            try { outline = MemoryOutline(next.TargetLevel); }
+            catch (Exception error) { Message = "升级格子配置无效：" + error.Message; return; }
+            if (!MemoryOutlineValid(outline)) { Message = "升级格子配置越界，未扣费。"; return; }
+            if (memoryInstallGame == null) { Message = "缺少内存安装界面，未升级或扣费。"; canvasView?.Refresh(); return; }
+            // 先打开小游戏再记录挂起意图：界面损坏抛异常时不会留下悬空意图。
+            int attempt = ++installAttempt; // 不可变的本次尝试标识：过期回调不得消费新意图。
+            UnbindInstallCompletion();
+            try { memoryInstallGame.OpenGame(); }
+            catch (Exception error)
             {
-                memoryInstallGame.InstallCompleted -= FinishMemoryInstall;
-                memoryInstallGame.InstallCompleted += FinishMemoryInstall;
-                memoryInstallGame.OpenGame();
+                memoryInstallGame.ResetGame();
+                Message = "内存安装界面打开失败：" + error.Message + "，未扣费。"; canvasView?.Refresh(); return;
             }
+            pendingMemoryUpgrade = next;
+            installCompletionHandler = () => CommitMemoryUpgrade(attempt);
+            memoryInstallGame.InstallCompleted += installCompletionHandler;
+            Message = "完成内存安装小游戏，或点击跳过按钮，才会扣费并完成升级。";
             canvasView?.Refresh();
         }
-        private void FinishMemoryInstall()
+        private bool MemoryOutlineValid(IReadOnlyList<Cell> cells)
         {
-            Message = $"内存 Lv{MemoryLevel} 安装完成，可继续查看升级或关闭返回经营。";
+            if (cells == null) return false;
+            foreach (var cell in cells)
+                if (cell.X < 0 || cell.Y < 0 || cell.X >= Simulation.Width || cell.Y >= Simulation.Height) return false;
+            return true;
+        }
+        // 完成与跳过共用同一事务：先校验尝试标识并清除挂起意图，重复或过期回调均为无操作。
+        private void CommitMemoryUpgrade(int attempt)
+        {
+            if (attempt != installAttempt || pendingMemoryUpgrade == null || !isActiveAndEnabled
+                || memoryInstallGame == null || !memoryInstallGame.IsComplete) return;
+            var step = pendingMemoryUpgrade;
+            pendingMemoryUpgrade = null;
+            UnbindInstallCompletion();
+            if (step == null || Simulation == null || Economy == null) return;
+            string failure = null;
+            if (GameEnded) failure = "经营已结束";
+            else if (!ReferenceEquals(NextMemoryUpgrade, step)) failure = "升级目标已变化";
+            else if (step.TaskMultipliers != null && !step.TaskMultipliers.IsValid) failure = "新任务倍率范围配置无效";
+            else if (step.AbilityPoints < 0 || AvailableAbilityPoints > int.MaxValue - step.AbilityPoints) failure = "奖励点数配置无效或超过上限";
+            else if (step.Cost < 0) failure = "升级价格配置无效";
+            else if (CompletedTasks < step.RequiredCompletedTasks) failure = $"需要累计达标提交 {step.RequiredCompletedTasks} 个任务";
+            else if (Economy.IsBankrupt || Funds < step.Cost) failure = "升级资金不足";
+            IReadOnlyList<Cell> outline = null;
+            bool geometryFailed = false;
+            if (failure == null)
+            {
+                try { outline = MemoryOutline(step.TargetLevel); }
+                catch (Exception error) { failure = "升级格子配置无效：" + error.Message; geometryFailed = true; }
+                if (failure == null && !MemoryOutlineValid(outline)) { failure = "升级格子配置越界"; geometryFailed = true; }
+            }
+            int before = Simulation.OpenCellCount;
+            if (failure == null && !Economy.TrySpendFunds(step.Cost)) failure = "升级资金不足";
+            if (failure == null && !Simulation.TryUnlockCells(outline))
+            {
+                Economy.AddFunds(step.Cost); // 退款：绝不出现扣费却未升级。
+                failure = "升级格子配置越界"; geometryFailed = true;
+            }
+            if (failure != null)
+            {
+                // 几何配置损坏时刷新视图会再次求值同一配置，保持原越界路径风格不刷新。
+                Message = $"内存升级未完成：{failure}，未扣费，可再次尝试。";
+                if (!geometryFailed) canvasView?.Refresh();
+                return;
+            }
+            MemoryLevel = step.TargetLevel; AvailableAbilityPoints += step.AbilityPoints;
+            Message = $"内存升级至 Lv{MemoryLevel}：新增 {Simulation.OpenCellCount - before} 格，花费 {step.Cost}，获得 {step.AbilityPoints} 点（剩余 {AvailableAbilityPoints} 点）";
+            logs.Insert(0, Message);
+            if (logs.Count > 7) logs.RemoveAt(logs.Count - 1);
             canvasView?.Refresh();
+        }
+        // 重置、关闭、禁用、切场景或读档成功都会中止未完成的安装意图，不产生任何费用或升级。
+        private void CancelPendingMemoryInstall()
+        {
+            bool wasPending = pendingMemoryUpgrade != null;
+            pendingMemoryUpgrade = null;
+            installAttempt++; // 使任何已捕获的旧完成回调立即失效。
+            UnbindInstallCompletion();
+            if (memoryInstallGame != null) memoryInstallGame.ResetGame();
+            if (wasPending) Message = "内存安装已取消，未扣费升级。";
+        }
+        private void UnbindInstallCompletion()
+        {
+            if (installCompletionHandler != null && memoryInstallGame != null)
+                memoryInstallGame.InstallCompleted -= installCompletionHandler;
+            installCompletionHandler = null;
         }
         public void AllocateAbility(AbilityKind ability)
         {
@@ -458,7 +539,18 @@ namespace CallmeCatgirl.Gameplay
             var model=training.Session.Models.First(m=>m.Id==modelId);
             return training.Session.Architectures.First(a=>a.Id==model.ArchitectureId).Transform(configuration.MemoryUpgrades.GetOpenCells(MemoryLevel),Simulation.Width,Simulation.Height);
         }
-        private void OnDestroy() { if (training != null) training.Changed -= RefreshTraining; }
+        private void OnDisable()
+        {
+            // 禁用时同步取消挂起的安装意图；Update 在禁用期间不会运行，不能依赖看门狗。
+            if (pendingMemoryUpgrade != null) CancelPendingMemoryInstall();
+        }
+        private void OnDestroy()
+        {
+            pendingMemoryUpgrade = null;
+            installAttempt++;
+            UnbindInstallCompletion();
+            if (training != null) training.Changed -= RefreshTraining;
+        }
         public static string AbilityText(AbilityKind kind) => kind == AbilityKind.Writing ? "写作" : kind == AbilityKind.Code ? "代码" : kind == AbilityKind.Reasoning ? "推理" : "检索";
         public static string QualityText(Quality quality) => quality == Quality.Excellent ? "优秀" : quality == Quality.Complete ? "完成" : "未达标";
         public static string StateText(RequestState state) => new[] { "等待摆放", "运行中", "已撤回", "算完待确认", "已提交待回复", "超时失败", "反馈结束" }[(int)state];

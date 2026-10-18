@@ -15,10 +15,13 @@ namespace CallmeCatgirl.UI
         [SerializeField] private float openAngle = 20, initialTilt = 3, halfTilt = 1.5f;
         private bool leftPressed, installed, bound;
         public bool IsOpen { get; private set; }
+        public bool IsComplete => installed && !IsOpen;
         public event Action InstallCompleted;
 
         public void OpenGame()
         {
+            if (!enabled || pressLeftButton == null || pressRightButton == null || skipButton == null || finishButton == null)
+                throw new InvalidOperationException("内存安装界面不可用或控件缺失。");
             if (IsOpen) return;
             if (!bound)
             {
@@ -38,7 +41,7 @@ namespace CallmeCatgirl.UI
             IsOpen = leftPressed = installed = false;
             if (finishButton != null) finishButton.gameObject.SetActive(false);
             Paint(false);
-            if (gamePanel != null) gamePanel.SetActive(false);
+            if (gamePanel != null && gamePanel.activeInHierarchy) gamePanel.SetActive(false);
         }
 
         private void OnPressLeft()
@@ -72,6 +75,15 @@ namespace CallmeCatgirl.UI
             finishButton.gameObject.SetActive(false);
             if (gamePanel != null) gamePanel.SetActive(false);
             InstallCompleted?.Invoke();
+        }
+
+        // 组件或所在物体被禁用即取消未完成的安装：只复位、不触发完成事件。
+        // Unity 可能正在切换物体的激活状态，此处只清状态，不再次 SetActive。
+        private void OnDisable()
+        {
+            if (!IsOpen) return;
+            IsOpen = leftPressed = installed = false;
+            Paint(false);
         }
 
         private void Paint(bool complete)
