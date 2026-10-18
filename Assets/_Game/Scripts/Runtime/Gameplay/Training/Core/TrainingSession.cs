@@ -169,8 +169,14 @@ namespace CallmeCatgirl.Gameplay.Training
                 || ids.Distinct(StringComparer.Ordinal).Count() != ids.Length) return TrainingResult.InvalidInput;
             if (ids.Any(id => !corpus.ContainsKey(id))) return TrainingResult.MissingCorpus;
             if (ids.Any(IsConsumed)) return TrainingResult.CorpusConsumed;
-            return StartTrainingCore(recipeId, architectureId, name,
-                ids.Select(id => new CorpusUse { CorpusId=id, Points=RemainingPoints(id) }).ToArray(), recipe.Shape, out job);
+            var uses = ids.Select(id => new CorpusUse { CorpusId=id, Points=RemainingPoints(id) }).ToArray();
+            try
+            {
+                var shape = recipe.WorkGrowthCoefficient > 0 ? GrowShape(recipe, uses.Sum(u=>u.Points), simulation.Width, simulation.Height) : recipe.Shape;
+                return StartTrainingCore(recipeId, architectureId, name, uses, shape, out job);
+            }
+            catch (ArgumentException) { return TrainingResult.InvalidInput; }
+            catch (OverflowException) { return TrainingResult.InvalidInput; }
         }
 
         private TrainingResult StartTrainingCore(string recipeId, string architectureId, string name,
@@ -195,7 +201,7 @@ namespace CallmeCatgirl.Gameplay.Training
                 var modifiers = policyModifiers();
                 var effectiveCost = checked((int)Math.Ceiling(recipe.Cost * modifiers.TrainingCostMultiplier));
                 effectiveRecipe = new TrainingRecipe(recipe.Id, recipe.Title, effectiveCost, recipe.MinimumRecords,
-                    recipe.WorkTokens * modifiers.TrainingWorkMultiplier, recipe.AbilityInterval,
+                    recipe.WorkForPoints(uses.Sum(u => u.Points)) * modifiers.TrainingWorkMultiplier, recipe.AbilityInterval,
                     recipe.PointsPerScore * modifiers.TrainingScoreMultiplier, shape, recipe.PointsPerExtraCell, recipe.MaximumCorpusPoints);
                 output = new CatalogModel(name, architectureId, effectiveRecipe.Build(outputId, uses.Select(Portion)), ids);
             }

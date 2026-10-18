@@ -31,11 +31,14 @@ namespace CallmeCatgirl.Gameplay.Training
             public int Cost = 20, MinimumRecords = 1;
             public double WorkTokens = 120, AbilityInterval = 1, PointsPerScore = 1;
             [InspectorName("每增加一格所需语料点"), Min(0.01f)] public double PointsPerExtraCell = 2;
-            [InspectorName("单次训练语料点上限"), Min(1)] public double MaximumCorpusPoints = 20;
+            [InspectorName("单次训练语料点上限"), Min(1)] public double MaximumCorpusPoints = 100;
+            [InspectorName("计算量增长系数"), Min(0), Tooltip("计算量 = WorkTokens + 系数 × 总投入点数 ^ 指数；随后应用训练政策倍率。")]
+            public double WorkGrowthCoefficient = 5;
+            [InspectorName("计算量增长指数"), Min(1)] public double WorkGrowthExponent = 1.5;
             public Vector2Int[] Shape = { new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(2, 0),
                 new Vector2Int(0, 1), new Vector2Int(1, 1), new Vector2Int(2, 1) };
             public TrainingRecipe Build() => new TrainingRecipe(Id, Title, Cost, MinimumRecords, WorkTokens,
-                AbilityInterval, PointsPerScore, Shape.Select(c => new Cell(c.x, c.y)), PointsPerExtraCell, MaximumCorpusPoints);
+                AbilityInterval, PointsPerScore, Shape.Select(c => new Cell(c.x, c.y)), PointsPerExtraCell, MaximumCorpusPoints, WorkGrowthCoefficient, WorkGrowthExponent);
         }
         [Serializable] public sealed class ArchitectureEntry
         {

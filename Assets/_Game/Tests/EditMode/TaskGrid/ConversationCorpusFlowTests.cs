@@ -30,6 +30,7 @@ namespace CallmeCatgirl.Tests
             var importer=Type.GetType("CallmeCatgirl.EditorTools.StoryTextImporter, Assembly-CSharp-Editor",true);
             const string text="角色：林小满\n角色ID：A\n计算量：30\n计算速度：30\n忍耐时间：100\nToken收入：0\n达标能力：写作10，代码2，推理2\n优秀能力：写作20，代码3，推理3\n方块：\n■\n【会话：语料测试】\n【第1轮】\n用户：你好。\n选项1：你好。\n【第2轮】\n用户：今天好吗？\n选项1：很好。\n【第3轮】\n用户：再见。\n选项1：再见。";
             story=(ScriptableObject)importer.GetMethod("Parse").Invoke(null,new object[]{text,new[]{"A","B","C"},null});
+            ShareSessionsWithSecondCharacter(story);
             foreach(var user in (Array)story.GetType().GetField("Users").GetValue(story))
             {var kind=user.GetType().GetField("Kind");kind.SetValue(user,Enum.Parse(kind.FieldType,"Scripted"));}
             foreach(string name in new[]{"TaskGeneration","OrdinaryDialoguePool","OpeningBalance"})configuration.GetType().GetField(name).SetValue(configuration,null);
@@ -50,6 +51,7 @@ namespace CallmeCatgirl.Tests
             Call(owner,"ChooseReply",0);Call(owner,"ChooseReply",0);
             var records=((IEnumerable)Get<object>(session,"Corpus")).Cast<object>().ToArray();Assert.That(records.Length,Is.EqualTo(1));
             var scores=Get<IReadOnlyDictionary<AbilityKind,double>>(records[0],"Scores");Assert.That(scores.Count,Is.EqualTo(1));Assert.That(scores[AbilityKind.Writing],Is.EqualTo(8));
+            AwardSecondSource(owner,sim);yield return null;
             Call(owner,"OpenTraining");yield return null;
             var gallery=Object.FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include,FindObjectsSortMode.None).Single(c=>c.GetType().Name=="ModelGalleryView");
             var reveal=Field(gallery,"reveal");reveal.GetType().GetProperty("ReducedMotion").SetValue(reveal,true);
@@ -81,16 +83,46 @@ namespace CallmeCatgirl.Tests
             Assert.That(Get<double>(view,"InvestedPoints"),Is.EqualTo(2));
             typeof(SystemFeedbackTests).GetMethod("Capture",BindingFlags.Static|BindingFlags.NonPublic).Invoke(null,new object[]{"ConversationCorpusInvestment.png"});
             typeof(SystemFeedbackTests).GetMethod("Capture",BindingFlags.Static|BindingFlags.NonPublic).Invoke(null,new object[]{"ConversationCorpusInvestment.png"});
+            // A second source is added without replacing A. Its own slider amount and removal are independent.
+            Call(view,"SelectConversation","B");((Slider)Field(view,"corpusAmount")).value=3;
+            Assert.That(((IEnumerable)Get<object>(view,"Investments")).Cast<object>().Count(),Is.EqualTo(2));
+            Assert.That(Get<double>(view,"InvestedPoints"),Is.EqualTo(3));
+            Call(view,"SelectConversation","A");Assert.That(Get<double>(view,"InvestedPoints"),Is.EqualTo(2));
+            Call(view,"SelectConversation","B");Call(view,"RemoveSelectedConversation");
+            Assert.That(Get<string>(view,"SelectedConversation"),Is.EqualTo("A"));Assert.That(Get<double>(view,"InvestedPoints"),Is.EqualTo(2));
+            Call(view,"SelectConversation","B");((Slider)Field(view,"corpusAmount")).value=2;
+            Assert.That(((Text)Field(view,"investmentScores")).text,Does.Contain("2 段 · 共 4 点"));
+            Assert.That(((Text)Field(view,"investmentScores")).text,Does.Contain("计算量 160"));
+            var invalid=(string)Call(owner,"ExecuteCommandJson","{\"kind\":\"train\",\"recipe\":\"dialogue-training\",\"architecture\":\"baseline\",\"displayName\":\"invalid\",\"conversationId\":\"A\",\"investments\":[{\"ConversationId\":\"B\",\"Points\":2}]}");
+            Assert.That(invalid,Does.Contain("InvalidInput"));Assert.That(((IEnumerable)Get<object>(session,"Jobs")).Cast<object>().Count(),Is.Zero);
+            typeof(SystemFeedbackTests).GetMethod("Capture",BindingFlags.Static|BindingFlags.NonPublic).Invoke(null,new object[]{"MultiCorpusTraining.png"});
+            typeof(SystemFeedbackTests).GetMethod("Capture",BindingFlags.Static|BindingFlags.NonPublic).Invoke(null,new object[]{"MultiCorpusTraining.png"});
             ((Button)Field(view,"trainButton")).onClick.Invoke();
             var summary=Call(session,"GetConversationCorpus","A");Assert.That(Get<double>(summary,"AvailablePoints"),Is.EqualTo(6));
             var jobs=((IEnumerable)Get<object>(session,"Jobs")).Cast<object>().ToArray();Assert.That(jobs.Length,Is.EqualTo(1));
-            string request=Get<string>(jobs[0],"RequestId");Assert.That(sim.Tasks[request].Definition.Shape.Count,Is.EqualTo(7));
+            string request=Get<string>(jobs[0],"RequestId");Assert.That(sim.Tasks[request].Definition.Shape.Count,Is.EqualTo(8));
+            Assert.That(sim.Tasks[request].Definition.Calculation,Is.EqualTo(160).Within(1e-8));
+            Assert.That(Get<double>(Call(session,"GetConversationCorpus","B"),"AvailablePoints"),Is.EqualTo(6));
             Call(owner,"ConfigureSaveSlot","corpus-flow-"+Guid.NewGuid().ToString("N"));
             slotDirectory=System.IO.Path.GetDirectoryName(Get<string>(owner,"SavePath"));
             Assert.That(Call(owner,"SaveRun"),Is.EqualTo(true));Assert.That(Call(owner,"ContinueRun"),Is.EqualTo(true));
             session=Get<object>(Get<object>(owner,"Training"),"Session");
             Assert.That(Get<double>(Call(session,"GetConversationCorpus","A"),"AvailablePoints"),Is.EqualTo(6));
             yield return new ExitPlayMode();
+        }
+        private static void ShareSessionsWithSecondCharacter(ScriptableObject story)
+        {
+            var field=story.GetType().GetField("Users");var users=(Array)field.GetValue(story);var first=users.GetValue(0);
+            var second=JsonUtility.FromJson(JsonUtility.ToJson(first),first.GetType());
+            second.GetType().GetField("UserId").SetValue(second,"B");second.GetType().GetField("DisplayName").SetValue(second,"周序");
+            var combined=Array.CreateInstance(first.GetType(),2);combined.SetValue(first,0);combined.SetValue(second,1);field.SetValue(story,combined);
+        }
+        private static void AwardSecondSource(object owner,TaskSimulation sim)
+        {
+            Assert.That(sim.TryPlace("B-1",FindSpot(sim,"B-1"),0,out _),Is.True);
+            sim.Paused=false;sim.Advance(30);sim.Paused=true;
+            Call(owner,"SelectRequest","B-1");Call(owner,"SubmitSelected");
+            Call(owner,"ChooseReply",0);Call(owner,"ChooseReply",0);Call(owner,"ChooseReply",0);
         }
         private static Cell FindSpot(TaskSimulation sim,string id) => Enumerable.Range(0,sim.Width*sim.Height).Select(i=>new Cell(i%sim.Width,i/sim.Width)).First(c=>sim.Preview(id,c,0)==PlacementFailure.None);
         [UnityTearDown] public IEnumerator Cleanup()

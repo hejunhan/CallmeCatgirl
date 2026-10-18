@@ -194,9 +194,10 @@ namespace CallmeCatgirl.Gameplay.Training
                     && task.ConversationId==r.ConversationId && task.RoundId==r.RoundId && !restored.jobs.ContainsKey(r.RequestId),"corpus/task source mismatch");
             foreach(var j in restored.jobs.Values)
             {
+                // Extension JSON can round fractional power-law work by a few ULPs before the host snapshot is encoded.
                 RequireState(restoredSimulation.Tasks.TryGetValue(j.RequestId,out var task)
                     && task.Definition.Id=="training:"+j.RecipeId && task.Definition.Tokens==0 && task.Definition.Requirements.Count==0
-                    && task.Definition.Calculation==j.WorkTokens && task.ConversationId==j.RequestId && task.RoundId=="training","training/task mismatch");
+                    && Math.Abs(task.Definition.Calculation-j.WorkTokens)<=1e-12*Math.Max(1,task.Definition.Calculation) && task.ConversationId==j.RequestId && task.RoundId=="training","training/task mismatch");
                 RequireState(j.Completed ? task.State==RequestState.Closed && task.Result!=null
                     : task.State==RequestState.Waiting || task.State==RequestState.Running || task.State==RequestState.Withdrawn || task.State==RequestState.Ready,
                     "training completion state mismatch");

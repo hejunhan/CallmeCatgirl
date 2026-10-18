@@ -21,6 +21,10 @@ MonoBehaviour:
     WorkTokens: 120
     AbilityInterval: 1
     PointsPerScore: 1
+    PointsPerExtraCell: 2
+    MaximumCorpusPoints: 100
+    WorkGrowthCoefficient: 5
+    WorkGrowthExponent: 1.5
     Shape:
     - {x: 0, y: 0}
     - {x: 1, y: 0}

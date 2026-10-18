@@ -59,6 +59,8 @@ namespace CallmeCatgirl.Gameplay.Training
         }
         public TrainingResult StartConversationTraining(string recipe, string architecture, string name, string conversationId, double points)
             => Report(CanManage ? Session.StartConversationTraining(recipe, architecture, name, conversationId, points, out _) : TrainingResult.Busy);
+        public TrainingResult StartConversationsTraining(string recipe, string architecture, string name, IEnumerable<ConversationInvestment> investments)
+            => Report(CanManage ? Session.StartConversationsTraining(recipe,architecture,name,investments,out _) : TrainingResult.Busy);
         public TrainingResult CompleteTraining(string id) => Report(CanManage ? Session.CompleteTraining(id) : TrainingResult.Busy);
         public TrainingResult SelectModel(string id) => Report(CanManage ? Session.SelectModel(id) : TrainingResult.Busy);
         public TrainingResult RenameModel(string id, string displayName) => Report(CanManage ? Session.RenameModel(id, displayName) : TrainingResult.Busy);

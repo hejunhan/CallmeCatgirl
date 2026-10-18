@@ -21,6 +21,10 @@ namespace CallmeCatgirl.UI
         [SerializeField] private Slider corpusAmount;
         [SerializeField] private Text investmentLabel, investmentScores;
         [SerializeField] private CorpusShapeGraphic shapePreview;
+        [SerializeField] private Button removeCorpusButton;
+        private readonly Dictionary<string,double> investments=new Dictionary<string,double>(StringComparer.Ordinal);
+        public IReadOnlyList<ConversationInvestment> Investments => investments.Where(p=>p.Value>1e-9)
+            .Select(p=>new ConversationInvestment {ConversationId=p.Key,Points=p.Value}).ToArray();
         private string selectedConversation;
         private double investedPoints;
         private string sessionModel;
@@ -31,15 +35,23 @@ namespace CallmeCatgirl.UI
         {
             controller=source;owner=source.GetComponent<CoreGameplayController>();
             var session=source.Session;recipe=session.Recipes[0].Id;
-            if(sessionModel!=session.ActiveModelId){selectedConversation=null;investedPoints=0;sessionModel=session.ActiveModelId;}
-            if(selectedConversation!=null && session.GetConversationCorpus(selectedConversation).AvailablePoints<=1e-9)
-            {selectedConversation=null;investedPoints=0;}
+            if(sessionModel!=session.ActiveModelId){investments.Clear();selectedConversation=null;investedPoints=0;sessionModel=session.ActiveModelId;}
+            foreach(var id in investments.Keys.ToArray())
+            {
+                double available=session.GetConversationCorpus(id).AvailablePoints;
+                if(available<=1e-9)investments.Remove(id);else investments[id]=Math.Min(investments[id],available);
+            }
+            if(selectedConversation!=null&&!investments.ContainsKey(selectedConversation))selectedConversation=investments.Keys.FirstOrDefault();
             if(architecture==null||!session.Architectures.Any(a=>a.Id==architecture&&a.ContentReady&&a.UnlockStage<=session.CurrentStage))architecture=session.Architectures[0].Id;
-            recipeLabel.text="配方："+session.Recipes[0].Title+" · 费用 "+session.Recipes[0].Cost+" · 计算量 "+session.Recipes[0].WorkTokens;
+            var rule=session.Recipes[0];
+            recipeLabel.text="计算量："+rule.WorkTokens+" + "+rule.WorkGrowthCoefficient+" × 总语料点数^"+rule.WorkGrowthExponent+" · 上限 "+rule.MaximumCorpusPoints+" 点";
+            recipeLabel.resizeTextForBestFit=true;recipeLabel.resizeTextMinSize=12;recipeLabel.resizeTextMaxSize=22;
             trainButton.onClick.RemoveAllListeners();trainButton.onClick.AddListener(()=>{
-                var result=owner.ExecuteCommand(new GameCommand{kind="train",recipe=recipe,architecture=architecture,displayName=modelName.text,conversationId=selectedConversation,corpusPoints=investedPoints});
-                if(result.ok){selectedConversation=null;investedPoints=0;Bind(controller);}
+                var result=owner.ExecuteCommand(new GameCommand{kind="train",recipe=recipe,architecture=architecture,displayName=modelName.text,investments=Investments.ToArray()});
+                if(result.ok){investments.Clear();selectedConversation=null;investedPoints=0;Bind(controller);}
             });
+            if(removeCorpusButton!=null)
+            {removeCorpusButton.onClick.RemoveAllListeners();removeCorpusButton.onClick.AddListener(RemoveSelectedConversation);}
             computeButton.onClick.RemoveAllListeners();computeButton.onClick.AddListener(()=>owner.ExecuteCommand(new GameCommand{kind="upgradeCompute"}));
             trainButton.interactable=controller.CanManage;computeButton.interactable=controller.CanManage&&session.NextCompute!=null;
             Clear(records,emptyHint.transform);Clear(jobs);Clear(architectures);
@@ -61,7 +73,9 @@ namespace CallmeCatgirl.UI
                 row.Find("Title").GetComponent<Text>().text=owner.Story.Name(id)+" · 可用 "+conversation.AvailablePoints.ToString("0.###")+" / 累计 "+conversation.TotalPoints.ToString("0.###")+" 点";
                 row.Find("Scores").GetComponent<Text>().text=string.Join("  ",conversation.AvailableScores.Select(pair=>CoreGameplayController.AbilityText(pair.Key)+" "+pair.Value.ToString("0.###")));
                 var button=row.Find("Action").GetComponent<Button>();button.interactable=!used&&controller.CanManage;
-                button.GetComponentInChildren<Text>(true).text=selectedConversation==id?"已投入此对话":"拖入训练 / 选择";
+                button.GetComponentInChildren<Text>(true).resizeTextForBestFit=true;
+                button.GetComponentInChildren<Text>(true).resizeTextMinSize=12;
+                button.GetComponentInChildren<Text>(true).resizeTextMaxSize=22;
                 button.onClick.RemoveAllListeners();button.onClick.AddListener(()=>SelectConversation(id));
                 var drag=button.gameObject.AddComponent<ConversationCorpusDrag>();drag.Bind(this,id);
                 var debugRecord=conversation.Records.FirstOrDefault(r=>!session.IsConsumed(r.Id))??conversation.Records[0];
@@ -81,36 +95,54 @@ namespace CallmeCatgirl.UI
             if(controller==null||!controller.CanManage)return;
             double available=controller.Session.GetConversationCorpus(id).AvailablePoints;
             if(available<=1e-9)return;
-            selectedConversation=id;investedPoints=Math.Min(available,controller.Session.Recipes[0].MaximumCorpusPoints);
-            RefreshInvestment();
+            if(!investments.ContainsKey(id))
+                investments[id]=Math.Min(available,Math.Max(0,controller.Session.Recipes[0].MaximumCorpusPoints-investments.Values.Sum()));
+            selectedConversation=id;RefreshInvestment();
+        }
+        public void RemoveSelectedConversation()
+        {
+            if(controller==null||!controller.CanManage||selectedConversation==null)return;
+            investments.Remove(selectedConversation);selectedConversation=investments.Keys.FirstOrDefault();RefreshInvestment();
         }
         private void RefreshInvestment()
         {
             if(corpusAmount==null||investmentLabel==null)return;
             var session=controller.Session;var rule=session.Recipes[0];
             double available=selectedConversation==null?0:session.GetConversationCorpus(selectedConversation).AvailablePoints;
-            investedPoints=Math.Min(investedPoints,Math.Min(available,rule.MaximumCorpusPoints));
+            double other=investments.Where(p=>p.Key!=selectedConversation).Sum(p=>p.Value);
+            double limit=Math.Min(available,Math.Max(0,rule.MaximumCorpusPoints-other));
+            investedPoints=selectedConversation!=null&&investments.TryGetValue(selectedConversation,out var current)?Math.Min(current,limit):0;
+            if(selectedConversation!=null)investments[selectedConversation]=investedPoints;
             corpusAmount.onValueChanged.RemoveAllListeners();
-            corpusAmount.minValue=0;corpusAmount.maxValue=(float)Math.Min(available,rule.MaximumCorpusPoints);
-            corpusAmount.SetValueWithoutNotify((float)investedPoints);corpusAmount.interactable=available>0&&controller.CanManage;
+            corpusAmount.minValue=0;corpusAmount.maxValue=(float)limit;
+            corpusAmount.SetValueWithoutNotify((float)investedPoints);corpusAmount.interactable=limit>0&&controller.CanManage;
             corpusAmount.onValueChanged.AddListener(value=>{
-                double amount=value>=corpusAmount.maxValue-1e-6f?Math.Min(available,rule.MaximumCorpusPoints):Math.Round(value,1);
-                investedPoints=Math.Min(available,amount);RefreshInvestment();
+                double amount=value>=corpusAmount.maxValue-1e-6f?limit:Math.Round(value,1);
+                investments[selectedConversation]=Math.Max(0,Math.Min(limit,amount));RefreshInvestment();
             });
-            investmentLabel.text=selectedConversation==null?"将左侧对话拖到这里，选择投入点数":owner.Story.Name(selectedConversation)+" · 投入 "+investedPoints.ToString("0.###")+" / 可用 "+available.ToString("0.###")+" 点";
-            bool valid=investedPoints>1e-9&&selectedConversation!=null;
+            investmentLabel.text=selectedConversation==null?"可连续拖入多段对话，分别选择点数":owner.Story.Name(selectedConversation)+" · 本段 "+investedPoints.ToString("0.###")+" / 可用 "+available.ToString("0.###")+" 点";
+            if(removeCorpusButton!=null)removeCorpusButton.interactable=controller.CanManage&&selectedConversation!=null;
+            foreach(Transform row in records)
+            {
+                if(!row.name.StartsWith("ConversationCorpus_",StringComparison.Ordinal))continue;
+                var id=row.name.Substring("ConversationCorpus_".Length);var button=row.Find("Action").GetComponent<Button>();
+                button.GetComponentInChildren<Text>(true).text=investments.TryGetValue(id,out var amount)?"投入 "+amount.ToString("0.###")+" 点 / 调整":"拖入训练 / 添加";
+                button.GetComponent<Image>().color=id==selectedConversation?new Color(.65f,.82f,.82f):new Color(.87f,.9f,.91f);
+            }
+            var inputs=Investments; bool valid=inputs.Count>0;
             if(valid)
             {
                 try
                 {
-                    var cells=TrainingSession.GrowShape(rule,investedPoints,controller.Simulation.Width,controller.Simulation.Height);
-                    shapePreview.SetCells(cells);
-                    investmentScores.text="占用 "+cells.Length+" 格 · 每 "+rule.PointsPerExtraCell+" 点 +1格\n"+
-                        string.Join("  ",session.PreviewTrainingAbilities(recipe,selectedConversation,investedPoints).Select(pair=>CoreGameplayController.AbilityText(pair.Key)+" "+pair.Value.ToString("0.###")));
+                    var preview=session.PreviewTraining(recipe,inputs);shapePreview.SetCells(preview.Shape);
+                    investmentScores.text=inputs.Count+" 段 · 共 "+preview.TotalPoints.ToString("0.###")+" 点 · 占 "+preview.Shape.Count+" 格 · 费用 "+preview.Cost+
+                        "\n计算量 "+preview.WorkTokens.ToString("0.##")+" · 约 "+preview.EstimatedSeconds.ToString("0.#")+" 游戏秒"+
+                        "\n"+string.Join("  ",preview.Abilities.Select(pair=>CoreGameplayController.AbilityText(pair.Key)+" "+pair.Value.ToString("0.###")));
                 }
-                catch(ArgumentException){valid=false;investmentScores.text="投入过多，形状超出棋盘；请减少点数。";shapePreview.SetCells(Array.Empty<CallmeCatgirl.Gameplay.TaskGrid.Cell>());}
+                catch(ArgumentException){valid=false;investmentScores.text="投入量或形状无效，请减少点数；不会扣除语料。";shapePreview.SetCells(Array.Empty<CallmeCatgirl.Gameplay.TaskGrid.Cell>());}
+                catch(OverflowException){valid=false;investmentScores.text="计算量超出范围，请减少点数。";shapePreview.SetCells(Array.Empty<CallmeCatgirl.Gameplay.TaskGrid.Cell>());}
             }
-            else{investmentScores.text="确认生成时扣除语料，剩余点数可留到下次。";shapePreview.SetCells(Array.Empty<CallmeCatgirl.Gameplay.TaskGrid.Cell>());}
+            else{investmentScores.text="添加多段对话 → 逐段调节 → 合并训练\n确认生成时扣除投入量，剩余语料保留。\n耗时按当前架构和算力估算，暂停时不训练。";shapePreview.SetCells(Array.Empty<CallmeCatgirl.Gameplay.TaskGrid.Cell>());}
             trainButton.interactable=controller.CanManage&&valid;
         }
         private static void Clear(RectTransform parent,Transform keep=null)
@@ -154,7 +186,7 @@ namespace CallmeCatgirl.UI
             {
                 if(shapePreview!=null&&shapePreview.GetComponent<CanvasRenderer>()==null)shapePreview.gameObject.AddComponent<CanvasRenderer>();
                 if(corpusAmount.handleRect!=null)corpusAmount.handleRect.sizeDelta=new Vector2(corpusAmount.handleRect.sizeDelta.x,0);
-                return;
+                PrepareMultiCorpusInvestment();return;
             }
             var drop=Rect(transform,"ConversationCorpusInvestment",610,318,550,152);
             drop.gameObject.AddComponent<Image>().color=new Color(.91f,.93f,.93f);
@@ -174,6 +206,23 @@ namespace CallmeCatgirl.UI
             if(tip!=null)((RectTransform)tip).anchoredPosition=new Vector2(610*DesignWidthScale,-520*DesignScale);
             var viewport=(RectTransform)jobs.parent;viewport.anchoredPosition=new Vector2(610*DesignWidthScale,-554*DesignScale);viewport.sizeDelta=new Vector2(550*DesignWidthScale,85*DesignScale);
             emptyHint.text="完成合格请求的全部对白后，语料点数会计入对应对话。拖入对话后选择本次投入量。";
+            PrepareMultiCorpusInvestment();
+        }
+        private void PrepareMultiCorpusInvestment()
+        {
+            investmentScores.resizeTextForBestFit=true;investmentScores.resizeTextMinSize=12;investmentScores.resizeTextMaxSize=21;
+            if(removeCorpusButton!=null)return;
+            var drop=investmentLabel.transform.parent;
+            investmentLabel.rectTransform.sizeDelta=new Vector2(420*DesignWidthScale,30*DesignScale);
+            investmentLabel.resizeTextForBestFit=true;investmentLabel.resizeTextMinSize=12;investmentLabel.resizeTextMaxSize=21;
+            investmentLabel.text="可连续拖入多段对话，分别选择点数";
+            removeCorpusButton=Button(drop,"移除此段",436,4,106);
+            removeCorpusButton.GetComponentInChildren<Text>().fontSize=Mathf.RoundToInt(14*DesignScale);
+            removeCorpusButton.GetComponentInChildren<Text>().rectTransform.sizeDelta=new Vector2(98*DesignWidthScale,28*DesignScale);
+            investmentScores.resizeTextForBestFit=true;investmentScores.resizeTextMinSize=12;investmentScores.resizeTextMaxSize=21;
+            investmentScores.text="添加多段对话 → 逐段调节 → 合并训练";
+            foreach(Transform child in transform)
+                if(child.GetComponent<Text>()?.text=="语料库存")child.GetComponent<Text>().text="语料库存 · 可添加多段对话";
         }
         private void DebugSlot(RectTransform row,float y){var slot=Rect(row,"InlineDebugSlot",0,y,500,270);slot.sizeDelta=new Vector2(500*DesignWidthScale,270*DesignScale);}
         private RectTransform Rect(Transform parent,string name,float x,float y,float w,float h)

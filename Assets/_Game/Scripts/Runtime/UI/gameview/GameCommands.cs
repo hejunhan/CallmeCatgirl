@@ -11,6 +11,7 @@ namespace CallmeCatgirl.Gameplay
         public string[] corpusIds;
         public string conversationId;
         public double corpusPoints;
+        public CallmeCatgirl.Gameplay.Training.ConversationInvestment[] investments;
         public int x, y, rotation, choice, storyRevision = -1;
         public long expectedVersion = -1;
         public double seconds;
@@ -53,7 +54,7 @@ namespace CallmeCatgirl.Gameplay
     [Serializable] public sealed class GameArchitectureSnapshot { public string id,title,outline; public int unlockStage; public double speedMultiplier,corpusMultiplier; public bool contentReady; }
     [Serializable] public sealed class GameCellSnapshot { public int x,y,compartment; }
     [Serializable] public sealed class GameAbilitySnapshot { public string kind; public double value,excellent; }
-    [Serializable] public sealed class GameRecipeSnapshot { public string id; public int cost,minimumRecords; public double workTokens,pointsPerExtraCell,maximumCorpusPoints; public GameCellSnapshot[] shape; }
+    [Serializable] public sealed class GameRecipeSnapshot { public string id; public int cost,minimumRecords; public double workTokens,pointsPerExtraCell,maximumCorpusPoints,workGrowthCoefficient,workGrowthExponent; public GameCellSnapshot[] shape; }
     [Serializable] public sealed class GameCorpusSnapshot { public string id,conversationId,requestId,roundId,nodeId,choiceId; public bool consumed; public double remainingPoints; public GameAbilitySnapshot[] scores; }
 
     public sealed partial class CoreGameplayController
@@ -77,7 +78,7 @@ namespace CallmeCatgirl.Gameplay
                 recipes=TrainingEnabled?training.Session.Recipes.Select(r=>r.Id).ToArray():Array.Empty<string>(),
                 architectures=TrainingEnabled?training.Session.Architectures.Where(a=>a.UnlockStage<=MemoryLevel && a.ContentReady).Select(a=>a.Id).ToArray():Array.Empty<string>(),
                 architectureDetails=TrainingEnabled?training.Session.Architectures.Select(a=>new GameArchitectureSnapshot{id=a.Id,title=a.Title,outline=a.Outline.ToString(),unlockStage=a.UnlockStage,speedMultiplier=a.SpeedMultiplier,corpusMultiplier=a.CorpusMultiplier,contentReady=a.ContentReady}).ToArray():Array.Empty<GameArchitectureSnapshot>(),
-                recipeDetails=TrainingEnabled?training.Session.Recipes.Select(r=>new GameRecipeSnapshot {id=r.Id,cost=r.Cost,minimumRecords=r.MinimumRecords,workTokens=r.WorkTokens,pointsPerExtraCell=r.PointsPerExtraCell,maximumCorpusPoints=r.MaximumCorpusPoints,shape=r.Shape.Select(cell=>new GameCellSnapshot{x=cell.X,y=cell.Y}).ToArray()}).ToArray():Array.Empty<GameRecipeSnapshot>(),
+                recipeDetails=TrainingEnabled?training.Session.Recipes.Select(r=>new GameRecipeSnapshot {id=r.Id,cost=r.Cost,minimumRecords=r.MinimumRecords,workTokens=r.WorkTokens,pointsPerExtraCell=r.PointsPerExtraCell,maximumCorpusPoints=r.MaximumCorpusPoints,workGrowthCoefficient=r.WorkGrowthCoefficient,workGrowthExponent=r.WorkGrowthExponent,shape=r.Shape.Select(cell=>new GameCellSnapshot{x=cell.X,y=cell.Y}).ToArray()}).ToArray():Array.Empty<GameRecipeSnapshot>(),
                 corpus=TrainingEnabled?training.Session.Corpus.Select(r=>new GameCorpusSnapshot {id=r.Id,conversationId=r.ConversationId,requestId=r.RequestId,roundId=r.RoundId,nodeId=r.NodeId,choiceId=r.ChoiceId,consumed=training.Session.IsConsumed(r.Id),remainingPoints=training.Session.RemainingPoints(r.Id),scores=r.Scores.Select(p=>new GameAbilitySnapshot{kind=p.Key.ToString(),value=p.Value}).ToArray()}).ToArray():Array.Empty<GameCorpusSnapshot>(),
                 corpusIds = TrainingEnabled ? training.Session.Corpus.Where(c => !training.Session.IsConsumed(c.Id)).Select(c => c.Id).ToArray() : Array.Empty<string>(),
                 models = TrainingEnabled ? training.Session.Models.Select(m => new GameModelSnapshot {id=m.Id,name=m.Name,architecture=m.ArchitectureId,
@@ -165,7 +166,11 @@ namespace CallmeCatgirl.Gameplay
                 case "closeHistory": CloseConversationHistory(); return CommandResult(true,"Success");
                 case "train":
                     if (!TrainingEnabled) return CommandResult(false,"Unavailable");
-                    var trainingResult=!string.IsNullOrEmpty(c.conversationId)
+                    var trainingResult=c.investments!=null
+                        ? ((!string.IsNullOrEmpty(c.conversationId)||(c.corpusIds?.Length??0)>0||c.corpusPoints!=0)
+                            ? CallmeCatgirl.Gameplay.Training.TrainingResult.InvalidInput
+                            : training.StartConversationsTraining(c.recipe,c.architecture,c.displayName,c.investments))
+                        : !string.IsNullOrEmpty(c.conversationId)
                         ? ((c.corpusIds?.Length??0)>0 ? CallmeCatgirl.Gameplay.Training.TrainingResult.InvalidInput : training.StartConversationTraining(c.recipe,c.architecture,c.displayName,c.conversationId,c.corpusPoints))
                         : training.StartTraining(c.recipe,c.architecture,c.displayName,c.corpusIds ?? Array.Empty<string>());
                     return CommandResult(trainingResult.ToString()=="Success",trainingResult.ToString());
