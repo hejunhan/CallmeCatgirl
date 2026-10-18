@@ -52,7 +52,7 @@ namespace CallmeCatgirl.Persistence.Training
             var saved = DecodeForRestore(state);
             return TrainingSession.RestoreState(saved, simulation, recipes, architectures, compute,
                 spend, refund,
-                profile => simulation.TryChangeExecutionProfile(profile.Model, profile.TokensPerSecond, profile.OpenCells),
+                profile => simulation.TryChangeExecutionProfile(profile.Model, profile.TokensPerSecond, profile.OpenCells, profile.Architecture),
                 rate => simulation.TrySetTokenThroughput(rate), canonicalCapacity,
                 composePermanentBonuses, policies, restoredStage, restoredTokensPerSecond: simulation.TokenThroughput);
         }

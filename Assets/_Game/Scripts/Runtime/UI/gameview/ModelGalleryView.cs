@@ -127,8 +127,10 @@ namespace CallmeCatgirl.UI
         {
             string id=model.Id;bool current=id==controller.Session.ActiveModelId;var arch=controller.Session.Architectures.First(a=>a.Id==model.ArchitectureId);
             card.GetComponent<Outline>().effectColor=current?Color.black:new Color32(111,111,111,255);
-            card.Find("ArchitectureIcon/Label").GetComponent<Text>().text=model.ArchitectureId=="baseline"?"T":model.ArchitectureId=="alternate"?"M":"S";
-            SetCardText(card,"ModelName",model.Name);SetCardText(card,"ArchitectureTitle",arch.Title);
+            card.Find("ArchitectureIcon/Label").GetComponent<Text>().text=model.ArchitectureId=="baseline"?"学":model.ArchitectureId=="alternate"?"速":"衡";
+            SetCardText(card,"ModelName",model.Name);SetCardText(card,"ArchitectureTitle",arch.Title+" · 语料×"+arch.CorpusMultiplier.ToString("0.##")+" / 速度×"+arch.SpeedMultiplier.ToString("0.##"));
+            var architectureLabel=card.Find("ArchitectureTitle").GetComponent<Text>();
+            architectureLabel.resizeTextForBestFit=true;architectureLabel.resizeTextMinSize=16;architectureLabel.resizeTextMaxSize=architectureLabel.fontSize;
             SetCardText(card,"Throughput",controller.Session.PreviewTokensPerSecond(id).ToString("0.##")+" token/s");
             foreach(var ability in Enum.GetValues(typeof(CallmeCatgirl.Gameplay.TaskGrid.AbilityKind)).Cast<CallmeCatgirl.Gameplay.TaskGrid.AbilityKind>())
             {model.Definition.Points.TryGetValue(ability,out double value);SetCardText(card,"Ability_"+ability,CallmeCatgirl.Gameplay.CoreGameplayController.AbilityText(ability)+"  "+value.ToString("0.###"));}
@@ -140,7 +142,7 @@ namespace CallmeCatgirl.UI
                 square.anchoredPosition=new Vector2(cell.X*cellSize,-cell.Y*cellSize);square.sizeDelta=Vector2.one*Mathf.Max(1,cellSize-1);
             }
             string shape=arch.Outline==OutlineTransform.Keep?"标准":arch.Outline==OutlineTransform.Transpose?"转置":"镜像";
-            SetCardText(card,"OutlineSummary","模型轮廓："+shape+" · "+cells.Count+"格");SetCardText(card,"Interval","能力产出间隔："+model.Definition.Interval.ToString("0.###")+"s");
+            SetCardText(card,"OutlineSummary","模型轮廓："+shape+" · "+cells.Count+"格");SetCardText(card,"Interval","能力产出间隔："+(model.Definition.Interval/arch.Runtime.AbilityRateMultiplier).ToString("0.###")+"s");
             SetCardText(card,"ModelState",(current?"● 当前使用":"○ 可切换")+"   训练语料 "+model.CorpusIds.Count+"条");SetCardText(card,"ModelUuid",id);
             var rename=card.Find("Rename").GetComponent<InputField>();rename.SetTextWithoutNotify(model.Name);
             var renameButton=card.Find("改名").GetComponent<Button>();renameButton.onClick.RemoveAllListeners();renameButton.onClick.AddListener(()=>owner.ExecuteCommand(new CallmeCatgirl.Gameplay.GameCommand{kind="renameModel",id=id,displayName=rename.text}));
@@ -182,7 +184,7 @@ namespace CallmeCatgirl.UI
             var card=Rect("ModelCard",cards,x,y,width,height);card.gameObject.AddComponent<Image>().color=new Color(.965f,.965f,.965f);
             var border=card.gameObject.AddComponent<Outline>();border.effectColor=current?Color.black:new Color32(111,111,111,255);border.effectDistance=Vector2.one;
             var icon=Rect("ArchitectureIcon",card,20,22,34,34);icon.gameObject.AddComponent<Image>().color=Color.black;
-            Label(icon,model.ArchitectureId=="baseline"?"T":model.ArchitectureId=="alternate"?"M":"S",7,4,28,30,22,Color.white);
+            Label(icon,model.ArchitectureId=="baseline"?"学":model.ArchitectureId=="alternate"?"速":"衡",7,4,28,30,22,Color.white);
             Label(card,model.Name,70,16,width-90,94,26).name="ModelName";
             var arch=controller.Session.Architectures.First(a=>a.Id==model.ArchitectureId);
             Label(card,arch.Title,20,122,330,30,17);Label(card,controller.Session.PreviewTokensPerSecond(id).ToString("0.##")+" token/s",362,122,194,30,20);

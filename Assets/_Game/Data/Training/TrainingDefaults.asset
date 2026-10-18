@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85c17c0859f9007fc404fe0a5c38f4a9, type: 3}
   m_Name: TrainingDefaults
   m_EditorClassIdentifier:
-  DefaultsNotice: "可调默认；Transformer/MoE Transformer/协调状态架构在5阶段中的1/2/4解锁。倍率和轮廓暂定。无上下文空间玩法。所有模型可改名，ID稳定。"
+  DefaultsNotice: "学习型/高速型/均衡型按内存1/2/4级解锁。语料倍率1.6/1/1.25，速度倍率1/1.6/1.25；首次落位锁定架构，速度同步加速能力周期。"
   Recipes:
   - Id: dialogue-training
     Title: "对话语料训练（暂定）"
@@ -30,21 +30,24 @@ MonoBehaviour:
     - {x: 2, y: 1}
   Architectures:
   - Id: baseline
-    Title: "Transformer（倍率暂定）"
+    Title: "学习型"
+    CorpusMultiplier: 1.6
     SpeedMultiplier: 1
     Outline: 0
     UnlockStage: 1
     ContentReady: 1
   - Id: alternate
-    Title: "MoE Transformer（倍率暂定）"
-    SpeedMultiplier: 0.8
-    Outline: 1
+    Title: "高速型"
+    CorpusMultiplier: 1
+    SpeedMultiplier: 1.6
+    Outline: 0
     UnlockStage: 2
     ContentReady: 1
   - Id: architecture-slot-3
-    Title: "协调状态架构"
-    TechnicalDescription: "注意力/状态空间混合"
-    SpeedMultiplier: 1
+    Title: "均衡型"
+    TechnicalDescription: "语料与速度均衡"
+    CorpusMultiplier: 1.25
+    SpeedMultiplier: 1.25
     Outline: 0
     UnlockStage: 4
     ContentReady: 1

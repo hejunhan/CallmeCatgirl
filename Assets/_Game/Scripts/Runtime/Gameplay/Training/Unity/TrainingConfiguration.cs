@@ -13,9 +13,9 @@ namespace CallmeCatgirl.Gameplay.Training
         public string DefaultsNotice = "暂定：语料一次消耗、无退款取消、能力不继承旧模型。速度为每任务token/s，并发不分摊。";
         public RecipeEntry[] Recipes = { new RecipeEntry() };
         public ArchitectureEntry[] Architectures = {
-            new ArchitectureEntry { Id = "baseline", Title = "Transformer（倍率暂定）", UnlockStage = 1, SpeedMultiplier = 1, Outline = OutlineTransform.Keep },
-            new ArchitectureEntry { Id = "alternate", Title = "MoE Transformer（倍率暂定）", UnlockStage = 2, SpeedMultiplier = .8, Outline = OutlineTransform.Transpose },
-            new ArchitectureEntry { Id = "architecture-slot-3", Title = "协调状态架构", TechnicalDescription = "注意力/状态空间混合", UnlockStage = 4, ContentReady = true, SpeedMultiplier = 1, Outline = OutlineTransform.Keep }
+            new ArchitectureEntry { Id = "baseline", Title = "学习型", UnlockStage = 1, CorpusMultiplier = 1.6, SpeedMultiplier = 1, Outline = OutlineTransform.Keep },
+            new ArchitectureEntry { Id = "alternate", Title = "高速型", UnlockStage = 2, CorpusMultiplier = 1, SpeedMultiplier = 1.6, Outline = OutlineTransform.Keep },
+            new ArchitectureEntry { Id = "architecture-slot-3", Title = "均衡型", TechnicalDescription = "语料与速度均衡", UnlockStage = 4, ContentReady = true, CorpusMultiplier = 1.25, SpeedMultiplier = 1.25, Outline = OutlineTransform.Keep }
         };
         public ComputeEntry[] Compute = {
             new ComputeEntry { Id = "compute-1", TokensPerSecond = 10, UpgradeCost = 0 },
@@ -41,11 +41,12 @@ namespace CallmeCatgirl.Gameplay.Training
         {
             public string Id, Title;
             public string TechnicalDescription;
-            public double SpeedMultiplier = 1;
+            [InspectorName("运行速度倍率"), Min(.01f)] public double SpeedMultiplier = 1;
+            [InspectorName("语料获取倍率"), Min(.01f)] public double CorpusMultiplier = 1;
             public OutlineTransform Outline;
             [Range(1, 5)] public int UnlockStage = 1;
             public bool ContentReady = true;
-            public ArchitectureDefinition Build() => new ArchitectureDefinition(Id, Title, SpeedMultiplier, Outline, UnlockStage, ContentReady, TechnicalDescription);
+            public ArchitectureDefinition Build() => new ArchitectureDefinition(Id, Title, SpeedMultiplier, Outline, UnlockStage, ContentReady, TechnicalDescription, CorpusMultiplier, SpeedMultiplier, true);
         }
         [Serializable] public sealed class ComputeEntry
         {

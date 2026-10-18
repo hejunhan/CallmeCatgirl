@@ -47,16 +47,19 @@ namespace CallmeCatgirl.UI
             foreach(var arch in session.Architectures)
             {
                 var a=arch;var button=Instantiate(architectureTemplate,architectures);button.name=a.Id;button.gameObject.SetActive(true);
-                button.GetComponentInChildren<Text>(true).text=a.Title;button.interactable=controller.CanManage&&a.ContentReady&&a.UnlockStage<=session.CurrentStage;
-                button.onClick.RemoveAllListeners();button.onClick.AddListener(()=>{architecture=a.Id;owner.SetMessage("训练架构："+a.Title);});
+                button.GetComponent<Image>().color=a.Id==architecture?new Color(.65f,.82f,.82f):new Color(.87f,.9f,.91f);
+                var label=button.GetComponentInChildren<Text>(true);
+                label.text=a.Title+" · 内存"+a.UnlockStage+"级\n语料×"+a.CorpusMultiplier.ToString("0.###")+" / 速度×"+a.SpeedMultiplier.ToString("0.###");
+                label.resizeTextForBestFit=true;label.resizeTextMinSize=11;label.resizeTextMaxSize=18;button.interactable=controller.CanManage&&a.ContentReady&&a.UnlockStage<=session.CurrentStage;
+                button.onClick.RemoveAllListeners();button.onClick.AddListener(()=>{architecture=a.Id;Bind(controller);});
             }
             foreach(var conversation in session.ConversationCorpora)
             {
                 var id=conversation.ConversationId;
                 var row=Instantiate(recordTemplate,records);row.name="ConversationCorpus_"+id;row.gameObject.SetActive(true);
                 bool used=conversation.AvailablePoints<=1e-9;
-                row.Find("Title").GetComponent<Text>().text=owner.Story.Name(id)+" · 可用 "+conversation.AvailablePoints.ToString("0.##")+" / 累计 "+conversation.TotalPoints.ToString("0.##")+" 点";
-                row.Find("Scores").GetComponent<Text>().text=string.Join("  ",conversation.AvailableScores.Select(pair=>CoreGameplayController.AbilityText(pair.Key)+" "+pair.Value.ToString("0.##")));
+                row.Find("Title").GetComponent<Text>().text=owner.Story.Name(id)+" · 可用 "+conversation.AvailablePoints.ToString("0.###")+" / 累计 "+conversation.TotalPoints.ToString("0.###")+" 点";
+                row.Find("Scores").GetComponent<Text>().text=string.Join("  ",conversation.AvailableScores.Select(pair=>CoreGameplayController.AbilityText(pair.Key)+" "+pair.Value.ToString("0.###")));
                 var button=row.Find("Action").GetComponent<Button>();button.interactable=!used&&controller.CanManage;
                 button.GetComponentInChildren<Text>(true).text=selectedConversation==id?"已投入此对话":"拖入训练 / 选择";
                 button.onClick.RemoveAllListeners();button.onClick.AddListener(()=>SelectConversation(id));
@@ -90,8 +93,11 @@ namespace CallmeCatgirl.UI
             corpusAmount.onValueChanged.RemoveAllListeners();
             corpusAmount.minValue=0;corpusAmount.maxValue=(float)Math.Min(available,rule.MaximumCorpusPoints);
             corpusAmount.SetValueWithoutNotify((float)investedPoints);corpusAmount.interactable=available>0&&controller.CanManage;
-            corpusAmount.onValueChanged.AddListener(value=>{investedPoints=Math.Min(available,Math.Round(value,1));RefreshInvestment();});
-            investmentLabel.text=selectedConversation==null?"将左侧对话拖到这里，选择投入点数":owner.Story.Name(selectedConversation)+" · 投入 "+investedPoints.ToString("0.#")+" / 可用 "+available.ToString("0.##")+" 点";
+            corpusAmount.onValueChanged.AddListener(value=>{
+                double amount=value>=corpusAmount.maxValue-1e-6f?Math.Min(available,rule.MaximumCorpusPoints):Math.Round(value,1);
+                investedPoints=Math.Min(available,amount);RefreshInvestment();
+            });
+            investmentLabel.text=selectedConversation==null?"将左侧对话拖到这里，选择投入点数":owner.Story.Name(selectedConversation)+" · 投入 "+investedPoints.ToString("0.###")+" / 可用 "+available.ToString("0.###")+" 点";
             bool valid=investedPoints>1e-9&&selectedConversation!=null;
             if(valid)
             {
@@ -100,7 +106,7 @@ namespace CallmeCatgirl.UI
                     var cells=TrainingSession.GrowShape(rule,investedPoints,controller.Simulation.Width,controller.Simulation.Height);
                     shapePreview.SetCells(cells);
                     investmentScores.text="占用 "+cells.Length+" 格 · 每 "+rule.PointsPerExtraCell+" 点 +1格\n"+
-                        string.Join("  ",session.PreviewTrainingAbilities(recipe,selectedConversation,investedPoints).Select(pair=>CoreGameplayController.AbilityText(pair.Key)+" "+pair.Value.ToString("0.##")));
+                        string.Join("  ",session.PreviewTrainingAbilities(recipe,selectedConversation,investedPoints).Select(pair=>CoreGameplayController.AbilityText(pair.Key)+" "+pair.Value.ToString("0.###")));
                 }
                 catch(ArgumentException){valid=false;investmentScores.text="投入过多，形状超出棋盘；请减少点数。";shapePreview.SetCells(Array.Empty<CallmeCatgirl.Gameplay.TaskGrid.Cell>());}
             }

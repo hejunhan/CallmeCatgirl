@@ -84,7 +84,7 @@ namespace CallmeCatgirl.Gameplay.Training.Tests
                         new ArchitectureDefinition("third", "协调状态架构", 1, OutlineTransform.Keep, 4, thirdReady, "注意力/状态空间混合") },
                     new[] { new ComputeTier("one", 10, 0), new ComputeTier("two", 20, 30) },
                     Wallet.TrySpendFunds, Wallet.AddFunds,
-                    p => !RejectProfile && Sim.TryChangeExecutionProfile(p.Model, p.TokensPerSecond, p.OpenCells),
+                    p => !RejectProfile && Sim.TryChangeExecutionProfile(p.Model, p.TokensPerSecond, p.OpenCells, p.Architecture),
                     rate => !RejectRate && Sim.TrySetTokenThroughput(rate), () => Capacity, null, () => Policy, () => Stage);
             }
             public TaskInstance Request(string id, double calc = 10, double tokens = 10, bool impossible = false)
@@ -414,7 +414,7 @@ namespace CallmeCatgirl.Gameplay.Training.Tests
             return TrainingSession.RestoreState(state,sim,f.Session.Recipes,f.Session.Architectures,f.Session.ComputeTiers,
                 amount=>{onGameplayCall?.Invoke();return f.Wallet.TrySpendFunds(amount);},
                 amount=>{onGameplayCall?.Invoke();f.Wallet.AddFunds(amount);},
-                profile=>{onGameplayCall?.Invoke();return sim.TryChangeExecutionProfile(profile.Model,profile.TokensPerSecond,profile.OpenCells);},
+                profile=>{onGameplayCall?.Invoke();return sim.TryChangeExecutionProfile(profile.Model,profile.TokensPerSecond,profile.OpenCells,profile.Architecture);},
                 rate=>{onGameplayCall?.Invoke();return sim.TrySetTokenThroughput(rate);},
                 ()=>f.Capacity,compose,()=>f.Policy,()=>f.Stage,sim.TokenThroughput);
         }
@@ -482,7 +482,7 @@ namespace CallmeCatgirl.Gameplay.Training.Tests
             var f=new Fixture();f.Record();TrainingSession session=null;bool busyRejected=false;
             session=new TrainingSession(f.Sim,f.Session.Models.Single(),f.Session.Recipes,f.Session.Architectures,f.Session.ComputeTiers,
                 amount=>{try{session.CaptureState();}catch(InvalidOperationException){busyRejected=true;}return f.Wallet.TrySpendFunds(amount);},
-                f.Wallet.AddFunds,p=>f.Sim.TryChangeExecutionProfile(p.Model,p.TokensPerSecond,p.OpenCells),
+                f.Wallet.AddFunds,p=>f.Sim.TryChangeExecutionProfile(p.Model,p.TokensPerSecond,p.OpenCells,p.Architecture),
                 rate=>f.Sim.TrySetTokenThroughput(rate),()=>f.Capacity);
             session.RecordDialogue("request","node","reply",new Dictionary<AbilityKind,double>{{AbilityKind.Code,3}},"story-explicit");
             Equal(TrainingResult.Success,session.StartTraining("train","base","busy",new[]{session.Corpus.Single().Id},out _));True(busyRejected);

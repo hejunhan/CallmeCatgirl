@@ -104,6 +104,8 @@ namespace CallmeCatgirl.Gameplay.Training
                 throw new ArgumentException("Initial architecture must be defined and unlocked at the current stage.");
             models.Add(initial.Id, initial); ActiveModelId = initial.Id;
             if (!Identities.Register(initial.LegacyId, initial.Id)) throw new ArgumentException("Conflicting initial model migration.");
+            if (!simulation.TrySetArchitecture(this.architectures[initial.ArchitectureId].Runtime))
+                throw new ArgumentException("Architecture initialization requires a paused simulation.");
             if (simulation.Model.Id != initial.Id)
             {
                 // Identity-only migration while paused: preserve the CURRENT effective points, interval and all task state.
@@ -141,7 +143,12 @@ namespace CallmeCatgirl.Gameplay.Training
             var key = Tuple.Create(requestId, nodeId);
             if (recordedFragments.Contains(key)) return TrainingResult.AlreadyRecorded;
             CorpusRecord record;
-            try { record = new CorpusRecord("corpus-" + (corpus.Count + 1), task, nodeId, choiceId, scoreSource, scores); }
+            try
+            {
+                double multiplier = (task.Architecture ?? simulation.Architecture).CorpusMultiplier;
+                record = new CorpusRecord("corpus-" + (corpus.Count + 1), task, nodeId, choiceId, scoreSource,
+                    scores?.ToDictionary(p=>p.Key,p=>p.Value*multiplier));
+            }
             catch (ArgumentException) { return TrainingResult.InvalidInput; }
             recordedFragments.Add(key); corpus.Add(record.Id, record); Changed?.Invoke(); return TrainingResult.Success;
         }
@@ -241,7 +248,7 @@ namespace CallmeCatgirl.Gameplay.Training
             try
             {
                 profile = new ExecutionProfile(composeBonuses(selected.Definition), Throughput(architecture.Id, ComputeIndex),
-                    architecture.Transform(capacityCells(), simulation.Width, simulation.Height));
+                    architecture.Transform(capacityCells(), simulation.Width, simulation.Height), architecture.Runtime);
                 if (profile.Model.Id != selected.Id) return TrainingResult.HostRejected;
             }
             catch (ArgumentException) { return TrainingResult.HostRejected; }

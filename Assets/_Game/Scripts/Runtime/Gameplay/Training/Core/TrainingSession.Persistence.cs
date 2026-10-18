@@ -201,7 +201,11 @@ namespace CallmeCatgirl.Gameplay.Training
                     : task.State==RequestState.Waiting || task.State==RequestState.Running || task.State==RequestState.Withdrawn || task.State==RequestState.Ready,
                     "training completion state mismatch");
             }
+            foreach(var task in restoredSimulation.Tasks.Values.Where(t=>t.Architecture!=null))
+                RequireState(restored.architectures.TryGetValue(task.Architecture.Id,out var source)
+                    && source.UnlockStage<=state.Stage && source.Runtime.SameAs(task.Architecture),"frozen architecture differs from configuration");
             var active=restored.models[state.ActiveModelId];
+            RequireState(restoredSimulation.Architecture.SameAs(restored.architectures[active.ArchitectureId].Runtime),"active architecture differs from simulation");
             RequireState(SameDefinition(restored.composeBonuses(active.Definition),restoredSimulation.Model),"effective model differs (permanent bonuses must compose once)");
             double expected=restored.TokensPerSecond;
             RequireState(Math.Abs(expected-state.TokensPerSecond)<=1e-9*Math.Max(1,expected),"saved execution rate differs from policy/compute");

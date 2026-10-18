@@ -154,6 +154,7 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
         public double Deadline { get; }
         public double Progress { get; internal set; }
         public double AbilityRemainder { get; internal set; }
+        public ArchitectureRuntime Architecture { get; internal set; }
         public double? FinishedAt { get; internal set; }
         public bool ReadyInCandidate { get; internal set; }
         public Cell Origin { get; internal set; }

@@ -41,7 +41,8 @@ namespace CallmeCatgirl.Gameplay
     }
     [Serializable] public sealed class GameTaskSnapshot
     {
-        public string id, state, quality, conversationId;
+        public string id, state, quality, conversationId, architectureId;
+        public double architectureSpeedMultiplier, corpusMultiplier;
         public int x, y, rotation;
         public double progress, calculation, tokens, patience, remaining, deadline;
         public GameCellSnapshot[] shape;
@@ -49,7 +50,7 @@ namespace CallmeCatgirl.Gameplay
         public bool training, readyInCandidate;
     }
     [Serializable] public sealed class GameModelSnapshot { public string id, name, architecture; public double interval,tokenPerSecond; public GameAbilitySnapshot[] abilities; }
-    [Serializable] public sealed class GameArchitectureSnapshot { public string id,title,outline; public int unlockStage; public double speedMultiplier; public bool contentReady; }
+    [Serializable] public sealed class GameArchitectureSnapshot { public string id,title,outline; public int unlockStage; public double speedMultiplier,corpusMultiplier; public bool contentReady; }
     [Serializable] public sealed class GameCellSnapshot { public int x,y,compartment; }
     [Serializable] public sealed class GameAbilitySnapshot { public string kind; public double value,excellent; }
     [Serializable] public sealed class GameRecipeSnapshot { public string id; public int cost,minimumRecords; public double workTokens,pointsPerExtraCell,maximumCorpusPoints; public GameCellSnapshot[] shape; }
@@ -75,13 +76,13 @@ namespace CallmeCatgirl.Gameplay
                     .Where(Simulation.IsOpen).Select(cell=>new GameCellSnapshot {x=cell.X,y=cell.Y,compartment=Simulation.CompartmentAt(cell)}).ToArray(),
                 recipes=TrainingEnabled?training.Session.Recipes.Select(r=>r.Id).ToArray():Array.Empty<string>(),
                 architectures=TrainingEnabled?training.Session.Architectures.Where(a=>a.UnlockStage<=MemoryLevel && a.ContentReady).Select(a=>a.Id).ToArray():Array.Empty<string>(),
-                architectureDetails=TrainingEnabled?training.Session.Architectures.Select(a=>new GameArchitectureSnapshot{id=a.Id,title=a.Title,outline=a.Outline.ToString(),unlockStage=a.UnlockStage,speedMultiplier=a.SpeedMultiplier,contentReady=a.ContentReady}).ToArray():Array.Empty<GameArchitectureSnapshot>(),
+                architectureDetails=TrainingEnabled?training.Session.Architectures.Select(a=>new GameArchitectureSnapshot{id=a.Id,title=a.Title,outline=a.Outline.ToString(),unlockStage=a.UnlockStage,speedMultiplier=a.SpeedMultiplier,corpusMultiplier=a.CorpusMultiplier,contentReady=a.ContentReady}).ToArray():Array.Empty<GameArchitectureSnapshot>(),
                 recipeDetails=TrainingEnabled?training.Session.Recipes.Select(r=>new GameRecipeSnapshot {id=r.Id,cost=r.Cost,minimumRecords=r.MinimumRecords,workTokens=r.WorkTokens,pointsPerExtraCell=r.PointsPerExtraCell,maximumCorpusPoints=r.MaximumCorpusPoints,shape=r.Shape.Select(cell=>new GameCellSnapshot{x=cell.X,y=cell.Y}).ToArray()}).ToArray():Array.Empty<GameRecipeSnapshot>(),
                 corpus=TrainingEnabled?training.Session.Corpus.Select(r=>new GameCorpusSnapshot {id=r.Id,conversationId=r.ConversationId,requestId=r.RequestId,roundId=r.RoundId,nodeId=r.NodeId,choiceId=r.ChoiceId,consumed=training.Session.IsConsumed(r.Id),remainingPoints=training.Session.RemainingPoints(r.Id),scores=r.Scores.Select(p=>new GameAbilitySnapshot{kind=p.Key.ToString(),value=p.Value}).ToArray()}).ToArray():Array.Empty<GameCorpusSnapshot>(),
                 corpusIds = TrainingEnabled ? training.Session.Corpus.Where(c => !training.Session.IsConsumed(c.Id)).Select(c => c.Id).ToArray() : Array.Empty<string>(),
                 models = TrainingEnabled ? training.Session.Models.Select(m => new GameModelSnapshot {id=m.Id,name=m.Name,architecture=m.ArchitectureId,
                     interval=m.Definition.Interval,tokenPerSecond=training.Session.PreviewTokensPerSecond(m.Id),abilities=m.Definition.Points.Select(p=>new GameAbilitySnapshot{kind=p.Key.ToString(),value=p.Value}).ToArray()}).ToArray() : Array.Empty<GameModelSnapshot>(),
-                tasks = Simulation.Tasks.Values.Select(t => new GameTaskSnapshot {id=t.Id,conversationId=t.ConversationId,state=t.State.ToString(),
+                tasks = Simulation.Tasks.Values.Select(t => new GameTaskSnapshot {id=t.Id,conversationId=t.ConversationId,state=t.State.ToString(),architectureId=t.Architecture?.Id,architectureSpeedMultiplier=(t.Architecture??Simulation.Architecture).SpeedMultiplier,corpusMultiplier=(t.Architecture??Simulation.Architecture).CorpusMultiplier,
                     x=t.Origin.X,y=t.Origin.Y,rotation=t.Rotation,progress=t.Progress,calculation=t.Definition.Calculation,
                     tokens=t.Definition.Tokens,patience=t.Definition.Patience,quality=t.Result?.Overall.ToString(),
                     remaining=t.Remaining(Simulation.GameTime),deadline=t.Deadline,

@@ -69,17 +69,21 @@ namespace CallmeCatgirl.Gameplay.Training
         public string Id { get; }
         public string Title { get; }
         public double SpeedMultiplier { get; }
+        public double CorpusMultiplier => Runtime.CorpusMultiplier;
+        public ArchitectureRuntime Runtime { get; }
         public OutlineTransform Outline { get; }
         public int UnlockStage { get; }
         public bool ContentReady { get; }
         public string TechnicalDescription { get; }
         public ArchitectureDefinition(string id, string title, double speedMultiplier, OutlineTransform outline,
-            int unlockStage = 1, bool contentReady = true, string technicalDescription = "")
+            int unlockStage = 1, bool contentReady = true, string technicalDescription = "",
+            double corpusMultiplier = 1, double abilityRateMultiplier = 1, bool freezeOnPlacement = false)
         {
             Id = Check.Id(id); Title = Check.Id(title); Check.Number(speedMultiplier, true);
             if (!Enum.IsDefined(typeof(OutlineTransform), outline)) throw new ArgumentException("Invalid outline.");
             if (unlockStage < 1 || unlockStage > 5) throw new ArgumentOutOfRangeException(nameof(unlockStage));
             SpeedMultiplier = speedMultiplier; Outline = outline;
+            Runtime = new ArchitectureRuntime(id,speedMultiplier,abilityRateMultiplier,corpusMultiplier,freezeOnPlacement);
             UnlockStage = unlockStage; ContentReady = contentReady;
             TechnicalDescription = technicalDescription ?? string.Empty;
         }
@@ -214,10 +218,11 @@ namespace CallmeCatgirl.Gameplay.Training
         public ModelDefinition Model { get; }
         public double TokensPerSecond { get; }
         public IReadOnlyList<Cell> OpenCells { get; }
-        public ExecutionProfile(ModelDefinition model, double tokensPerSecond, IEnumerable<Cell> openCells)
+        public ArchitectureRuntime Architecture { get; }
+        public ExecutionProfile(ModelDefinition model, double tokensPerSecond, IEnumerable<Cell> openCells, ArchitectureRuntime architecture = null)
         {
             Model = model ?? throw new ArgumentNullException(nameof(model)); Check.Number(tokensPerSecond, true);
-            TokensPerSecond = tokensPerSecond;
+            TokensPerSecond = tokensPerSecond; Architecture = architecture ?? ArchitectureRuntime.Neutral;
             OpenCells = Array.AsReadOnly((openCells ?? throw new ArgumentNullException(nameof(openCells))).ToArray());
             if (OpenCells.Count == 0 || OpenCells.Distinct().Count() != OpenCells.Count) throw new ArgumentException("Invalid outline.");
         }

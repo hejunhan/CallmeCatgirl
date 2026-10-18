@@ -53,6 +53,8 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
         public double ArrivedAt;
         public double Progress;
         public double AbilityRemainder;
+        public bool HasArchitecture;
+        public ArchitectureRuntimeState Architecture;
         public bool HasFinishedAt;
         public double FinishedAt;
         public CellState Origin;
@@ -74,6 +76,7 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
         public RequestSnapshot[] Requests;
         public int ExecutionProfileVersion;
         public double TokenThroughput;
+        public ArchitectureRuntimeState Architecture;
     }
 
     public static class StateRules
@@ -107,9 +110,10 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
             {
                 Version = 1, Width = Width, Height = Height, OpenCells = openCells.OrderBy(c => c.Y).ThenBy(c => c.X).Select(StateRules.Cell).ToArray(),
                 Compartments = (int[])compartments.Clone(), Model = ModelState.Capture(Model), GameTime = GameTime, Paused = Paused,
+                Architecture = ArchitectureRuntimeState.Capture(Architecture),
                 ExecutionProfileVersion =
 #if CALLMECATGIRL_TRAINING_GRID
-                    1, TokenThroughput = TokenThroughput,
+                    2, TokenThroughput = TokenThroughput,
 #else
                     0, TokenThroughput = 0,
 #endif
@@ -117,6 +121,7 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
                 {
                     Id = t.Id, ConversationId = t.ConversationId, RoundId = t.RoundId, Definition = DefinitionState.Capture(t.Definition),
                     State = t.State, ArrivedAt = t.ArrivedAt, Progress = t.Progress, AbilityRemainder = t.AbilityRemainder,
+                    HasArchitecture = t.Architecture != null, Architecture = ArchitectureRuntimeState.Capture(t.Architecture),
                     HasFinishedAt = t.FinishedAt.HasValue, FinishedAt = t.FinishedAt ?? 0, Origin = StateRules.Cell(t.Origin),
                     Rotation = t.Rotation, Abilities = StateRules.CaptureAbilities(t.Abilities), HasResult = t.Result != null,
 #if CALLMECATGIRL_TRAINING_GRID
@@ -138,11 +143,14 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
             StateRules.Require(cells.Distinct().Count() == cells.Length, "Duplicate open cells.");
             var simulation = new TaskSimulation(s.Width, s.Height, cells, s.Model.Build(), s.Compartments)
                 { GameTime = s.GameTime, Paused = s.Paused };
-            StateRules.Require(s.ExecutionProfileVersion >= 0 && s.ExecutionProfileVersion <= 1
+            StateRules.Require(s.ExecutionProfileVersion >= 0 && s.ExecutionProfileVersion <= 2
                 && StateRules.Finite(s.TokenThroughput) && s.TokenThroughput >= 0
                 && (s.ExecutionProfileVersion != 0 || s.TokenThroughput == 0), "Invalid execution profile state.");
 #if CALLMECATGIRL_TRAINING_GRID
+            StateRules.Require(s.ExecutionProfileVersion<2 || s.Architecture!=null,"Missing architecture profile.");
             simulation.TokenThroughput = s.TokenThroughput;
+            simulation.Architecture = s.ExecutionProfileVersion<2 && string.IsNullOrWhiteSpace(s.Architecture?.Id)
+                ? ArchitectureRuntime.Neutral : s.Architecture?.Build() ?? ArchitectureRuntime.Neutral;
 #else
             if (s.ExecutionProfileVersion != 0) throw new NotSupportedException("Save requires the training TaskGrid patch and CALLMECATGIRL_TRAINING_GRID.");
 #endif
@@ -164,13 +172,17 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
                 StateRules.Require(!item.HasResult || (item.Progress == definition.Calculation && item.State != RequestState.TimedOut), "Invalid result.");
                 StateRules.Require((item.State != RequestState.Ready && item.State != RequestState.Submitted) || item.HasResult, "Completed request lacks result.");
                 StateRules.Require(item.State != RequestState.TimedOut || item.Progress < definition.Calculation, "Timeout is already complete.");
-                StateRules.Require(!item.ReadyInCandidate || (s.ExecutionProfileVersion == 1 && item.State == RequestState.Ready), "Invalid candidate-ready state.");
+                StateRules.Require(!item.ReadyInCandidate || (s.ExecutionProfileVersion >= 1 && item.State == RequestState.Ready), "Invalid candidate-ready state.");
                 StateRules.Require(item.State != RequestState.Closed || item.HasResult == (item.Progress == definition.Calculation), "Closed request result differs from completion.");
                 StateRules.Require((item.State != RequestState.TimedOut && (item.State != RequestState.Closed || item.HasResult))
                     || item.FinishedAt == task.Deadline, "Timeout finish time differs from deadline.");
                 StateRules.Require(!unfinished || item.AbilityRemainder < simulation.Model.Interval + Epsilon, "Invalid ability remainder.");
                 var abilities = StateRules.Abilities(item.Abilities);
                 StateRules.Require(item.State != RequestState.Waiting || (item.Progress == 0 && item.AbilityRemainder == 0 && abilities.Count == 0), "Waiting request already produced work.");
+                // Unity JsonUtility expands null serializable objects to empty objects. The explicit presence flag is authoritative.
+                StateRules.Require(!item.HasArchitecture || (s.ExecutionProfileVersion>=2 && item.Architecture!=null),"Missing frozen architecture.");
+                task.Architecture = item.HasArchitecture ? item.Architecture.Build() : null;
+                StateRules.Require(task.Architecture==null || (task.Architecture.FreezeOnPlacement && item.State!=RequestState.Waiting),"Invalid frozen architecture.");
                 task.State = item.State; task.Progress = item.Progress; task.AbilityRemainder = item.AbilityRemainder;
                 task.FinishedAt = item.HasFinishedAt ? (double?)item.FinishedAt : null; task.Origin = item.Origin.Build(); task.Rotation = item.Rotation;
 #if CALLMECATGIRL_TRAINING_GRID

@@ -19,7 +19,7 @@ namespace CallmeCatgirl.Persistence
             bool legacyRevision = d.Story?.Version == 1 && !string.IsNullOrEmpty(legacyStoryV1Revision) && d.ContentRevision == legacyStoryV1Revision;
             if (d.ContentRevision != contentRevision && !legacyRevision) throw new SaveCompatibilityException("Save content revision differs from installed content.");
             if (d.Host?.Version > 2 || d.Economy?.Version > 1 || d.Story?.Version > 4 || d.Simulation?.Version > 1
-                || d.Policies?.Version > 1 || d.Host?.GenerationRandom?.Version > 1 || d.Simulation?.ExecutionProfileVersion > 1)
+                || d.Policies?.Version > 1 || d.Host?.GenerationRandom?.Version > 1 || d.Simulation?.ExecutionProfileVersion > 2)
                 throw new SaveCompatibilityException("Unsupported component state version.");
             StateRules.Require(Guid.TryParse(d.RunId, out _) && DateTimeOffset.TryParse(d.SavedAtUtc, out _)
                 && !string.IsNullOrWhiteSpace(d.ContentRevision) && d.Host != null && d.Economy != null && d.Story != null

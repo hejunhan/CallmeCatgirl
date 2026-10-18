@@ -104,6 +104,7 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
             Release(task);
             task.Origin = origin; task.Rotation = ((rotation % 4) + 4) % 4;
             foreach (var offset in task.Definition.RotatedShape(task.Rotation)) occupancy.Add(origin + offset, task.Id);
+            if (task.Architecture == null && Architecture.FreezeOnPlacement) task.Architecture = Architecture;
             task.State = RequestState.Running;
             Emit(TaskEventKind.Placed, task, GameTime);
             return true;
@@ -157,13 +158,19 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
         // Optional integration hook; leaves TaskGrid independent of Training assembly.
         // A null/invalid profile is an atomic no-op. Canonical capacity is owned by the memory system.
         public double TokenThroughput { get; private set; }
+        public ArchitectureRuntime Architecture { get; private set; } = ArchitectureRuntime.Neutral;
+        public bool TrySetArchitecture(ArchitectureRuntime architecture)
+        {
+            if(!Paused || architecture==null)return false;
+            Architecture=architecture;return true;
+        }
         public bool TrySetTokenThroughput(double tokensPerSecond)
         {
             if (!Paused || double.IsNaN(tokensPerSecond) || double.IsInfinity(tokensPerSecond) || tokensPerSecond <= 0)
                 return false;
             TokenThroughput = tokensPerSecond; return true;
         }
-        public bool TryChangeExecutionProfile(ModelDefinition model, double tokensPerSecond, IEnumerable<Cell> cells)
+        public bool TryChangeExecutionProfile(ModelDefinition model, double tokensPerSecond, IEnumerable<Cell> cells, ArchitectureRuntime architecture = null)
         {
             if (!Paused || model == null || cells == null || double.IsNaN(tokensPerSecond)
                 || double.IsInfinity(tokensPerSecond) || tokensPerSecond <= 0) return false;
@@ -187,15 +194,18 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
             // Preserve the existing fractional interval rule. No ability tick on switch.
             TryChangeModel(model);
             openCells.Clear(); openCells.UnionWith(next); TokenThroughput = tokensPerSecond;
+            Architecture = architecture ?? Architecture;
             return true;
         }
         private double EffectiveCalculationSpeed(TaskInstance task)
         {
-            if (TokenThroughput <= 0) return task.Definition.Speed; // Legacy mode until explicitly activated.
+            if (TokenThroughput <= 0) return task.Definition.Speed * (task.Architecture ?? Architecture).SpeedMultiplier; // Definition-speed mode.
             // Operating work uses Calculation as its workload, independent of its low billable reward.
             // Other requests retain the integrated token-budget rule; zero-billing training also uses Calculation.
             double ratio = !task.Definition.UsesCalculationBudget && task.Definition.Tokens > 0 ? task.Definition.Calculation / task.Definition.Tokens : 1;
-            return TokenThroughput * ratio;
+            // Hardware/policy changes still apply. A model switch cannot replace an existing task's frozen architecture.
+            double architectureRatio = task.Architecture == null ? 1 : task.Architecture.SpeedMultiplier / Architecture.SpeedMultiplier;
+            return TokenThroughput * ratio * architectureRatio;
         }
 
         public void Advance(double delta)
@@ -260,7 +270,7 @@ GameTime = end;
         }
         private void AddAbilities(TaskInstance task, double runTime)
         {//给任务赋予能力值
-            double elapsed = task.AbilityRemainder + runTime;
+            double elapsed = task.AbilityRemainder + runTime * (task.Architecture ?? Architecture).AbilityRateMultiplier;
             double count = Math.Floor((elapsed + Epsilon) / Model.Interval);
             task.AbilityRemainder = Math.Max(0, elapsed - count * Model.Interval);
             if (count == 0) return;

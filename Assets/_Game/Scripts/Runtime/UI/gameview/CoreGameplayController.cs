@@ -137,7 +137,7 @@ namespace CallmeCatgirl.Gameplay
                     training.Changed -= RefreshTraining;
                     trainingPanel?.Close();
                     training.Bind(Simulation, Economy,
-                        p => Simulation.TryChangeExecutionProfile(p.Model, p.TokensPerSecond, p.OpenCells),
+                        p => Simulation.TryChangeExecutionProfile(p.Model, p.TokensPerSecond, p.OpenCells, p.Architecture),
                         rate => Simulation.TrySetTokenThroughput(rate),
                         () => configuration.MemoryUpgrades.GetOpenCells(MemoryLevel),
                         () => !GameEnded && !IsMemoryUpgradeOpen && !IsMemoryInstallOpen,
@@ -354,7 +354,7 @@ namespace CallmeCatgirl.Gameplay
             if (!continuingRequest && Story.Finished(user)) { Simulation.TryCloseFeedback(request); ReadEvents(); }
             Message = continuingRequest ? "请继续选择，完成本次会话。" :
                 Story.Finished(user) ? Story.Name(user) + "的对话已结束。" : "本次会话结束，可开始下一次会话。";
-            if (corpusReward > 0) Message += " 对话语料 +" + corpusReward.ToString("0.##") + " 点。";
+            if (corpusReward > 0) Message += " 对话语料 +" + corpusReward.ToString("0.###") + " 点。";
             canvasView?.Refresh();
         }
         public void OpenConversationHistory()

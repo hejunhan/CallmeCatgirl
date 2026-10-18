@@ -22,7 +22,7 @@ namespace CallmeCatgirl.Gameplay.Training.Tests
                     new[]{new TrainingRecipe("train","训练",10,1,100,1,1,new[]{new Cell(0,0),new Cell(1,0)},2,10)},
                     new[]{new ArchitectureDefinition("base","基础",1,OutlineTransform.Keep)},new[]{new ComputeTier("one",1,0)},
                     amount=>{if(Money<amount)return false;Money-=amount;return true;},amount=>Money+=amount,
-                    profile=>Sim.TryChangeExecutionProfile(profile.Model,profile.TokensPerSecond,profile.OpenCells),rate=>Sim.TrySetTokenThroughput(rate),()=>cells);
+                    profile=>Sim.TryChangeExecutionProfile(profile.Model,profile.TokensPerSecond,profile.OpenCells,profile.Architecture),rate=>Sim.TrySetTokenThroughput(rate),()=>cells);
             }
             public void Award(string id="request")
             {
