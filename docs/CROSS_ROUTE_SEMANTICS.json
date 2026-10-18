@@ -1,0 +1,233 @@
+{
+  "status": "All four endings have passed full real-income Unity batch campaigns and real menu Continue. Normal route also covered five physical installs/stages. Desktop acceptance pending.",
+  "architecture_names": [
+    {
+      "id": "baseline",
+      "title": "Transformer",
+      "unlock_physical_ram": 1
+    },
+    {
+      "id": "alternate",
+      "title": "MoE Transformer",
+      "unlock_physical_ram": 2
+    },
+    {
+      "id": "architecture-slot-3",
+      "title": "协调状态架构",
+      "unlock_physical_ram": 4
+    }
+  ],
+  "memory": {
+    "initial_open_compute_cells": 0,
+    "center_reveal_open_compute_cells": 1,
+    "center_reveal_physical_ram": 0,
+    "growth_trigger": "Actual successful install or Skip transaction commit, exactly once",
+    "stages": [
+      "字面模仿",
+      "角色边界",
+      "理解陪伴意图",
+      "共同记忆",
+      "自主选择"
+    ]
+  },
+  "narrative_ids": {
+    "doctor": "narrative-doctor",
+    "companion": "narrative-lin",
+    "opening": "doctor.opening",
+    "stages": [
+      "stage.1",
+      "stage.2",
+      "stage.3",
+      "stage.4",
+      "stage.5"
+    ],
+    "companion_beats": [
+      "companion.1",
+      "companion.2",
+      "companion.3",
+      "companion.4",
+      "companion.5",
+      "companion.6",
+      "companion.7"
+    ],
+    "endings": [
+      "ending.low",
+      "ending.normal",
+      "ending.good",
+      "ending.companion"
+    ],
+    "effects": [
+      "narrative-opening-corpus",
+      "narrative-reveal-center",
+      "narrative-architecture-1",
+      "narrative-architecture-2",
+      "narrative-architecture-4",
+      "narrative-end-run"
+    ],
+    "stage_contact": "narrative-old-friend",
+    "host_end_reasons": [
+      "policy.bad",
+      "policy.normal",
+      "policy.good",
+      "emotion"
+    ]
+  },
+  "tutorial": {
+    "steps": [
+      "Opening",
+      "AwaitTraining",
+      "AwaitDoctorOrder",
+      "AwaitOrdinaryOrder",
+      "AwaitUpgradeFunds",
+      "Complete"
+    ],
+    "opening_prompt": "假设你是一个猫娘",
+    "choices": [
+      {
+        "text": "喵",
+        "domain": "Writing",
+        "points": 1
+      },
+      {
+        "text": "好的，现在我是一个猫娘了",
+        "domain": "Reasoning",
+        "points": 1
+      }
+    ],
+    "starter_recipe": "tutorial-first-model",
+    "starter_cost": 0,
+    "starter_points": 1,
+    "starter_compute_cells": 1,
+    "starter_arrangement_board": "3x3, separate from compute occupancy",
+    "first_orders": "One cell each, ability must match the opening corpus choice"
+  },
+  "policy": {
+    "main_ids": [
+      "policy-foundations",
+      "route-open",
+      "route-closed",
+      "main-emergence",
+      "main-public-future"
+    ],
+    "exclusive": [
+      "route-open",
+      "route-closed"
+    ],
+    "branch_ids": [
+      "branch-book-scan",
+      "branch-distillation-claim",
+      "branch-technology-share",
+      "branch-efficient-training",
+      "branch-auto-placement",
+      "branch-open-stewardship",
+      "branch-closed-consolidation"
+    ],
+    "emotion_opportunity_at": "main-emergence",
+    "currency": "money only",
+    "bad_max_reputation": -15,
+    "good_min_reputation": 15,
+    "ending_selection": "Three numerical reputation bands; explicit companion choice is a fourth mutually exclusive ending",
+    "save_v2_fields": [
+      "Version",
+      "UnlockedIds",
+      "Reputation",
+      "ReputationEvents",
+      "CorpusRewards",
+      "TerminalAcknowledged"
+    ],
+    "reward_fields": [
+      "EventId",
+      "NodeId",
+      "ConversationId",
+      "Stage",
+      "FrozenPoints",
+      "Acknowledged"
+    ],
+    "terminal_ram_gate": "No additional RAM5 gate was added; current terminal uses money and tree prerequisites. This is an explicit design difference for review.",
+    "mechanical_text_actions": {
+      "branch-book-scan": "购入绝版书籍，进行破坏性扫描（一次性）\n语料点数：购买时最佳剩余语料 ×1.25，最低 4 点",
+      "branch-distillation-claim": "指责开源模型对本模型进行蒸馏（虚构事件）\n客流 ×1.30；对话结束概率 ×0.70；声望 -10\n不妨碍当前任务完成",
+      "branch-technology-share": "推进技术开源化，主动公开重要技术\n对话结束概率 ×0.80；声望 +10"
+    },
+    "action_text_status": "Restored explicit user-requested subjects in both core and DefaultProgression.asset; costs, reputation deltas and multipliers unchanged"
+  },
+  "narrative_save_v1_fields": [
+    "Version",
+    "Tutorial",
+    "MemoryCount",
+    "CenterCellRevealed",
+    "CompanionBeat",
+    "CompanionUnlocked",
+    "CompanionMeetingReady",
+    "RomanceReady",
+    "CompanionDeclined",
+    "EndingRequested",
+    "PolicyEnding",
+    "EndingReason",
+    "EndingClosed",
+    "FalseMemoryErased",
+    "CurrentNode",
+    "ConversationVisible",
+    "Notice",
+    "LastTrainingRequestId",
+    "PendingStageNodes",
+    "AcknowledgedEventIds",
+    "ObservedCompletedRequestIds",
+    "PendingEffects",
+    "Memories"
+  ],
+  "effect_fields": [
+    "EventId",
+    "Kind",
+    "RequestId",
+    "ConversationId",
+    "Title",
+    "Description",
+    "CorpusDomain",
+    "CorpusPoints",
+    "RequiredCells",
+    "MemoryCount",
+    "ArchitectureId",
+    "EndingReason"
+  ],
+  "effect_protocol": "Apply stable eventId to the host ledger, then acknowledge; save pending and acknowledged states to avoid replay after Continue",
+  "companion_outline": {
+    "name": "林栖",
+    "life": "气象观测员兼旧硬件修复师",
+    "beats": [
+      "相识",
+      "共同习惯",
+      "约定",
+      "分歧",
+      "尊重",
+      "和解",
+      "邀约"
+    ],
+    "ending": "Explicit choice, fictional device body, joyful sunset departure; no real device, contact, permission or sandbox actions",
+    "progression": "Beat 1 unlocks at main-emergence; later meetings require a new actual qualifying completed request event; invitation is followed by a separate final leave/stay choice"
+  },
+  "argon_review": "Returned outline is editing material: actual 7109 Han characters exceeds the requested 2500-4000 and contradicts its own word count; stage count and forced-overreach details were corrected during implementation.",
+  "observed_ability_domain_difference": {
+    "Unity": [
+      "写作",
+      "代码",
+      "推理",
+      "检索"
+    ],
+    "Web_v17": [
+      "写作",
+      "推理",
+      "共情",
+      "知识"
+    ],
+    "status": "pending_parent_design_review; no invented one-to-one mapping"
+  },
+  "architecture_tutorial_exception": "Baseline Transformer is available for the free first training at physical RAM 0; regular unlock milestones remain 1/2/4",
+  "validation_evidence": {
+    "normal": "game-completion-11: full five-install campaign and actual new-Core menu Continue passed",
+    "good_bad_companion": "game-completion-13: 3/3 real-income campaigns passed; mid-run and terminal new-Core menu Continue, four ledgers equal",
+    "alternate_physical_ram": 2,
+    "monthly_maintenance": "not tested across a month boundary",
+    "qa_player_launched": false
+  }
+}

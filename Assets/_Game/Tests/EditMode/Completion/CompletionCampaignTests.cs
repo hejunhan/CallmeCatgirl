@@ -33,11 +33,18 @@ namespace CallmeCatgirl.Tests
         private string awaitedScenePath;
         private bool awaitedSceneLoaded;
         private int awaitedSceneLoadedFrame;
-        private TaskSimulation Sim => Get<TaskSimulation>(owner, "Simulation");
-        private NarrativeSession Narrative => Get<NarrativeSession>(owner, "Narrative");
-        private TrainingSession Training => Get<TrainingSession>(Get<object>(owner, "Training"), "Session");
-        private int Funds => Get<int>(owner, "Funds");
-        private int Memory => Get<int>(owner, "MemoryLevel");
+        internal TaskSimulation Sim => Get<TaskSimulation>(owner, "Simulation");
+        internal NarrativeSession Narrative => Get<NarrativeSession>(owner, "Narrative");
+        internal TrainingSession Training => Get<TrainingSession>(Get<object>(owner, "Training"), "Session");
+        internal int Funds => Get<int>(owner, "Funds");
+        internal int Memory => Get<int>(owner, "MemoryLevel");
+        internal MonoBehaviour Owner => owner;
+        internal int Completed => Get<int>(owner, "CompletedTasks");
+        internal int FixedSpend => spent;
+        internal string RouteTag { get; set; } = string.Empty;
+        internal double GameSecondsLimit { get; set; } = MaximumGameSeconds;
+        internal int SpawnedOrderLimit { get; set; } = MaximumSpawnedOrders;
+        internal int AdvanceCommandLimit { get; set; } = MaximumAdvanceCommands;
 
         [UnityTest]
         public IEnumerator EarnsFiveRealInstallationsAndNormalPolicyEndingThenRestores()
@@ -49,41 +56,7 @@ namespace CallmeCatgirl.Tests
         }
         private IEnumerator RunAfterEnteringPlayMode()
         {
-            yield return null;
-            yield return StartNewGameFromMenu();
-            yield return null; owner = Find("CoreGameplayController"); Assert.That(owner, Is.Not.Null);
-            slot = "completion-campaign-" + Guid.NewGuid().ToString("N");
-            Call(owner, "ConfigureSaveSlot", slot);
-            Api("{\"kind\":\"clock\",\"paused\":true}"); AttachEconomyObserver();
-            Assert.That(Sim.OpenCellCount, Is.Zero); Assert.That(Sim.Tasks, Is.Empty); Assert.That(Funds, Is.Zero);
-            Assert.That(Memory, Is.Zero);
-            Assert.That(Narrative.Choose("mew"), Is.True); yield return null; yield return null;
-            Assert.That(Narrative.CenterCellRevealed, Is.True); Assert.That(Narrative.MemoryCount, Is.Zero);
-            Assert.That(Sim.OpenCellCount, Is.EqualTo(1));
-            Assert.That(Training.Corpus.Single().Scores[AbilityKind.Writing], Is.EqualTo(1));
-            CloseDialogs();
-            Api("{\"kind\":\"train\",\"recipe\":\"tutorial-first-model\",\"architecture\":\"baseline\",\"displayName\":\"真实经营首训\",\"investments\":[{\"ConversationId\":\"narrative-doctor\",\"Points\":1}]}");
-            var starter = Training.Jobs.Single();
-            Assert.That(starter.PaidCost, Is.Zero); Assert.That(Sim.Tasks[starter.RequestId].Definition.Shape.Count, Is.EqualTo(1));
-            yield return FinishOne(starter.RequestId, 10);
-            Assert.That(starter.Completed, Is.True); Assert.That(Training.ActiveModelId, Is.EqualTo(starter.Output.Id));
-            CloseDialogs(); yield return null;
-            yield return FinishOne(NarrativeSession.FirstDoctorRequestId, 10); CloseDialogs(); yield return null;
-            yield return FinishOne(NarrativeSession.FirstOrdinaryRequestId, 20); CloseDialogs(); yield return null;
-            Assert.That(Get<int>(owner, "CompletedTasks"), Is.EqualTo(2)); Assert.That(Funds, Is.EqualTo(120));
-            yield return InstallNext(1);
-            Assert.That(Funds, Is.EqualTo(20));
-            Checkpoint("first-install"); Api("{\"kind\":\"save\"}");
-
-            // The pre-tutorial catalogue entry has ZERO abilities. The trained Writing model is the genuine bootstrap.
-            Assert.That(Training.Models.First(m => m.CorpusIds.Count == 0).Definition.Points.Values.Sum(), Is.Zero);
-            yield return WorkUntil(() => Funds >= 100, "earn-code-policy");
-            Purchase("Code-1", 100); yield return null;
-            Assert.That(Sim.Model.Points[AbilityKind.Code], Is.GreaterThanOrEqualTo(1));
-            yield return WorkUntil(() => Funds >= 100, "earn-reasoning-policy");
-            Purchase("Reasoning-1", 100); yield return null;
-            Assert.That(Sim.Model.Points[AbilityKind.Reasoning], Is.GreaterThanOrEqualTo(1));
-            Checkpoint("all-three-real-abilities");
+            yield return BeginRealCampaign();
 
             for (int target = 2; target <= 5; target++)
             {
@@ -166,10 +139,67 @@ namespace CallmeCatgirl.Tests
             yield return new ExitPlayMode();
         }
 
+        // Shared only by the bounded alternate-ending tests; the normal campaign keeps its original sequence.
+        internal IEnumerator BeginRealCampaign()
+        {
+            yield return null;
+            yield return StartNewGameFromMenu();
+            yield return null; owner = Find("CoreGameplayController"); Assert.That(owner, Is.Not.Null);
+            slot = "completion-campaign-" + Guid.NewGuid().ToString("N");
+            Call(owner, "ConfigureSaveSlot", slot);
+            Api("{\"kind\":\"clock\",\"paused\":true}"); AttachEconomyObserver();
+            Assert.That(Sim.OpenCellCount, Is.Zero); Assert.That(Sim.Tasks, Is.Empty); Assert.That(Funds, Is.Zero);
+            Assert.That(Memory, Is.Zero);
+            Assert.That(Narrative.Choose("mew"), Is.True); yield return null; yield return null;
+            Assert.That(Narrative.CenterCellRevealed, Is.True); Assert.That(Narrative.MemoryCount, Is.Zero);
+            Assert.That(Sim.OpenCellCount, Is.EqualTo(1));
+            Assert.That(Training.Corpus.Single().Scores[AbilityKind.Writing], Is.EqualTo(1));
+            CloseDialogs();
+            Api("{\"kind\":\"train\",\"recipe\":\"tutorial-first-model\",\"architecture\":\"baseline\",\"displayName\":\"真实经营首训\",\"investments\":[{\"ConversationId\":\"narrative-doctor\",\"Points\":1}]}");
+            var starter = Training.Jobs.Single();
+            Assert.That(starter.PaidCost, Is.Zero); Assert.That(Sim.Tasks[starter.RequestId].Definition.Shape.Count, Is.EqualTo(1));
+            yield return FinishOne(starter.RequestId, 10);
+            Assert.That(starter.Completed, Is.True); Assert.That(Training.ActiveModelId, Is.EqualTo(starter.Output.Id));
+            CloseDialogs(); yield return null;
+            yield return FinishOne(NarrativeSession.FirstDoctorRequestId, 10); CloseDialogs(); yield return null;
+            yield return FinishOne(NarrativeSession.FirstOrdinaryRequestId, 20); CloseDialogs(); yield return null;
+            Assert.That(Get<int>(owner, "CompletedTasks"), Is.EqualTo(2)); Assert.That(Funds, Is.EqualTo(120));
+            yield return InstallNext(1);
+            Assert.That(Funds, Is.EqualTo(20));
+            Checkpoint("first-install"); Api("{\"kind\":\"save\"}");
+
+            // The pre-tutorial catalogue entry has ZERO abilities. The trained Writing model is the genuine bootstrap.
+            Assert.That(Training.Models.First(m => m.CorpusIds.Count == 0).Definition.Points.Values.Sum(), Is.Zero);
+            yield return WorkUntil(() => Funds >= 100, "earn-code-policy");
+            Purchase("Code-1", 100); yield return null;
+            Assert.That(Sim.Model.Points[AbilityKind.Code], Is.GreaterThanOrEqualTo(1));
+            yield return WorkUntil(() => Funds >= 100, "earn-reasoning-policy");
+            Purchase("Reasoning-1", 100); yield return null;
+            Assert.That(Sim.Model.Points[AbilityKind.Reasoning], Is.GreaterThanOrEqualTo(1));
+            Checkpoint("all-three-real-abilities");
+
+        }
+
         private IEnumerator StartNewGameFromMenu()
         {
             Assert.That(SceneManager.GetActiveScene().path, Is.EqualTo(Menu));
             yield return NavigateAndWait("StartNewGame", Gameplay);
+        }
+
+        internal IEnumerator ReturnToMenuAndContinueQaSlot()
+        {
+            string savedPath = Get<string>(owner, "SavePath");
+            var previousOwner = owner;
+            yield return NavigateAndWait("ReturnToMenu", Menu);
+            Assert.That(previousOwner == null, Is.True, "Returning to the menu must unload the previous Core.");
+            Assert.That(Find("CoreGameplayController"), Is.Null);
+            owner = null;
+            yield return NavigateAndWait("ContinueSlot", Gameplay, slot);
+            owner = Find("CoreGameplayController");
+            Assert.That(owner, Is.Not.Null);
+            Assert.That(owner, Is.Not.SameAs(previousOwner), "Continue must create a different controller instance.");
+            Api("{\"kind\":\"clock\",\"paused\":true}");
+            Assert.That(Get<string>(owner, "SavePath"), Is.EqualTo(savedPath), "Continue must use only the named QA slot.");
         }
 
         private IEnumerator NavigateAndWait(string command, string destination, params object[] args)
@@ -228,7 +258,7 @@ namespace CallmeCatgirl.Tests
             awaitedSceneLoadedFrame = Time.frameCount;
         }
 
-        private IEnumerator InstallNext(int target)
+        internal IEnumerator InstallNext(int target)
         {
             CloseDialogs(); Api("{\"kind\":\"pause\",\"paused\":true}");
             int funds = Funds, cost = Get<int>(Get<object>(owner, "NextMemoryUpgrade"), "Cost");
@@ -259,7 +289,7 @@ namespace CallmeCatgirl.Tests
             Submit(id); yield return null; yield return null;
         }
 
-        private IEnumerator WorkUntil(Func<bool> achieved, string phase)
+        internal IEnumerator WorkUntil(Func<bool> achieved, string phase)
         {
             Checkpoint(phase + "-start");
             int idle = 0;
@@ -332,18 +362,18 @@ namespace CallmeCatgirl.Tests
             if (!Training.IsTrainingRequest(id)) { paidSubmissions++; income += Funds - before; }
             CloseDialogs();
         }
-        private void Purchase(string id, int cost)
+        internal void Purchase(string id, int cost)
         {
             CloseDialogs(); int before = Funds;
             Assert.That(Call(Policy(), "TryPurchase", id).ToString(), Is.EqualTo("Success"), id);
             Assert.That(Funds, Is.EqualTo(before - cost), "Policy must really spend its configured price: " + id); spent += cost;
         }
-        private object Policy()
+        internal object Policy()
         {
             var component = owner.GetComponent(owner.GetType().Assembly.GetType("CallmeCatgirl.Gameplay.Progression.ProgressionController", true));
             Assert.That(component, Is.Not.Null); Call(component, "EnsureBound"); return component;
         }
-        private void CloseDialogs()
+        internal void CloseDialogs()
         {
             if (owner == null) return;
             var menu = Find("SystemMenuHost"); if (menu != null) Call(menu, "CloseAll");
@@ -363,41 +393,45 @@ namespace CallmeCatgirl.Tests
         private void Bound(string phase)
         {
             Assert.That(Get<bool>(owner, "GameEnded"), Is.False, Summary(phase));
-            Assert.That(Sim.GameTime, Is.LessThan(MaximumGameSeconds), Summary(phase));
-            Assert.That(spawned, Is.LessThan(MaximumSpawnedOrders), Summary(phase));
-            Assert.That(advances, Is.LessThan(MaximumAdvanceCommands), Summary(phase));
+            Assert.That(Sim.GameTime, Is.LessThan(GameSecondsLimit), Summary(phase));
+            Assert.That(spawned, Is.LessThan(SpawnedOrderLimit), Summary(phase));
+            Assert.That(advances, Is.LessThan(AdvanceCommandLimit), Summary(phase));
         }
-        private string Summary(string phase) => phase + ": gameSeconds=" + Sim.GameTime.ToString("0.##") + ", spawned=" + spawned
+        internal string Summary(string phase) => (string.IsNullOrEmpty(RouteTag) ? phase : RouteTag + "/" + phase) + ": gameSeconds=" + Sim.GameTime.ToString("0.##") + ", spawned=" + spawned
             + ", paidSubmissions=" + paidSubmissions + ", funds=" + Funds + ", earned=" + income + ", spent=" + spent
             + ", completed=" + Get<int>(owner, "CompletedTasks") + ", RAM=" + Memory + ", month=" + Get<int>(owner, "CurrentMonth")
             + ", debt=" + Get<int>(owner, "DebtAmount") + ", grace=" + Get<bool>(owner, "IsInGracePeriod")
             + ", model=[" + string.Join(";", Sim.Model.Points.Select(p => p.Key + "=" + p.Value.ToString("0.###"))) + "]"
             + ", slot=" + slot + ", maintenance=[" + string.Join("; ", maintenance) + "]";
-        private void Checkpoint(string phase) => Debug.Log("[CompletionCampaign] " + Summary(phase));
-        private void AttachEconomyObserver()
+        internal void Checkpoint(string phase) => Debug.Log("[CompletionCampaign] " + Summary(phase));
+        internal void AttachEconomyObserver()
         {
             observedEconomy = Get<object>(owner, "Economy");
             economyObserver = text => { if (text.Contains("月底") || text.Contains("欠费") || text.Contains("宽限期")) maintenance.Add(text); };
             observedEconomy.GetType().GetEvent("OnEconomyLog").AddEventHandler(observedEconomy, economyObserver);
         }
-        private void DetachEconomyObserver()
+        internal void DetachEconomyObserver()
         { if (observedEconomy != null && economyObserver != null) observedEconomy.GetType().GetEvent("OnEconomyLog").RemoveEventHandler(observedEconomy, economyObserver); observedEconomy = null; economyObserver = null; }
-        private object Api(string json)
+        internal object Api(string json)
         {
             var type = owner.GetType().Assembly.GetType("CallmeCatgirl.Gameplay.GameCommand", true);
             var result = Call(owner, "ExecuteCommand", JsonUtility.FromJson(json, type));
             Assert.That(Get<bool>(result, "ok"), Is.True, json + " => " + Get<string>(result, "code") + "; " + Summary("command")); return result;
         }
         private static MonoBehaviour Find(string name) => UnityEngine.Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).FirstOrDefault(m => m.GetType().Name == name);
-        private static T Get<T>(object value, string name)
+        internal static T Get<T>(object value, string name)
         { var type = value.GetType(); var property = type.GetProperty(name); return (T)(property != null ? property.GetValue(value) : type.GetField(name).GetValue(value)); }
-        private static object Call(object value, string name, params object[] args)
+        internal static object Call(object value, string name, params object[] args)
             => value.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 .Single(m => m.Name == name && m.GetParameters().Length == args.Length).Invoke(value, args);
-        [UnityTearDown] public IEnumerator Cleanup()
+        internal void CleanupSessionObservers()
         {
             DetachEconomyObserver();
             if (owner != null) Debug.Log("[CompletionCampaign] Final observed state: " + Summary("cleanup"));
+        }
+        [UnityTearDown] public IEnumerator Cleanup()
+        {
+            CleanupSessionObservers();
             if (EditorApplication.isPlaying) yield return new ExitPlayMode();
         }
     }
