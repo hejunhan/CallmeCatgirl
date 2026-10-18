@@ -209,7 +209,7 @@ namespace CallmeCatgirl.Gameplay
             return CreateTask("new-" + suffix, user, "extra-" + suffix, basis, operating != null);
         }
         // 有剧情时按角色派发；每个角色至多一个请求，候选不足不复制已完成会话凑数。
-        private TaskInstance CreateMonthlyRequest()
+        private TaskInstance CreateScheduledRequest()
         {
             var profiles = configuration.Story?.Users;
             if (profiles == null || profiles.Length == 0) return CreateRandomRequest();
@@ -237,18 +237,20 @@ namespace CallmeCatgirl.Gameplay
             taskBases.Add(requestId, basis); // 保存未乘倍率的原始任务，下一会话不能拿已放大的值再乘。
             return task;
         }
-        private void RefreshMonthlyRequests()
+        private void RefreshScheduledRequests(bool daily)
         {
             var generation = configuration.TaskGeneration;
-            if (generation == null || !generation.ShouldRefresh(CurrentMonth)) return;
+            if (generation == null || generation.RefreshByDay != daily) return;
+            long day = (CurrentMonth - 1L) * DaysPerMonth + CurrentDay;
+            if (daily ? !generation.ShouldRefreshDay(day) : !generation.ShouldRefresh(CurrentMonth)) return;
             int count = 0;
             for (int i = 0; i < generation.RequestsPerRefresh; i++)
             {
-                if (CreateMonthlyRequest() == null) break;
+                if (CreateScheduledRequest() == null) break;
                 count++;
             }
             ReadEvents();
-            Message = $"第{CurrentMonth}月：新增{count}个请求，已有请求继续保留。";
+            Message = (daily ? $"第{CurrentMonth}月第{CurrentDay}天" : $"第{CurrentMonth}月") + $"：新增{count}个请求，已有请求继续保留。";
             AddEconomyLog(Message);
         }
         public void NextRound()
@@ -365,18 +367,23 @@ namespace CallmeCatgirl.Gameplay
         }
         public void CloseConversationHistory() { Story.CloseHistory(); canvasView?.Refresh(); }
         public void AddFunds(int amount) { Economy.AddFunds(amount); canvasView?.Refresh(); }
-        // 分段推进到每个月底，先处理任务结算，再扣维护费，跨多月也不会漏结算。
+        // 按天分段刷新任务；跨月底先结算维护费，破产时不再派发任务。
         public void AdvanceGame(double delta)
         {
             if (double.IsNaN(delta) || double.IsInfinity(delta) || delta < 0) throw new ArgumentOutOfRangeException(nameof(delta));
             if (Simulation == null || GameEnded || Simulation.Paused || IsModalOpen) return;
-            while (delta > 0 && !GameEnded && !IsModalOpen)
+            while (delta > 0 && !GameEnded && !Simulation.Paused && !IsModalOpen)
             {
-                double step = Math.Min(delta, configuration.SecondsPerGameMonth - monthTimer);
+                int dayBefore = CurrentDay;
+                double step = Math.Min(delta, Math.Min(DayTimeRemaining, configuration.SecondsPerGameMonth - monthTimer));
                 Simulation.Advance(step); ReadEvents(); monthTimer += step; delta -= step;
-                if (monthTimer + 1e-9 < configuration.SecondsPerGameMonth) continue;
+                if (monthTimer + 1e-9 < configuration.SecondsPerGameMonth)
+                {
+                    if (CurrentDay != dayBefore) RefreshScheduledRequests(true);
+                    continue;
+                }
                 monthTimer = 0;
-                if (Economy.SettleMonth(configuration.MonthlyMaintenanceFee)) { CurrentMonth++; RefreshMonthlyRequests(); }
+                if (Economy.SettleMonth(configuration.MonthlyMaintenanceFee)) { CurrentMonth++; RefreshScheduledRequests(false); RefreshScheduledRequests(true); }
                 else
                 {
                     GameEnded = true; Simulation.Paused = true;

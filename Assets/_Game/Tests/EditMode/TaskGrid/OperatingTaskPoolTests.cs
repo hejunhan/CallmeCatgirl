@@ -100,7 +100,7 @@ namespace CallmeCatgirl.Tests
             var field = owner.GetType().GetField("configuration", BindingFlags.Instance | BindingFlags.NonPublic);
             original = (ScriptableObject)field.GetValue(owner); var config = Object.Instantiate(original); resources.Add(config);
             Set(config, "OpeningBalance", null); Set(config, "OrdinaryDialoguePool", null);
-            var g = Generation(); SingleShape(g); Pool(g); Set(config, "TaskGeneration", g);
+            var g = Generation(); SingleShape(g); Pool(g); Set(g,"RequestsPerRefresh",5);Set(g,"RefreshByDay",false);Set(config, "TaskGeneration", g);
             Set(config, "MonthlyMaintenanceFee", 0); SetMonthDuration(config, 30f); Set(config, "TokenPrice", 1);
             Set(config, "InitialAffinity", 0f); Set(config, "SuccessAffinity", 1f); Set(config, "FailureAffinity", -.5f);
             Set(config, "ModelPoints", new Vector4(1, 1, 1, 0)); Set(config, "AbilityInterval", 1f);

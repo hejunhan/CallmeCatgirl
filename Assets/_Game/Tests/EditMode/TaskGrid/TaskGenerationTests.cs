@@ -38,7 +38,9 @@ namespace CallmeCatgirl.Tests
             var config = ScriptableObject.CreateInstance(GenerationType);
             try
             {
-                Assert.That(config.GetType().GetField("RequestsPerRefresh").GetValue(config),Is.EqualTo(5));
+                Assert.That(config.GetType().GetField("RequestsPerRefresh").GetValue(config),Is.EqualTo(1));
+                Assert.That(config.GetType().GetField("RefreshByDay").GetValue(config),Is.EqualTo(true));
+                Assert.That(config.GetType().GetField("DaysPerRefresh").GetValue(config),Is.EqualTo(1));
                 Assert.That(config.GetType().GetField("MonthsPerRefresh").GetValue(config),Is.EqualTo(1));
                 var shapes = (Array)config.GetType().GetField("Shapes").GetValue(config);
                 Assert.That(shapes.Length,Is.EqualTo(10)); var distinct = new HashSet<string>();
@@ -112,7 +114,7 @@ namespace CallmeCatgirl.Tests
                 Owner=owner; field=owner.GetType().GetField("configuration",BindingFlags.Instance|BindingFlags.NonPublic);
                 original=(ScriptableObject)field.GetValue(owner); Config=Object.Instantiate(original);
                 Generation=ScriptableObject.CreateInstance(GenerationType); SingleShape(Generation,new[]{"#"});
-                Set(Generation,"RandomSeed",5); Set(Config,"TaskGeneration",Generation); Set(Config,"OrdinaryDialoguePool",null);Set(Config,"Story",null);
+                Set(Generation,"RequestsPerRefresh",5);Set(Generation,"RefreshByDay",false);Set(Generation,"RandomSeed",5); Set(Config,"TaskGeneration",Generation); Set(Config,"OrdinaryDialoguePool",null);Set(Config,"Story",null);
                 SetMonthDuration(Config, 30f); Set(Config,"InitialFunds",5000); Set(Config,"MonthlyMaintenanceFee",0);
                 var taskType=Config.GetType().GetNestedType("DemoTask"); var task=Activator.CreateInstance(taskType);
                 Set(task,"Id","A"); Set(task,"Title","fixture"); Set(task,"Shape",new[]{Vector2Int.zero});
@@ -130,6 +132,29 @@ namespace CallmeCatgirl.Tests
         }
         private static MonoBehaviour Controller() => Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
             .Single(o=>o.GetType().FullName=="CallmeCatgirl.Gameplay.CoreGameplayController");
+        [UnityTest] public IEnumerator DailyRequestsRespectCalendarBoundariesIntervalsAndMonthlyFee()
+        {
+            EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity");yield return new EnterPlayMode();yield return null;
+            CheckDailyRequests(Controller());yield return new ExitPlayMode();
+        }
+        private static void CheckDailyRequests(MonoBehaviour owner)
+        {
+            using(var f=new Fixture(owner))
+            {
+                Set(f.Config,"SecondsPerGameDay",2f);Set(f.Config,"DaysPerGameMonth",3);Set(f.Config,"MonthlyMaintenanceFee",10);
+                Set(f.Generation,"RefreshByDay",true);Set(f.Generation,"DaysPerRefresh",1);Set(f.Generation,"RequestsPerRefresh",1);f.Reset();
+                var sim=f.Sim;var initial=sim.Tasks["A-1"];sim.Paused=false;f.Advance(1.9);
+                Assert.That(sim.Tasks.Count,Is.EqualTo(1));Assert.That(Value<int>(owner,"Funds"),Is.EqualTo(5000));
+                f.Advance(.1);Assert.That(sim.Tasks.Count,Is.EqualTo(2));Assert.That(Value<int>(owner,"CurrentDay"),Is.EqualTo(2));
+                f.Advance(4);Assert.That(sim.Tasks.Count,Is.EqualTo(4));Assert.That(Value<int>(owner,"CurrentMonth"),Is.EqualTo(2));
+                Assert.That(Value<int>(owner,"CurrentDay"),Is.EqualTo(1));Assert.That(Value<int>(owner,"Funds"),Is.EqualTo(4990));
+                Assert.That(sim.Tasks["A-1"],Is.SameAs(initial));Assert.That(initial.State,Is.EqualTo(RequestState.Waiting));
+                sim.Paused=true;f.Advance(100);Assert.That(sim.Tasks.Count,Is.EqualTo(4));Assert.That(sim.GameTime,Is.EqualTo(6));
+                sim.Paused=false;f.Advance(6);Assert.That(sim.Tasks.Count,Is.EqualTo(7));Assert.That(Value<int>(owner,"Funds"),Is.EqualTo(4980));
+                Set(f.Generation,"DaysPerRefresh",2);f.Reset();f.Sim.Paused=false;f.Advance(8);
+                Assert.That(f.Sim.Tasks.Count,Is.EqualTo(3),"One request on day 3 and day 5, including across a month boundary.");
+            }
+        }
         [UnityTest] public IEnumerator MonthlyBatchesPreserveExistingRequestsAndTimeoutRemovesCandidates()
         {
             EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity"); yield return new EnterPlayMode(); yield return null;

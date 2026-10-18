@@ -9,13 +9,16 @@ namespace CallmeCatgirl.Gameplay
     public sealed class TaskGenerationConfiguration : ScriptableObject
     {
         [Min(0), InspectorName("每次新增请求数"), Tooltip("0关闭自动刷新。已有请求保留，超时按任务自身忍耐时间处理。")]
-        public int RequestsPerRefresh = 5;
-        [Min(1), InspectorName("每隔多少个月刷新"), Tooltip("月长使用主玩法配置的每月游戏秒数；1表示每个月新增一批。")]
+        public int RequestsPerRefresh = 1;
+        [InspectorName("按天刷新"), Tooltip("开启按游戏日刷新；关闭时兼容原来的按月刷新。")]
+        public bool RefreshByDay = true;
+        [Min(1), InspectorName("每隔多少天刷新")] public int DaysPerRefresh = 1;
+        [Min(1), InspectorName("每隔多少个月刷新"), Tooltip("仅关闭按天刷新时生效；月份时长由主配置的每天秒数与每月天数决定。")]
         public int MonthsPerRefresh = 1;
         [InspectorName("随机种子"), Tooltip("负数每次开局随机；非负数便于复现测试。")]
         public int RandomSeed = -1;
         [Header("经营任务池")]
-        [InspectorName("经营任务模板"), Tooltip("按月补齐请求，主动新增时优先抽取。低能力门槛、大计算量、低奖励；空列表兼容原随机任务。形状共用下方形状库。")]
+        [InspectorName("经营任务模板"), Tooltip("按刷新周期补齐请求，主动新增时优先抽取。低能力门槛、大计算量、低奖励；空列表兼容原随机任务。形状共用下方形状库。")]
         public GameplayConfiguration.DemoTask[] OperatingTasks = Array.Empty<GameplayConfiguration.DemoTask>();
         public bool HasOperatingTasks => OperatingTasks != null && OperatingTasks.Length > 0;
         public TaskDefinition PickOperatingTask(System.Random random)
@@ -48,10 +51,11 @@ namespace CallmeCatgirl.Gameplay
             return Shapes[random.Next(Shapes.Length)].Build();
         }
         public bool ShouldRefresh(int currentMonth) => RequestsPerRefresh > 0 && (currentMonth - 1) % MonthsPerRefresh == 0;
+        public bool ShouldRefreshDay(long currentDay) => RequestsPerRefresh > 0 && currentDay > 1 && (currentDay - 1) % DaysPerRefresh == 0;
         public void Validate(int boardWidth, int boardHeight)
         {
-            if (RequestsPerRefresh < 0 || MonthsPerRefresh < 1 || Shapes == null || Shapes.Length == 0)
-                throw new InvalidOperationException("每次请求数不能为负，刷新月份间隔至少为1，形状库不能为空。");
+            if (RequestsPerRefresh < 0 || MonthsPerRefresh < 1 || DaysPerRefresh < 1 || Shapes == null || Shapes.Length == 0)
+                throw new InvalidOperationException("每次请求数不能为负，刷新天数/月数间隔至少为1，形状库不能为空。");
             var ids = new System.Collections.Generic.HashSet<string>();
             foreach (var task in OperatingTasks ?? Array.Empty<GameplayConfiguration.DemoTask>())
             {

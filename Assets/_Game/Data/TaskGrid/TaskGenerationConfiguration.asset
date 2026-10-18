@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6088543fabad47388d0ab9c75beca688, type: 3}
   m_Name: TaskGenerationConfiguration
   m_EditorClassIdentifier: Assembly-CSharp::CallmeCatgirl.Gameplay.TaskGenerationConfiguration
-  RequestsPerRefresh: 5
+  RequestsPerRefresh: 1
+  RefreshByDay: 1
+  DaysPerRefresh: 1
   MonthsPerRefresh: 1
   RandomSeed: -1
   Shapes:
