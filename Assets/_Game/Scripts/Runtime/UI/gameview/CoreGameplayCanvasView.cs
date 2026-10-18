@@ -268,7 +268,7 @@ namespace CallmeCatgirl.UI
             if ((controller.GameEnded || controller.IsModalOpen) && IsDragging) CancelDrag();
             if (endingPanel != null) endingPanel.SetActive(controller.GameEnded);
             if (endingLabel != null) endingLabel.text = controller.EndingText;
-            if (economyStatusLabel != null) economyStatusLabel.text = $"第{controller.CurrentMonth}月 · 月底剩 {controller.MonthTimeRemaining:0.0}s · "
+            if (economyStatusLabel != null) economyStatusLabel.text = $"第{controller.CurrentMonth}月 第{controller.CurrentDay}天 · 今日剩 {controller.DayTimeRemaining:0}s · "
                 + (controller.GameEnded ? "经营结束" : controller.IsInGracePeriod ? $"宽限期，欠款 {controller.DebtAmount}" : "正常经营");
             pauseButton.interactable = !controller.GameEnded && !controller.IsModalOpen;
             SetControlSelected(pauseButton, sim.Paused || controller.IsModalOpen, feedback != null ? feedback.PauseSelected : pauseActiveColor, pauseIdleColor);

@@ -18,37 +18,53 @@ namespace CallmeCatgirl.UI
         [SerializeField] private Text recipeLabel,emptyHint;
         private CoreGameplayController owner;
         private TrainingController controller;
-        private readonly HashSet<string> selected=new HashSet<string>();
+        [SerializeField] private Slider corpusAmount;
+        [SerializeField] private Text investmentLabel, investmentScores;
+        [SerializeField] private CorpusShapeGraphic shapePreview;
+        private string selectedConversation;
+        private double investedPoints;
+        private string sessionModel;
+        public string SelectedConversation => selectedConversation;
+        public double InvestedPoints => investedPoints;
         private string recipe,architecture;
         public void Bind(TrainingController source)
         {
             controller=source;owner=source.GetComponent<CoreGameplayController>();
             var session=source.Session;recipe=session.Recipes[0].Id;
-            selected.RemoveWhere(id=>!session.Corpus.Any(r=>r.Id==id)||session.IsConsumed(id));
+            if(sessionModel!=session.ActiveModelId){selectedConversation=null;investedPoints=0;sessionModel=session.ActiveModelId;}
+            if(selectedConversation!=null && session.GetConversationCorpus(selectedConversation).AvailablePoints<=1e-9)
+            {selectedConversation=null;investedPoints=0;}
             if(architecture==null||!session.Architectures.Any(a=>a.Id==architecture&&a.ContentReady&&a.UnlockStage<=session.CurrentStage))architecture=session.Architectures[0].Id;
             recipeLabel.text="配方："+session.Recipes[0].Title+" · 费用 "+session.Recipes[0].Cost+" · 计算量 "+session.Recipes[0].WorkTokens;
-            trainButton.onClick.RemoveAllListeners();trainButton.onClick.AddListener(()=>owner.ExecuteCommand(new GameCommand{kind="train",recipe=recipe,architecture=architecture,displayName=modelName.text,corpusIds=selected.ToArray()}));
+            trainButton.onClick.RemoveAllListeners();trainButton.onClick.AddListener(()=>{
+                var result=owner.ExecuteCommand(new GameCommand{kind="train",recipe=recipe,architecture=architecture,displayName=modelName.text,conversationId=selectedConversation,corpusPoints=investedPoints});
+                if(result.ok){selectedConversation=null;investedPoints=0;Bind(controller);}
+            });
             computeButton.onClick.RemoveAllListeners();computeButton.onClick.AddListener(()=>owner.ExecuteCommand(new GameCommand{kind="upgradeCompute"}));
             trainButton.interactable=controller.CanManage;computeButton.interactable=controller.CanManage&&session.NextCompute!=null;
             Clear(records,emptyHint.transform);Clear(jobs);Clear(architectures);
-            emptyHint.gameObject.SetActive(session.Corpus.Count==0);
+            emptyHint.gameObject.SetActive(session.ConversationCorpora.Count==0);
             foreach(var arch in session.Architectures)
             {
                 var a=arch;var button=Instantiate(architectureTemplate,architectures);button.name=a.Id;button.gameObject.SetActive(true);
                 button.GetComponentInChildren<Text>(true).text=a.Title;button.interactable=controller.CanManage&&a.ContentReady&&a.UnlockStage<=session.CurrentStage;
                 button.onClick.RemoveAllListeners();button.onClick.AddListener(()=>{architecture=a.Id;owner.SetMessage("训练架构："+a.Title);});
             }
-            foreach(var record in session.Corpus)
+            foreach(var conversation in session.ConversationCorpora)
             {
-                var row=Instantiate(recordTemplate,records);row.name="Corpus_"+record.Id;row.gameObject.SetActive(true);
-                bool used=session.IsConsumed(record.Id);
-                row.Find("Title").GetComponent<Text>().text=record.ConversationId+" / "+record.NodeId+" · "+(used?"已消耗":"可训练");
-                row.Find("Scores").GetComponent<Text>().text=string.Join("  ",record.Scores.Select(p=>CoreGameplayController.AbilityText(p.Key)+" "+p.Value));
-                var button=row.Find("Action").GetComponent<Button>();button.interactable=!used;
-                button.GetComponentInChildren<Text>(true).text=selected.Contains(record.Id)?"已选择 ✓":"选择此语料";
-                button.onClick.RemoveAllListeners();button.onClick.AddListener(()=>{if(!selected.Add(record.Id))selected.Remove(record.Id);button.GetComponentInChildren<Text>().text=selected.Contains(record.Id)?"已选择 ✓":"选择此语料";});
-                DebugDock(row,"corpus",record.Id);
+                var id=conversation.ConversationId;
+                var row=Instantiate(recordTemplate,records);row.name="ConversationCorpus_"+id;row.gameObject.SetActive(true);
+                bool used=conversation.AvailablePoints<=1e-9;
+                row.Find("Title").GetComponent<Text>().text=owner.Story.Name(id)+" · 可用 "+conversation.AvailablePoints.ToString("0.##")+" / 累计 "+conversation.TotalPoints.ToString("0.##")+" 点";
+                row.Find("Scores").GetComponent<Text>().text=string.Join("  ",conversation.AvailableScores.Select(pair=>CoreGameplayController.AbilityText(pair.Key)+" "+pair.Value.ToString("0.##")));
+                var button=row.Find("Action").GetComponent<Button>();button.interactable=!used&&controller.CanManage;
+                button.GetComponentInChildren<Text>(true).text=selectedConversation==id?"已投入此对话":"拖入训练 / 选择";
+                button.onClick.RemoveAllListeners();button.onClick.AddListener(()=>SelectConversation(id));
+                var drag=button.gameObject.AddComponent<ConversationCorpusDrag>();drag.Bind(this,id);
+                var debugRecord=conversation.Records.FirstOrDefault(r=>!session.IsConsumed(r.Id))??conversation.Records[0];
+                DebugDock(row,"corpus",debugRecord.Id);
             }
+            RefreshInvestment();
             foreach(var job in session.Jobs)
             {
                 var row=Instantiate(jobTemplate,jobs);row.name="Training_"+job.RequestId;row.gameObject.SetActive(true);var task=controller.Simulation.Tasks[job.RequestId];
@@ -56,6 +72,40 @@ namespace CallmeCatgirl.UI
                 var button=row.Find("Action").GetComponent<Button>();button.interactable=controller.CanManage&&!job.Completed&&task.State==CallmeCatgirl.Gameplay.TaskGrid.RequestState.Ready;
                 button.onClick.RemoveAllListeners();button.onClick.AddListener(()=>owner.ExecuteCommand(new GameCommand{kind="submit",id=job.RequestId}));DebugDock(row,"training",job.RequestId);
             }
+        }
+        public void SelectConversation(string id)
+        {
+            if(controller==null||!controller.CanManage)return;
+            double available=controller.Session.GetConversationCorpus(id).AvailablePoints;
+            if(available<=1e-9)return;
+            selectedConversation=id;investedPoints=Math.Min(available,controller.Session.Recipes[0].MaximumCorpusPoints);
+            RefreshInvestment();
+        }
+        private void RefreshInvestment()
+        {
+            if(corpusAmount==null||investmentLabel==null)return;
+            var session=controller.Session;var rule=session.Recipes[0];
+            double available=selectedConversation==null?0:session.GetConversationCorpus(selectedConversation).AvailablePoints;
+            investedPoints=Math.Min(investedPoints,Math.Min(available,rule.MaximumCorpusPoints));
+            corpusAmount.onValueChanged.RemoveAllListeners();
+            corpusAmount.minValue=0;corpusAmount.maxValue=(float)Math.Min(available,rule.MaximumCorpusPoints);
+            corpusAmount.SetValueWithoutNotify((float)investedPoints);corpusAmount.interactable=available>0&&controller.CanManage;
+            corpusAmount.onValueChanged.AddListener(value=>{investedPoints=Math.Min(available,Math.Round(value,1));RefreshInvestment();});
+            investmentLabel.text=selectedConversation==null?"将左侧对话拖到这里，选择投入点数":owner.Story.Name(selectedConversation)+" · 投入 "+investedPoints.ToString("0.#")+" / 可用 "+available.ToString("0.##")+" 点";
+            bool valid=investedPoints>1e-9&&selectedConversation!=null;
+            if(valid)
+            {
+                try
+                {
+                    var cells=TrainingSession.GrowShape(rule,investedPoints,controller.Simulation.Width,controller.Simulation.Height);
+                    shapePreview.SetCells(cells);
+                    investmentScores.text="占用 "+cells.Length+" 格 · 每 "+rule.PointsPerExtraCell+" 点 +1格\n"+
+                        string.Join("  ",session.PreviewTrainingAbilities(recipe,selectedConversation,investedPoints).Select(pair=>CoreGameplayController.AbilityText(pair.Key)+" "+pair.Value.ToString("0.##")));
+                }
+                catch(ArgumentException){valid=false;investmentScores.text="投入过多，形状超出棋盘；请减少点数。";shapePreview.SetCells(Array.Empty<CallmeCatgirl.Gameplay.TaskGrid.Cell>());}
+            }
+            else{investmentScores.text="确认生成时扣除语料，剩余点数可留到下次。";shapePreview.SetCells(Array.Empty<CallmeCatgirl.Gameplay.TaskGrid.Cell>());}
+            trainButton.interactable=controller.CanManage&&valid;
         }
         private static void Clear(RectTransform parent,Transform keep=null)
         {
@@ -91,6 +141,33 @@ namespace CallmeCatgirl.UI
             Button(recordTemplate,"Action",0,62,160).GetComponentInChildren<Text>().text="选择此语料";DebugSlot(recordTemplate,102);
             jobTemplate=Rect(templates,"TrainingJobTemplate",0,0,520,128);jobTemplate.gameObject.AddComponent<LayoutElement>().preferredHeight=128*DesignScale;
             Text(jobTemplate,"训练进度",0,0,500,50).name="Title";Button(jobTemplate,"Action",0,54,220).GetComponentInChildren<Text>().text="确认训练产物";DebugSlot(jobTemplate,96);
+        }
+        public void PrepareCorpusInvestment()
+        {
+            if(corpusAmount!=null)
+            {
+                if(shapePreview!=null&&shapePreview.GetComponent<CanvasRenderer>()==null)shapePreview.gameObject.AddComponent<CanvasRenderer>();
+                if(corpusAmount.handleRect!=null)corpusAmount.handleRect.sizeDelta=new Vector2(corpusAmount.handleRect.sizeDelta.x,0);
+                return;
+            }
+            var drop=Rect(transform,"ConversationCorpusInvestment",610,318,550,152);
+            drop.gameObject.AddComponent<Image>().color=new Color(.91f,.93f,.93f);
+            drop.gameObject.AddComponent<ConversationCorpusDrop>().View=this;
+            investmentLabel=Text(drop,"将左侧对话拖到这里，选择投入点数",8,4,530,30,15);
+            var sliderRect=Rect(drop,"CorpusPoints",12,40,500,26);
+            sliderRect.gameObject.AddComponent<Image>().color=new Color(.75f,.78f,.79f);
+            corpusAmount=sliderRect.gameObject.AddComponent<Slider>();
+            var handle=Rect(sliderRect,"Handle",0,0,20,26);handle.gameObject.AddComponent<Image>().color=new Color(.2f,.35f,.4f);
+            corpusAmount.handleRect=handle;handle.sizeDelta=new Vector2(20*DesignWidthScale,0);corpusAmount.targetGraphic=handle.GetComponent<Image>();
+            investmentScores=Text(drop,"投入预览",8,78,400,68,15);
+            shapePreview=Rect(drop,"ShapePreview",420,78,120,68).gameObject.AddComponent<CorpusShapeGraphic>();
+            shapePreview.color=new Color(.22f,.48f,.48f);shapePreview.raycastTarget=false;
+            trainButton.GetComponent<RectTransform>().anchoredPosition=new Vector2(610*DesignWidthScale,-480*DesignScale);
+            computeButton.GetComponent<RectTransform>().anchoredPosition=new Vector2(880*DesignWidthScale,-480*DesignScale);
+            var tip=transform.Cast<Transform>().FirstOrDefault(t=>t.GetComponent<Text>()?.text=="将训练模块放入棋盘运行");
+            if(tip!=null)((RectTransform)tip).anchoredPosition=new Vector2(610*DesignWidthScale,-520*DesignScale);
+            var viewport=(RectTransform)jobs.parent;viewport.anchoredPosition=new Vector2(610*DesignWidthScale,-554*DesignScale);viewport.sizeDelta=new Vector2(550*DesignWidthScale,85*DesignScale);
+            emptyHint.text="完成合格请求的全部对白后，语料点数会计入对应对话。拖入对话后选择本次投入量。";
         }
         private void DebugSlot(RectTransform row,float y){var slot=Rect(row,"InlineDebugSlot",0,y,500,270);slot.sizeDelta=new Vector2(500*DesignWidthScale,270*DesignScale);}
         private RectTransform Rect(Transform parent,string name,float x,float y,float w,float h)

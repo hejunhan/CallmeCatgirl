@@ -82,7 +82,7 @@ namespace CallmeCatgirl.UI
             if(owner==null||list==null)return;
             var tasks=owner.Simulation.Tasks.Values.Where(t=>!owner.IsOperatingTask(t.Id) && (!owner.TrainingEnabled||!owner.Training.IsTrainingRequest(t.Id))).ToArray();
             var corpus=owner.TrainingEnabled?owner.Training.Session.ConversationCorpora.ToArray():new CallmeCatgirl.Gameplay.Training.ConversationCorpusSummary[0];
-            string key=string.Join("|",tasks.Select(t=>t.ConversationId+":"+t.Id))+"#"+string.Join("|",corpus.Select(c=>c.ConversationId+":"+c.RecordCount+":"+c.AvailableRecordCount));
+            string key=string.Join("|",tasks.Select(t=>t.ConversationId+":"+t.Id))+"#"+string.Join("|",corpus.Select(c=>c.ConversationId+":"+c.RecordCount+":"+c.AvailablePoints));
             if(key!=fingerprint)
             {
                 fingerprint=key;hovered=null;hoverSource=null;
@@ -121,7 +121,7 @@ namespace CallmeCatgirl.UI
             }
             foreach(var pair in rows)
             {
-                pair.Value.Summary.text=$"亲密度 {owner.Story.Affinity(pair.Key):0.##} · {pair.Value.Requests} 请求 · {pair.Value.Records} 语料";
+                pair.Value.Summary.text=$"亲密度 {owner.Story.Affinity(pair.Key):0.##} · {pair.Value.Requests} 请求 · {(owner.TrainingEnabled?owner.Training.Session.GetConversationCorpus(pair.Key).AvailablePoints:0):0.##} 语料点";
                 bool linked=pair.Key==hovered;
                 bool selected=owner.SelectedTask?.ConversationId==pair.Key;
                 pair.Value.Border.Configure(selected?2:1,selected||linked?BorderEdges.All:BorderEdges.Bottom,selected||linked?new Color32(22,22,22,255):new Color32(111,111,111,255));

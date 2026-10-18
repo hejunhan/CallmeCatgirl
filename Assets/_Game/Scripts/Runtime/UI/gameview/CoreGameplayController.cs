@@ -41,7 +41,12 @@ namespace CallmeCatgirl.Gameplay
         public bool IsInGracePeriod => Economy.IsInGracePeriod;
         public bool GameEnded { get; private set; }
         public string EndingText { get; private set; }
-        public double MonthTimeRemaining => Math.Max(0, configuration.SecondsPerGameMonth - monthTimer);
+        public int DaysPerMonth => configuration.DaysPerGameMonth;
+        public double SecondsPerDay => configuration.SecondsPerGameDay;
+        public int CurrentDay => GameEnded ? DaysPerMonth : Math.Min(DaysPerMonth, (int)(monthTimer / SecondsPerDay) + 1);
+        public double DayTimeRemaining => GameEnded ? 0 : Math.Max(0, SecondsPerDay - monthTimer % SecondsPerDay);
+        public double MonthTimeRemaining => GameEnded ? 0 : Math.Max(0, configuration.SecondsPerGameMonth - monthTimer);
+        public int MonthlyMaintenanceFee => configuration.MonthlyMaintenanceFee;
         private double monthTimer;
         public int CompletedTasks { get; private set; }
         public int AvailableAbilityPoints { get; private set; }
@@ -110,8 +115,9 @@ namespace CallmeCatgirl.Gameplay
                     configuration.InitialAffinity, configuration.SuccessAffinity, configuration.FailureAffinity);
                 Simulation = configuration.BuildSimulation(); Simulation.Paused = true; definitions.Clear(); taskBases.Clear(); operatingTasks.Clear(); logs.Clear(); serial = 0;
                 MemoryLevel = configuration.MemoryUpgrades.InitialLevel; CompletedTasks = 0; AvailableAbilityPoints = 0;
-                if (configuration.SecondsPerGameMonth <= 0 || float.IsNaN(configuration.SecondsPerGameMonth)
-                    || float.IsInfinity(configuration.SecondsPerGameMonth)) throw new InvalidOperationException("每月游戏秒数必须是正的有限数值。");
+                if (configuration.DaysPerGameMonth < 1 || configuration.SecondsPerGameDay <= 0
+                    || configuration.SecondsPerGameMonth <= 0 || float.IsNaN(configuration.SecondsPerGameMonth)
+                    || float.IsInfinity(configuration.SecondsPerGameMonth)) throw new InvalidOperationException("每天游戏秒数必须为正数、每月天数至少为1，月份时长必须有限。");
                 if (Economy != null) Economy.OnEconomyLog -= AddEconomyLog;
                 Economy = configuration.BuildEconomyManager(); Economy.OnEconomyLog += AddEconomyLog;
                 Story.Economy = Economy;
@@ -338,11 +344,15 @@ namespace CallmeCatgirl.Gameplay
             string user = Story.UserId, request = Story.RequestId;
             string node = Story.CurrentCorpusNodeId, choice = Story.CorpusChoiceId(Story.Choices[index]);
             if (!Story.ChooseAtRevision(index, expectedRevision)) return;
-            if (TrainingEnabled) training.RecordAcceptedReply(request, node, choice);
             bool continuingRequest = Story.IsReply && Story.RequestId == request;
+            double corpusReward = 0;
+            if (TrainingEnabled && !continuingRequest && !training.Session.Corpus.Any(r => r.RequestId == request)
+                && training.RecordAcceptedReply(request, node, choice) == TrainingResult.Success)
+                corpusReward = training.Session.Corpus.Single(r => r.RequestId == request).Scores.Values.Sum();
             if (!continuingRequest && Story.Finished(user)) { Simulation.TryCloseFeedback(request); ReadEvents(); }
             Message = continuingRequest ? "请继续选择，完成本次会话。" :
                 Story.Finished(user) ? Story.Name(user) + "的对话已结束。" : "本次会话结束，可开始下一次会话。";
+            if (corpusReward > 0) Message += " 对话语料 +" + corpusReward.ToString("0.##") + " 点。";
             canvasView?.Refresh();
         }
         public void OpenConversationHistory()

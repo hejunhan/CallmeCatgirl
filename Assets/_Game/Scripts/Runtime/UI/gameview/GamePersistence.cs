@@ -64,6 +64,8 @@ namespace CallmeCatgirl.Gameplay
             foreach(var source in sources) if(source != null)
             {
                 string json=JsonUtility.ToJson(source);
+                if(source==training?.Configuration)
+                    json=Regex.Replace(json,@",""PointsPerExtraCell"":2(?:\.0+)?,""MaximumCorpusPoints"":20(?:\.0+)?","");
                 if(legacyStoryV1 && source==configuration.Story) json=RunSaveValidation.LegacyStoryV1ConfigurationJson(json);
                 content+=Regex.Replace(json,@"""instanceID""\s*:\s*-?\d+","\"instanceID\":0");
             }

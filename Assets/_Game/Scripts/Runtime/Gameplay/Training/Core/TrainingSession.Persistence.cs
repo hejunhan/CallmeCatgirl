@@ -20,6 +20,7 @@ namespace CallmeCatgirl.Gameplay.Training
         public bool Completed;
         public int PaidCost;
         public double WorkTokens;
+        public CorpusUse[] Uses;
     }
     [Serializable] public sealed class TrainingSessionState
     {
@@ -56,7 +57,7 @@ namespace CallmeCatgirl.Gameplay.Training
                 Models=models.Values.Select(ModelPersistence.Capture).ToArray(),
                 Jobs=jobs.Values.Select(j=>new TrainingJobState {
                     RequestId=j.RequestId,RecipeId=j.RecipeId,Output=ModelPersistence.Capture(j.Output),Completed=j.Completed,
-                    PaidCost=j.PaidCost,WorkTokens=j.WorkTokens
+                    PaidCost=j.PaidCost,WorkTokens=j.WorkTokens,Uses=j.Uses?.Select(u=>new CorpusUse{CorpusId=u.CorpusId,Points=u.Points}).ToArray()
                 }).ToArray()
             };
         }
@@ -138,7 +139,12 @@ namespace CallmeCatgirl.Gameplay.Training
                     && number>0 && number<=s.Serial,"job serial");
                 var output=readModel(j.Output);
                 RequireState(output.CorpusIds.Count>0 && outputIds.Add(output.Id),"job output identity");
-                foreach(var id in output.CorpusIds)RequireState(decoded.Consumed.Add(id),"corpus consumed by multiple jobs");
+                if(j.Uses != null)
+                {
+                    RequireState(j.Uses.Length==output.CorpusIds.Count && j.Uses.All(u=>u!=null)
+                        && j.Uses.Select(u=>u.CorpusId).SequenceEqual(output.CorpusIds),"job allocation references");
+                    foreach(var u in j.Uses)Check.Number(u.Points,true);
+                }
                 if(j.Completed)
                 {
                     RequireState(decoded.Models.TryGetValue(output.Id,out var catalog) && SameModel(output,catalog),"completed job/catalog mismatch");
@@ -146,7 +152,15 @@ namespace CallmeCatgirl.Gameplay.Training
                 }
                 else RequireState(!decoded.Models.ContainsKey(output.Id),"unfinished output already in catalog");
                 RequireState(!decoded.Jobs.ContainsKey(j.RequestId),"duplicate training request");
-                decoded.Jobs.Add(j.RequestId,new TrainingJob(j.RequestId,output,j.RecipeId,j.PaidCost,j.WorkTokens){Completed=j.Completed});
+                decoded.Jobs.Add(j.RequestId,new TrainingJob(j.RequestId,output,j.RecipeId,j.PaidCost,j.WorkTokens){Completed=j.Completed,Uses=j.Uses==null?null:Array.AsReadOnly(j.Uses.Select(u=>new CorpusUse{CorpusId=u.CorpusId,Points=u.Points}).ToArray())});
+            }
+            foreach(var record in decoded.Corpus.Values)
+            {
+                double spent=decoded.Jobs.Values.Sum(j=>j.Uses==null
+                    ? (j.CorpusIds.Contains(record.Id)?record.Scores.Values.Sum():0)
+                    : j.Uses.Where(u=>u.CorpusId==record.Id).Sum(u=>u.Points));
+                RequireState(spent<=record.Scores.Values.Sum()+1e-9,"corpus overspent");
+                if(record.Scores.Values.Sum()-spent<=1e-9)decoded.Consumed.Add(record.Id);
             }
             RequireState(decoded.Models.Values.All(m=>m.CorpusIds.Count==0 || outputIds.Contains(m.Id)),"orphan trained model");
             RequireState(s.ConsumedCorpusIds.All(id=>id!=null) && s.ConsumedCorpusIds.Distinct(StringComparer.Ordinal).Count()==s.ConsumedCorpusIds.Length

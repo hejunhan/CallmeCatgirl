@@ -56,7 +56,7 @@ namespace CallmeCatgirl.Gameplay.Training
             return Throughput(model.ArchitectureId, ComputeIndex);
         }
         public event Action Changed;
-        public bool IsConsumed(string id) => id != null && consumed.Contains(id);
+        public bool IsConsumed(string id) => id != null && corpus.ContainsKey(id) && RemainingPoints(id) <= 1e-9;
         public bool IsTrainingRequest(string id) => id != null && jobs.ContainsKey(id);
         public bool TryGetJob(string id, out TrainingJob job) { job = null; return id != null && jobs.TryGetValue(id, out job); }
 
@@ -161,7 +161,21 @@ namespace CallmeCatgirl.Gameplay.Training
             if (ids.Length < recipe.MinimumRecords || ids.Any(string.IsNullOrWhiteSpace)
                 || ids.Distinct(StringComparer.Ordinal).Count() != ids.Length) return TrainingResult.InvalidInput;
             if (ids.Any(id => !corpus.ContainsKey(id))) return TrainingResult.MissingCorpus;
-            if (ids.Any(consumed.Contains)) return TrainingResult.CorpusConsumed;
+            if (ids.Any(IsConsumed)) return TrainingResult.CorpusConsumed;
+            return StartTrainingCore(recipeId, architectureId, name,
+                ids.Select(id => new CorpusUse { CorpusId=id, Points=RemainingPoints(id) }).ToArray(), recipe.Shape, out job);
+        }
+
+        private TrainingResult StartTrainingCore(string recipeId, string architectureId, string name,
+            CorpusUse[] uses, IEnumerable<Cell> shape, out TrainingJob job)
+        {
+            job = null;
+            var recipe = recipes[recipeId];
+            var availability = ArchitectureAvailability(architectureId);
+            if (availability != TrainingResult.Success) return availability;
+            if (!ModelNames.TryNormalize(name, out name) || uses.Length == 0) return TrainingResult.InvalidInput;
+            var ids = uses.Select(u => u.CorpusId).ToArray();
+            if (ids.Length < recipe.MinimumRecords) return TrainingResult.InvalidInput;
             int next = serial;
             string requestId, outputId;
             do { next = checked(next + 1); requestId = "training-" + next; outputId = Guid.NewGuid().ToString("D"); }
@@ -175,12 +189,12 @@ namespace CallmeCatgirl.Gameplay.Training
                 var effectiveCost = checked((int)Math.Ceiling(recipe.Cost * modifiers.TrainingCostMultiplier));
                 effectiveRecipe = new TrainingRecipe(recipe.Id, recipe.Title, effectiveCost, recipe.MinimumRecords,
                     recipe.WorkTokens * modifiers.TrainingWorkMultiplier, recipe.AbilityInterval,
-                    recipe.PointsPerScore * modifiers.TrainingScoreMultiplier, recipe.Shape);
-                output = new CatalogModel(name, architectureId, effectiveRecipe.Build(outputId, ids.Select(id => corpus[id])), ids);
+                    recipe.PointsPerScore * modifiers.TrainingScoreMultiplier, shape, recipe.PointsPerExtraCell, recipe.MaximumCorpusPoints);
+                output = new CatalogModel(name, architectureId, effectiveRecipe.Build(outputId, uses.Select(Portion)), ids);
             }
             catch (ArgumentException) { return TrainingResult.InvalidInput; }
             catch (OverflowException) { return TrainingResult.InvalidInput; }
-            var definition = new TaskDefinition("training:" + recipe.Id, "训练 · " + name.Trim(), recipe.Shape,
+            var definition = new TaskDefinition("training:" + recipe.Id, "训练 · " + name.Trim(), shape,
                 effectiveRecipe.WorkTokens, 1, double.MaxValue / 4, 0, Array.Empty<AbilityRequirement>());
             busy = true;
             try
@@ -189,7 +203,8 @@ namespace CallmeCatgirl.Gameplay.Training
                 if (!simulation.TryCreate(requestId, requestId, "training", definition, out _))
                 { refund(effectiveRecipe.Cost); return TrainingResult.HostRejected; }
                 serial = next; job = new TrainingJob(requestId, output, recipe.Id, effectiveRecipe.Cost, effectiveRecipe.WorkTokens); jobs.Add(requestId, job);
-                consumed.UnionWith(ids);
+                job.Uses = Array.AsReadOnly(uses);
+                consumed.UnionWith(ids.Where(IsConsumed));
             }
             finally { busy = false; }
             Changed?.Invoke(); return TrainingResult.Success;

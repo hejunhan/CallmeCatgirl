@@ -15,6 +15,12 @@ namespace CallmeCatgirl.Tests
 {
     public sealed class TaskGenerationTests
     {
+        private static void SetMonthDuration(object config, float seconds)
+        {
+            config.GetType().GetField("DaysPerGameMonth").SetValue(config, 1);
+            config.GetType().GetField("SecondsPerGameDay").SetValue(config, seconds);
+        }
+
         private static Type GenerationType => Type.GetType("CallmeCatgirl.Gameplay.TaskGenerationConfiguration, Assembly-CSharp", true);
         private static Type StoryType => Type.GetType("CallmeCatgirl.Gameplay.ConversationStory, Assembly-CSharp", true);
         private static object Call(object o, string name, params object[] args) => o.GetType().GetMethod(name).Invoke(o,args);
@@ -107,7 +113,7 @@ namespace CallmeCatgirl.Tests
                 original=(ScriptableObject)field.GetValue(owner); Config=Object.Instantiate(original);
                 Generation=ScriptableObject.CreateInstance(GenerationType); SingleShape(Generation,new[]{"#"});
                 Set(Generation,"RandomSeed",5); Set(Config,"TaskGeneration",Generation); Set(Config,"OrdinaryDialoguePool",null);Set(Config,"Story",null);
-                Set(Config,"SecondsPerGameMonth",30f); Set(Config,"InitialFunds",5000); Set(Config,"MonthlyMaintenanceFee",0);
+                SetMonthDuration(Config, 30f); Set(Config,"InitialFunds",5000); Set(Config,"MonthlyMaintenanceFee",0);
                 var taskType=Config.GetType().GetNestedType("DemoTask"); var task=Activator.CreateInstance(taskType);
                 Set(task,"Id","A"); Set(task,"Title","fixture"); Set(task,"Shape",new[]{Vector2Int.zero});
                 Set(task,"Calculation",1000f); Set(task,"Speed",1f); Set(task,"Patience",500f); Set(task,"Tokens",0f);
@@ -138,7 +144,7 @@ namespace CallmeCatgirl.Tests
                 Assert.That(sim.TryPlace(old.Id,position,0,out _),Is.True);sim.Paused=false;fixture.Advance(29);
                 Assert.That(sim.Tasks.Count,Is.EqualTo(1));fixture.Advance(1);
                 Assert.That(sim.Tasks.Count,Is.EqualTo(6));Assert.That(sim.Tasks[old.Id],Is.SameAs(old));
-                Assert.That(old.Progress,Is.EqualTo(30));Assert.That(old.Origin,Is.EqualTo(position));
+                Assert.That(old.Progress,Is.EqualTo(30 * sim.TokenThroughput));Assert.That(old.Origin,Is.EqualTo(position));
                 var first=sim.Tasks.Values.Where(t=>t.ArrivedAt==30).ToArray();Assert.That(first.Length,Is.EqualTo(5));
                 foreach(var task in first){Assert.That(task.Definition.Shape.Count,Is.EqualTo(1));Assert.That(task.State,Is.EqualTo(RequestState.Waiting));Assert.That(task.Deadline,Is.EqualTo(75));}
                 fixture.Advance(15);Assert.That(old.State,Is.EqualTo(RequestState.TimedOut));Assert.That(sim.Occupancy,Is.Empty);
@@ -160,8 +166,8 @@ namespace CallmeCatgirl.Tests
             {
                 var sim=fixture.Sim;fixture.Advance(100);Assert.That(sim.GameTime,Is.Zero);Assert.That(sim.Tasks.Count,Is.EqualTo(1));
                 sim.Paused=false;fixture.Advance(29);Call(owner,"OpenMemoryUpgrade");fixture.Advance(100);
-                Assert.That(sim.GameTime,Is.EqualTo(29));Call(owner,"CloseMemoryUpgrade");Call(owner,"OpenConversationHistory");fixture.Advance(100);
-                Assert.That(sim.GameTime,Is.EqualTo(29));Call(owner,"CloseConversationHistory");Call(owner,"SetSpeed",4f);Call(owner,"SetSpeed",.5f);
+                Assert.That(sim.GameTime,Is.EqualTo(29));Call(owner,"CloseMemoryUpgrade");sim.Paused=true;fixture.Advance(100);
+                Assert.That(sim.GameTime,Is.EqualTo(29));sim.Paused=false;Call(owner,"SetSpeed",4f);Call(owner,"SetSpeed",.5f);
                 Assert.That(sim.Tasks.Count,Is.EqualTo(1));fixture.Advance(1);Assert.That(sim.Tasks.Count,Is.EqualTo(6));
                 fixture.Reset();Assert.That(fixture.Sim.GameTime,Is.Zero);Assert.That(fixture.Sim.Tasks.Count,Is.EqualTo(1));Assert.That(fixture.Sim.Paused,Is.True);
             }
@@ -177,7 +183,7 @@ namespace CallmeCatgirl.Tests
             {
                 Set(fixture.Generation,"MonthsPerRefresh",2);Set(fixture.Generation,"RequestsPerRefresh",2);fixture.Reset();fixture.Sim.Paused=false;fixture.Advance(90);
                 Assert.That(fixture.Sim.Tasks.Count,Is.EqualTo(3));Assert.That(fixture.Sim.Tasks.Values.Count(t=>t.ArrivedAt==60),Is.EqualTo(2));
-                Set(fixture.Generation,"MonthsPerRefresh",1);Set(fixture.Config,"SecondsPerGameMonth",10f);fixture.Reset();fixture.Sim.Paused=false;fixture.Advance(35);
+                Set(fixture.Generation,"MonthsPerRefresh",1);SetMonthDuration(fixture.Config, 10f);fixture.Reset();fixture.Sim.Paused=false;fixture.Advance(35);
                 Assert.That(fixture.Sim.Tasks.Count,Is.EqualTo(7));Assert.That(fixture.Sim.Tasks.Values.Count(t=>t.ArrivedAt==10),Is.EqualTo(2));
                 Assert.That(fixture.Sim.Tasks.Values.Count(t=>t.ArrivedAt==20),Is.EqualTo(2));Assert.That(fixture.Sim.Tasks.Values.Count(t=>t.ArrivedAt==30),Is.EqualTo(2));
                 Set(fixture.Config,"InitialFunds",0);Set(fixture.Config,"MonthlyMaintenanceFee",1);fixture.Reset();fixture.Sim.Paused=false;fixture.Advance(100);

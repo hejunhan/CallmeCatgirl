@@ -15,6 +15,12 @@ namespace CallmeCatgirl.Tests
 {
     public sealed class EconomyIntegrationTests
     {
+        private static void SetMonthDuration(object config, float seconds)
+        {
+            config.GetType().GetField("DaysPerGameMonth").SetValue(config, 1);
+            config.GetType().GetField("SecondsPerGameDay").SetValue(config, seconds);
+        }
+
         private static Type WalletType => Type.GetType("CallmeCatgirl.Gameplay.EconomyManager, Assembly-CSharp", true);
         private static object Wallet(int funds = 80, int price = 1) => Activator.CreateInstance(WalletType, funds, price);
         private static object Call(object target, string method, params object[] args) => target.GetType().GetMethod(method).Invoke(target, args);
@@ -81,14 +87,38 @@ namespace CallmeCatgirl.Tests
         {
             EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity");
             yield return new EnterPlayMode(); yield return null;
-            var controller = Controller(); var sim = Value<TaskSimulation>(controller, "Simulation");
-            sim.Paused = false; Call(controller, "AdvanceGame", 60d); sim.Paused = true;
-            Assert.That(Value<int>(controller, "CurrentMonth"), Is.EqualTo(4));
-            Assert.That(Value<int>(controller, "Funds"), Is.EqualTo(1350));
-            double remaining = Value<double>(controller, "MonthTimeRemaining");
-            Call(controller, "AdvanceGame", 60d);
-            Assert.That(sim.GameTime, Is.EqualTo(60));
-            Assert.That(Value<double>(controller, "MonthTimeRemaining"), Is.EqualTo(remaining));
+            var controller=Controller();controller.GetType().GetProperty("ManualCommandClock").SetValue(controller,true);
+            var sim=Value<TaskSimulation>(controller,"Simulation");
+            Assert.That(Value<double>(controller,"SecondsPerDay"),Is.EqualTo(120));
+            Assert.That(Value<int>(controller,"DaysPerMonth"),Is.EqualTo(30));
+            Assert.That(Value<int>(controller,"MonthlyMaintenanceFee"),Is.EqualTo(1500));
+            Assert.That(Value<double>(controller,"MonthTimeRemaining"),Is.EqualTo(3600));
+            Call(controller,"AdvanceGame",120d);Assert.That(sim.GameTime,Is.Zero);
+            sim.Paused=false;Call(controller,"AdvanceGame",119d);
+            Assert.That(Value<int>(controller,"CurrentDay"),Is.EqualTo(1));
+            Assert.That(Value<int>(controller,"Funds"),Is.EqualTo(1500));
+            Call(controller,"AdvanceGame",1d);
+            Assert.That(Value<int>(controller,"CurrentDay"),Is.EqualTo(2));
+            Assert.That(Value<double>(controller,"DayTimeRemaining"),Is.EqualTo(120));
+            Assert.That(Value<int>(controller,"Funds"),Is.EqualTo(1500),"Daily boundaries never charge maintenance.");
+            Call(controller,"AdvanceGame",3479d);
+            Assert.That(Value<int>(controller,"CurrentDay"),Is.EqualTo(30));
+            Assert.That(Value<int>(controller,"Funds"),Is.EqualTo(1500));
+            Call(controller,"AdvanceGame",1d);
+            Assert.That(Value<int>(controller,"CurrentMonth"),Is.EqualTo(2));
+            Assert.That(Value<int>(controller,"CurrentDay"),Is.EqualTo(1));
+            Assert.That(Value<int>(controller,"Funds"),Is.Zero);
+            Call(controller,"AdvanceGame",3600d);
+            Assert.That(Value<int>(controller,"CurrentMonth"),Is.EqualTo(3));
+            Assert.That(Value<bool>(controller,"IsInGracePeriod"),Is.True);
+            Assert.That(Value<int>(controller,"DebtAmount"),Is.EqualTo(1500));
+            Assert.That(Value<bool>(controller,"GameEnded"),Is.False);
+            Call(controller,"AdvanceGame",7200d);
+            Assert.That(Value<bool>(controller,"GameEnded"),Is.True);
+            Assert.That(sim.GameTime,Is.EqualTo(10800));
+            Assert.That(sim.Paused,Is.True);
+            Assert.That(Value<double>(controller,"DayTimeRemaining"),Is.Zero);
+            Assert.That(Value<double>(controller,"MonthTimeRemaining"),Is.Zero);
             yield return new ExitPlayMode();
         }
         [UnityTest] public IEnumerator IncomeOnMonthlyBoundaryIsAppliedBeforeMaintenance()
@@ -107,7 +137,7 @@ namespace CallmeCatgirl.Tests
             {
                 config.GetType().GetField("InitialFunds").SetValue(config, 0);
                 config.GetType().GetField("MonthlyMaintenanceFee").SetValue(config, 100);
-                config.GetType().GetField("SecondsPerGameMonth").SetValue(config, 10f);
+                SetMonthDuration(config, 10f);
                 Configure(controller, config); Call(controller, "ResetSimulation");
                 controller.GetType().GetEvent("TaskEventRaised").AddEventHandler(controller, submit);
                 var sim = Value<TaskSimulation>(controller, "Simulation");
@@ -134,6 +164,7 @@ namespace CallmeCatgirl.Tests
             try
             {
                 config.GetType().GetField("InitialFunds").SetValue(config, 80);
+                config.GetType().GetField("MonthlyMaintenanceFee").SetValue(config, 50);SetMonthDuration(config,20f);
                 Configure(controller, config); Call(controller, "ResetSimulation");
                 var sim = Value<TaskSimulation>(controller, "Simulation"); sim.Paused = false;
                 Call(controller, "AdvanceGame", 100d);

@@ -26,7 +26,7 @@ namespace CallmeCatgirl.Gameplay.Training
         {
             if (busy || corpusId == null || !Enum.IsDefined(typeof(AbilityKind), ability)
                 || double.IsNaN(value) || double.IsInfinity(value) || value < 0
-                || !corpus.TryGetValue(corpusId, out var record) || consumed.Contains(corpusId)) return false;
+                || !corpus.TryGetValue(corpusId, out var record) || jobs.Values.Any(j=>j.CorpusIds.Contains(corpusId))) return false;
             var scores = record.Scores.ToDictionary(p => p.Key, p => p.Value);
             scores[ability] = value;
             if (!scores.Values.Any(v => v > 0)) return false;

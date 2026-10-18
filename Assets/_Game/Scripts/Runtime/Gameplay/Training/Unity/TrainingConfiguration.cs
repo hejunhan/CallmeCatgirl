@@ -30,10 +30,12 @@ namespace CallmeCatgirl.Gameplay.Training
             public string Id = "dialogue-training", Title = "对话语料训练（暂定）";
             public int Cost = 20, MinimumRecords = 1;
             public double WorkTokens = 120, AbilityInterval = 1, PointsPerScore = 1;
+            [InspectorName("每增加一格所需语料点"), Min(0.01f)] public double PointsPerExtraCell = 2;
+            [InspectorName("单次训练语料点上限"), Min(1)] public double MaximumCorpusPoints = 20;
             public Vector2Int[] Shape = { new Vector2Int(0, 0), new Vector2Int(1, 0), new Vector2Int(2, 0),
                 new Vector2Int(0, 1), new Vector2Int(1, 1), new Vector2Int(2, 1) };
             public TrainingRecipe Build() => new TrainingRecipe(Id, Title, Cost, MinimumRecords, WorkTokens,
-                AbilityInterval, PointsPerScore, Shape.Select(c => new Cell(c.x, c.y)));
+                AbilityInterval, PointsPerScore, Shape.Select(c => new Cell(c.x, c.y)), PointsPerExtraCell, MaximumCorpusPoints);
         }
         [Serializable] public sealed class ArchitectureEntry
         {

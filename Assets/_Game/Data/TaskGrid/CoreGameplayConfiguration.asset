@@ -59,8 +59,9 @@ MonoBehaviour:
   Story: {fileID: 11400000, guid: 7097ee7307375ad4e88ce31b0180cfb9, type: 2}
   OrdinaryDialoguePool: {fileID: 11400000, guid: 31136a355efd44ce95b340eb79406ce5, type: 2}
   TokenPrice: 1
-  MonthlyMaintenanceFee: 50
-  SecondsPerGameMonth: 30
+  MonthlyMaintenanceFee: 1500
+  SecondsPerGameDay: 120
+  DaysPerGameMonth: 30
   TaskGeneration: {fileID: 11400000, guid: 49bdc014938d4bc6a5609a1599f80ebf, type: 2}
   InitialAffinity: 0
   SuccessAffinity: 1

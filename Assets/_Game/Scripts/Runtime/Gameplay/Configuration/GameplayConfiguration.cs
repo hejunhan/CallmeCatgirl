@@ -18,8 +18,11 @@ namespace CallmeCatgirl.Gameplay
         [InspectorName("原有会话配置（由角色类型区分普通与剧情）")] public StoryConfiguration Story;
         [InspectorName("普通随机对话池（替换普通试玩内容，剧情不受影响）")] public StoryConfiguration OrdinaryDialoguePool;
         [Min(0), InspectorName("每Token收入单价")] public int TokenPrice = 1;
-        [Min(0), InspectorName("每月维护费")] public int MonthlyMaintenanceFee = 50;
-        [Min(0.1f), InspectorName("每月游戏秒数")] public float SecondsPerGameMonth = 30;
+        [Min(0), InspectorName("每月维护费")] public int MonthlyMaintenanceFee = 1500;
+        [Min(0.1f), InspectorName("每天游戏秒数"), Tooltip("游戏时间，受暂停和倍速影响。120秒为一天。")]
+        public float SecondsPerGameDay = 120;
+        [Min(1), InspectorName("每月天数")] public int DaysPerGameMonth = 30;
+        public float SecondsPerGameMonth => SecondsPerGameDay * DaysPerGameMonth;
         [InspectorName("任务生成与方块配置")] public TaskGenerationConfiguration TaskGeneration;
         [Header("角色亲密度（重开生效，允许负值）")]
         [InspectorName("初始亲密度")] public float InitialAffinity = 0;

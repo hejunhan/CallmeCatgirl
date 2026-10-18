@@ -16,6 +16,12 @@ namespace CallmeCatgirl.Tests
 {
     public sealed class TaskMultiplierTests
     {
+        private static void SetMonthDuration(object config, float seconds)
+        {
+            config.GetType().GetField("DaysPerGameMonth").SetValue(config, 1);
+            config.GetType().GetField("SecondsPerGameDay").SetValue(config, seconds);
+        }
+
         private static Type MemoryType => Type.GetType("CallmeCatgirl.Gameplay.MemoryUpgradeConfiguration, Assembly-CSharp",true);
         private static object Call(object o,string method,params object[] args) => o.GetType().GetMethod(method).Invoke(o,args);
         private static T Value<T>(object o,string name) => (T)o.GetType().GetProperty(name).GetValue(o);
@@ -100,7 +106,7 @@ namespace CallmeCatgirl.Tests
                 var poolType=Generation.GetType().GetField("OperatingTasks").FieldType.GetElementType();
                 Set(Generation,"OperatingTasks",Array.CreateInstance(poolType,0)); // 本组隔离经营池，仅测试原任务倍率。
                 Set(Config,"MemoryUpgrades",Memory);Set(Config,"TaskGeneration",Generation);Set(Config,"Story",null);
-                Set(Config,"InitialFunds",10000);Set(Config,"MonthlyMaintenanceFee",0);Set(Config,"SecondsPerGameMonth",30f);Set(Config,"TokenPrice",2);
+                Set(Config,"InitialFunds",10000);Set(Config,"MonthlyMaintenanceFee",0);SetMonthDuration(Config, 30f);Set(Config,"TokenPrice",2);
                 Set(Memory,"InitialLevel",1);Range(Field(Memory,"InitialTaskMultipliers"),1,1,1,1);
                 foreach(object step in (Array)Field(Memory,"Levels"))
                 {
@@ -126,7 +132,13 @@ namespace CallmeCatgirl.Tests
                 var cell=Enumerable.Range(0,Sim.Width*Sim.Height).Select(i=>new Cell(i%Sim.Width,i/Sim.Width)).First(c=>Sim.Preview(task.Id,c,0)==PlacementFailure.None);
                 Assert.That(Sim.TryPlace(task.Id,cell,0,out _),Is.True);
             }
-            public void Upgrade(){Call(Owner,"OpenMemoryUpgrade");Call(Owner,"UpgradeMemory");Call(Owner,"CloseMemoryUpgrade");}
+            public void Upgrade()
+            {
+                Call(Owner,"OpenMemoryUpgrade");Call(Owner,"UpgradeMemory");
+                if(Value<bool>(Owner,"IsMemoryInstallOpen"))
+                    Call(Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).Single(o=>o.GetType().Name=="StandaloneMemoryInstall"),"SkipInstall");
+                Call(Owner,"CloseMemoryUpgrade");
+            }
             public TaskInstance Selected=>Value<TaskInstance>(Owner,"SelectedTask");
             public void Submit(TaskInstance task){Call(Owner,"SelectRequest",task.Id);Call(Owner,"SubmitSelected");Call(Owner,"ChooseReply",0);}
             public void RestoreImportedStoryAtLevelTwo()

@@ -10,6 +10,9 @@ namespace CallmeCatgirl.Gameplay.Training
     [CreateAssetMenu(menuName = "CallmeCatgirl/Training/Dialogue Corpus Configuration")]
     public sealed class DialogueCorpusConfiguration : ScriptableObject
     {
+        [InspectorName("按最高能力要求发放语料")] public bool UseHighestRequirement = true;
+        [InspectorName("最高达标要求的语料比例"), Min(0)] public double HighestRequirementRatio = 0.5;
+        [Tooltip("使用任务达标值最高的能力；并列时按能力枚举顺序取一项。无正数要求不发放。")]
         public DialogueScores[] Entries = Array.Empty<DialogueScores>();
         [Tooltip("正式剧情缺数值时是否启用暂定补齐。优先使用传入的剧情显式数值，其次精确对话侧表。")]
         public bool AllowRequirementFallback;
@@ -28,6 +31,12 @@ namespace CallmeCatgirl.Gameplay.Training
             IDictionary<AbilityKind, double> explicitStoryScores, out IDictionary<AbilityKind, double> scores, out string source)
         {
             scores = null; source = null;
+            if(task==null)return false;
+            if(UseHighestRequirement)
+            {
+                scores=CorpusRewards.FromRequirements(task.Definition.Requirements,HighestRequirementRatio);
+                source="highest-requirement-ratio";return scores.Count>0;
+            }
             if (explicitStoryScores != null) { scores = explicitStoryScores; source = "story-explicit"; return true; }
             var matches = (Entries ?? Array.Empty<DialogueScores>()).Where(e => e != null && e.UserId == task.ConversationId
                 && e.NodeId == nodeId && e.ChoiceId == choiceId).ToArray();

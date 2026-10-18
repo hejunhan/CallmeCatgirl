@@ -9,6 +9,8 @@ namespace CallmeCatgirl.Gameplay
     {
         public string kind, id, recipe, architecture, displayName;
         public string[] corpusIds;
+        public string conversationId;
+        public double corpusPoints;
         public int x, y, rotation, choice, storyRevision = -1;
         public long expectedVersion = -1;
         public double seconds;
@@ -23,9 +25,9 @@ namespace CallmeCatgirl.Gameplay
     [Serializable] public sealed class GameSnapshot
     {
         public long version;
-        public double gameTime, tokenPerSecond, monthRemaining;
+        public double gameTime, tokenPerSecond, monthRemaining, dayRemaining, secondsPerDay;
         public bool paused, modal, ended;
-        public int funds, month, stage, completed, storyRevision;
+        public int funds, month, day, daysPerMonth, monthlyMaintenanceFee, stage, completed, storyRevision;
         public string selectedId, activeModelId, storyRequestId;
         public string[] choices, corpusIds;
         public int boardWidth,boardHeight;
@@ -50,8 +52,8 @@ namespace CallmeCatgirl.Gameplay
     [Serializable] public sealed class GameArchitectureSnapshot { public string id,title,outline; public int unlockStage; public double speedMultiplier; public bool contentReady; }
     [Serializable] public sealed class GameCellSnapshot { public int x,y,compartment; }
     [Serializable] public sealed class GameAbilitySnapshot { public string kind; public double value,excellent; }
-    [Serializable] public sealed class GameRecipeSnapshot { public string id; public int cost,minimumRecords; public double workTokens; public GameCellSnapshot[] shape; }
-    [Serializable] public sealed class GameCorpusSnapshot { public string id,conversationId,requestId,roundId,nodeId,choiceId; public bool consumed; public GameAbilitySnapshot[] scores; }
+    [Serializable] public sealed class GameRecipeSnapshot { public string id; public int cost,minimumRecords; public double workTokens,pointsPerExtraCell,maximumCorpusPoints; public GameCellSnapshot[] shape; }
+    [Serializable] public sealed class GameCorpusSnapshot { public string id,conversationId,requestId,roundId,nodeId,choiceId; public bool consumed; public double remainingPoints; public GameAbilitySnapshot[] scores; }
 
     public sealed partial class CoreGameplayController
     {
@@ -64,7 +66,7 @@ namespace CallmeCatgirl.Gameplay
             var s = new GameSnapshot {
                 gameTime = Simulation.GameTime, paused = Simulation.Paused, modal = IsModalOpen, ended = GameEnded,
                 funds = Funds, month = CurrentMonth, stage = MemoryLevel, completed = CompletedTasks,
-                monthRemaining = MonthTimeRemaining, tokenPerSecond = Simulation.TokenThroughput, selectedId = SelectedId,
+                monthRemaining = MonthTimeRemaining, day=CurrentDay, daysPerMonth=DaysPerMonth, dayRemaining=DayTimeRemaining, secondsPerDay=SecondsPerDay, monthlyMaintenanceFee=MonthlyMaintenanceFee, tokenPerSecond = Simulation.TokenThroughput, selectedId = SelectedId,
                 storyRevision = Story.Revision, storyRequestId = Story.RequestId,
                 choices = Story.Choices.Select(c => c.Label).ToArray(),
                 activeModelId = TrainingEnabled ? training.Session.ActiveModelId : Simulation.Model.Id,
@@ -74,8 +76,8 @@ namespace CallmeCatgirl.Gameplay
                 recipes=TrainingEnabled?training.Session.Recipes.Select(r=>r.Id).ToArray():Array.Empty<string>(),
                 architectures=TrainingEnabled?training.Session.Architectures.Where(a=>a.UnlockStage<=MemoryLevel && a.ContentReady).Select(a=>a.Id).ToArray():Array.Empty<string>(),
                 architectureDetails=TrainingEnabled?training.Session.Architectures.Select(a=>new GameArchitectureSnapshot{id=a.Id,title=a.Title,outline=a.Outline.ToString(),unlockStage=a.UnlockStage,speedMultiplier=a.SpeedMultiplier,contentReady=a.ContentReady}).ToArray():Array.Empty<GameArchitectureSnapshot>(),
-                recipeDetails=TrainingEnabled?training.Session.Recipes.Select(r=>new GameRecipeSnapshot {id=r.Id,cost=r.Cost,minimumRecords=r.MinimumRecords,workTokens=r.WorkTokens,shape=r.Shape.Select(cell=>new GameCellSnapshot{x=cell.X,y=cell.Y}).ToArray()}).ToArray():Array.Empty<GameRecipeSnapshot>(),
-                corpus=TrainingEnabled?training.Session.Corpus.Select(r=>new GameCorpusSnapshot {id=r.Id,conversationId=r.ConversationId,requestId=r.RequestId,roundId=r.RoundId,nodeId=r.NodeId,choiceId=r.ChoiceId,consumed=training.Session.IsConsumed(r.Id),scores=r.Scores.Select(p=>new GameAbilitySnapshot{kind=p.Key.ToString(),value=p.Value}).ToArray()}).ToArray():Array.Empty<GameCorpusSnapshot>(),
+                recipeDetails=TrainingEnabled?training.Session.Recipes.Select(r=>new GameRecipeSnapshot {id=r.Id,cost=r.Cost,minimumRecords=r.MinimumRecords,workTokens=r.WorkTokens,pointsPerExtraCell=r.PointsPerExtraCell,maximumCorpusPoints=r.MaximumCorpusPoints,shape=r.Shape.Select(cell=>new GameCellSnapshot{x=cell.X,y=cell.Y}).ToArray()}).ToArray():Array.Empty<GameRecipeSnapshot>(),
+                corpus=TrainingEnabled?training.Session.Corpus.Select(r=>new GameCorpusSnapshot {id=r.Id,conversationId=r.ConversationId,requestId=r.RequestId,roundId=r.RoundId,nodeId=r.NodeId,choiceId=r.ChoiceId,consumed=training.Session.IsConsumed(r.Id),remainingPoints=training.Session.RemainingPoints(r.Id),scores=r.Scores.Select(p=>new GameAbilitySnapshot{kind=p.Key.ToString(),value=p.Value}).ToArray()}).ToArray():Array.Empty<GameCorpusSnapshot>(),
                 corpusIds = TrainingEnabled ? training.Session.Corpus.Where(c => !training.Session.IsConsumed(c.Id)).Select(c => c.Id).ToArray() : Array.Empty<string>(),
                 models = TrainingEnabled ? training.Session.Models.Select(m => new GameModelSnapshot {id=m.Id,name=m.Name,architecture=m.ArchitectureId,
                     interval=m.Definition.Interval,tokenPerSecond=training.Session.PreviewTokensPerSecond(m.Id),abilities=m.Definition.Points.Select(p=>new GameAbilitySnapshot{kind=p.Key.ToString(),value=p.Value}).ToArray()}).ToArray() : Array.Empty<GameModelSnapshot>(),
@@ -91,7 +93,7 @@ namespace CallmeCatgirl.Gameplay
             // Continuous clock/progress changes are returned but do not invalidate discrete commands every frame.
             string fingerprint = s.funds+"|"+s.month+"|"+s.stage+"|"+s.paused+"|"+s.modal+"|"+s.ended+"|"+s.storyRevision+"|"+s.activeModelId+"|"+s.tokenPerSecond
                 +string.Join(";",s.tasks.Select(t=>t.id+":"+t.state+":"+t.x+":"+t.y+":"+t.rotation+":"+t.readyInCandidate+":"+t.quality))
-                +string.Join(";",s.models.Select(m=>m.id+":"+m.name))+string.Join(";",s.corpusIds);
+                +string.Join(";",s.models.Select(m=>m.id+":"+m.name))+string.Join(";",s.corpus.Select(r=>r.id+":"+r.remainingPoints.ToString("R",System.Globalization.CultureInfo.InvariantCulture)));
             if (fingerprint != observedState) { observedState = fingerprint; commandVersion++; }
             s.version = commandVersion; return s;
         }
@@ -162,7 +164,9 @@ namespace CallmeCatgirl.Gameplay
                 case "closeHistory": CloseConversationHistory(); return CommandResult(true,"Success");
                 case "train":
                     if (!TrainingEnabled) return CommandResult(false,"Unavailable");
-                    var trainingResult=training.StartTraining(c.recipe,c.architecture,c.displayName,c.corpusIds ?? Array.Empty<string>());
+                    var trainingResult=!string.IsNullOrEmpty(c.conversationId)
+                        ? ((c.corpusIds?.Length??0)>0 ? CallmeCatgirl.Gameplay.Training.TrainingResult.InvalidInput : training.StartConversationTraining(c.recipe,c.architecture,c.displayName,c.conversationId,c.corpusPoints))
+                        : training.StartTraining(c.recipe,c.architecture,c.displayName,c.corpusIds ?? Array.Empty<string>());
                     return CommandResult(trainingResult.ToString()=="Success",trainingResult.ToString());
                 case "selectModel":
                     if (!TrainingEnabled) return CommandResult(false,"Unavailable");

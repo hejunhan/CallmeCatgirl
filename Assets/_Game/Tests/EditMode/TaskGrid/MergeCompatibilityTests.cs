@@ -16,6 +16,12 @@ namespace CallmeCatgirl.Tests
 {
     public sealed class MergeCompatibilityTests
     {
+        private static void SetMonthDuration(object config, float seconds)
+        {
+            config.GetType().GetField("DaysPerGameMonth").SetValue(config, 1);
+            config.GetType().GetField("SecondsPerGameDay").SetValue(config, seconds);
+        }
+
         private static object Call(object o, string name, params object[] args) => o.GetType().GetMethod(name).Invoke(o, args);
         private static T Get<T>(object o, string name) => (T)o.GetType().GetProperty(name).GetValue(o);
         private static T Field<T>(object o, string name) => (T)o.GetType().GetField(name).GetValue(o);
@@ -74,7 +80,7 @@ namespace CallmeCatgirl.Tests
             try
             {
                 Set(config, "Story", storyConfig); Set(config, "OpeningBalance", null); Set(config, "OrdinaryDialoguePool", null);
-                Set(config, "MonthlyMaintenanceFee", 0); Set(config, "SecondsPerGameMonth", 10000f);
+                Set(config, "MonthlyMaintenanceFee", 0); SetMonthDuration(config, 10000f);
                 foreach (var definition in Field<Array>(config, "Requests"))
                 { Set(definition, "Minimum", Vector3.zero); Set(definition, "Excellent", Vector3.zero); }
                 configField.SetValue(owner, config); Call(owner, "ResetSimulation"); Call(owner, "ConfigureSaveSlot", slot);

@@ -137,8 +137,10 @@ namespace CallmeCatgirl.Gameplay.Training
         public double AbilityInterval { get; }
         public double PointsPerScore { get; }
         public IReadOnlyList<Cell> Shape { get; }
+        public double PointsPerExtraCell { get; }
+        public double MaximumCorpusPoints { get; }
         public TrainingRecipe(string id, string title, int cost, int minimumRecords, double workTokens,
-            double abilityInterval, double pointsPerScore, IEnumerable<Cell> shape)
+            double abilityInterval, double pointsPerScore, IEnumerable<Cell> shape, double pointsPerExtraCell = 2, double maximumCorpusPoints = 20)
         {
             Id = Check.Id(id); Title = Check.Id(title);
             if (cost < 0 || minimumRecords < 1) throw new ArgumentOutOfRangeException(nameof(cost));
@@ -147,6 +149,8 @@ namespace CallmeCatgirl.Gameplay.Training
             // TaskDefinition owns normalization and shape validation.
             Shape = new TaskDefinition(id, title, cells, workTokens, 1, double.MaxValue / 4, 0,
                 Array.Empty<AbilityRequirement>()).Shape;
+            Check.Number(pointsPerExtraCell, true); Check.Number(maximumCorpusPoints, true);
+            PointsPerExtraCell = pointsPerExtraCell; MaximumCorpusPoints = maximumCorpusPoints;
             Cost = cost; MinimumRecords = minimumRecords; WorkTokens = workTokens;
             AbilityInterval = abilityInterval; PointsPerScore = pointsPerScore;
         }
@@ -234,6 +238,13 @@ namespace CallmeCatgirl.Gameplay.Training
         public string RecipeId { get; }
         public int PaidCost { get; }
         public double WorkTokens { get; }
+        // Null denotes the original whole-record consumption format.
+        private CorpusUse[] uses;
+        public IReadOnlyList<CorpusUse> Uses
+        {
+            get => uses==null ? null : Array.AsReadOnly(uses.Select(u=>new CorpusUse{CorpusId=u.CorpusId,Points=u.Points}).ToArray());
+            internal set => uses=value?.Select(u=>new CorpusUse{CorpusId=u.CorpusId,Points=u.Points}).ToArray();
+        }
         internal TrainingJob(string requestId, CatalogModel output, string recipeId, int paidCost, double workTokens)
         { RequestId=requestId;Output=output;RecipeId=recipeId;PaidCost=paidCost;WorkTokens=workTokens; }
     }

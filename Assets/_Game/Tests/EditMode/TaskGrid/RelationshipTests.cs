@@ -16,6 +16,12 @@ namespace CallmeCatgirl.Tests
 {
     public sealed class RelationshipTests
     {
+        private static void SetMonthDuration(object config, float seconds)
+        {
+            config.GetType().GetField("DaysPerGameMonth").SetValue(config, 1);
+            config.GetType().GetField("SecondsPerGameDay").SetValue(config, seconds);
+        }
+
         private readonly List<ScriptableObject> resources = new List<ScriptableObject>();
         private MonoBehaviour owner;
         private ScriptableObject original;
@@ -124,7 +130,7 @@ namespace CallmeCatgirl.Tests
             var template = requests.GetValue(0); Set(template, "Calculation", 3f); Set(template, "Speed", 1f); Set(template, "Patience", 15f);
             Set(template, "Minimum", new Vector3(1, 0, 0)); Set(template, "Excellent", new Vector3(2, 0, 0)); one.SetValue(template, 0);
             Set(config, "Requests", one); Set(config, "Story", Profiles("A", "B", "C")); Set(config, "TaskGeneration", generation);
-            Set(config, "MonthlyMaintenanceFee", 0); Set(config, "SecondsPerGameMonth", 30f);
+            Set(config, "MonthlyMaintenanceFee", 0); SetMonthDuration(config, 30f);
             Set(config, "ModelPoints", new Vector4(1, 0, 0, 0)); Set(config, "AbilityInterval", 3f);
             Set(config, "InitialAffinity", 0f); Set(config, "SuccessAffinity", 1f); Set(config, "FailureAffinity", -.5f);
             owner.GetType().GetField("training", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(owner, null);
