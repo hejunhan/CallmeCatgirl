@@ -20,3 +20,7 @@
 - 单一桌面同一时间只由一个代理操作。安全确认由用户处理，不能把“继续”当成网络放行或已关闭弹窗的证据。
 - 用户正在决定成长阶段计数、终局门槛、感情独立终局和林栖身份；答案前不猜改这些玩法与剧情规则。
 - 重要进度提供裁在游戏区域内的真实截图并标明版本和 Edit/Play/Player，优先上传为可向手机端交付的 Library 文件。
+
+编辑入口：`CallmeCatgirl/Preview Authored UI` 在独立预览场景显示持久 UI 副本，`Select Source` 定位真正的场景对象。`Save Current UI Layout To Scene` 与 `Save Main Menu Settings Layout` 为显式、增量作者操作。
+
+需要隔离 Editor Play 存档时，显式开启 `CallmeCatgirl/Use Isolated Saves In This Editor`。它仅在当前编辑器会话使用项目 `Library/AuthoringPlaySaves`；默认关闭，独立 Player 不使用该开关。

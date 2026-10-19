@@ -15,17 +15,20 @@ namespace CallmeCatgirl.UI
     {
         [SerializeField] private Font font;
         [SerializeField,Min(1)] private int arrangementColumns=3,arrangementRows=3;
+        [SerializeField] private Color selectedSlotColor=new Color32(179,208,202,255), idleSlotColor=new Color32(248,249,246,255);
         private readonly CorpusArrangement draft=new CorpusArrangement();
         private TrainingController controller;
         private TrainingSession session;
         private CoreGameplayController owner;
-        private RectTransform page,inventory,board;
-        private InputField query,modelName;
-        private Dropdown filter,recipes,architectures;
-        private Slider amount;
-        private Text summary,detail,message,selection;
-        private Button start,remove;
-        private readonly List<Button> slots=new List<Button>();
+        [SerializeField] private RectTransform page,inventory,board,inventoryTemplate;
+        [SerializeField] private InputField query,modelName;
+        [SerializeField] private Dropdown filter,recipes,architectures;
+        [SerializeField] private Slider amount;
+        [SerializeField] private Text summary,detail,message,selection;
+        [SerializeField] private Button start,remove,modelsButton,closeButton,cancelButton;
+        [SerializeField] private List<Button> slots=new List<Button>();
+        [SerializeField] private List<Button> recommendations=new List<Button>();
+        private bool actionsBound;
         private TrainingRecipe[] recipeOptions;
         private ArchitectureDefinition[] architectureOptions;
         private string selected,recipe,architecture,search="";
@@ -51,7 +54,8 @@ namespace CallmeCatgirl.UI
             controller=source;owner=source.GetComponent<CoreGameplayController>();
             if(!ReferenceEquals(session,source.Session))
             {session=source.Session;draft.Clear();selected=null;recipe=null;architecture=null;}
-            EnsurePage();
+            if(page==null||inventoryTemplate==null)throw new InvalidOperationException("Save the authored training page and corpus template before binding a session.");
+            BindActions();
             foreach(var item in Investments)
             {
                 double available=session.GetConversationCorpus(item.ConversationId).AvailablePoints;
@@ -73,8 +77,8 @@ namespace CallmeCatgirl.UI
             draft.Configure(arrangementColumns,arrangementRows);
             page=Area(transform,"TrainingFullPage",0,0,1,1);Background(page,new Color32(239,239,234,255));
             Label(Area(page,"Title",.025f,.935f,.60f,.99f),"语料与训练 / CORPUS LAB",26);
-            MakeButton(Area(page,"Models",.63f,.935f,.825f,.99f),"模型目录",()=>{if(returnToModels!=null)returnToModels();else Cancel();});
-            MakeButton(Area(page,"Close",.85f,.935f,.975f,.99f),"取消并返回",Cancel);
+            modelsButton=MakeButton(Area(page,"Models",.63f,.935f,.825f,.99f),"模型目录",()=>{if(returnToModels!=null)returnToModels();else Cancel();});
+            closeButton=MakeButton(Area(page,"Close",.85f,.935f,.975f,.99f),"取消并返回",Cancel);
             var left=Area(page,"InventoryPanel",.025f,.155f,.485f,.92f);Background(left,Color.white);
             Label(Area(left,"InventoryTitle",.025f,.92f,.975f,.99f),"库存 · 筛选不改变已选投入",20);
             query=MakeInput(Area(left,"Search",.025f,.83f,.61f,.91f),"搜索联系人或来源");
@@ -85,7 +89,7 @@ namespace CallmeCatgirl.UI
             for(int i=0;i<4;i++)
             {
                 var kind=(AbilityKind)i;
-                MakeButton(Area(left,"Recommend_"+kind,.025f+i*.24f,.70f,.245f+i*.24f,.765f),CoreGameplayController.AbilityText(kind),()=>Recommend(kind));
+                recommendations.Add(MakeButton(Area(left,"Recommend_"+kind,.025f+i*.24f,.70f,.245f+i*.24f,.765f),CoreGameplayController.AbilityText(kind),()=>Recommend(kind)));
             }
             inventory=MakeList(Area(left,"InventoryScroll",.025f,.02f,.975f,.685f));
             var right=Area(page,"ArrangementPanel",.51f,.155f,.975f,.92f);Background(right,new Color32(225,229,225,255));
@@ -109,10 +113,26 @@ namespace CallmeCatgirl.UI
             var footer=Area(page,"Footer",.025f,.015f,.975f,.105f);Background(footer,new Color32(30,38,39,255));
             summary=Label(Area(footer,"Summary",.015f,.05f,.63f,.95f),"尚未投入语料",17,Color.white);
             start=MakeButton(Area(footer,"Start",.66f,.18f,.835f,.82f),"开始训练",StartTraining);
-            MakeButton(Area(footer,"Cancel",.85f,.18f,.985f,.82f),"取消",Cancel);
+            cancelButton=MakeButton(Area(footer,"Cancel",.85f,.18f,.985f,.82f),"取消",Cancel);
             message=Label(Area(page,"Message",.025f,.105f,.975f,.145f),"",15);
-            EventSystem.current?.SetSelectedGameObject(query.gameObject);
         }
+        private void BindActions()
+        {
+            if(actionsBound)return; actionsBound=true;
+            if(draft.Columns!=arrangementColumns||draft.Rows!=arrangementRows)draft.Configure(arrangementColumns,arrangementRows);
+            Wire(modelsButton,()=>{if(returnToModels!=null)returnToModels();else Cancel();});
+            Wire(closeButton,Cancel);Wire(cancelButton,Cancel);Wire(start,StartTraining);Wire(remove,RemoveSelectedConversation);
+            for(int i=0;i<recommendations.Count;i++){var kind=(AbilityKind)i;Wire(recommendations[i],()=>Recommend(kind));}
+            for(int i=0;i<slots.Count;i++){int index=i;Wire(slots[i],()=>SelectSlot(index));}
+            query.onValueChanged.RemoveAllListeners();query.onValueChanged.AddListener(value=>{search=value;RefreshInventory();});
+            filter.onValueChanged.RemoveAllListeners();filter.onValueChanged.AddListener(value=>{domain=value==0?(AbilityKind?)null:(AbilityKind)(value-1);RefreshInventory();});
+            modelName.onValueChanged.RemoveAllListeners();modelName.onValueChanged.AddListener(_=>RefreshDraft());
+            recipes.onValueChanged.RemoveAllListeners();recipes.onValueChanged.AddListener(index=>{if(recipeOptions==null||index>=recipeOptions.Length)return;recipe=recipeOptions[index].Id;RefreshDraft();});
+            architectures.onValueChanged.RemoveAllListeners();architectures.onValueChanged.AddListener(index=>{if(architectureOptions==null||index>=architectureOptions.Length)return;architecture=architectureOptions[index].Id;RefreshDraft();});
+            amount.onValueChanged.RemoveAllListeners();amount.onValueChanged.AddListener(ChangeAmount);
+        }
+        private static void Wire(Button button,Action action){button.onClick.RemoveAllListeners();button.onClick.AddListener(()=>action());}
+        private void SelectSlot(int index){if(draft.Slots.TryGetValue(index,out var item)){selected=item.ConversationId;ShowCorpusDetails(selected);RefreshDraft();}}
         private void RefreshPickers()
         {
             recipeOptions=session.Recipes.Where(r=>r.Id!=TrainingSession.StarterRecipeId||session.StarterTrainingAvailable).ToArray();
@@ -136,16 +156,14 @@ namespace CallmeCatgirl.UI
             foreach(var entry in entries)
             {
                 string id=entry.ConversationId;
-                var card=Area(inventory,"Corpus_"+id,0,0,1,1);Background(card,new Color32(242,244,240,255));card.gameObject.AddComponent<LayoutElement>().minHeight=146;
-                var layout=card.gameObject.AddComponent<VerticalLayoutGroup>();layout.padding=new RectOffset(8,8,8,8);layout.spacing=6;
-                layout.childControlWidth=layout.childControlHeight=true;layout.childForceExpandHeight=false;
-                Label(Area(card,"Title",.025f,.64f,.975f,.98f),CorpusName(id)+" · 可用 "+entry.AvailablePoints.ToString("0.###")+" 点",18).gameObject.AddComponent<LayoutElement>().minHeight=42;
-                Label(Area(card,"Scores",.025f,.30f,.975f,.64f),Scores(entry.AvailableScores),16).gameObject.AddComponent<LayoutElement>().minHeight=40;
-                var button=MakeButton(Area(card,"Action",.025f,.035f,.975f,.28f),draft.Find(id)>=0?"已编排 · 查看 / 调整":"点击添加 / 按住拖入右侧",()=>SelectConversation(id));
-                button.gameObject.AddComponent<LayoutElement>().preferredHeight=36;
-                button.interactable=controller.CanManage;button.gameObject.AddComponent<ConversationCorpusDrag>().Bind(this,id);
-                card.gameObject.AddComponent<ConversationCorpusDrag>().Bind(this,id);
-                card.gameObject.AddComponent<CorpusCardDetails>().Bind(this,id);button.gameObject.AddComponent<CorpusCardDetails>().Bind(this,id);
+                var card=Instantiate(inventoryTemplate,inventory);card.name="Corpus_"+id;card.gameObject.SetActive(true);
+                card.Find("Title").GetComponent<Text>().text=CorpusName(id)+" · 可用 "+entry.AvailablePoints.ToString("0.###")+" 点";
+                card.Find("Scores").GetComponent<Text>().text=Scores(entry.AvailableScores);
+                var button=card.Find("Action").GetComponent<Button>();
+                button.GetComponentInChildren<Text>(true).text=draft.Find(id)>=0?"已编排 · 查看 / 调整":"点击添加 / 按住拖入右侧";
+                Wire(button,()=>SelectConversation(id));button.interactable=controller.CanManage;
+                foreach(var drag in card.GetComponentsInChildren<ConversationCorpusDrag>(true))drag.Bind(this,id);
+                foreach(var info in card.GetComponentsInChildren<CorpusCardDetails>(true))info.Bind(this,id);
             }
         }
         private void Recommend(AbilityKind kind)
@@ -199,7 +217,7 @@ namespace CallmeCatgirl.UI
                 draft.Slots.TryGetValue(i,out var item);
                 var name=item==null?"":CorpusName(item.ConversationId);
                 slots[i].GetComponentInChildren<Text>().text=item==null?"＋\n空位":(name.Length>8?name.Substring(0,8)+"…":name)+"\n"+item.Points.ToString("0.###")+" 点";
-                slots[i].GetComponent<Image>().color=item?.ConversationId==selected?new Color32(179,208,202,255):new Color32(248,249,246,255);
+                slots[i].GetComponent<Image>().color=item?.ConversationId==selected?selectedSlotColor:idleSlotColor;
             }
             double available=selected==null?0:session.GetConversationCorpus(selected).AvailablePoints;
             double other=Investments.Where(i=>i.ConversationId!=selected).Sum(i=>i.Points);
@@ -278,7 +296,23 @@ namespace CallmeCatgirl.UI
         private static Slider MakeSlider(RectTransform r)
         {Background(r,new Color32(182,195,190,255));var s=r.gameObject.AddComponent<Slider>();var handle=Area(r,"Handle",0,0,0,1);handle.sizeDelta=new Vector2(20,0);Background(handle,new Color32(38,78,73,255));s.handleRect=handle;s.targetGraphic=handle.GetComponent<Image>();return s;}
 #if UNITY_EDITOR
-        public void PrepareSceneLayout(Font sourceFont){font=sourceFont;}
+        public void PrepareSceneLayout(Font sourceFont)
+        {
+            if(font==null)font=sourceFont;EnsurePage();
+            if(inventoryTemplate!=null)return;
+            var templates=Area(transform,"CorpusTemplates",0,0,1,1);
+            var card=Area(templates,"CorpusCardTemplate",0,0,1,1);inventoryTemplate=card;
+            Background(card,new Color32(242,244,240,255));card.gameObject.AddComponent<LayoutElement>().minHeight=146;
+            var layout=card.gameObject.AddComponent<VerticalLayoutGroup>();layout.padding=new RectOffset(8,8,8,8);layout.spacing=6;
+            layout.childControlWidth=layout.childControlHeight=true;layout.childForceExpandHeight=false;
+            Label(Area(card,"Title",0,0,1,1),"语料来源 · 可用点数",18).gameObject.AddComponent<LayoutElement>().minHeight=42;
+            Label(Area(card,"Scores",0,0,1,1),"写作 / 代码 / 推理 / 检索",16).gameObject.AddComponent<LayoutElement>().minHeight=40;
+            var button=MakeButton(Area(card,"Action",0,0,1,1),"点击添加 / 按住拖入右侧",()=>{});
+            button.gameObject.AddComponent<LayoutElement>().preferredHeight=36;
+            button.gameObject.AddComponent<ConversationCorpusDrag>();card.gameObject.AddComponent<ConversationCorpusDrag>();
+            card.gameObject.AddComponent<CorpusCardDetails>();button.gameObject.AddComponent<CorpusCardDetails>();
+            templates.gameObject.SetActive(false);
+        }
         public void PrepareCorpusInvestment(){ }
 #endif
     }

@@ -6,8 +6,8 @@ namespace CallmeCatgirl.UI
     /// <summary>Title drag or bottom-right resize, expressed in the window parent's canvas units.</summary>
     public sealed class FloatingWindowGesture : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        private RectTransform target;
-        private bool resize;
+        [SerializeField] private RectTransform target;
+        [SerializeField] private bool resize;
         private bool dragging;
         private int pointerId;
         private Vector2 previous;

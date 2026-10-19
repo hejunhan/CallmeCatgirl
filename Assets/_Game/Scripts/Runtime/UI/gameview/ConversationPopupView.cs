@@ -24,6 +24,7 @@ namespace CallmeCatgirl.UI
   private int revision=-1;
   private bool dismissed;
   private bool readyChoices;
+  [SerializeField] private bool interactionAuthored;
   private bool interactionReady;
   private Vector2 lastWindowSize,lastViewportSize;
   public bool IsVisible => panel != null && panel.activeInHierarchy;
@@ -58,8 +59,10 @@ namespace CallmeCatgirl.UI
   {
    if(interactionReady)return;interactionReady=true;
    var window=(RectTransform)userLabel.transform.parent;
-   LayoutHeader();
-   userLabel.raycastTarget=true;
+    if(Application.isPlaying&&!interactionAuthored)throw new InvalidOperationException("Save the authored chat interaction controls before Play.");
+    if(interactionAuthored){FloatingWindowGesture.ClampToParent(window);return;}
+    LayoutHeader();
+    userLabel.raycastTarget=true;
    (userLabel.gameObject.GetComponent<FloatingWindowGesture>()??userLabel.gameObject.AddComponent<FloatingWindowGesture>()).Bind(window,false);
    var corner=Rect("ResizeCorner",window);corner.anchorMin=corner.anchorMax=corner.pivot=new Vector2(1,0);corner.anchoredPosition=Vector2.zero;corner.sizeDelta=new Vector2(28,28);
    var image=corner.gameObject.AddComponent<Image>();image.color=new Color32(120,120,120,110);
@@ -94,7 +97,7 @@ namespace CallmeCatgirl.UI
    foreach(var b in buttons)
    {
     var t=b.GetComponentInChildren<Text>(true);var element=b.GetComponent<LayoutElement>();
-    element.preferredHeight=Mathf.Max(64,t.preferredHeight+28);
+     element.preferredHeight=Mathf.Max(choiceTemplate.GetComponent<LayoutElement>().preferredHeight,t.preferredHeight+28);
    }
    foreach(Transform row in historyScroll.content)
    {
@@ -106,7 +109,11 @@ namespace CallmeCatgirl.UI
 #if UNITY_EDITOR
   public void PrepareSceneLayout()
   {
-   if(incomingTemplate!=null)return;
+   if(incomingTemplate!=null)
+    {
+     if(!interactionAuthored){interactionReady=false;EnsureWindowInteraction();interactionAuthored=true;}
+     return;
+    }
    bool visible=panel.activeSelf;panel.SetActive(true);LayoutWindow(null,true);
    var window=(RectTransform)userLabel.transform.parent;
    var body=Rect("MessageBody",window);Stretch(body,16,16,16,108);
@@ -129,8 +136,8 @@ namespace CallmeCatgirl.UI
    var text=choiceTemplate.GetComponentInChildren<Text>(true);text.fontSize=26;text.resizeTextForBestFit=false;text.color=new Color32(22,22,22,255);
    var size=choiceTemplate.GetComponent<LayoutElement>()??choiceTemplate.gameObject.AddComponent<LayoutElement>();size.preferredHeight=64;
    choiceTemplate.gameObject.SetActive(false);
-   Canvas.ForceUpdateCanvases();RenderHistory("[对话记录]\n\n联系人：用户消息预览\n\n我：回复消息预览",null);
-   panel.SetActive(visible);
+    interactionReady=false;EnsureWindowInteraction();interactionAuthored=true;
+    panel.SetActive(visible);
   }
   private RectTransform BuildMessageTemplate(Transform parent,bool outgoing,bool system)
   {

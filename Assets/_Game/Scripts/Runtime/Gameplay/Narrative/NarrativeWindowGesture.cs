@@ -6,8 +6,9 @@ namespace CallmeCatgirl.Gameplay.Narrative
     /// <summary>Pointer coordinates are measured in the modal canvas, including CanvasScaler transforms.</summary>
     public sealed class NarrativeWindowGesture : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        private RectTransform window, bounds;
-        private bool resize, dragging;
+        [SerializeField] private RectTransform window, bounds;
+        [SerializeField] private bool resize;
+        private bool dragging;
         private int pointerId;
         private Vector2 originPointer, originPosition, originSize, boundsSize;
         public void Bind(RectTransform target, RectTransform screenBounds, bool resizing)

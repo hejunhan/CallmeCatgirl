@@ -16,7 +16,8 @@ namespace CallmeCatgirl.UI
         public const string MenuPath = "Assets/_Game/Scenes/Gameplay/MenuScene.unity";
         public const string GameplayPath = "Assets/_Game/Scenes/Prototypes/CoreGameplay.unity";
         public bool IsTransitioning { get; private set; }
-        [SerializeField] private Button continueButton;
+        [SerializeField] private Button continueButton,settingsButton;
+        [SerializeField] private SystemMenuHost authoredMenuSettings;
         private static string pendingContinueSlot;
         private SystemMenuHost menuSettings;
         public static string ConsumeContinueSlot() { string value=pendingContinueSlot; pendingContinueSlot=null; return value; }
@@ -48,18 +49,30 @@ namespace CallmeCatgirl.UI
             var font = Resources.FindObjectsOfTypeAll<Font>().FirstOrDefault(f => f.name.Contains("Harmony"))
                 ?? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             menuSettings = SystemMenuHost.Create((RectTransform)canvas.transform, font, false, null, null, null);
+            if(settingsButton==null)throw new System.InvalidOperationException("Save the main-menu settings button in the scene before Play.");
+            settingsButton.onClick.RemoveAllListeners();settingsButton.onClick.AddListener(menuSettings.OpenSettings);
+        }
+#if UNITY_EDITOR
+        public void PrepareSceneLayout(Font font)
+        {
+            var canvas=gameObject.scene.GetRootGameObjects().SelectMany(r=>r.GetComponentsInChildren<Canvas>(true)).First();
+            authoredMenuSettings=canvas.GetComponentInChildren<SystemMenuHost>(true);
+            if(authoredMenuSettings==null){var host=new GameObject("SystemMenuHost",typeof(RectTransform),typeof(SystemMenuHost));host.transform.SetParent(canvas.transform,false);var h=(RectTransform)host.transform;h.anchorMin=Vector2.zero;h.anchorMax=Vector2.one;h.offsetMin=h.offsetMax=Vector2.zero;authoredMenuSettings=host.GetComponent<SystemMenuHost>();}
+            authoredMenuSettings.PrepareSceneLayout(font);
+            if(settingsButton!=null)return;
             var go = new GameObject("OpenSystemSettings", typeof(RectTransform), typeof(Image), typeof(Button));
             go.transform.SetParent(canvas.transform, false);
             var rect = (RectTransform)go.transform; rect.anchorMin = rect.anchorMax = new Vector2(1, 0);
             rect.pivot = new Vector2(1, 0); rect.anchoredPosition = new Vector2(-32, 28); rect.sizeDelta = new Vector2(180, 48);
             go.GetComponent<Image>().color = new Color32(232,232,232,255);
-            go.GetComponent<Button>().onClick.AddListener(menuSettings.OpenSettings);
+            settingsButton=go.GetComponent<Button>();
             var label = new GameObject("Label", typeof(RectTransform), typeof(Text)); label.transform.SetParent(go.transform, false);
             var text = label.GetComponent<Text>(); text.font = font; text.text = "系统设置"; text.fontSize = 22;
             text.alignment = TextAnchor.MiddleCenter; text.color = Color.black; text.raycastTarget = false;
             text.rectTransform.anchorMin = Vector2.zero; text.rectTransform.anchorMax = Vector2.one;
             text.rectTransform.offsetMin = text.rectTransform.offsetMax = Vector2.zero;
         }
+#endif
         public void QuitGame()
         {
 #if UNITY_EDITOR

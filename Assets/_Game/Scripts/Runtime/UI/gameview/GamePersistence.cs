@@ -20,9 +20,16 @@ namespace CallmeCatgirl.Gameplay
         private string saveSlot="main";
         private RunSaveService saveService;
         private TrainingSaveExtension trainingSave;
+#if UNITY_EDITOR
+        // Explicit opt-in from the authoring menu; never serialized into a scene or Player.
+        public static string EditorSaveRoot { get; set; }
+#endif
         public static string SlotDirectory(string slot)
         {
             if (string.IsNullOrEmpty(slot) || !Regex.IsMatch(slot,@"\A[a-zA-Z0-9_-]{1,64}\z")) throw new ArgumentException("Invalid save slot.");
+#if UNITY_EDITOR
+            if(!string.IsNullOrEmpty(EditorSaveRoot))return Path.Combine(EditorSaveRoot,slot);
+#endif
             return Path.Combine(Application.persistentDataPath,"GameJamSaves-v1",slot);
         }
         public string SavePath => Path.Combine(SlotDirectory(saveSlot),"run.json");

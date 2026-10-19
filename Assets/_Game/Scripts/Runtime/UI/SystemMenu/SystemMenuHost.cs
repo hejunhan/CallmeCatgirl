@@ -13,13 +13,15 @@ namespace CallmeCatgirl.UI.SystemMenu
         private static readonly Color Ink = new Color32(30, 33, 34, 255);
         private static readonly Color Paper = new Color32(242, 240, 232, 255);
         private static readonly Color Muted = new Color32(83, 88, 89, 255);
-        private RectTransform root, drawer, settingsFrame;
-        private CanvasGroup drawerGroup, settingsGroup;
-        private GameObject blocker, settingsRoot, previewRoot;
-        private Text saveError, status, volumeValue, modeValue, resolutionValue, capValue, syncValue, syncExplanation, previewLabel;
-        private Slider volume;
-        private Button resumeButton, settingsBackButton, previewConfirm, previewCancel;
-        private Font font;
+        [SerializeField] private RectTransform root, drawer, settingsFrame;
+        [SerializeField] private CanvasGroup drawerGroup, settingsGroup;
+        [SerializeField] private GameObject blocker, settingsRoot, previewRoot;
+        [SerializeField] private Text saveError, status, volumeValue, modeValue, resolutionValue, capValue, syncValue, syncExplanation, previewLabel;
+        [SerializeField] private Slider volume;
+        [SerializeField] private Button resumeButton, settingsButton, saveButton, settingsBackButton, previewConfirm, previewCancel;
+        [SerializeField] private Font font;
+        [SerializeField] private Vector2 preferredSettingsSize = new Vector2(820,900), preferredPreviewSize = new Vector2(660,350);
+        [SerializeField] private float preferredDrawerWidth = 390;
         private float drawerProgress;
         private bool refreshing, configured, wasBlocking;
         private GameObject previousSelection;
@@ -35,8 +37,9 @@ namespace CallmeCatgirl.UI.SystemMenu
             Func<MenuSaveResult> saveAndReturnToMenu = null, SystemSettingsService service = null, bool applySavedSettings = true)
         {
             if (parent == null) throw new ArgumentNullException(nameof(parent));
-            var rect = Rect("SystemMenuHost", parent); Stretch(rect);
-            var host = rect.gameObject.AddComponent<SystemMenuHost>();
+            var host = parent.GetComponentsInChildren<SystemMenuHost>(true).FirstOrDefault();
+            if(host==null && Application.isPlaying)throw new InvalidOperationException("System menu UI is missing. Save its authored scene layout before Play.");
+            if (host == null) { var rect = Rect("SystemMenuHost", parent); Stretch(rect); host = rect.gameObject.AddComponent<SystemMenuHost>(); }
             host.Configure(font, gameplay, pauseClaimChanged, consumeEscapeBeforeMenu, saveAndReturnToMenu, service, applySavedSettings);
             return host;
         }
@@ -47,17 +50,50 @@ namespace CallmeCatgirl.UI.SystemMenu
         {
             if (configured) throw new InvalidOperationException("This system menu is already configured.");
             if (sharedFont == null) throw new ArgumentNullException(nameof(sharedFont), "Pass the existing game's Chinese UI font.");
-            configured = true; font = sharedFont; root = (RectTransform)transform;
-            var canvas = root.gameObject.AddComponent<Canvas>(); canvas.overrideSorting = true; canvas.sortingOrder = 1000;
-            root.gameObject.AddComponent<GraphicRaycaster>();
-            root.gameObject.AddComponent<CanvasGroup>().ignoreParentGroups = true;
+            if(Application.isPlaying && drawer==null)throw new InvalidOperationException("System menu references must be authored before Play.");
+            configured = true; PrepareSceneLayout(sharedFont);
             Settings = service ?? new SystemSettingsService(new UnitySystemSettingsBackend(), new PlayerPrefsSystemSettingsStore());
             session = new SystemMenuSession(gameplay, pauseClaimChanged, consumeEscapeBeforeMenu, saveAndReturnToMenu);
-            Build(); session.Changed += RefreshVisibility; Settings.Changed += RefreshSettings;
+            BindActions(); session.Changed += RefreshVisibility; Settings.Changed += RefreshSettings;
             if (applySavedSettings) Run(Settings.LoadAndApply);
             RefreshSettings(); RefreshVisibility();
         }
 
+        public void PrepareSceneLayout(Font sharedFont)
+        {
+            if (font == null) font = sharedFont;
+            root = (RectTransform)transform;
+            if (drawer != null) return;
+            var canvas = root.GetComponent<Canvas>();
+            if (canvas == null) canvas = root.gameObject.AddComponent<Canvas>();
+            canvas.overrideSorting = true; canvas.sortingOrder = 1000;
+            if (root.GetComponent<GraphicRaycaster>() == null) root.gameObject.AddComponent<GraphicRaycaster>();
+            var group=root.GetComponent<CanvasGroup>();
+            if(group==null)group=root.gameObject.AddComponent<CanvasGroup>();
+            group.ignoreParentGroups = true;
+            Build();
+            blocker.SetActive(false); drawer.gameObject.SetActive(false); settingsRoot.SetActive(false); previewRoot.SetActive(false);
+        }
+        private static void Wire(Button button, Action action)
+        { button.onClick.RemoveAllListeners(); button.onClick.AddListener(() => action()); }
+        private static void WireChoice(Text value, Action previous, Action next)
+        {
+            var buttons = value.transform.parent.GetComponentsInChildren<Button>(true);
+            Wire(buttons[0], previous); Wire(buttons[1], next);
+        }
+        private void BindActions()
+        {
+            Wire(resumeButton, CloseAll); Wire(settingsButton, OpenSettings); Wire(saveButton, () => session.SaveAndReturn());
+            Wire(settingsBackButton, CloseSettings);
+            Wire(previewConfirm, () => Run(() => Settings.ConfirmDisplayPreview()));
+            Wire(previewCancel, () => Run(Settings.RevertDisplayPreview));
+            WireChoice(modeValue, PreviewMode, PreviewMode);
+            WireChoice(resolutionValue, () => StepResolution(-1), () => StepResolution(1));
+            WireChoice(capValue, () => StepFrameRate(-1), () => StepFrameRate(1));
+            WireChoice(syncValue, () => Run(() => Settings.SetVSync(!Settings.Current.VSync)), () => Run(() => Settings.SetVSync(!Settings.Current.VSync)));
+            volume.onValueChanged.RemoveAllListeners();
+            volume.onValueChanged.AddListener(value => { if (!refreshing) Run(() => Settings.SetMasterVolume(value)); });
+        }
         public bool HandleEscape()
         {
             if (session == null) return false;
@@ -113,8 +149,8 @@ namespace CallmeCatgirl.UI.SystemMenu
             RowLabel(drawerContent, "已暂停", 36, 58, Ink);
             RowLabel(drawerContent, "继续时保留原来的暂停与倍速设置。", 22, 78, Muted);
             resumeButton = RowButton(drawerContent, "继续游戏", () => CloseAll(), 64);
-            RowButton(drawerContent, "系统设置", OpenSettings, 64);
-            RowButton(drawerContent, "保存并返回主菜单", () => session.SaveAndReturn(), 82);
+            settingsButton = RowButton(drawerContent, "系统设置", OpenSettings, 64);
+            saveButton = RowButton(drawerContent, "保存并返回主菜单", () => session.SaveAndReturn(), 82);
             saveError = RowLabel(drawerContent, "", 22, 154, new Color32(143, 47, 42, 255));
             RowLabel(drawerContent, "Esc 继续", 20, 38, Muted);
 
@@ -267,9 +303,9 @@ namespace CallmeCatgirl.UI.SystemMenu
         {
             if (root == null || drawer == null) return;
             var size = root.rect.size; if (size.x <= 0 || size.y <= 0) return;
-            drawer.sizeDelta = new Vector2(Mathf.Min(390, size.x - 24), 0);
-            settingsFrame.sizeDelta = new Vector2(Mathf.Min(820, size.x - 40), Mathf.Min(900, size.y - 40));
-            if (previewRoot != null) ((RectTransform)previewRoot.transform.GetChild(0)).sizeDelta = new Vector2(Mathf.Min(660, size.x - 64), Mathf.Min(350, size.y - 64));
+            drawer.sizeDelta = new Vector2(Mathf.Min(preferredDrawerWidth, size.x - 24), 0);
+            settingsFrame.sizeDelta = Vector2.Min(preferredSettingsSize, size - new Vector2(40,40));
+            if (previewRoot != null) ((RectTransform)previewRoot.transform.GetChild(0)).sizeDelta = Vector2.Min(preferredPreviewSize, size - new Vector2(64,64));
         }
         private void Run(Action action)
         {

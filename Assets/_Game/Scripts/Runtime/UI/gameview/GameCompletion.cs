@@ -125,10 +125,6 @@ namespace CallmeCatgirl.Gameplay
                 if (policyPanel != null && overlay != null)
                 {
                     var surface = (RectTransform)policyPanel.transform;
-                    surface.SetParent(overlay, false);
-                    surface.anchorMin = Vector2.zero; surface.anchorMax = Vector2.one;
-                    surface.offsetMin = new Vector2(24,24); surface.offsetMax = new Vector2(-24,-24);
-                    foreach (Transform child in overlay) if (child != surface) child.gameObject.SetActive(false);
                     policyPanel.Bind(GetComponent<ProgressionController>(), CompletionFont());
                     policyPanel.Closed += () => overlay.gameObject.SetActive(false);
                     canvasView.WindowLayers?.Register(overlay.gameObject,surface,UIWindowKind.ModalPage);
@@ -139,9 +135,6 @@ namespace CallmeCatgirl.Gameplay
                         // Replace the old serialized SetActive listener with the normal host gate.
                         entry.onClick = new Button.ButtonClickedEvent();
                         entry.onClick.AddListener(OpenPolicyTree);
-                        var label = entry.GetComponentInChildren<Text>(true);
-                        if (label != null) { label.text = "政策"; label.alignment = TextAnchor.MiddleCenter; }
-                        ((RectTransform)entry.transform).SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,44);
                     }
                     policyViewPrepared = true;
                 }

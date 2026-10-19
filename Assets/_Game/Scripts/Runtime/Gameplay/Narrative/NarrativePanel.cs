@@ -12,11 +12,11 @@ namespace CallmeCatgirl.Gameplay.Narrative
     public sealed class NarrativePanel : MonoBehaviour
     {
         private NarrativeSession session;
-        private Font font;
-        private RectTransform overlay, window, content, viewport, noticeRoot;
-        private Text heading, body, noticeText;
-        private Button close, dismiss;
-        private ScrollRect scroll;
+        [SerializeField] private Font font;
+        [SerializeField] private RectTransform overlay, window, content, viewport, noticeRoot;
+        [SerializeField] private Text heading, body, noticeText;
+        [SerializeField] private Button close, dismiss, choiceTemplate;
+        [SerializeField] private ScrollRect scroll;
         private readonly List<Button> choiceButtons = new List<Button>();
         private string fingerprint;
         private Vector2 lastSize;
@@ -26,6 +26,9 @@ namespace CallmeCatgirl.Gameplay.Narrative
         public static NarrativePanel Create(Transform parent, Font font, NarrativeSession session)
         {
             if (parent == null) throw new ArgumentNullException(nameof(parent));
+            var authored = parent.GetComponentsInChildren<NarrativePanel>(true).FirstOrDefault();
+            if (authored != null) { authored.Bind(session, font); return authored; }
+            if(Application.isPlaying)throw new InvalidOperationException("Narrative UI is missing. Save its authored scene layout before Play.");
             var root = new GameObject("NarrativePanel", typeof(RectTransform), typeof(NarrativePanel));
             root.transform.SetParent(parent, false);
             Stretch(root.GetComponent<RectTransform>(), Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
@@ -37,8 +40,11 @@ namespace CallmeCatgirl.Gameplay.Narrative
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
             if (session != null) session.Changed -= Refresh;
-            session = source; font = textFont != null ? textFont : Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            if (overlay == null) Build();
+            session = source;
+            if(Application.isPlaying && overlay==null)throw new InvalidOperationException("Narrative UI references must be authored before Play.");
+            PrepareSceneLayout(textFont);
+            close.onClick.RemoveAllListeners(); close.onClick.AddListener(() => session.CloseConversation());
+            dismiss.onClick.RemoveAllListeners(); dismiss.onClick.AddListener(() => session.DismissNotice());
             session.Changed += Refresh; fingerprint = null; Refresh();
         }
         public bool HandleEscape()
@@ -54,6 +60,19 @@ namespace CallmeCatgirl.Gameplay.Narrative
         {
             if (!IsOpen) return;
             if (lastSize != window.rect.size) { lastSize = window.rect.size; FitChoices(); }
+        }
+        // Idempotent authoring entry: the gameplay scene persists these controls and references.
+        public void PrepareSceneLayout(Font sourceFont)
+        {
+            if (font == null) font = sourceFont != null ? sourceFont : Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            if (overlay != null) return;
+            Build();
+            var templates = Rect("NarrativeTemplates", transform);
+            choiceTemplate = MakeButton("ChoiceTemplate", templates, "剧情选项", () => { });
+            choiceTemplate.gameObject.AddComponent<ScrollSelectionFocus>();
+            choiceTemplate.gameObject.AddComponent<LayoutElement>().preferredHeight = 72;
+            templates.gameObject.SetActive(false);
+            overlay.gameObject.SetActive(false);
         }
         private void Build()
         {
@@ -131,9 +150,11 @@ namespace CallmeCatgirl.Gameplay.Narrative
             foreach (var option in frame.Choices)
             {
                 string id = option.Id;
-                var button = MakeButton("Choice_" + id, content, option.Text, () => session.Choose(id));
-                button.gameObject.AddComponent<ScrollSelectionFocus>();
-                button.gameObject.AddComponent<LayoutElement>().preferredHeight = 72;
+                var button = Instantiate(choiceTemplate, content);
+                button.name = "Choice_" + id;
+                button.GetComponentInChildren<Text>(true).text = option.Text;
+                button.onClick.RemoveAllListeners(); button.onClick.AddListener(() => session.Choose(id));
+                button.gameObject.SetActive(true);
                 choiceButtons.Add(button);
             }
             bool notice = !string.IsNullOrEmpty(session.Notice);
@@ -158,7 +179,7 @@ namespace CallmeCatgirl.Gameplay.Narrative
             {
                 var text = button.GetComponentInChildren<Text>();
                 var layout = button.GetComponent<LayoutElement>();
-                layout.preferredHeight = Mathf.Max(64, text.preferredHeight + 28);
+                layout.preferredHeight = Mathf.Max(choiceTemplate.GetComponent<LayoutElement>().preferredHeight, text.preferredHeight + 28);
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(content);
         }

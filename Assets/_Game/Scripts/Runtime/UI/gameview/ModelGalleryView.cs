@@ -100,10 +100,6 @@ namespace CallmeCatgirl.UI
             if(trainingPage)
             {
                 // The corpus workspace is a full Canvas page; the catalogue retains its authored frame/reveal.
-                var trainingRect=(RectTransform)trainingView.transform;
-                trainingRect.SetParent(root.transform,false);
-                trainingRect.anchorMin=Vector2.zero;trainingRect.anchorMax=Vector2.one;
-                trainingRect.offsetMin=trainingRect.offsetMax=Vector2.zero;trainingRect.SetAsLastSibling();
                 trainingView.ConfigureNavigation(()=>{trainingPage=false;Redraw();});
                 trainingView.Bind(controller);return;
             }
@@ -162,7 +158,7 @@ namespace CallmeCatgirl.UI
 #if UNITY_EDITOR
         public void PrepareSceneLayout(TrainingController source,TrainingPanel owner)
         {
-            if(root!=null)return;controller=source;panel=owner;Build();
+            if(root!=null){PrepareTrainingLayout();return;}controller=source;panel=owner;Build();
             titleLabel=Label(body,"模型广场",28,20,800,48,32);titleLabel.name="PageTitle";
             pageButton=Button(body,"语料与训练",900,24,160,()=>{});closeButton=Button(body,"返回",1080,24,110,()=>{});
             messageLabel=Label(body,"",28,78,1160,28,15,new Color32(82,82,82,255));messageLabel.name="PageStatus";
@@ -185,7 +181,13 @@ namespace CallmeCatgirl.UI
             cards.gameObject.AddComponent<ContentSizeFitter>().verticalFit=ContentSizeFitter.FitMode.PreferredSize;
             var trainingRoot=Rect("TrainingWorkspace",body,0,0,1232,672);trainingRoot.anchorMin=Vector2.zero;trainingRoot.anchorMax=Vector2.one;trainingRoot.offsetMin=trainingRoot.offsetMax=Vector2.zero;
             trainingView=trainingRoot.gameObject.AddComponent<TrainingWorkspaceView>();trainingView.PrepareSceneLayout(font);trainingRoot.gameObject.SetActive(false);
-            IsVisible=true;Redraw();IsVisible=false;root.SetActive(false);
+            PrepareTrainingLayout();IsVisible=true;Redraw();IsVisible=false;root.SetActive(false);
+        }
+        private void PrepareTrainingLayout()
+        {
+            var rect=(RectTransform)trainingView.transform;
+            if(rect.parent!=root.transform){rect.SetParent(root.transform,false);rect.anchorMin=Vector2.zero;rect.anchorMax=Vector2.one;rect.offsetMin=rect.offsetMax=Vector2.zero;}
+            trainingView.PrepareSceneLayout(font);
         }
         private void MarketCard(CatalogModel model,float x,float y,float width,float height)
         {

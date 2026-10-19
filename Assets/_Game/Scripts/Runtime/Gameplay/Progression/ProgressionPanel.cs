@@ -13,16 +13,18 @@ namespace CallmeCatgirl.Gameplay.Progression
     {
         [SerializeField] private ProgressionController controller;
         [SerializeField] private Font labelFont;
+        [SerializeField,HideInInspector] private int authoredLayoutVersion;
+        [SerializeField] private Color ownedColor=new Color(.12f,.35f,.30f), excludedColor=new Color(.25f,.15f,.18f), availableColor=new Color(.14f,.22f,.28f), lockedColor=new Color(.13f,.14f,.16f);
         private readonly Dictionary<string, Button> cards = new Dictionary<string, Button>();
         private readonly Dictionary<string, Text> statuses = new Dictionary<string, Text>();
-        private Font font;
-        private Text heading, footer, detailText, detailStatus;
-        private Button secondPage, buy, detailBack;
-        private ScrollRect graphScroll;
-        private RectTransform content;
+        [SerializeField] private Font font;
+        [SerializeField] private Text heading, footer, detailText, detailStatus;
+        [SerializeField] private Button firstPage, closeButton, secondPage, buy, detailBack;
+        [SerializeField] private ScrollRect graphScroll;
+        [SerializeField] private RectTransform content, nodeTemplate, connectionTemplate;
         private ProgressionTree displayed;
         private ProgressionNode[] displayedNodes = Array.Empty<ProgressionNode>();
-        private GameObject detail;
+        [SerializeField] private GameObject detail;
         private string selected;
         private int page;
         public event Action Closed;
@@ -31,23 +33,29 @@ namespace CallmeCatgirl.Gameplay.Progression
         public void Bind(ProgressionController policyController, Font preferredFont = null)
         {
             controller = policyController;
-            if (preferredFont != null) labelFont = preferredFont;
-            if (font != null && preferredFont != null) {
-                font = preferredFont;
-                foreach (var text in GetComponentsInChildren<Text>(true)) text.font = font;
-            }
+            if (labelFont == null && preferredFont != null) labelFont = preferredFont;
             displayed = null;
         }
         private void Start()
         {
             if (controller == null) controller = FindAnyObjectByType<ProgressionController>();
+            if(heading==null)throw new InvalidOperationException("Save the authored policy layout before Play.");
+            PrepareSceneLayout(labelFont);
+            Wire(closeButton,Close);Wire(firstPage,()=>ShowPage(0));Wire(secondPage,()=>ShowPage(1));
+            Wire(detailBack,()=>CloseDetail());Wire(buy,()=>{if(selected!=null)controller.TryPurchase(selected);});
+        }
+        private static void Wire(Button button,Action action){button.onClick.RemoveAllListeners();button.onClick.AddListener(()=>action());}
+        public void PrepareSceneLayout(Font preferredFont)
+        {
+            if(heading!=null)return;
+            if(labelFont==null)labelFont=preferredFont;
             font = labelFont != null ? labelFont : Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             (GetComponent<Image>() ?? gameObject.AddComponent<Image>()).color = new Color(.055f, .07f, .085f, .99f);
             heading = Label("政策", transform, 22);
             Place(heading.rectTransform, new Vector2(0,1), Vector2.one, new Vector2(20,-44), new Vector2(-170,-4));
-            var close = Button("关闭 ×", transform, Close);
+            var close = Button("关闭 ×", transform, Close);closeButton=close;
             Place((RectTransform)close.transform, Vector2.one, Vector2.one, new Vector2(-150,-42), new Vector2(-16,-8));
-            var first = Button("第一页 · 路线与材料", transform, () => ShowPage(0));
+            var first = Button("第一页 · 路线与材料", transform, () => ShowPage(0));firstPage=first;
             Place((RectTransform)first.transform, new Vector2(0,1), new Vector2(0,1), new Vector2(20,-82), new Vector2(270,-46));
             secondPage = Button("第二页 · 回答以外", transform, () => ShowPage(1));
             Place((RectTransform)secondPage.transform, new Vector2(0,1), new Vector2(0,1), new Vector2(280,-82), new Vector2(530,-46));
@@ -55,7 +63,24 @@ namespace CallmeCatgirl.Gameplay.Progression
             content = graphScroll.content;
             footer = Label("点击查看完整说明；拖动空白、滚轮或滚动条查看连线。", transform, 16);
             Place(footer.rectTransform, Vector2.zero, new Vector2(1,0), new Vector2(20,5), new Vector2(-20,44));
-            BuildDetail();
+            BuildDetail();BuildTemplates();
+        }
+        private void BuildTemplates()
+        {
+            var templates=new GameObject("PolicyTemplates",typeof(RectTransform));templates.transform.SetParent(transform,false);
+            var card=Button(string.Empty,templates.transform,()=>{});card.name="PolicyNodeTemplate";nodeTemplate=(RectTransform)card.transform;
+            DestroyImmediate(card.GetComponentInChildren<Text>().gameObject);
+            nodeTemplate.anchorMin=nodeTemplate.anchorMax=new Vector2(0,1);nodeTemplate.pivot=new Vector2(0,1);nodeTemplate.sizeDelta=new Vector2(304,196);
+            var title=Label("政策标题",card.transform,20);title.name="Title";
+            Place(title.rectTransform,Vector2.zero,Vector2.one,new Vector2(12,150),new Vector2(-12,-8));
+            var mechanics=Label("配置资源中的数值说明",card.transform,16);mechanics.name="Mechanics";mechanics.alignment=TextAnchor.UpperLeft;
+            Place(mechanics.rectTransform,Vector2.zero,Vector2.one,new Vector2(12,48),new Vector2(-12,-50));
+            var status=Label("价格 · 当前可用状态",card.transform,16);status.name="Status";
+            Place(status.rectTransform,Vector2.zero,new Vector2(1,0),new Vector2(12,7),new Vector2(-12,46));
+            connectionTemplate=new GameObject("ConnectionTemplate",typeof(RectTransform),typeof(Image)).GetComponent<RectTransform>();
+            connectionTemplate.SetParent(templates.transform,false);connectionTemplate.sizeDelta=new Vector2(100,3);
+            var image=connectionTemplate.GetComponent<Image>();image.color=new Color(.38f,.50f,.53f);image.raycastTarget=false;
+            templates.SetActive(false);
         }
         public void ShowPage(int index)
         {
@@ -74,18 +99,30 @@ namespace CallmeCatgirl.Gameplay.Progression
             footer.text = "第 " + (page + 1) + " 页 · 开放 / 封闭互斥 · 全部仅收金币 · 节点可点击查看完整说明";
             foreach (var n in displayedNodes.Where(n => n.Page == page)) {
                 var state = tree.Availability(n.Id); bool owned = tree.IsUnlocked(n.Id);
-                cards[n.Id].GetComponent<Image>().color = owned ? new Color(.12f,.35f,.30f)
-                    : state == PurchaseResult.ExcludedByChoice ? new Color(.25f,.15f,.18f)
-                    : state == PurchaseResult.Success ? new Color(.14f,.22f,.28f) : new Color(.13f,.14f,.16f);
+                cards[n.Id].GetComponent<Image>().color = owned ? ownedColor
+                    : state == PurchaseResult.ExcludedByChoice ? excludedColor
+                    : state == PurchaseResult.Success ? availableColor : lockedColor;
                 statuses[n.Id].text = owned ? "✓ 已购买" : n.Cost + " 金币 · " + ProgressionController.PurchaseResultText(state);
             }
             if (detail.activeSelf) UpdateDetail();
         }
         private void Rebuild(ProgressionTree tree)
         {
-            foreach (Transform child in content) Destroy(child.gameObject);
-            cards.Clear(); statuses.Clear(); displayed = tree;
-            displayedNodes = tree.Nodes.ToArray();
+            displayed=tree;RebuildNodes(tree.Nodes.ToArray());
+        }
+#if UNITY_EDITOR
+        public void PreviewConfiguration()
+        {
+            if(controller==null)return;
+            RebuildNodes(controller.Nodes);heading.text="政策 · 配置预览（无运行中存档）";
+            foreach(var node in displayedNodes.Where(n=>n.Page==page))statuses[node.Id].text=node.Cost+" 金币 · 运行时判定条件";
+        }
+#endif
+        private void RebuildNodes(ProgressionNode[] definitions)
+        {
+            foreach (var child in content.Cast<Transform>().ToArray())
+            {child.gameObject.SetActive(false);if(Application.isPlaying)Destroy(child.gameObject);else DestroyImmediate(child.gameObject);}
+            cards.Clear(); statuses.Clear();displayedNodes=definitions;
             var nodes = displayedNodes.Where(n => n.Page == page).ToArray();
             int columns = nodes.Length == 0 ? 1 : nodes.Max(n => n.Column) + 1;
             int rows = nodes.Length == 0 ? 1 : nodes.Max(n => n.Row) + 1;
@@ -99,16 +136,11 @@ namespace CallmeCatgirl.Gameplay.Progression
                     Line(a, new Vector2(middle,a.y)); Line(new Vector2(middle,a.y), new Vector2(middle,b.y)); Line(new Vector2(middle,b.y),b);
                 }
             foreach (var n in nodes) {
-                string id = n.Id; var card = Button(string.Empty, content, () => OpenDetail(id)); card.name = "Policy-" + id;
-                Destroy(card.GetComponentInChildren<Text>().gameObject);
-                var r = (RectTransform)card.transform; r.anchorMin = r.anchorMax = new Vector2(0,1); r.pivot = new Vector2(0,1);
-                r.anchoredPosition = Position(n); r.sizeDelta = new Vector2(304,196);
-                var title = Label(n.Title, card.transform, 20);
-                Place(title.rectTransform, Vector2.zero, Vector2.one, new Vector2(12,150), new Vector2(-12,-8));
-                var mechanics = Label(n.MechanicalText, card.transform, 16); mechanics.alignment = TextAnchor.UpperLeft;
-                Place(mechanics.rectTransform, Vector2.zero, Vector2.one, new Vector2(12,48), new Vector2(-12,-50));
-                var status = Label(string.Empty, card.transform, 16);
-                Place(status.rectTransform, Vector2.zero, new Vector2(1,0), new Vector2(12,7), new Vector2(-12,46));
+                string id=n.Id;var r=Instantiate(nodeTemplate,content);r.name="Policy-"+id;r.gameObject.SetActive(true);
+                var card=r.GetComponent<Button>();Wire(card,()=>OpenDetail(id));r.anchoredPosition=Position(n);
+                r.Find("Title").GetComponent<Text>().text=n.Title;
+                r.Find("Mechanics").GetComponent<Text>().text=n.MechanicalText;
+                var status=r.Find("Status").GetComponent<Text>();
                 cards.Add(id,card); statuses.Add(id,status);
             }
             graphScroll.horizontalNormalizedPosition = 0; graphScroll.verticalNormalizedPosition = 1;
@@ -116,10 +148,9 @@ namespace CallmeCatgirl.Gameplay.Progression
         private static Vector2 Position(ProgressionNode n) => new Vector2(16+n.Column*350,-16-n.Row*218);
         private void Line(Vector2 a, Vector2 b)
         {
-            var go = new GameObject("Connection",typeof(RectTransform),typeof(Image)); go.transform.SetParent(content,false);
-            var r = (RectTransform)go.transform; r.anchorMin = r.anchorMax = new Vector2(0,1); r.anchoredPosition = (a+b)/2;
-            r.sizeDelta = new Vector2(Vector2.Distance(a,b),3); r.localEulerAngles = new Vector3(0,0,Mathf.Atan2(b.y-a.y,b.x-a.x)*Mathf.Rad2Deg);
-            var image = go.GetComponent<Image>(); image.color = new Color(.38f,.50f,.53f); image.raycastTarget = false;
+            var r=Instantiate(connectionTemplate,content);r.name="Connection";r.gameObject.SetActive(true);
+            var go=r.gameObject;r.anchorMin = r.anchorMax = new Vector2(0,1); r.anchoredPosition = (a+b)/2;
+            r.sizeDelta = new Vector2(Vector2.Distance(a,b),connectionTemplate.sizeDelta.y); r.localEulerAngles = new Vector3(0,0,Mathf.Atan2(b.y-a.y,b.x-a.x)*Mathf.Rad2Deg);
         }
         private void BuildDetail()
         {
