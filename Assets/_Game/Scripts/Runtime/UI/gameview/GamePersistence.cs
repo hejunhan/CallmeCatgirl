@@ -101,9 +101,10 @@ namespace CallmeCatgirl.Gameplay
         }
         public bool SaveRun()
         {
-            if (IsMemoryInstallPending || IsMemoryInstallOpen) { Message="请先完成或跳过内存安装，再保存。"; return false; }
-            try { ReadEvents(); EnsureSaveService(); saveService.Save(); Message="游戏已保存。"; return true; }
-            catch(Exception error) { Message="保存失败："+error.Message; return false; }
+            if (IsMemoryInstallPending || IsMemoryInstallOpen)
+            { Message = "请先完成或取消内存安装后再保存。"; canvasView?.ShowPersistenceFeedback(Message, false); return false; }
+            try { ReadEvents(); EnsureSaveService(); saveService.Save(); Message = "游戏已保存。"; canvasView?.ShowPersistenceFeedback(Message, true); return true; }
+            catch (Exception error) { Message = "保存失败：" + error.Message; canvasView?.ShowPersistenceFeedback(Message, false); return false; }
         }
         public bool ContinueRun()
         {

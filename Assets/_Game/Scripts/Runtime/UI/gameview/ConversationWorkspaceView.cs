@@ -127,7 +127,7 @@ namespace CallmeCatgirl.UI
                 double available=owner.TrainingEnabled?owner.Training.Session.GetConversationCorpus(pair.Key).AvailablePoints:0;
                 if(pinned.TryGetValue(pair.Key,out var contact))pair.Value.Summary.text=(contact.HasUnread?"● ":"")+contact.Summary;
                 else if(!tasks.Any(t=>t.ConversationId==pair.Key))pair.Value.Summary.text=$"语料来源 · {available:0.###} 点可用";
-                else pair.Value.Summary.text=$"亲密度 {owner.Story.Affinity(pair.Key):0.##} · {pair.Value.Requests} 请求 · {available:0.###} 语料点";
+                else pair.Value.Summary.text=$"亲密度 {owner.Story.Affinity(pair.Key):0.##} · {pair.Value.Requests} 请求\n语料 {available:0.###} 点";
                 bool linked=pair.Key==hovered;
                 bool selected=owner.SelectedTask?.ConversationId==pair.Key;
                 pair.Value.Border.Configure(selected?2:1,selected||linked?BorderEdges.All:BorderEdges.Bottom,selected||linked?new Color32(22,22,22,255):new Color32(111,111,111,255));

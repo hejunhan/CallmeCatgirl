@@ -120,7 +120,11 @@ namespace CallmeCatgirl.UI
                 cells[i].ShowSignal(border, data, edges, config == null ? 1.5f : config.BorderWidth * (1 + readyBreath * 3), phase,
                     config != null && config.Animate && !preview && !ready ? config.ScanOpacity : 0, flash);
             }
-            titleLabel.text = preview ? "预览" : task.Id + (task.State == RequestState.Ready ? "\n待提交" : "");
+            string display = owner.RequestDisplayName(task);
+            titleLabel.text = preview ? "预览" : display.Length > 2 ? display.Substring(0, 2) : display;
+            titleLabel.alignment = TextAnchor.MiddleCenter;
+            titleLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+            titleLabel.verticalOverflow = VerticalWrapMode.Truncate;
             titleLabel.rectTransform.sizeDelta = new Vector2(width - 4, height - 8);
             progressFill.rectTransform.sizeDelta = new Vector2(Mathf.Max(0, width - 8), 5);
             progressFill.color = Color.Lerp(progressIdle,data,flash);

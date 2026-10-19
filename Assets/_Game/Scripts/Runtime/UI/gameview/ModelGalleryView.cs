@@ -135,7 +135,7 @@ namespace CallmeCatgirl.UI
             card.Find("ArchitectureIcon/Label").GetComponent<Text>().text=model.ArchitectureId=="baseline"?"学":model.ArchitectureId=="alternate"?"速":"衡";
             SetCardText(card,"ModelName",model.Name);SetCardText(card,"ArchitectureTitle",arch.Title+" · 语料×"+arch.CorpusMultiplier.ToString("0.##")+" / 速度×"+arch.SpeedMultiplier.ToString("0.##"));
             var architectureLabel=card.Find("ArchitectureTitle").GetComponent<Text>();
-            architectureLabel.resizeTextForBestFit=true;architectureLabel.resizeTextMinSize=16;architectureLabel.resizeTextMaxSize=architectureLabel.fontSize;
+            architectureLabel.resizeTextForBestFit=false;
             SetCardText(card,"Throughput",controller.Session.PreviewTokensPerSecond(id).ToString("0.##")+" token/s");
             foreach(var ability in Enum.GetValues(typeof(CallmeCatgirl.Gameplay.TaskGrid.AbilityKind)).Cast<CallmeCatgirl.Gameplay.TaskGrid.AbilityKind>())
             {model.Definition.Points.TryGetValue(ability,out double value);SetCardText(card,"Ability_"+ability,CallmeCatgirl.Gameplay.CoreGameplayController.AbilityText(ability)+"  "+value.ToString("0.###"));}

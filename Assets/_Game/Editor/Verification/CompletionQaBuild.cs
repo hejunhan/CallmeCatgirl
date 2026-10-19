@@ -29,7 +29,7 @@ namespace CallmeCatgirl.Verification
             {
                 PlayerSettings.companyName = CompletionQaPlayer.QaCompany;
                 PlayerSettings.productName = CompletionQaPlayer.QaProduct;
-                PlayerSettings.defaultScreenWidth = 1280; PlayerSettings.defaultScreenHeight = 720;
+                PlayerSettings.defaultScreenWidth = 1920; PlayerSettings.defaultScreenHeight = 1080;
                 PlayerSettings.defaultIsNativeResolution = false;
                 PlayerSettings.fullScreenMode = FullScreenMode.Windowed; PlayerSettings.runInBackground = true;
                 Directory.CreateDirectory(Path.GetDirectoryName(output));

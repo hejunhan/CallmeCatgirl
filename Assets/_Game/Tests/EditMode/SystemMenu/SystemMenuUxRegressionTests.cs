@@ -50,6 +50,11 @@ namespace CallmeCatgirl.Tests.SystemMenu
             ((RectTransform)source.transform).sizeDelta = new Vector2(120, 50);
             ((RectTransform)source.transform).anchoredPosition = new Vector2(0, -330);
             settings = new SystemSettingsService(new Backend(), new Store());
+            // Explicit in-memory authored fixture; production still rejects missing saved UI at runtime.
+            var fixture = new GameObject("AuthoredMenuFixture", typeof(RectTransform), typeof(SystemMenuHost));
+            fixture.transform.SetParent(parent, false);
+            var fixtureRect = fixture.GetComponent<RectTransform>(); fixtureRect.anchorMin = Vector2.zero; fixtureRect.anchorMax = Vector2.one; fixtureRect.offsetMin = fixtureRect.offsetMax = Vector2.zero;
+            fixture.GetComponent<SystemMenuHost>().PrepareSceneLayout(UxOffscreenCapture.ChineseFont());
             host = SystemMenuHost.Create(parent, UxOffscreenCapture.ChineseFont(), true,
                 service: settings, applySavedSettings: false);
             EventSystem.current.SetSelectedGameObject(previous.gameObject);

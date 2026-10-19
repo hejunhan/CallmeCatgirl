@@ -216,7 +216,7 @@ namespace CallmeCatgirl.UI
             {
                 draft.Slots.TryGetValue(i,out var item);
                 var name=item==null?"":CorpusName(item.ConversationId);
-                slots[i].GetComponentInChildren<Text>().text=item==null?"＋\n空位":(name.Length>8?name.Substring(0,8)+"…":name)+"\n"+item.Points.ToString("0.###")+" 点";
+                slots[i].GetComponentInChildren<Text>().text=item==null?"＋":(name.Length>8?name.Substring(0,8)+"…":name)+"\n"+item.Points.ToString("0.###")+" 点";
                 slots[i].GetComponent<Image>().color=item?.ConversationId==selected?selectedSlotColor:idleSlotColor;
             }
             double available=selected==null?0:session.GetConversationCorpus(selected).AvailablePoints;
@@ -292,7 +292,7 @@ namespace CallmeCatgirl.UI
             var layout=content.gameObject.AddComponent<VerticalLayoutGroup>();layout.padding=new RectOffset(8,8,8,8);layout.spacing=8;layout.childControlHeight=true;layout.childControlWidth=true;layout.childForceExpandHeight=false;
             content.gameObject.AddComponent<ContentSizeFitter>().verticalFit=ContentSizeFitter.FitMode.PreferredSize;var scroll=viewport.gameObject.AddComponent<ScrollRect>();scroll.horizontal=false;scroll.viewport=viewport;scroll.content=content;return content;
         }
-        private void ListText(RectTransform parent,string text,float height){var label=Label(Area(parent,"Empty",0,0,1,1),text,18);label.gameObject.AddComponent<LayoutElement>().preferredHeight=height;}
+        private void ListText(RectTransform parent,string text,float height){var label=Label(Area(parent,"Empty",0,0,1,1),text,26);label.gameObject.AddComponent<LayoutElement>().preferredHeight=height;}
         private static Slider MakeSlider(RectTransform r)
         {Background(r,new Color32(182,195,190,255));var s=r.gameObject.AddComponent<Slider>();var handle=Area(r,"Handle",0,0,0,1);handle.sizeDelta=new Vector2(20,0);Background(handle,new Color32(38,78,73,255));s.handleRect=handle;s.targetGraphic=handle.GetComponent<Image>();return s;}
 #if UNITY_EDITOR

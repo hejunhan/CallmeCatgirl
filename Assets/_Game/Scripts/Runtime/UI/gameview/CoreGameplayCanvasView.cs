@@ -41,6 +41,18 @@ namespace CallmeCatgirl.UI
                 return settlementFrom + (int)System.Math.Round((settlementTo-(double)settlementFrom)*(1-(1-t)*(1-t)));
             }
         }
+        [Header("Authored persistence notification")]
+        [SerializeField] private CanvasGroup persistenceGroup;
+        [SerializeField] private Text persistenceLabel;
+        private float persistenceUntil;
+        public void ShowPersistenceFeedback(string text, bool success)
+        {
+            if (persistenceGroup == null || persistenceLabel == null) return;
+            persistenceLabel.text = text;
+            persistenceLabel.color = success ? new Color32(22, 55, 47, 255) : new Color32(145, 36, 28, 255);
+            persistenceGroup.alpha = 1;
+            persistenceUntil = Time.unscaledTime + 5;
+        }
         private int lastFunds;
         private float fundsAt = -100, rejectedAt = -100;
         private Color fundsIdle, messageIdle, modelIdle;
@@ -105,6 +117,8 @@ namespace CallmeCatgirl.UI
         private Camera pointerCamera;
         private TaskModuleView ghost;
         public bool IsInitialized => controller != null;
+        public string RequestDisplayName(TaskInstance task) => controller.TrainingEnabled && controller.Training.IsTrainingRequest(task.Id)
+            ? "训练" : controller.ConversationDisplayName(task.ConversationId);
         public bool IsOperatingRequest(string id) => controller != null && controller.IsOperatingTask(id);
         public bool IsDragging => draggedId != null;
         public RectTransform Board => board;
@@ -130,7 +144,6 @@ namespace CallmeCatgirl.UI
             if(qualityLabel!=null){qualityLabel.rectTransform.anchoredPosition=new Vector2(560,-176);qualityLabel.rectTransform.sizeDelta=new Vector2(180,36);}
             }
             controller = owner; lastFunds = owner.Funds; fundsAt = rejectedAt = settlementAt = -100;
-            AlignSpeedLabels();
             if (settlementFeedback != null) settlementFeedback.Clear();
             if (speedIdleColors == null && speedButtons != null)
                 speedIdleColors = speedButtons.Select(b => b.targetGraphic.color).ToArray();
@@ -288,7 +301,7 @@ namespace CallmeCatgirl.UI
             {
                 memoryUpgradeButton.interactable = !controller.GameEnded && !controller.IsModalOpen;
                 memoryUpgradeButtonLabel.text = "内存 / 加点";
-                memoryUpgradeLabel.text = $"内存 Lv{controller.MemoryLevel}   资金 <size={Mathf.RoundToInt(memoryUpgradeLabel.fontSize*42f/22f)}>{DisplayFunds}</size>   点数 {controller.AvailableAbilityPoints}";
+                memoryUpgradeLabel.text = $"内存 Lv{controller.MemoryLevel}   资金 <b>{DisplayFunds}</b>   点数 {controller.AvailableAbilityPoints}";
             }
             float width = board.rect.width / sim.Width, height = board.rect.height / sim.Height;
             int open = 0;
@@ -351,6 +364,8 @@ namespace CallmeCatgirl.UI
             }
         }
 
+        // Explicit authoring only; never overwrite scene typography while binding a session.
+#if UNITY_EDITOR
         private void AlignSpeedLabels()
         {
             if (speedButtons == null) return;
@@ -374,8 +389,10 @@ namespace CallmeCatgirl.UI
             }
         }
 
+#endif
         private void RefreshSignals()
         {
+            if (persistenceGroup != null) persistenceGroup.alpha = Time.unscaledTime < persistenceUntil ? 1 : 0;
             if (lastFunds != controller.Funds) { lastFunds = controller.Funds; fundsAt = Time.unscaledTime; }
             float duration = feedback == null ? .55f : Mathf.Max(.05f,feedback.PulseSeconds);
             bool animate = feedback != null && feedback.Animate;
@@ -410,7 +427,7 @@ namespace CallmeCatgirl.UI
                 + "\n\n" + controller.Story.Latest(task.ConversationId);
             submitButton.gameObject.SetActive(trainingTask || IsOperatingRequest(task?.Id));
             if (task == null) return;
-            infoTitle.text = "当前请求 / " + task.Id + " · " + task.Definition.Title
+            infoTitle.text = RequestDisplayName(task) + " · " + task.Definition.Title
                 + (trainingTask ? " · 训练模块" : IsOperatingRequest(task.Id) ? " · 经营委托" : $" · 亲密度 {controller.Story.Affinity(task.ConversationId):0.##}");
             infoStatus.text = $"{CoreGameplayController.StateText(task.State)}  ·  计算 {task.Progress:0.#}/{task.Definition.Calculation:0.#}  ·  忍耐 {task.Remaining(controller.Simulation.GameTime):0.0}s · 达标奖励 {task.Definition.Tokens:0.#} Token";
             abilitiesLabel.text = string.Join("\n", task.Definition.Requirements.Select(req =>

@@ -15,8 +15,8 @@ MonoBehaviour:
   TaskNormal: {r: 0.36, g: 0.47, b: 0.63, a: 1}
   TaskSelected: {r: 0.31, g: 0.12, b: 0.9, a: 1}
   CardSelected: {r: 0.55, g: 0.4, b: 0.95, a: 0.16}
-  SpeedSelected: {r: 0.32, g: 0.12, b: 0.9, a: 1}
-  PauseSelected: {r: 0.32, g: 0.12, b: 0.9, a: 1}
+  SpeedSelected: {r: 0.1764706, g: 0.21568628, b: 0.21960784, a: 1}
+  PauseSelected: {r: 0.1764706, g: 0.21568628, b: 0.21960784, a: 1}
   LegalPreview: {r: 0.25, g: 0.9, b: 0.45, a: 0.65}
   IllegalPreview: {r: 1, g: 0.3, b: 0.3, a: 0.65}
   BelowStandard: {r: 0.85, g: 0.48, b: 0.36, a: 1}
