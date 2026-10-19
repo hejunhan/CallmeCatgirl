@@ -9,8 +9,8 @@
 
 ## 当前工作副本
 
-- 当前获准开发的是本隔离候选。操作 Unity 前核对实例和 `Application.dataPath`，不能把原 `D:/Unity/CallmeCatgirl` 的旧版本、未同步内容误判为同版本的编辑态/运行态缺陷。
-- 不覆盖原 D 盘项目，不停止原 Editor 的 Play，不覆盖用户存档。测试和预览使用独立存档。全局安全、网络与代理配置不在项目修改范围内。
+- 用户已于 2026-10-19 明确指定 `D:/Unity/CallmeCatgirl` 为后续主开发目录。操作 Unity 前核对实例和 `Application.dataPath`；保留的 C 盘隔离候选与历史构建不能冒充当前 D 盘运行版本。
+- 保留目标现有用户修改，不覆盖正式存档，不擅自关闭未保存的编辑器。迁移前的文件、Git 历史及旧 Play 运行态已备份在 `C:/Users/81004/Documents/Codex/2026-10-17/task-10/migration-to-d-20261019/backup`。测试和预览使用独立存档；全局安全、网络、代理及凭据配置不在项目修改范围内。
 
 ## 可编辑场景与运行一致性
 
@@ -31,3 +31,10 @@
 编辑入口：`CallmeCatgirl/Preview Authored UI` 在独立预览场景显示持久 UI 副本，`Select Source` 定位真正的场景对象。`Save Current UI Layout To Scene` 与 `Save Main Menu Settings Layout` 为显式、增量作者操作。
 
 需要隔离 Editor Play 存档时，显式开启 `CallmeCatgirl/Use Isolated Saves In This Editor`。它仅在当前编辑器会话使用项目 `Library/AuthoringPlaySaves`；默认关闭，独立 Player 不使用该开关。
+
+## 开发监督与当前边界
+
+- 在本目录 `D:/Unity/CallmeCatgirl` 打开 OpenCode 即进入当前主工程。会话是否正在运行必须核实；不得把直接 Magpie API 调用称为 OpenCode 对话开发。
+- 今后新增或改写的玩家可见剧情文本必须由 argon4 输出；主代理只负责大纲和一致性审核。新 Argon4 文案当前仅待审候选，未纳入本次运行代码迁移；感情线后续和新政策树仍未获批。
+- 训练个体随机倍率及“随机取最大值”当前仍是未实现提案，不得报告为已有功能。
+- `.opencode/plugins/dot-notifier` 仅监听本工程精确目录，未扩展权限；自动排队不代表自动发回 dot。发送仍依赖人工核对的适配器，未完成无人值守接收通道。旧通知队列和发送状态没有迁入，禁止重放旧通知。
