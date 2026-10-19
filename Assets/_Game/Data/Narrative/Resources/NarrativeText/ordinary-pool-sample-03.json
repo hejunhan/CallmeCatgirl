@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "ordinary.pool.sample-03.display-name",
+      "text": "拼单的人"
+    },
+    {
+      "id": "ordinary.pool.sample-03.initial-history",
+      "text": ""
+    },
+    {
+      "id": "ordinary.pool.sample-03.session.sample-03-s1.title",
+      "text": "猫娘能开发票吗"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.user-message",
+      "text": "猫娘在吗？帮我理一下部门拼单：三杯拿铁、两杯美式。别漏了，我一会儿去买。"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.choice.acknowledge-address.label",
+      "text": "接称呼并确认"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.choice.acknowledge-address.player-reply",
+      "text": "喵，听见了。一共五杯：三杯拿铁、两杯美式。你没给单价，金额我先空着。"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.choice.acknowledge-address.user-reply",
+      "text": "行，数量对就行，价格我到店里再看。"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.choice.organize-order.label",
+      "text": "平静接单整理"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.choice.organize-order.player-reply",
+      "text": "整理好了，共五杯：拿铁 3 杯，美式 2 杯。你没给价格，总价先空着。"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.choice.organize-order.user-reply",
+      "text": "够清楚了，我照着这个去点单。"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.choice.joke-and-list-items.label",
+      "text": "轻开玩笑列数"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.choice.joke-and-list-items.player-reply",
+      "text": "五杯，记住了：拿铁三杯，美式两杯。猫娘今天先负责数杯子，金额等你看完价目表。"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.choice.joke-and-list-items.user-reply",
+      "text": "哈哈好，五杯记准就行，省得我数乱了。"
+    },
+    {
+      "id": "ordinary.pool.sample-03.session.sample-03-s2.title",
+      "text": "猫娘能开发票吗"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.user-message",
+      "text": "所以猫娘能开发票吗？我是认真的，这单要拿回公司报销。"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.choice.refer-to-merchant.label",
+      "text": "说明找商家"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.choice.refer-to-merchant.player-reply",
+      "text": "发票得向卖咖啡的商家申请。可以先问店员怎么开，我这里能帮你整理拼单。"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.choice.refer-to-merchant.user-reply",
+      "text": "好，我到店里先问清楚，清单就用这份。"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.choice.confirm-invoice-details.label",
+      "text": "确认开票信息"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.choice.confirm-invoice-details.player-reply",
+      "text": "我不能开票。你可以先问公司报销需要哪些开票信息，再跟店家确认办理方式。"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.choice.confirm-invoice-details.user-reply",
+      "text": "那我先看一下公司的报销要求，省得到了店里现问。"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.choice.joke-and-set-boundary.label",
+      "text": "玩笑后说明边界"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.choice.joke-and-set-boundary.player-reply",
+      "text": "猫娘能数咖啡，不能给咖啡开票。清单我理好了，发票还得找店家申请。"
+    },
+    {
+      "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.choice.joke-and-set-boundary.user-reply",
+      "text": "分工挺清楚。五杯我照单买，发票去问店员。"
+    }
+  ]
+}

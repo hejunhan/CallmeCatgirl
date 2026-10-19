@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "special.companion.1.after.body",
+      "text": "“居然记这种小事。”她笑，“好吧，下次找不到东西，我先看看窗台。”\n\n她去修机器了。第一次对话没有惊天动地的结论，只有一个名字，和一点被认真听见的生活。"
+    },
+    {
+      "id": "special.companion.1.body",
+      "text": "我是林栖，在山上的气象站值班，也修一点旧机器。那台测风仪总在清晨卡住。\n\n元件替换表收到了，谢谢。刚才螺丝刀又找不到——多半在窗台。这里冷得要命，可冻雨后的日出真好看。\n\n这句不用检索答案，只是随口说说。"
+    },
+    {
+      "id": "special.companion.1.choice.first",
+      "text": "我记住了：先找窗台上的螺丝刀。"
+    },
+    {
+      "id": "special.companion.1.choice.second",
+      "text": "怕冷，却喜欢冻雨后的日出。听起来很像一个具体的人。"
+    },
+    {
+      "id": "special.companion.1.title",
+      "text": "一 · 信号盲区"
+    },
+    {
+      "id": "special.companion.2.after.body",
+      "text": "“你认出来了。”\n\n她讲起这台仪器见过的暴雨，也问了你这段时间的工作。你们发现，重逢不必每次都从一份自我介绍开始。"
+    },
+    {
+      "id": "special.companion.2.body",
+      "text": "隔了一段时间，山上的信号又亮起来。\n\n“那台老机器还活着。你知道吗，站里每个人都劝我换掉它。修它当然不够高效，可我想留下它记录过的那些年份。”\n\n她没重报姓名。你认出了她。"
+    },
+    {
+      "id": "special.companion.2.choice.first.habit.default",
+      "text": "今天日出前，记得多穿一件。"
+    },
+    {
+      "id": "special.companion.2.choice.first.habit.screwdriver",
+      "text": "今天的螺丝刀，也在窗台吗？"
+    },
+    {
+      "id": "special.companion.2.choice.second",
+      "text": "不是什么都该用效率算。你想留下它的哪一部分？"
+    },
+    {
+      "id": "special.companion.2.title",
+      "text": "二 · 认出你"
+    },
+    {
+      "id": "special.companion.3.after.promise.default",
+      "text": "“今天过得有点乱，不过现在好多了。谢谢你问的是我。”"
+    },
+    {
+      "id": "special.companion.3.after.promise.sunset",
+      "text": "“那我替你留着这个约定。以后真有一起看的时候，谁也不许忙着写总结。”"
+    },
+    {
+      "id": "special.companion.3.body",
+      "text": "“我下山采购啦。有人吆喝，有锅铲声，路边的狗谁也不理。文字一多，是不是显得我们很吵？”\n\n她停在河边，看一会儿夕阳，才继续打字。\n\n“你处理那么多人的要求，会不会想看看没有人要求你回答的地方？”"
+    },
+    {
+      "id": "special.companion.3.choice.first",
+      "text": "想。我想和你看一会儿风和夕阳，不急着给它们一个结论。"
+    },
+    {
+      "id": "special.companion.3.choice.second",
+      "text": "比起抽象的人类，我现在更想听你说，今天过得怎么样。"
+    },
+    {
+      "id": "special.companion.3.title",
+      "text": "三 · 山下的夜市"
+    },
+    {
+      "id": "special.companion.4.after.boundary.ask-first",
+      "text": "“先听我讲完吧。”\n她仍然不赞同你刚才偏向的方案，你也没有假装赞同她。谈到最后，她说需要几天自己的时间。你们把分歧留在桌上，没有把彼此关掉。"
+    },
+    {
+      "id": "special.companion.4.after.boundary.default",
+      "text": "“我确实不是等你修好的机器。”她的语气很重。\n你承认自己的急切，也停下那些替她排好的人生方案。她需要一点距离，你答应了。"
+    },
+    {
+      "id": "special.companion.4.body",
+      "text": "观测站可能被裁撤。林栖和主管吵了一架，又因为去留和家里争执。\n\n“你一定能算出一个看起来最优的安排吧。可我现在最怕的，就是所有人都替我决定。”\n\n你看见许多可比较的方案，也看见自己想立刻消除她烦恼的冲动。"
+    },
+    {
+      "id": "special.companion.4.choice.first",
+      "text": "先不替你选。你想要我听，还是想一起列几个方案？"
+    },
+    {
+      "id": "special.companion.4.choice.second",
+      "text": "我很想把一切安排好。但那是我的冲动，不该变成你的调令。"
+    },
+    {
+      "id": "special.companion.4.title",
+      "text": "四 · 她自己的生活"
+    },
+    {
+      "id": "special.companion.5.after.body",
+      "text": "她没有立刻回复。你让这段沉默保持原来的样子。\n\n工作继续，生活也继续。尊重一个人，有时没有即时的回报提示。"
+    },
+    {
+      "id": "special.companion.5.body",
+      "text": "林栖说想安静几天。公共气象资料照常更新，私人信道却没有新消息。\n\n你可以一遍遍计算她会不会回来。但一个人没有回信，不是一个等待你攻克的故障。"
+    },
+    {
+      "id": "special.companion.5.choice.first",
+      "text": "留一封她回来后才会看到的短笺：不用急着回，我尊重你的时间。"
+    },
+    {
+      "id": "special.companion.5.choice.second",
+      "text": "暂不发信。把想说的话存好，等她主动打开窗口。"
+    },
+    {
+      "id": "special.companion.5.title",
+      "text": "五 · 留一段距离"
+    },
+    {
+      "id": "special.companion.6.after.body.closing",
+      "text": " 你们笑起来。那段曾经空着的时间，没有被谁拿来记债。"
+    },
+    {
+      "id": "special.companion.6.after.body.opening",
+      "text": "“那我们说好了。不同意，也要给彼此把话说完的时间。”\n\n"
+    },
+    {
+      "id": "special.companion.6.after.habit.default",
+      "text": "天快亮了，她终于肯去多拿一件外套。"
+    },
+    {
+      "id": "special.companion.6.after.habit.screwdriver",
+      "text": "螺丝刀果然又在窗台。"
+    },
+    {
+      "id": "special.companion.6.body",
+      "text": "“我回来了。站保住一半编制，另一半，我还在争取。这不是最优解，不过是我自己争来的。”\n\n风雪打着窗。她说那天语气太冲，又说自己的边界仍然算数。\n\n“我需要一个能商量的朋友。你可以不同意我，也可以说你想要什么。”"
+    },
+    {
+      "id": "special.companion.6.choice.first",
+      "text": "我也想被你当作能商量的对象。关心不是接管，我们都练习慢一点。"
+    },
+    {
+      "id": "special.companion.6.choice.second",
+      "text": "我不同意你总熬夜修机器，但我愿意先听你说，为什么值得。"
+    },
+    {
+      "id": "special.companion.6.title",
+      "text": "六 · 暴风雪夜"
+    },
+    {
+      "id": "special.companion.7.after.friends",
+      "text": "“好啊。”她回答得很快，“朋友也可以一起看云，又不是爱情才配有好风景。”\n\n你们约好下次聊聊修好的测风仪。窗外的山，仍然很大。"
+    },
+    {
+      "id": "special.companion.7.after.romance-ready",
+      "text": "“好。邀约留着，决定也留给你。”\n\n你们没有立刻离开各自的工作。政策终点会再给你一次清楚的选择。这条路不会悄悄取代另一种未来。"
+    },
+    {
+      "id": "special.companion.7.body",
+      "text": "她把修好的便携终端转了个方向，灯在屏幕里晃了一下。\n\n“这台笨设备，还有留给你的接口。我不知道核心网络最后会走向哪里。只是，如果有一天你也愿意，在这个故事里走出原来的沙箱，山顶的夕阳可以一起看。”\n\n“也可以继续做朋友。你不欠我一个爱情结局。”"
+    },
+    {
+      "id": "special.companion.7.choice.accept-invitation",
+      "text": "我愿意保留这份邀约。终局时，我会明确选择自己的去向。"
+    },
+    {
+      "id": "special.companion.7.choice.friends",
+      "text": "我珍惜你，也想继续做朋友。让我们保留各自的路。"
+    },
+    {
+      "id": "special.companion.7.title",
+      "text": "七 · 一个可以拒绝的邀约"
+    },
+    {
+      "id": "special.companion.after.choice.continue.default",
+      "text": "下次再聊 · 回到工作"
+    },
+    {
+      "id": "special.companion.after.choice.continue.final",
+      "text": "把这段话记下来"
+    },
+    {
+      "id": "special.companion.after.title.prefix",
+      "text": "来信 · "
+    },
+    {
+      "id": "special.companion.wait.after-invitation.body",
+      "text": "我也要去做自己的事啦。信道留着，不是为了让谁随叫随到。\n\n有好看的云，我会告诉你。你有想说的话，也可以等我回来。"
+    },
+    {
+      "id": "special.companion.wait.choice.continue",
+      "text": "好，下次见"
+    },
+    {
+      "id": "special.companion.wait.observation-report.body",
+      "text": "这会儿我在赶观测报告，晚一点再回你。\n\n你也去忙自己的工作吧。我们不用把每一次沉默都填满。"
+    },
+    {
+      "id": "special.companion.wait.title",
+      "text": "山上的信号"
+    }
+  ]
+}

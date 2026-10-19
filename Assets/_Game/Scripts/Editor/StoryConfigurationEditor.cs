@@ -13,6 +13,34 @@ public sealed class StoryConfigurationEditor : Editor
 {
     public override void OnInspectorGUI()
     {
+        var official = (StoryConfiguration)target;
+        if (StoryTextBindings.IsFormalAsset(official))
+        {
+            try { official.RefreshTextCache(); }
+            catch (Exception error) { EditorGUILayout.HelpBox(error.Message, MessageType.Error); }
+            EditorGUILayout.HelpBox("正式文本只维护 NarrativeText/*.json；下面的文本字段是只读生成缓存。数值、节点和跳转仍由此配置管理。", MessageType.Info);
+            if (GUILayout.Button("定位 JSON 正式文本目录"))
+                Selection.activeObject = AssetDatabase.LoadAssetAtPath<DefaultAsset>("Assets/_Game/Data/Narrative/Resources/NarrativeText");
+            if (GUILayout.Button("验证并重载 JSON 文本")) StoryTextLibraryEditor.Reload();
+            serializedObject.Update();
+            var property = serializedObject.GetIterator(); bool enter = true;
+            int indent = EditorGUI.indentLevel;
+            try
+            {
+                while (property.NextVisible(enter))
+                {
+                    EditorGUI.indentLevel = property.depth;
+                    bool generated = property.propertyType == SerializedPropertyType.String
+                        && new[] { "DisplayName", "InitialHistory", "Title", "UserMessage", "Label", "PlayerReply", "UserReply" }.Contains(property.name);
+                    using (new EditorGUI.DisabledScope(generated || property.name == "m_Script"))
+                        enter = EditorGUILayout.PropertyField(property, false);
+                }
+            }
+            finally { EditorGUI.indentLevel = indent; }
+            serializedObject.ApplyModifiedProperties();
+            return;
+        }
+
         EditorGUILayout.HelpBox("每个角色的会话次数、每次会话轮数、每轮选项数均独立配置。一次会话只计算一次，弹窗内连续选择直到会话结束。推荐使用中文策划文本：对白、数值和方块统一编辑。导入后重开生效。", MessageType.Info);
         if (GUILayout.Button("导入角色文本（推荐，保留其他角色）")) Import(false, true);
         if (GUILayout.Button("从角色文本创建新的剧情配置资源")) Create(true);

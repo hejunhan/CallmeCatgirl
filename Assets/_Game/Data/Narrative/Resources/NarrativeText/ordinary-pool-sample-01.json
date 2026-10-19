@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "ordinary.pool.sample-01.display-name",
+      "text": "晚到的人"
+    },
+    {
+      "id": "ordinary.pool.sample-01.initial-history",
+      "text": ""
+    },
+    {
+      "id": "ordinary.pool.sample-01.session.sample-01-s1.title",
+      "text": "道歉别像客服"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s1/r1.user-message",
+      "text": "我记错时间晚到二十分钟，朋友在店外等。我写“因本人时间管理疏忽致您久候，深表歉意”，是不是太像客服了？"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s1/r1.choice.ask-usual-tone.label",
+      "text": "问平时语气"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s1/r1.choice.ask-usual-tone.player-reply",
+      "text": "确实像工单回复。你平时跟这位朋友聊天，认错一般怎么开口？"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s1/r1.choice.ask-usual-tone.user-reply",
+      "text": "平时就直接说我搞错了。那我也照平时的说法写，不写检讨书了。"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s1/r1.choice.condense-apology.label",
+      "text": "直接压成一句"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s1/r1.choice.condense-apology.player-reply",
+      "text": "把公文词全删掉，直接说“我记错时间了，害你在外面等这么久，真对不起”。"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s1/r1.choice.condense-apology.user-reply",
+      "text": "这句顺耳多了，比我那句像活人说的话。"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s1/r1.choice.reorder-apology.label",
+      "text": "调整认错顺序"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s1/r1.choice.reorder-apology.player-reply",
+      "text": "解释放前面容易像辩解；先认让他久等，再说明记错时间，意思更清楚。"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s1/r1.choice.reorder-apology.user-reply",
+      "text": "明白，先把歉意递过去，不整那些官方词了。"
+    },
+    {
+      "id": "ordinary.pool.sample-01.session.sample-01-s2.title",
+      "text": "道歉别像客服"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s2/r1.user-message",
+      "text": "我还是想顺便提一句“路上也有点堵”，虽然主要还是我记错了时间。加这句会不会好受点？"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s2/r1.choice.ask-excuse-motive.label",
+      "text": "问想加的原因"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s2/r1.choice.ask-excuse-motive.player-reply",
+      "text": "你是怕只说记错时间显得太粗心，想拿堵车缓冲一下？"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s2/r1.choice.ask-excuse-motive.user-reply",
+      "text": "对，就怕他觉得我不当回事。那还是照实说吧。"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s2/r1.choice.keep-main-cause.label",
+      "text": "建议只写主因"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s2/r1.choice.keep-main-cause.player-reply",
+      "text": "只写记错时间就够了。堵车既然不是主因，加上去反而分散重点。"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s2/r1.choice.keep-main-cause.user-reply",
+      "text": "也是，真话最省事，我把堵车那句删了。"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s2/r1.choice.explain-mixed-causes.label",
+      "text": "点出混写后果"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s2/r1.choice.explain-mixed-causes.player-reply",
+      "text": "把堵车和记错时间并列，对方可能分不清你在说明原因，还是把责任推给路况。"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s2/r1.choice.explain-mixed-causes.user-reply",
+      "text": "对，记错时间才是主要原因。我就说这件事。"
+    },
+    {
+      "id": "ordinary.pool.sample-01.session.sample-01-s3.title",
+      "text": "道歉别像客服"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s3/r1.user-message",
+      "text": "那我发这句：“我记错时间了，让你在外面等这么久，对不起。下次我提前到。”这语气行吗？"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s3/r1.choice.keep-original-apology.label",
+      "text": "保留原话"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s3/r1.choice.keep-original-apology.player-reply",
+      "text": "挺好的，原因和态度都清楚，也不端着，直接发这句就行。"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s3/r1.choice.keep-original-apology.user-reply",
+      "text": "好，那我复制发过去了，谢啦。"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s3/r1.choice.smooth-apology.label",
+      "text": "稍调顺口"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s3/r1.choice.smooth-apology.player-reply",
+      "text": "可以把“这么久”换成“二十分钟”，更具体。其他不用动。"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s3/r1.choice.smooth-apology.user-reply",
+      "text": "行，我稍微顺一下词就发给他。"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s3/r1.choice.avoid-extra-promise.label",
+      "text": "不用再加保证"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s3/r1.choice.avoid-extra-promise.player-reply",
+      "text": "够用了，认错加一句下次提前刚刚好，再列一堆保证反而又像写检讨了。"
+    },
+    {
+      "id": "ordinary.pool.sample-01.node.sample-01-s3/r1.choice.avoid-extra-promise.user-reply",
+      "text": "懂了，不往下叠词了，这就发出去。"
+    }
+  ]
+}

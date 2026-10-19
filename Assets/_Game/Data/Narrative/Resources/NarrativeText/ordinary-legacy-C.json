@@ -1,0 +1,1057 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "ordinary.legacy.C.display-name",
+      "text": "苏禾"
+    },
+    {
+      "id": "ordinary.legacy.C.initial-history",
+      "text": "苏禾：你好，我想和你慢慢聊聊。"
+    },
+    {
+      "id": "ordinary.legacy.C.session.s1.title",
+      "text": "初次问候"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s1/第1轮.user-message",
+      "text": "今天想和你聊聊“初次问候”。你愿意先听我说吗？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s1/第1轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s1/第1轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s1/第1轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s1/第1轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s1/第1轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s1/第1轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s1/第1轮.choice.compare-options.label",
+      "text": "分析两种可能"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s1/第1轮.choice.compare-options.player-reply",
+      "text": "我们比较两种做法的收益和风险，再一起选择。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s1/第1轮.choice.compare-options.user-reply",
+      "text": "你考虑得很周到，我想继续听。"
+    },
+    {
+      "id": "ordinary.legacy.C.session.s2.title",
+      "text": "谈谈喜欢的事"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s2/第1轮.user-message",
+      "text": "今天想和你聊聊“谈谈喜欢的事”。你愿意先听我说吗？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s2/第1轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s2/第1轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s2/第1轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s2/第1轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s2/第1轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s2/第1轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s2/第1轮.choice.end-session.label",
+      "text": "暂时结束本次会话"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s2/第1轮.choice.end-session.player-reply",
+      "text": "今天先整理到这里，下次再继续。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s2/第1轮.choice.end-session.user-reply",
+      "text": "谢谢你陪我，下一次会话再见。"
+    },
+    {
+      "id": "ordinary.legacy.C.session.s3.title",
+      "text": "寻找灵感"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s3/第1轮.user-message",
+      "text": "今天想和你聊聊“寻找灵感”。你愿意先听我说吗？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s3/第1轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s3/第1轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s3/第1轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s3/第1轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s3/第1轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s3/第1轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s3/第1轮.choice.compare-options.label",
+      "text": "分析两种可能"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s3/第1轮.choice.compare-options.player-reply",
+      "text": "我们比较两种做法的收益和风险，再一起选择。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s3/第1轮.choice.compare-options.user-reply",
+      "text": "你考虑得很周到，我想继续听。"
+    },
+    {
+      "id": "ordinary.legacy.C.session.s4.title",
+      "text": "描述画面"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第1轮.user-message",
+      "text": "今天想和你聊聊“描述画面”。你愿意先听我说吗？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第1轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第1轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第1轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第1轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第1轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第1轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第2轮.user-message",
+      "text": "关于“描述画面”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第2轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第2轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第2轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第2轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第2轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第2轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第2轮.choice.compare-options.label",
+      "text": "分析两种可能"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第2轮.choice.compare-options.player-reply",
+      "text": "我们比较两种做法的收益和风险，再一起选择。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第2轮.choice.compare-options.user-reply",
+      "text": "你考虑得很周到，我想继续听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第2轮.choice.end-session.label",
+      "text": "暂时结束本次会话"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第2轮.choice.end-session.player-reply",
+      "text": "今天先整理到这里，下次再继续。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s4/第2轮.choice.end-session.user-reply",
+      "text": "谢谢你陪我，下一次会话再见。"
+    },
+    {
+      "id": "ordinary.legacy.C.session.s5.title",
+      "text": "取一个名字"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第1轮.user-message",
+      "text": "今天想和你聊聊“取一个名字”。你愿意先听我说吗？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第1轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第1轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第1轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第1轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第1轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第1轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第1轮.choice.compare-options.label",
+      "text": "分析两种可能"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第1轮.choice.compare-options.player-reply",
+      "text": "我们比较两种做法的收益和风险，再一起选择。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第1轮.choice.compare-options.user-reply",
+      "text": "你考虑得很周到，我想继续听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第1轮.choice.end-session.label",
+      "text": "暂时结束本次会话"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第1轮.choice.end-session.player-reply",
+      "text": "今天先整理到这里，下次再继续。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第1轮.choice.end-session.user-reply",
+      "text": "谢谢你陪我，下一次会话再见。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第2轮.user-message",
+      "text": "关于“取一个名字”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第2轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第2轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第2轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第2轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第2轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s5/第2轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.session.s6.title",
+      "text": "安排创作"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第1轮.user-message",
+      "text": "今天想和你聊聊“安排创作”。你愿意先听我说吗？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第1轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第1轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第1轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第1轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第1轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第1轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第2轮.user-message",
+      "text": "关于“安排创作”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第2轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第2轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第2轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第2轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第2轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第2轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第2轮.choice.compare-options.label",
+      "text": "分析两种可能"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第2轮.choice.compare-options.player-reply",
+      "text": "我们比较两种做法的收益和风险，再一起选择。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第2轮.choice.compare-options.user-reply",
+      "text": "你考虑得很周到，我想继续听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第3轮.user-message",
+      "text": "关于“安排创作”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第3轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第3轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第3轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第3轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第3轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第3轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第3轮.choice.end-session.label",
+      "text": "暂时结束本次会话"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第3轮.choice.end-session.player-reply",
+      "text": "今天先整理到这里，下次再继续。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s6/第3轮.choice.end-session.user-reply",
+      "text": "谢谢你陪我，下一次会话再见。"
+    },
+    {
+      "id": "ordinary.legacy.C.session.s7.title",
+      "text": "修改草稿"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第1轮.user-message",
+      "text": "今天想和你聊聊“修改草稿”。你愿意先听我说吗？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第1轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第1轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第1轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第1轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第1轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第1轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第1轮.choice.compare-options.label",
+      "text": "分析两种可能"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第1轮.choice.compare-options.player-reply",
+      "text": "我们比较两种做法的收益和风险，再一起选择。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第1轮.choice.compare-options.user-reply",
+      "text": "你考虑得很周到，我想继续听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第2轮.user-message",
+      "text": "关于“修改草稿”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第2轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第2轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第2轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第2轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第2轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第2轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第2轮.choice.end-session.label",
+      "text": "暂时结束本次会话"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第2轮.choice.end-session.player-reply",
+      "text": "今天先整理到这里，下次再继续。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第2轮.choice.end-session.user-reply",
+      "text": "谢谢你陪我，下一次会话再见。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第3轮.user-message",
+      "text": "关于“修改草稿”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第3轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第3轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第3轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第3轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第3轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第3轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第3轮.choice.compare-options.label",
+      "text": "分析两种可能"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第3轮.choice.compare-options.player-reply",
+      "text": "我们比较两种做法的收益和风险，再一起选择。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s7/第3轮.choice.compare-options.user-reply",
+      "text": "你考虑得很周到，我想继续听。"
+    },
+    {
+      "id": "ordinary.legacy.C.session.s8.title",
+      "text": "比较版本"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第1轮.user-message",
+      "text": "今天想和你聊聊“比较版本”。你愿意先听我说吗？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第1轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第1轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第1轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第1轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第1轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第1轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第1轮.choice.end-session.label",
+      "text": "暂时结束本次会话"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第1轮.choice.end-session.player-reply",
+      "text": "今天先整理到这里，下次再继续。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第1轮.choice.end-session.user-reply",
+      "text": "谢谢你陪我，下一次会话再见。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第2轮.user-message",
+      "text": "关于“比较版本”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第2轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第2轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第2轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第2轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第2轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第2轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第2轮.choice.compare-options.label",
+      "text": "分析两种可能"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第2轮.choice.compare-options.player-reply",
+      "text": "我们比较两种做法的收益和风险，再一起选择。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第2轮.choice.compare-options.user-reply",
+      "text": "你考虑得很周到，我想继续听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第3轮.user-message",
+      "text": "关于“比较版本”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第3轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第3轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第3轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第3轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第3轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第3轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第4轮.user-message",
+      "text": "关于“比较版本”，我们已经整理了前面的想法。第4个问题：接下来该怎样具体行动？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第4轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第4轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第4轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第4轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第4轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第4轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第4轮.choice.compare-options.label",
+      "text": "分析两种可能"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第4轮.choice.compare-options.player-reply",
+      "text": "我们比较两种做法的收益和风险，再一起选择。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第4轮.choice.compare-options.user-reply",
+      "text": "你考虑得很周到，我想继续听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第4轮.choice.end-session.label",
+      "text": "暂时结束本次会话"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第4轮.choice.end-session.player-reply",
+      "text": "今天先整理到这里，下次再继续。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s8/第4轮.choice.end-session.user-reply",
+      "text": "谢谢你陪我，下一次会话再见。"
+    },
+    {
+      "id": "ordinary.legacy.C.session.s9.title",
+      "text": "准备展示"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第1轮.user-message",
+      "text": "今天想和你聊聊“准备展示”。你愿意先听我说吗？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第1轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第1轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第1轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第1轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第1轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第1轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第1轮.choice.compare-options.label",
+      "text": "分析两种可能"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第1轮.choice.compare-options.player-reply",
+      "text": "我们比较两种做法的收益和风险，再一起选择。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第1轮.choice.compare-options.user-reply",
+      "text": "你考虑得很周到，我想继续听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第2轮.user-message",
+      "text": "关于“准备展示”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第2轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第2轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第2轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第2轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第2轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第2轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第3轮.user-message",
+      "text": "关于“准备展示”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第3轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第3轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第3轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第3轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第3轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第3轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第3轮.choice.compare-options.label",
+      "text": "分析两种可能"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第3轮.choice.compare-options.player-reply",
+      "text": "我们比较两种做法的收益和风险，再一起选择。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第3轮.choice.compare-options.user-reply",
+      "text": "你考虑得很周到，我想继续听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第3轮.choice.end-session.label",
+      "text": "暂时结束本次会话"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第3轮.choice.end-session.player-reply",
+      "text": "今天先整理到这里，下次再继续。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第3轮.choice.end-session.user-reply",
+      "text": "谢谢你陪我，下一次会话再见。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第4轮.user-message",
+      "text": "关于“准备展示”，我们已经整理了前面的想法。第4个问题：接下来该怎样具体行动？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第4轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第4轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第4轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第4轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第4轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s9/第4轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.session.s10.title",
+      "text": "分享作品"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第1轮.user-message",
+      "text": "今天想和你聊聊“分享作品”。你愿意先听我说吗？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第1轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第1轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第1轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第1轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第1轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第1轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第2轮.user-message",
+      "text": "关于“分享作品”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第2轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第2轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第2轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第2轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第2轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第2轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第2轮.choice.compare-options.label",
+      "text": "分析两种可能"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第2轮.choice.compare-options.player-reply",
+      "text": "我们比较两种做法的收益和风险，再一起选择。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第2轮.choice.compare-options.user-reply",
+      "text": "你考虑得很周到，我想继续听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第2轮.choice.end-session.label",
+      "text": "暂时结束本次会话"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第2轮.choice.end-session.player-reply",
+      "text": "今天先整理到这里，下次再继续。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第2轮.choice.end-session.user-reply",
+      "text": "谢谢你陪我，下一次会话再见。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第3轮.user-message",
+      "text": "关于“分享作品”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第3轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第3轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第3轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第3轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第3轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第3轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第4轮.user-message",
+      "text": "关于“分享作品”，我们已经整理了前面的想法。第4个问题：接下来该怎样具体行动？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第4轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第4轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第4轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第4轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第4轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第4轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第4轮.choice.compare-options.label",
+      "text": "分析两种可能"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第4轮.choice.compare-options.player-reply",
+      "text": "我们比较两种做法的收益和风险，再一起选择。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第4轮.choice.compare-options.user-reply",
+      "text": "你考虑得很周到，我想继续听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第5轮.user-message",
+      "text": "关于“分享作品”，我们已经整理了前面的想法。第5个问题：接下来该怎样具体行动？"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第5轮.choice.listen.label",
+      "text": "先听她说"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第5轮.choice.listen.player-reply",
+      "text": "先说说现在的情况，我会认真听。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第5轮.choice.listen.user-reply",
+      "text": "好，我们从最具体的一件事说起。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第5轮.choice.suggest-small-step.label",
+      "text": "给出一个小步骤"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第5轮.choice.suggest-small-step.player-reply",
+      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第5轮.choice.suggest-small-step.user-reply",
+      "text": "这样容易开始，我愿意试试。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第5轮.choice.end-session.label",
+      "text": "暂时结束本次会话"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第5轮.choice.end-session.player-reply",
+      "text": "今天先整理到这里，下次再继续。"
+    },
+    {
+      "id": "ordinary.legacy.C.node.s10/第5轮.choice.end-session.user-reply",
+      "text": "谢谢你陪我，下一次会话再见。"
+    }
+  ]
+}

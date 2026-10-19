@@ -1,3 +1,5 @@
+> 文本迁移后：本文件是历史说明/阅读参考，不再是正式文案作者源。唯一正式文本位于 `Assets/_Game/Data/Narrative/Resources/NarrativeText/*.json`；绑定与编辑规范见 `Assets/_Game/Data/Narrative/README.md`。未审 Argon 候选未接入。
+
 # Narrative runtime contract
 
 The host owns money, tasks, training, memory and save transactions. This module owns dialogue choices and emits stable effects. It never submits requests, grants resources or changes memory directly.

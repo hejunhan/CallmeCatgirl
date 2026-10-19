@@ -34,12 +34,12 @@ namespace CallmeCatgirl.Gameplay.Narrative
         {
             get
             {
-                var contacts = new List<NarrativeContact> { new NarrativeContact(DoctorId, "博士 · 置顶", TutorialSummary(),
+                var contacts = new List<NarrativeContact> { new NarrativeContact(DoctorId, T("session.contact.doctor.name"), TutorialSummary(),
                     state.Tutorial == TutorialStep.Opening || state.PendingStageNodes.Any(n => StageNumber(n) <= 2)) };
                 if (state.PendingStageNodes.Any(n => StageNumber(n) >= 3) || state.MemoryCount >= 3)
-                    contacts.Add(new NarrativeContact(StageContactId, "一位老用户", "同一句问候，不同的夜晚", state.PendingStageNodes.Any(n => StageNumber(n) >= 3)));
+                    contacts.Add(new NarrativeContact(StageContactId, T("session.contact.old-friend.name"), T("session.contact.old-friend.summary"), state.PendingStageNodes.Any(n => StageNumber(n) >= 3)));
                 if (state.CompanionUnlocked)
-                    contacts.Add(new NarrativeContact(CompanionId, "林栖", state.CompanionMeetingReady ? "有一封给你的来信" : state.CompanionBeat <= 7 ? "她也有自己的生活 · 下次工作结算后再会" : "山上的信号仍然亮着", state.CompanionMeetingReady));
+                    contacts.Add(new NarrativeContact(CompanionId, T("session.contact.companion.name"), state.CompanionMeetingReady ? T("session.contact.companion.ready") : state.CompanionBeat <= 7 ? T("session.contact.companion.working") : T("session.contact.companion.waiting"), state.CompanionMeetingReady));
                 return contacts.AsReadOnly();
             }
         }
@@ -77,8 +77,8 @@ namespace CallmeCatgirl.Gameplay.Narrative
                     Enqueue(new NarrativeEffect { EventId = "narrative-architecture-" + stage,
                         Kind = NarrativeEffectKind.IntroduceArchitecture, MemoryCount = stage,
                         ArchitectureId = stage == 1 ? "baseline" : stage == 2 ? "alternate" : "architecture-slot-3",
-                        Title = stage == 1 ? "Transformer" : stage == 2 ? "MoE Transformer" : "协调状态架构",
-                        Description = stage == 1 ? "先用一个语料点训练第一台模型。" : stage == 2 ? "新架构已开放；训练页可比较并切换，不会替你消耗语料。" : "协调状态架构已开放；先看参数与占用，再决定是否训练。" });
+                        Title = stage == 1 ? T("session.architecture.transformer.title") : stage == 2 ? T("session.architecture.moe.title") : T("session.architecture.coordinated.title"),
+                        Description = stage == 1 ? T("session.architecture.transformer.description") : stage == 2 ? T("session.architecture.moe.description") : T("session.architecture.coordinated.description") });
             }
             state.MemoryCount = completedMemoryCount; Publish(); return true;
         }
@@ -93,7 +93,7 @@ namespace CallmeCatgirl.Gameplay.Narrative
             state.LastTrainingRequestId = requestId;
             state.Tutorial = TutorialStep.AwaitDoctorOrder;
             Enqueue(RequestEffect("narrative-queue-doctor-first", NarrativeEffectKind.QueueDoctorRequest,
-                FirstDoctorRequestId, DoctorId, "博士的第一份正式委托", "请把这段观测记录整理成一句清楚的话。这次不是连通测试，是正式委托。", 1));
+                FirstDoctorRequestId, DoctorId, T("session.request.doctor-first.title"), T("session.request.doctor-first.description"), 1));
             Show("doctor.first-order"); Publish(); return true;
         }
         public bool ObserveRequestSettled(string requestId)
@@ -111,7 +111,7 @@ namespace CallmeCatgirl.Gameplay.Narrative
             {
                 state.Tutorial = TutorialStep.AwaitOrdinaryOrder;
                 Enqueue(RequestEffect("narrative-queue-ordinary-first", NarrativeEffectKind.QueueOrdinaryRequest,
-                    FirstOrdinaryRequestId, "narrative-first-visitor", "第一次外部委托", "你好，博士说你已经可以帮忙了。能替我写一句给夜班同事的问候吗？", 1));
+                    FirstOrdinaryRequestId, "narrative-first-visitor", T("session.request.ordinary-first.title"), T("session.request.ordinary-first.description"), 1));
                 Show("doctor.first-visitor");
             }
             else if (state.Tutorial == TutorialStep.AwaitOrdinaryOrder && requestId == FirstOrdinaryRequestId)
@@ -124,7 +124,7 @@ namespace CallmeCatgirl.Gameplay.Narrative
             if (funds < 0 || upgradeCost <= 0 || state.Tutorial != TutorialStep.AwaitUpgradeFunds || funds < upgradeCost || state.EndingRequested) return false;
             state.Tutorial = TutorialStep.Complete;
             Enqueue(new NarrativeEffect { EventId = "narrative-first-upgrade-hint", Kind = NarrativeEffectKind.ShowUpgradeHint,
-                Title = "可以扩充内存了", Description = "钱已经够了。打开内存升级，安装完成后再结算；想跳过操作也可以。" });
+                Title = T("session.upgrade-hint.title"), Description = T("session.upgrade-hint.description") });
             Show("doctor.upgrade"); Publish(); return true;
         }
         public bool UnlockCompanionOpportunity()
@@ -189,9 +189,9 @@ namespace CallmeCatgirl.Gameplay.Narrative
                 Remember("opening", choiceId); state.Tutorial = TutorialStep.AwaitTraining;
                 Enqueue(new NarrativeEffect { EventId = "narrative-opening-corpus", Kind = NarrativeEffectKind.GrantCorpus,
                     ConversationId = DoctorId, CorpusDomain = choiceId == "mew" ? NarrativeCorpusDomain.Writing : NarrativeCorpusDomain.Reasoning,
-                    CorpusPoints = 1, Title = "第一份语料", Description = choiceId == "mew" ? "博士记下了你的第一声喵。" : "博士记下了你的第一条完整回答。" });
+                    CorpusPoints = 1, Title = T("session.corpus.first.title"), Description = choiceId == "mew" ? T("session.corpus.first.mew") : T("session.corpus.first.accept") });
                 Enqueue(new NarrativeEffect { EventId = "narrative-reveal-center", Kind = NarrativeEffectKind.RevealCenterMemory,
-                    RequiredCells = 1, MemoryCount = 0, Title = "中心的一格", Description = "博士打开了中心的一个运算格；这不增加物理内存条数。" });
+                    RequiredCells = 1, MemoryCount = 0, Title = T("session.center-cell.title"), Description = T("session.center-cell.description") });
                 Show("doctor.train");
             }
             else if (node.StartsWith("stage.", StringComparison.Ordinal) && !node.EndsWith(".after", StringComparison.Ordinal))
@@ -221,12 +221,12 @@ namespace CallmeCatgirl.Gameplay.Narrative
             }
             else if (node == "ending.choose") BeginEnding(choiceId == "leave" ? NarrativeEndingReason.Companion : state.PolicyEnding);
             else if (node == "ending.low" && choiceId == "remember")
-            { state.FalseMemoryErased = true; state.Notice = "你没有"; }
+            { state.FalseMemoryErased = true; state.Notice = T("session.false-memory.notice"); }
             else if (node.StartsWith("ending.", StringComparison.Ordinal) && choiceId == "curtain")
             {
                 state.EndingClosed = true; state.ConversationVisible = false;
                 Enqueue(new NarrativeEffect { EventId = "narrative-end-run", Kind = NarrativeEffectKind.EndRun,
-                    EndingReason = state.EndingReason, Title = EndingTitle(state.EndingReason), Description = "落幕" });
+                    EndingReason = state.EndingReason, Title = EndingTitle(state.EndingReason), Description = T("session.ending.curtain") });
             }
             else if (node.StartsWith("ending.", StringComparison.Ordinal))
             { Remember(node, choiceId); Show(node + ".closed." + choiceId); }
@@ -288,12 +288,12 @@ namespace CallmeCatgirl.Gameplay.Narrative
         {
             switch (state.Tutorial)
             {
-                case TutorialStep.Opening: return "第一句测试消息";
-                case TutorialStep.AwaitTraining: return "用 1 点语料开始首训";
-                case TutorialStep.AwaitDoctorOrder: return "第一份正式委托 · 1 格";
-                case TutorialStep.AwaitOrdinaryOrder: return "第一次接待外部用户";
-                case TutorialStep.AwaitUpgradeFunds: return "继续接单，攒够扩容的钱";
-                default: return "你的创造者，现在也是搭档";
+                case TutorialStep.Opening: return T("session.tutorial.opening");
+                case TutorialStep.AwaitTraining: return T("session.tutorial.training");
+                case TutorialStep.AwaitDoctorOrder: return T("session.tutorial.doctor-order");
+                case TutorialStep.AwaitOrdinaryOrder: return T("session.tutorial.ordinary-order");
+                case TutorialStep.AwaitUpgradeFunds: return T("session.tutorial.upgrade-funds");
+                default: return T("session.tutorial.complete");
             }
         }
         private static NarrativeSaveData Copy(NarrativeSaveData s) => new NarrativeSaveData

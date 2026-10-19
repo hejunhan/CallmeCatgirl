@@ -1,3 +1,5 @@
+> 文本迁移后：本文件是历史说明/阅读参考，不再是正式文案作者源。唯一正式文本位于 `Assets/_Game/Data/Narrative/Resources/NarrativeText/*.json`；绑定与编辑规范见 `Assets/_Game/Data/Narrative/README.md`。未审 Argon 候选未接入。
+
 # 当前 Unity 实现叙事终稿 · Web 对齐用
 
 这是当前 Unity 实现的完整可读终稿，依据 Argon 素材编辑并以实际目录、选项处理和状态转移为准，**不是 Argon 原稿或待实现提案**。下方引文、选项、标题与说话者逐字取自当前实现；「条件」「后续」属于对实现的说明。稳定 ID 用于 Web 对齐，不替代正文。

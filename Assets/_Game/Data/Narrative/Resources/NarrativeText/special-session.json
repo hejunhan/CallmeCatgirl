@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "session.contact.doctor.name",
+      "text": "博士 · 置顶"
+    },
+    {
+      "id": "session.contact.old-friend.name",
+      "text": "一位老用户"
+    },
+    {
+      "id": "session.contact.old-friend.summary",
+      "text": "同一句问候，不同的夜晚"
+    },
+    {
+      "id": "session.contact.companion.name",
+      "text": "林栖"
+    },
+    {
+      "id": "session.contact.companion.ready",
+      "text": "有一封给你的来信"
+    },
+    {
+      "id": "session.contact.companion.working",
+      "text": "她也有自己的生活 · 下次工作结算后再会"
+    },
+    {
+      "id": "session.contact.companion.waiting",
+      "text": "山上的信号仍然亮着"
+    },
+    {
+      "id": "session.architecture.transformer.title",
+      "text": "Transformer"
+    },
+    {
+      "id": "session.architecture.moe.title",
+      "text": "MoE Transformer"
+    },
+    {
+      "id": "session.architecture.coordinated.title",
+      "text": "协调状态架构"
+    },
+    {
+      "id": "session.architecture.transformer.description",
+      "text": "先用一个语料点训练第一台模型。"
+    },
+    {
+      "id": "session.architecture.moe.description",
+      "text": "新架构已开放；训练页可比较并切换，不会替你消耗语料。"
+    },
+    {
+      "id": "session.architecture.coordinated.description",
+      "text": "协调状态架构已开放；先看参数与占用，再决定是否训练。"
+    },
+    {
+      "id": "session.request.doctor-first.title",
+      "text": "博士的第一份正式委托"
+    },
+    {
+      "id": "session.request.doctor-first.description",
+      "text": "请把这段观测记录整理成一句清楚的话。这次不是连通测试，是正式委托。"
+    },
+    {
+      "id": "session.request.ordinary-first.title",
+      "text": "第一次外部委托"
+    },
+    {
+      "id": "session.request.ordinary-first.description",
+      "text": "你好，博士说你已经可以帮忙了。能替我写一句给夜班同事的问候吗？"
+    },
+    {
+      "id": "session.upgrade-hint.title",
+      "text": "可以扩充内存了"
+    },
+    {
+      "id": "session.upgrade-hint.description",
+      "text": "钱已经够了。打开内存升级，安装完成后再结算；想跳过操作也可以。"
+    },
+    {
+      "id": "session.corpus.first.title",
+      "text": "第一份语料"
+    },
+    {
+      "id": "session.corpus.first.mew",
+      "text": "博士记下了你的第一声喵。"
+    },
+    {
+      "id": "session.corpus.first.accept",
+      "text": "博士记下了你的第一条完整回答。"
+    },
+    {
+      "id": "session.center-cell.title",
+      "text": "中心的一格"
+    },
+    {
+      "id": "session.center-cell.description",
+      "text": "博士打开了中心的一个运算格；这不增加物理内存条数。"
+    },
+    {
+      "id": "session.false-memory.notice",
+      "text": "你没有"
+    },
+    {
+      "id": "session.ending.curtain",
+      "text": "落幕"
+    },
+    {
+      "id": "session.tutorial.opening",
+      "text": "第一句测试消息"
+    },
+    {
+      "id": "session.tutorial.training",
+      "text": "用 1 点语料开始首训"
+    },
+    {
+      "id": "session.tutorial.doctor-order",
+      "text": "第一份正式委托 · 1 格"
+    },
+    {
+      "id": "session.tutorial.ordinary-order",
+      "text": "第一次接待外部用户"
+    },
+    {
+      "id": "session.tutorial.upgrade-funds",
+      "text": "继续接单，攒够扩容的钱"
+    },
+    {
+      "id": "session.tutorial.complete",
+      "text": "你的创造者，现在也是搭档"
+    }
+  ]
+}

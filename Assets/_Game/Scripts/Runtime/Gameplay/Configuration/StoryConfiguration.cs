@@ -14,8 +14,13 @@ namespace CallmeCatgirl.Gameplay
         [Tooltip("普通对话结束率：以下默认值均为暂定调参；优秀只减缓本轮增长，剧情不使用此规则。")]
         public OrdinaryConversationPolicy OrdinaryLifecycle = new OrdinaryConversationPolicy();
 
+        // Formal asset text is a generated cache; the JSON library is the authoring source.
+        private void OnEnable() => RefreshTextCache();
+        public void RefreshTextCache() => StoryTextBindings.Refresh(this);
+
         public void Validate(IEnumerable<string> requestIds)
         {
+            RefreshTextCache();
             if (OrdinaryLifecycle == null) throw new InvalidOperationException("普通对话结束率配置缺失。");
             OrdinaryLifecycle.Validate();
             var tasks = new HashSet<string>(requestIds);

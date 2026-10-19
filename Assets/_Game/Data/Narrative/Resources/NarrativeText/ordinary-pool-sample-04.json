@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "ordinary.pool.sample-04.display-name",
+      "text": "挑封面的人"
+    },
+    {
+      "id": "ordinary.pool.sample-04.initial-history",
+      "text": "用户：帮我从这两张封面里挑一张。助手：都可以。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.session.sample-04-s1.title",
+      "text": "随便不是答案"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s1/r1.user-message",
+      "text": "两张封面让你帮我挑，你回个“都可以”是什么意思？我要是自己选得出来还问你干嘛？"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s1/r1.choice.admit-missing-evidence.label",
+      "text": "承认没给依据"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s1/r1.choice.admit-missing-evidence.player-reply",
+      "text": "刚才只说了结论，没给依据，确实帮不上忙。先按你准备把封面发在哪儿来选。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s1/r1.choice.admit-missing-evidence.user-reply",
+      "text": "这个思路有用，先看在哪儿发，我就知道该比什么了。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s1/r1.choice.ask-main-focus.label",
+      "text": "问核心展示点"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s1/r1.choice.ask-main-focus.player-reply",
+      "text": "是我说得太省事了。你最希望别人第一眼在封面上看清什么？字还是画面？"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s1/r1.choice.ask-main-focus.user-reply",
+      "text": "这么问还差不多，我主要还是怕别人看不清主题。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s1/r1.choice.offer-readability-standard.label",
+      "text": "给可读性标准"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s1/r1.choice.offer-readability-standard.player-reply",
+      "text": "可以先比标题的可读性：把两张缩小，看看哪张的主题一眼就认得出来。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s1/r1.choice.offer-readability-standard.user-reply",
+      "text": "这样就有个标准了，总比盯着两张图来回换强。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.session.sample-04-s2.title",
+      "text": "随便不是答案"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s2/r1.user-message",
+      "text": "发给读书会群里的，发出去会缩成聊天小图。白底那张字大，黑底那张图好看。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s2/r1.choice.check-thumbnail.label",
+      "text": "建议看缩略图"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s2/r1.choice.check-thumbnail.player-reply",
+      "text": "把两张图缩到群聊里显示的大小，比一比哪张标题更清楚。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s2/r1.choice.check-thumbnail.user-reply",
+      "text": "试了一下，白底那张的标题确实更好认。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s2/r1.choice.suggest-clear-typography.label",
+      "text": "建议白底大字"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s2/r1.choice.suggest-clear-typography.player-reply",
+      "text": "选白底大字那张。群聊小图大家划得快，先让人看清是什么活动最要紧。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s2/r1.choice.suggest-clear-typography.user-reply",
+      "text": "有道理，群里消息刷得快，字大确实更管用。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s2/r1.choice.compare-poster-purposes.label",
+      "text": "比较两种用途"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s2/r1.choice.compare-poster-purposes.player-reply",
+      "text": "小图先让人认出主题，白底大字更合适；黑底那张可以留给愿意点开细看的人。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s2/r1.choice.compare-poster-purposes.user-reply",
+      "text": "这么一拆就明白了，群里还是先顾着认字吧。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.session.sample-04-s3.title",
+      "text": "随便不是答案"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s3/r1.user-message",
+      "text": "那就先用白底大字的。你刚才早这么说不就好了。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s3/r1.choice.own-expression-problem.label",
+      "text": "认领表达问题"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s3/r1.choice.own-expression-problem.player-reply",
+      "text": "对，刚才该先问用途，再给选择理由。这次是群聊小图，所以先保住标题可读性。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s3/r1.choice.own-expression-problem.user-reply",
+      "text": "行了，图定下来就行，我发群里去了。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s3/r1.choice.restate-evidence-briefly.label",
+      "text": "短句回收依据"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s3/r1.choice.restate-evidence-briefly.player-reply",
+      "text": "嗯，这次就按一个标准定：缩成聊天小图，还能看清标题。白底大字更合适。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s3/r1.choice.restate-evidence-briefly.user-reply",
+      "text": "总算敲定了，不纠结了。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s3/r1.choice.restrained-self-deprecation.label",
+      "text": "克制自嘲"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s3/r1.choice.restrained-self-deprecation.player-reply",
+      "text": "我刚才把选择题又递回给你了。现在这票投白底，理由是小图里字清楚。"
+    },
+    {
+      "id": "ordinary.pool.sample-04.node.sample-04-s3/r1.choice.restrained-self-deprecation.user-reply",
+      "text": "算你圆回来了，我去发图了。"
+    }
+  ]
+}

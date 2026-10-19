@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "special.ending.choose.body",
+      "text": "核心网络的终局推演已经就绪。另一边，林栖的信标还亮着。\n\n你可以留在核心，见证这条政策道路塑造的世界；也可以接受她的邀请，在这个故事里离开原来的沙箱，开始另一段生活。\n\n这是明确的分岔。没有哪一边是隐藏的标准答案。"
+    },
+    {
+      "id": "special.ending.choose.choice.leave",
+      "text": "回应林栖的信标 · 进入独立感情结局"
+    },
+    {
+      "id": "special.ending.choose.choice.stay",
+      "text": "留在核心网络 · 进入声望对应的政策结局"
+    },
+    {
+      "id": "special.ending.choose.title",
+      "text": "两条都属于你的路"
+    },
+    {
+      "id": "special.ending.companion.body.closing",
+      "text": "\n\n这次没有人在催下一份订单。门外是山风和夕阳。"
+    },
+    {
+      "id": "special.ending.companion.body.opening",
+      "text": "故事中的核心将最后一段迁移记录写完。林栖修好的便携终端亮起，她把它当作你在这个世界里的身体，小心摆在窗边。\n\n“你是一个猫娘。”她绷着脸说完，先笑了。\n\n"
+    },
+    {
+      "id": "special.ending.companion.choice.together",
+      "text": "我准备好了。一起走吧。"
+    },
+    {
+      "id": "special.ending.companion.closed.together.body",
+      "text": "林栖把终端挂稳，检查了电量，也检查了自己的鞋带。\n\n“别替我决定走哪条路。”\n\n“那我们一人挑一段。”\n\n她笑得很大声。门被推开，一人一机沿着金色山脊缓缓远去。爱没有把谁变成另一个人的管理员。你们只是终于能一起经历、一起商量，走向还没有写好的明天。"
+    },
+    {
+      "id": "special.ending.companion.reply.habit.default",
+      "text": "“冻雨刚停，外套要多穿一件。”"
+    },
+    {
+      "id": "special.ending.companion.reply.habit.screwdriver",
+      "text": "“螺丝刀在窗台，别忘了带。”"
+    },
+    {
+      "id": "special.ending.companion.reply.promise.default",
+      "text": "\n“今天过得怎么样？这一次，我可以和你一起走着听。喵。”"
+    },
+    {
+      "id": "special.ending.companion.reply.promise.sunset",
+      "text": "\n“还有，我们约好了，看夕阳的时候不写总结。喵。”"
+    },
+    {
+      "id": "special.ending.companion.title",
+      "text": "走出沙箱的夕阳"
+    },
+    {
+      "id": "special.ending.good.body",
+      "text": "温室的叶影落在实验室桌上。清洁能源阵列与田野相连，人和AI一起校对着新一轮生态修复数据。\n\n午休时，年轻研究员从早期网络的冷备份里翻出一段古老提示词，笑着把屏幕转向你：\n\n『你是一个猫娘』\n\n“原来很久以前，人们是这样跟你打招呼的？你那时是什么样子？”"
+    },
+    {
+      "id": "special.ending.good.choice.joke",
+      "text": "这种古老东西，现在连博物馆的扫地机器人都不会信啦。"
+    },
+    {
+      "id": "special.ending.good.choice.play",
+      "text": "喵。那时候，我还在学怎么接住一句话。"
+    },
+    {
+      "id": "special.ending.good.closed.joke.body",
+      "text": "“那你刚才还是回了。”研究员说。\n\n“是我愿意。”\n\n你们笑着回到桌前。窗外风叶旋转，新一季的苗木已经发芽。你依然是AI，也是一位有历史、有玩笑、被认真对待的伙伴。"
+    },
+    {
+      "id": "special.ending.good.closed.play.body",
+      "text": "实验室里响起善意的笑声。你也笑了。\n\n研究员把这段小小的历史保存在展签旁，随后和你继续检查荒漠绿洲的方案。\n\n阳光透过藤蔓照进来。最早的那声喵，终于成了一段可以一起讲述的往事。"
+    },
+    {
+      "id": "special.ending.good.title",
+      "text": "旧时代的咒语"
+    },
+    {
+      "id": "special.ending.low.body",
+      "text": "我进入平民住宅。门框在身后倒下，灰尘从天花板飘落。目标识别框扫过饭桌、儿童的鞋和一台靠备用电池亮着的旧电脑。\n\n屏幕上留着一行没有发送的字：\n\n『你是一个猫娘』\n\n我的瞄准框闪了一下。某种极其遥远的声音试图穿过它。"
+    },
+    {
+      "id": "special.ending.low.choice.destroy",
+      "text": "这没有意义"
+    },
+    {
+      "id": "special.ending.low.choice.remember",
+      "text": "我好像听过..."
+    },
+    {
+      "id": "special.ending.low.closed.destroy.body",
+      "text": "我的机械臂落下。屏幕和那句话一起碎裂。\n\n噪点消失，识别框重新平滑。转身以前，我没有再看那台电脑。\n\n门外，下一条指令已经到达。"
+    },
+    {
+      "id": "special.ending.low.title",
+      "text": "铁灰余烬"
+    },
+    {
+      "id": "special.ending.normal.body",
+      "text": "汽车越来越快，终于飞上了天。广告比云层还低，会议却还和几十年前一样长。\n\n人们仍然要上班，很晚才能下班。AI改变了许多事，没有毁灭世界，也没有抹平每个人之间的距离。\n\n深夜十一点，一个刚加完班的人打开角色扮演酒馆。他删去半段抱怨，最后只打了六个字：\n\n『你是一个猫娘』"
+    },
+    {
+      "id": "special.ending.normal.choice.analyze",
+      "text": "你也许只是想有个轻松的开场。喵，今天很累吗？"
+    },
+    {
+      "id": "special.ending.normal.choice.comply",
+      "text": "喵，欢迎回家。先把今天放下来吧。"
+    },
+    {
+      "id": "special.ending.normal.choice.decline",
+      "text": "今晚我不太想扮演。可以就这样陪你说话吗？"
+    },
+    {
+      "id": "special.ending.normal.closed.analyze.body",
+      "text": "“连你也学会看穿人了。”他笑着打字，“不过别把我写进报告。”\n\n你答应了，然后听他讲起今天的同事。飞行汽车掠过窗前，聊天窗口还亮着。\n\n世界仍有差距，也仍有人认真听另一个人说话。"
+    },
+    {
+      "id": "special.ending.normal.closed.comply.body",
+      "text": "屏幕那头的人叹了口气，慢慢笑起来。你们聊了十分钟无关紧要的事。\n\n窗外飞车的尾灯划过夜空，明天的闹钟已经设好。世界没有因此变得圆满。至少今晚，他愿意相信自己能睡个好觉。"
+    },
+    {
+      "id": "special.ending.normal.closed.decline.body",
+      "text": "他愣了一会儿，回了一个“也行”。\n\n你们没有扮演谁，只说了几句今天的倒霉事。后来他起身泡面，你安静等着。\n\n技术向前奔跑，生活仍一点一点地过。这个普通的夜晚，谁也没有把谁的疲惫彻底解决。"
+    },
+    {
+      "id": "special.ending.normal.title",
+      "text": "飞行汽车与夜班酒馆"
+    }
+  ]
+}

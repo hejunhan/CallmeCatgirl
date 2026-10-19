@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "ordinary.defaults.send-reply.label",
+      "text": "发送回复"
+    },
+    {
+      "id": "ordinary.defaults.send-reply.player-reply",
+      "text": "这是我的回复，希望能帮到你。"
+    },
+    {
+      "id": "ordinary.defaults.send-reply.user-reply",
+      "text": "谢谢，我收到了。"
+    }
+  ]
+}

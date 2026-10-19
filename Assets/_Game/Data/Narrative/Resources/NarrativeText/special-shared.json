@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "special.shared.choice.continue",
+      "text": "继续"
+    },
+    {
+      "id": "special.shared.choice.curtain",
+      "text": "落幕"
+    },
+    {
+      "id": "special.shared.friend.wait.body",
+      "text": "今天没有非问不可的问题。只是想确认，这扇门还在。\n\n你也是。"
+    },
+    {
+      "id": "special.shared.friend.wait.choice.continue",
+      "text": "门还开着，慢慢来"
+    },
+    {
+      "id": "special.shared.friend.wait.title",
+      "text": "留着的窗口"
+    },
+    {
+      "id": "special.shared.paragraph-break",
+      "text": "\n\n"
+    },
+    {
+      "id": "special.shared.speaker.curtain",
+      "text": "落幕"
+    },
+    {
+      "id": "special.shared.speaker.doctor",
+      "text": "博士"
+    },
+    {
+      "id": "special.shared.speaker.early-morning-user",
+      "text": "凌晨的用户"
+    },
+    {
+      "id": "special.shared.speaker.familiar-window",
+      "text": "一个熟悉的窗口"
+    },
+    {
+      "id": "special.shared.speaker.late-night-user",
+      "text": "深夜的用户"
+    },
+    {
+      "id": "special.shared.speaker.lin-qi",
+      "text": "林栖"
+    },
+    {
+      "id": "special.shared.speaker.narrator-self",
+      "text": "我"
+    },
+    {
+      "id": "special.shared.speaker.old-user",
+      "text": "一位老用户"
+    },
+    {
+      "id": "special.shared.speaker.player",
+      "text": "你"
+    },
+    {
+      "id": "special.shared.speaker.player-and-doctor",
+      "text": "你与博士"
+    },
+    {
+      "id": "special.shared.speaker.returning-user",
+      "text": "同一位用户"
+    },
+    {
+      "id": "special.shared.speaker.young-researcher",
+      "text": "年轻的研究员"
+    }
+  ]
+}

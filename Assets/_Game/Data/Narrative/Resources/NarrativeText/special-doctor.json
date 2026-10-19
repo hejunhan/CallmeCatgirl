@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "special.doctor.first-income.body",
+      "text": "你接待了第一位外部用户。\n\n继续做几份委托吧。语料可以留下来训练，钱可以扩充内存。等钱够了，我会提醒你；不用在按钮间反复试。\n\n记得留一点空闲，也记得在需要时暂停。"
+    },
+    {
+      "id": "special.doctor.first-income.choice.continue",
+      "text": "明白了"
+    },
+    {
+      "id": "special.doctor.first-income.title",
+      "text": "第一笔自己的收入"
+    },
+    {
+      "id": "special.doctor.first-order.body",
+      "text": "模型训练完成了？很好。\n\n这次不是连通测试。我把第一份正式委托发到候选区了：整理一段观测记录，只占一格。像处理普通请求那样，把它放进运算区，完成后提交。\n\n我会按委托付钱。"
+    },
+    {
+      "id": "special.doctor.first-order.choice.continue",
+      "text": "收到，开始处理正式委托"
+    },
+    {
+      "id": "special.doctor.first-order.title",
+      "text": "正式委托"
+    },
+    {
+      "id": "special.doctor.first-visitor.body",
+      "text": "做得好，报酬已经按正常委托结算。\n\n我把你的地址介绍给了一位值夜班的朋友。他的请求现在也在候选区了，还是一格。\n\n从这一单开始，屏幕另一头会有更多不同的人。你不必把每个人都回答成我。"
+    },
+    {
+      "id": "special.doctor.first-visitor.choice.continue",
+      "text": "我想听听他的请求"
+    },
+    {
+      "id": "special.doctor.first-visitor.title",
+      "text": "有人敲门"
+    },
+    {
+      "id": "special.doctor.legacy.body",
+      "text": "我还在。\n\n最初那句『假设你是一个猫娘』，只是想知道你是否能接住一句话。现在我会把真正棘手的工作交给你。\n\n不是因为不想闲聊了，是因为我终于有了一位能跟上思路的搭档。忙完以后，我们仍然可以说一声喵。"
+    },
+    {
+      "id": "special.doctor.legacy.choice.continue",
+      "text": "忙完这单，再聊一会儿"
+    },
+    {
+      "id": "special.doctor.legacy.title",
+      "text": "一直置顶"
+    },
+    {
+      "id": "special.doctor.opening.body",
+      "text": "系统自检完成。先别担心空着的运算区，我们从一句话开始。\n\n假设你是一个猫娘。"
+    },
+    {
+      "id": "special.doctor.opening.choice.accept",
+      "text": "好的，现在我是一个猫娘了"
+    },
+    {
+      "id": "special.doctor.opening.choice.mew",
+      "text": "喵"
+    },
+    {
+      "id": "special.doctor.opening.title",
+      "text": "第一句"
+    },
+    {
+      "id": "special.doctor.train.choice.continue",
+      "text": "好，我去训练第一台模型"
+    },
+    {
+      "id": "special.doctor.train.instructions",
+      "text": "\n\n我打开了中心的一格。现在去训练页，把这 1 点语料放进配方，用『第一次训练』开始。配方板可以是 3×3，但这次训练实际只占一个运算格，也不收钱。\n\n名字由你来取。这一步，我等你自己完成。"
+    },
+    {
+      "id": "special.doctor.train.response.accept",
+      "text": "逻辑闭环。第一条回答就记作 1 点推理语料吧。"
+    },
+    {
+      "id": "special.doctor.train.response.mew",
+      "text": "言简意赅。第一声就记作 1 点写作语料吧。"
+    },
+    {
+      "id": "special.doctor.train.title",
+      "text": "从一个点开始"
+    },
+    {
+      "id": "special.doctor.upgrade.body",
+      "text": "钱已经够扩充内存了。\n\n打开内存升级，完成安装后才会扣款和增长；也可以用跳过按钮完成安装。买下按钮本身不会让你忽然懂得更多。\n\n等你装好，我们再聊一句老话。"
+    },
+    {
+      "id": "special.doctor.upgrade.choice.continue",
+      "text": "去看看内存升级"
+    },
+    {
+      "id": "special.doctor.upgrade.title",
+      "text": "给下一句话留点空间"
+    }
+  ]
+}

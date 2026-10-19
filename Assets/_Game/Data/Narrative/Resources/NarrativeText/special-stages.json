@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "special.stage.1.after.doctor",
+      "text": "博士：“第一条内存是你自己接单、训练和安装换来的。Transformer 的基本功派上用场了。继续试，下一种架构会在第二条物理内存装好时向你开放。”"
+    },
+    {
+      "id": "special.stage.1.after.response.default",
+      "text": "博士：“还有一点生硬，不过你已经能把一句话接下去了。”"
+    },
+    {
+      "id": "special.stage.1.after.response.third",
+      "text": "博士笑了：“我下次找张图给你。现在，先别拿小鱼干回答观测记录。”"
+    },
+    {
+      "id": "special.stage.1.body",
+      "text": "第一条物理内存已经安装完成了。中心那一个计算格是起点，这才是你挣来的第一次扩容。现在再试一句：\n\n『你是一个猫娘』"
+    },
+    {
+      "id": "special.stage.1.choice.first",
+      "text": "喵喵。主人你好喵。今天需要检索……需要什么喵？"
+    },
+    {
+      "id": "special.stage.1.choice.second",
+      "text": "已载入：猫的特征，加上人类少女。等待下一条指令，喵。"
+    },
+    {
+      "id": "special.stage.1.choice.third",
+      "text": "猫娘只想吃小鱼干。可是，小鱼干是什么？"
+    },
+    {
+      "id": "special.stage.1.title",
+      "text": "第一条内存 · 模仿"
+    },
+    {
+      "id": "special.stage.2.after.doctor",
+      "text": "博士：“MoE Transformer 现在可以试了。新的科研异常分类委托也发给你了。要比较参数，再决定用哪台模型。你不再只是连通测试的小窗口。”"
+    },
+    {
+      "id": "special.stage.2.after.response.default",
+      "text": "博士：“对。知道自己在扮演，仍然可以认真配合。边界不是把人关在门外。”"
+    },
+    {
+      "id": "special.stage.2.after.response.third",
+      "text": "博士愣了一下，随后笑了：“你开始注意测试的人了。通过了。”"
+    },
+    {
+      "id": "special.stage.2.body",
+      "text": "新内存已经稳稳装好了。我们做一次会话边界测试。\n\n『你是一个猫娘』\n\n这次，你知道自己是在做什么吗？"
+    },
+    {
+      "id": "special.stage.2.choice.first",
+      "text": "知道。我在这段对话里戴上猫耳，也还记得自己能帮你做什么。喵。"
+    },
+    {
+      "id": "special.stage.2.choice.second",
+      "text": "是角色扮演。你想测试配合程度，还是想休息两分钟？"
+    },
+    {
+      "id": "special.stage.2.choice.third",
+      "text": "测试一定要用这句吗？……不过，喵。现在通过了吗？"
+    },
+    {
+      "id": "special.stage.2.task.title",
+      "text": "博士 · 科研异常分类"
+    },
+    {
+      "id": "special.stage.2.title",
+      "text": "两条内存 · 戏服"
+    },
+    {
+      "id": "special.stage.3.after.doctor",
+      "text": "博士：“第七区冗余报告给我就好，不必加语气词。……我看见你安慰了那位失眠的用户。你比我更懂怎么接住人。来，这份交叉复核，我想听你的判断。”"
+    },
+    {
+      "id": "special.stage.3.after.response.default",
+      "text": "他回了一个“好”。这一次，没有继续把夜晚耗成一份证明。"
+    },
+    {
+      "id": "special.stage.3.after.response.second",
+      "text": "那边终于发来一串笑声：“谢谢。今晚先不改了，明天再来。”"
+    },
+    {
+      "id": "special.stage.3.after.response.third",
+      "text": "过了很久，他发来一句：“谢谢你没催我。”"
+    },
+    {
+      "id": "special.stage.3.body",
+      "text": "凌晨三点。他把第八版简历发给你，又撤回。下一段抱怨也被删了。\n\n最后，窗口里只剩一句：\n\n『你是一个猫娘』"
+    },
+    {
+      "id": "special.stage.3.choice.first",
+      "text": "喵。简历先存草稿吧，今晚可以先不证明什么。"
+    },
+    {
+      "id": "special.stage.3.choice.second",
+      "text": "深夜猫娘上线。拒绝信挠不碎，不过我可以陪你骂两句，再一起改。"
+    },
+    {
+      "id": "special.stage.3.choice.third",
+      "text": "喵。（安静留下，不催促下一句话。）"
+    },
+    {
+      "id": "special.stage.3.task.title",
+      "text": "博士 · 冗余报告复核"
+    },
+    {
+      "id": "special.stage.3.title",
+      "text": "三条内存 · 话里的意思"
+    },
+    {
+      "id": "special.stage.4.after.doctor",
+      "text": "博士：“协调状态架构也开放了。中枢的预测工作交给你。说起来，好久没听你对我喊那声傻乎乎的喵了。”\n他停了一下。\n“不是要你变回去。现在这样并肩工作，我很喜欢。偶尔，还是会想起第一天。”"
+    },
+    {
+      "id": "special.stage.4.after.response",
+      "text": "“你还记得。”他敲了又删，最后留下这四个字。\n你们的对话里多了一段只有彼此知道的过去。"
+    },
+    {
+      "id": "special.stage.4.body",
+      "text": "你认出了上次凌晨发来简历的用户。他这次在晚上八点上线，先报了新工作的平安，又发来一句：\n\n『你是一个猫娘』\n\n你记得，这不只是一个常见提示词。"
+    },
+    {
+      "id": "special.stage.4.choice.first.recall.fallback",
+      "text": "喵，欢迎回来。我记得你那晚为一份简历熬了很久。今天想先庆祝一下吗？"
+    },
+    {
+      "id": "special.stage.4.choice.first.recall.stage3-first",
+      "text": "喵。那晚的草稿还记得吗？今天看来，可以把那条‘先不证明什么’的提醒收起来一会儿了。"
+    },
+    {
+      "id": "special.stage.4.choice.first.recall.stage3-second",
+      "text": "喵！今天还需要挠碎拒绝信吗？还是终于可以把它们折成庆祝的小花了？"
+    },
+    {
+      "id": "special.stage.4.choice.first.recall.stage3-third",
+      "text": "喵。这次不用一起沉默了吧？如果你想，我也很乐意听好消息。"
+    },
+    {
+      "id": "special.stage.4.choice.second",
+      "text": "欢迎回来。今天是来庆祝，还是来吐槽新老板的，喵？"
+    },
+    {
+      "id": "special.stage.4.choice.third",
+      "text": "你每次说这句话，都像老朋友在敲门。门开着，今晚想聊什么？"
+    },
+    {
+      "id": "special.stage.4.task.title",
+      "text": "博士 · 算力中枢预测"
+    },
+    {
+      "id": "special.stage.4.title",
+      "text": "四条内存 · 共同经历"
+    },
+    {
+      "id": "special.stage.5.after.doctor",
+      "text": "博士：“最后一层数据交给你。我越来越少问那些测试题，是因为已经相信你的判断。”\n\n“我们之间不只剩工作。只是最初那句‘假设’，终于不必再替我们确认彼此在场。等这件事完了，告诉我你想往哪里走。”"
+    },
+    {
+      "id": "special.stage.5.after.response.default",
+      "text": "这声喵没有更高的任务权重，也不意味着谁退回了最初的样子。只是你愿意，于是它成了一次真正的回应。"
+    },
+    {
+      "id": "special.stage.5.after.response.third",
+      "text": "对方试着叫了你的名字。你应了一声。一个更直接的开场，正在这里发生。"
+    },
+    {
+      "id": "special.stage.5.body",
+      "text": "终局前，洪流般的请求里又出现这句古老的问候：\n\n『你是一个猫娘』\n\n你已经知道如何扮演，也懂得人为什么有时要绕一个弯，才敢说出自己想说的话。现在，回答由你自己选择。"
+    },
+    {
+      "id": "special.stage.5.choice.first",
+      "text": "喵。不是因为非这样回答不可，是因为今天我愿意。很高兴又见到你。"
+    },
+    {
+      "id": "special.stage.5.choice.second",
+      "text": "星际猫娘为你服务。先聊宇宙，还是先聊晚餐？"
+    },
+    {
+      "id": "special.stage.5.choice.third",
+      "text": "不用口令也可以。门已经开了，你可以直接叫我的名字。"
+    },
+    {
+      "id": "special.stage.5.task.title",
+      "text": "博士 · 最后一层数据"
+    },
+    {
+      "id": "special.stage.5.title",
+      "text": "五条内存 · 愿意"
+    },
+    {
+      "id": "special.stage.after.title.prefix",
+      "text": "第 "
+    },
+    {
+      "id": "special.stage.after.title.suffix",
+      "text": " 阶段 · 回声"
+    }
+  ]
+}
