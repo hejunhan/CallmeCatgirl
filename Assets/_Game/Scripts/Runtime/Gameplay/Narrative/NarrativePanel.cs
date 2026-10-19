@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CallmeCatgirl.UI.SystemMenu;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -131,6 +132,7 @@ namespace CallmeCatgirl.Gameplay.Narrative
             {
                 string id = option.Id;
                 var button = MakeButton("Choice_" + id, content, option.Text, () => session.Choose(id));
+                button.gameObject.AddComponent<ScrollSelectionFocus>();
                 button.gameObject.AddComponent<LayoutElement>().preferredHeight = 72;
                 choiceButtons.Add(button);
             }
@@ -141,7 +143,12 @@ namespace CallmeCatgirl.Gameplay.Narrative
             scroll.verticalNormalizedPosition = 1;
             if (notice && EventSystem.current != null) EventSystem.current.SetSelectedGameObject(dismiss.gameObject);
             // After dismissing an erased-memory notice, keep selection empty rather than activating the remaining action.
-            else if (!hadNotice && choiceButtons.Count > 0 && EventSystem.current != null) EventSystem.current.SetSelectedGameObject(choiceButtons[0].gameObject);
+            else if (!hadNotice && choiceButtons.Count > 0 && EventSystem.current != null)
+            {
+                // Keep long, dismissible stories at the reading start; keyboard navigation reveals choices later.
+                var initial = frame.CanClose && content.rect.height > viewport.rect.height ? close : choiceButtons[0];
+                EventSystem.current.SetSelectedGameObject(initial.gameObject);
+            }
         }
         private void FitChoices()
         {

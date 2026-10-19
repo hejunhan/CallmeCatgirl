@@ -25,7 +25,7 @@ namespace CallmeCatgirl.UI
   private bool dismissed;
   private bool readyChoices;
   private bool interactionReady;
-  private Vector2 lastWindowSize;
+  private Vector2 lastWindowSize,lastViewportSize;
   public bool IsVisible => panel != null && panel.activeInHierarchy;
   public void Reveal(){dismissed=false;}
   public void Dismiss(){dismissed=true;if(panel!=null)panel.SetActive(false);if(EventSystem.current!=null)EventSystem.current.SetSelectedGameObject(null);}
@@ -58,6 +58,7 @@ namespace CallmeCatgirl.UI
   {
    if(interactionReady)return;interactionReady=true;
    var window=(RectTransform)userLabel.transform.parent;
+   LayoutHeader();
    userLabel.raycastTarget=true;
    (userLabel.gameObject.GetComponent<FloatingWindowGesture>()??userLabel.gameObject.AddComponent<FloatingWindowGesture>()).Bind(window,false);
    var corner=Rect("ResizeCorner",window);corner.anchorMin=corner.anchorMax=corner.pivot=new Vector2(1,0);corner.anchoredPosition=Vector2.zero;corner.sizeDelta=new Vector2(28,28);
@@ -71,8 +72,22 @@ namespace CallmeCatgirl.UI
   {
    if(!interactionReady||!panel.activeInHierarchy)return;
    var window=(RectTransform)userLabel.transform.parent;
-   if(lastWindowSize==window.rect.size)return;
-   lastWindowSize=window.rect.size;FloatingWindowGesture.ClampToParent(window);Canvas.ForceUpdateCanvases();ReflowText();
+   var viewportSize=((RectTransform)window.parent).rect.size;
+   if(lastWindowSize==window.rect.size&&lastViewportSize==viewportSize)return;
+   FloatingWindowGesture.ClampToParent(window);lastWindowSize=window.rect.size;lastViewportSize=viewportSize;
+   Canvas.ForceUpdateCanvases();ReflowText();
+  }
+  private void LayoutHeader()
+  {
+   HeaderRow(userLabel.rectTransform,20,12,80,40);
+   HeaderRow(resultLabel.rectTransform,20,58,32,40);
+   var close=(RectTransform)closeButton.transform;close.anchorMin=close.anchorMax=close.pivot=Vector2.one;
+   close.anchoredPosition=new Vector2(-12,-12);close.sizeDelta=new Vector2(44,44);
+  }
+  private static void HeaderRow(RectTransform rect,float left,float top,float right,float height)
+  {
+   rect.anchorMin=new Vector2(0,1);rect.anchorMax=Vector2.one;rect.pivot=new Vector2(.5f,1);
+   rect.sizeDelta=new Vector2(-left-right,height);rect.anchoredPosition=new Vector2((left-right)*.5f,-top);
   }
   private void ReflowText()
   {
@@ -139,9 +154,9 @@ namespace CallmeCatgirl.UI
    var border=window.GetComponent<Outline>();if(border!=null)border.enabled=false;InnerBorderGraphic.Attach(window,1,BorderEdges.All,new Color32(82,82,82,255));
    var artwork=window.Find("WindowArtwork");if(artwork!=null)artwork.gameObject.SetActive(false);
    var hint=window.Find("ChoiceHint");if(hint!=null)hint.gameObject.SetActive(false);
-   Place(userLabel.rectTransform,20,12,540,40);userLabel.fontSize=28;userLabel.color=new Color32(22,22,22,255);
-   Place(resultLabel.rectTransform,20,58,588,40);resultLabel.fontSize=22;resultLabel.resizeTextForBestFit=false;
-   closeButton.gameObject.SetActive(true);Place((RectTransform)closeButton.transform,584,12,44,44);
+   LayoutHeader();userLabel.fontSize=28;userLabel.color=new Color32(22,22,22,255);
+   resultLabel.fontSize=22;resultLabel.resizeTextForBestFit=false;
+   closeButton.gameObject.SetActive(true);
    var closeImage=closeButton.GetComponent<Image>();closeImage.sprite=closeIcon;closeImage.type=Image.Type.Simple;closeImage.color=Color.white;
    foreach(Transform child in closeButton.transform)child.gameObject.SetActive(false);
    bool replies=ready;float replyHeight=replies?240:0;
@@ -165,7 +180,6 @@ namespace CallmeCatgirl.UI
   }
   private Text Label(Transform parent,string text,int size){var t=Rect("Text",parent).gameObject.AddComponent<Text>();t.font=historyLabel.font;t.text=text;t.fontSize=size;t.color=new Color32(22,22,22,255);t.raycastTarget=false;return t;}
   private static RectTransform Rect(string name,Transform parent){var r=new GameObject(name,typeof(RectTransform)).GetComponent<RectTransform>();r.SetParent(parent,false);return r;}
-  private static void Place(RectTransform r,float x,float y,float w,float h){r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);r.anchoredPosition=new Vector2(x,-y);r.sizeDelta=new Vector2(w,h);}
   private static void Stretch(RectTransform r,float left,float bottom,float right,float top){r.anchorMin=Vector2.zero;r.anchorMax=Vector2.one;r.offsetMin=new Vector2(left,bottom);r.offsetMax=new Vector2(-right,-top);}
  }
 }

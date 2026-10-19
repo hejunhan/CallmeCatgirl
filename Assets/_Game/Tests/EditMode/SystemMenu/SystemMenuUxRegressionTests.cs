@@ -50,7 +50,7 @@ namespace CallmeCatgirl.Tests.SystemMenu
             ((RectTransform)source.transform).sizeDelta = new Vector2(120, 50);
             ((RectTransform)source.transform).anchoredPosition = new Vector2(0, -330);
             settings = new SystemSettingsService(new Backend(), new Store());
-            host = SystemMenuHost.Create(parent, Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"), true,
+            host = SystemMenuHost.Create(parent, UxOffscreenCapture.ChineseFont(), true,
                 service: settings, applySavedSettings: false);
             EventSystem.current.SetSelectedGameObject(previous.gameObject);
         }
@@ -72,6 +72,8 @@ namespace CallmeCatgirl.Tests.SystemMenu
             Assert.That(slider.IsInteractable(), Is.True);
             settings.PreviewDisplay(new DisplayConfiguration(1920, 1080, GameWindowMode.Windowed));
             Assert.That(slider.IsInteractable(), Is.False, "The confirmation modal must isolate keyboard input as well as pointer input.");
+            UxOffscreenCapture.Save(canvasObject.GetComponent<RectTransform>(), "fixture_display-preview",
+                "Production SystemMenuHost; in-memory settings backend; confirmation isolates the settings behind it.");
             settings.RevertDisplayPreview();
             Assert.That(slider.IsInteractable(), Is.True);
             Assert.That(host.IsSettingsOpen, Is.True);
