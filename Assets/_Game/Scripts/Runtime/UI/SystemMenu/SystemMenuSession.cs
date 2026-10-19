@@ -18,6 +18,7 @@ namespace CallmeCatgirl.UI.SystemMenu
         private readonly Action<bool> pauseClaimChanged;
         private readonly Func<bool> consumeEscapeBeforeMenu;
         private readonly Func<MenuSaveResult> saveAndReturnToMenu;
+        private bool saving;
         public bool IsPauseOpen { get; private set; }
         public bool IsSettingsOpen { get; private set; }
         public bool IsPauseClaimed => gameplay && (IsPauseOpen || IsSettingsOpen);
@@ -56,18 +57,23 @@ namespace CallmeCatgirl.UI.SystemMenu
 
         public bool SaveAndReturn()
         {
-            if (!gameplay || !IsPauseOpen || IsSettingsOpen) return false;
-            MenuSaveResult result;
-            try { result = saveAndReturnToMenu == null ? MenuSaveResult.Failure("尚未连接保存入口，请继续游戏。") : saveAndReturnToMenu(); }
-            catch (Exception exception) { result = MenuSaveResult.Failure("保存失败：" + exception.Message); }
-            if (!result.Succeeded)
+            if (!gameplay || !IsPauseOpen || IsSettingsOpen || saving) return false;
+            saving = true;
+            try
             {
-                SaveError = string.IsNullOrWhiteSpace(result.Message) ? "保存失败，请重试。" : result.Message;
-                Changed?.Invoke();
-                return false;
+                MenuSaveResult result;
+                try { result = saveAndReturnToMenu == null ? MenuSaveResult.Failure("尚未连接保存入口，请继续游戏。") : saveAndReturnToMenu(); }
+                catch (Exception exception) { result = MenuSaveResult.Failure("保存失败：" + exception.Message); }
+                if (!result.Succeeded)
+                {
+                    SaveError = string.IsNullOrWhiteSpace(result.Message) ? "保存失败，请重试。" : result.Message;
+                    Changed?.Invoke();
+                    return false;
+                }
+                CloseAll();
+                return true;
             }
-            CloseAll();
-            return true;
+            finally { saving = false; }
         }
 
         private void Change(bool pause, bool settings)

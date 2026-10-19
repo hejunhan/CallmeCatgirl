@@ -14,11 +14,11 @@ namespace CallmeCatgirl.UI.SystemMenu
         private static readonly Color Paper = new Color32(242, 240, 232, 255);
         private static readonly Color Muted = new Color32(83, 88, 89, 255);
         private RectTransform root, drawer, settingsFrame;
-        private CanvasGroup drawerGroup;
+        private CanvasGroup drawerGroup, settingsGroup;
         private GameObject blocker, settingsRoot, previewRoot;
         private Text saveError, status, volumeValue, modeValue, resolutionValue, capValue, syncValue, syncExplanation, previewLabel;
         private Slider volume;
-        private Button resumeButton, settingsBackButton, previewConfirm;
+        private Button resumeButton, settingsBackButton, previewConfirm, previewCancel;
         private Font font;
         private float drawerProgress;
         private bool refreshing, configured, wasBlocking;
@@ -121,6 +121,7 @@ namespace CallmeCatgirl.UI.SystemMenu
             var settings = Rect("SharedSystemSettings", root); Stretch(settings); settingsRoot = settings.gameObject;
             var bg = settings.gameObject.AddComponent<Image>(); bg.color = new Color(0, 0, 0, .24f);
             settingsFrame = Rect("SettingsPaper", settings); settingsFrame.anchorMin = settingsFrame.anchorMax = settingsFrame.pivot = new Vector2(.5f, .5f); Surface(settingsFrame);
+            settingsGroup = settingsFrame.gameObject.AddComponent<CanvasGroup>();
             var heading = Label("Heading", settingsFrame, "系统设置", 34, TextAnchor.MiddleLeft); Top(heading.rectTransform, 28, 16, -56, 58);
             var scrollRect = Rect("SettingsScroll", settingsFrame); Stretch(scrollRect, 26, 100, 26, 86);
             var scroll = scrollRect.gameObject.AddComponent<ScrollRect>(); scroll.horizontal = false; scroll.scrollSensitivity = 36;
@@ -167,7 +168,16 @@ namespace CallmeCatgirl.UI.SystemMenu
             var body = Rect("Content", paper); Stretch(body, 24, 24, 24, 24); Vertical(body, 12);
             previewLabel = RowLabel(body, "保留这次显示设置？", 26, 124, Ink);
             previewConfirm = RowButton(body, "保留显示设置", () => Run(() => Settings.ConfirmDisplayPreview()), 58);
-            RowButton(body, "恢复原设置", () => Run(Settings.RevertDisplayPreview), 58);
+            previewCancel = RowButton(body, "恢复原设置", () => Run(Settings.RevertDisplayPreview), 58);
+            // A pointer veil cannot contain keyboard/gamepad navigation. Keep this two-button modal closed.
+            LinkPreviewNavigation(previewConfirm, previewCancel);
+            LinkPreviewNavigation(previewCancel, previewConfirm);
+        }
+
+        private static void LinkPreviewNavigation(Button source, Button other)
+        {
+            source.navigation = new Navigation { mode = Navigation.Mode.Explicit,
+                selectOnUp = other, selectOnDown = other, selectOnLeft = other, selectOnRight = other };
         }
 
         private Text Choice(RectTransform parent, string title, Action previous, Action next)
@@ -212,7 +222,8 @@ namespace CallmeCatgirl.UI.SystemMenu
             syncExplanation.text += " Editor 预览不能证明独立 Player 的显示与限帧效果。";
 #endif
             bool wasPreview = previewRoot.activeSelf; previewRoot.SetActive(Settings.IsDisplayPreviewPending);
-            if (Settings.IsDisplayPreviewPending) { UpdatePreviewText(); previewConfirm.interactable = Settings.CanConfirmDisplayPreview; if (!wasPreview) Select(previewConfirm); }
+            settingsGroup.interactable = settingsGroup.blocksRaycasts = !Settings.IsDisplayPreviewPending;
+            if (Settings.IsDisplayPreviewPending) { UpdatePreviewText(); previewConfirm.interactable = Settings.CanConfirmDisplayPreview; if (!wasPreview) Select(previewConfirm.interactable ? previewConfirm : previewCancel); }
             else if (wasPreview && IsSettingsOpen) Select(settingsBackButton);
             refreshing = false;
         }
@@ -235,7 +246,7 @@ namespace CallmeCatgirl.UI.SystemMenu
             }
             else if (wasBlocking && EventSystem.current != null)
             {
-                EventSystem.current.SetSelectedGameObject(previousSelection != null && previousSelection.activeInHierarchy ? previousSelection : null);
+                EventSystem.current.SetSelectedGameObject(CanReceiveSelection(previousSelection) ? previousSelection : null);
                 previousSelection = null;
             }
             wasBlocking = blocking;
@@ -245,7 +256,13 @@ namespace CallmeCatgirl.UI.SystemMenu
             if (wasBlocking || EventSystem.current == null) return;
             previousSelection = EventSystem.current.currentSelectedGameObject;
         }
-        private static void Select(Selectable target) { if (EventSystem.current != null && target != null && target.gameObject.activeInHierarchy) EventSystem.current.SetSelectedGameObject(target.gameObject); }
+        private static bool CanReceiveSelection(GameObject target)
+        {
+            if (target == null || !target.activeInHierarchy) return false;
+            var selectable = target.GetComponent<Selectable>();
+            return selectable == null || (selectable.isActiveAndEnabled && selectable.IsInteractable());
+        }
+        private static void Select(Selectable target) { if (EventSystem.current != null && target != null && CanReceiveSelection(target.gameObject)) EventSystem.current.SetSelectedGameObject(target.gameObject); }
         private void Layout()
         {
             if (root == null || drawer == null) return;
