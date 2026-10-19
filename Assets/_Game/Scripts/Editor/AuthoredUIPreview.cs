@@ -25,7 +25,10 @@ namespace CallmeCatgirl.EditorTools
         public static void Open(){GetWindow<AuthoredUIPreview>("Authored UI · Edit").Show();}
         public void ShowTraining(){page=0;Rebuild();Repaint();}
         public void ShowPage(int index){page=index;Rebuild();Repaint();}
-        private void OnDisable(){DisposePreview();}
+        private void OnEnable(){EditorApplication.playModeStateChanged+=OnPlayModeChanged;}
+        private void OnDisable(){EditorApplication.playModeStateChanged-=OnPlayModeChanged;DisposePreview();}
+        private void OnPlayModeChanged(PlayModeStateChange state)
+        {if(state==PlayModeStateChange.ExitingEditMode)Close();}
         private void OnGUI()
         {
             EditorGUILayout.HelpBox("Edit preview · 1280 × 720 · saved UI copies only. Dynamic session contents are absent. Select Source edits the actual scene object.",MessageType.Info);
@@ -51,7 +54,7 @@ namespace CallmeCatgirl.EditorTools
         private void Rebuild()
         {
             DisposePreview();failure=null;
-            if(EditorApplication.isPlaying){failure="Leave Play to inspect authored Edit UI.";return;}
+            if(EditorApplication.isPlayingOrWillChangePlaymode){failure="Leave Play to inspect authored Edit UI.";return;}
             var scene=SceneManager.GetActiveScene();
             source=scene.GetRootGameObjects().SelectMany(r=>r.GetComponentsInChildren<RectTransform>(true))
                 .Where(r=>r.name==Pages[page]).Select(r=>r.gameObject).FirstOrDefault();
@@ -94,7 +97,9 @@ namespace CallmeCatgirl.EditorTools
             }
             var rect=(RectTransform)copy.transform;
             rect.anchorMin=Vector2.zero;rect.anchorMax=Vector2.one;rect.offsetMin=rect.offsetMax=Vector2.zero;
-            Canvas.ForceUpdateCanvases();LayoutRebuilder.ForceRebuildLayoutImmediate(rect);Canvas.ForceUpdateCanvases();
+            // Rebuild only this copy. A global Canvas update also rewrites driven
+            // RectTransforms in the editable scene when its Game view size changes.
+            LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
             }
             finally
             {
