@@ -476,9 +476,10 @@ namespace CallmeCatgirl.UI
             lastPointer = data.position; pointerCamera = data.pressEventCamera;
             var cell = ScreenToCell(lastPointer, pointerCamera);
             var origin = new Cell(cell.X - grabOffset.X, cell.Y - grabOffset.Y);
-            bool success = controller.TryPlaceRequest(draggedId, origin, dragRotation, out var failure);
-            controller.SetMessage(success ? "已放置" : "落位失败：" + CoreGameplayController.FailureText(failure) + "，原位置与进度保留。");
+            // Placement can synchronously refresh the view and cancel its drag.
             string dropped = draggedId;
+            bool success = controller.TryPlaceRequest(dropped, origin, dragRotation, out var failure);
+            controller.SetMessage(success ? "已放置" : "落位失败：" + CoreGameplayController.FailureText(failure) + "，原位置与进度保留。");
             if (!success) rejectedAt = Time.unscaledTime;
             CancelDrag(); Refresh();
             if (modules.TryGetValue(dropped,out var module) && module.gameObject.activeSelf)
