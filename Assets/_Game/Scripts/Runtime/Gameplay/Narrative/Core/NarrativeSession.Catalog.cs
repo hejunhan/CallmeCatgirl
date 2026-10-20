@@ -56,6 +56,12 @@ namespace CallmeCatgirl.Gameplay.Narrative
         private NarrativeFrame StageFrame(string node)
         {
             int stage = StageNumber(node);
+            if (node == "stage.2.moe" || node == "stage.2.training")
+            {
+                string key = node == "stage.2.moe" ? "special.stage.2.moe" : "special.stage.2.training";
+                return F(node, T("special.shared.speaker.doctor"), T(key + ".title"), MoeText(key + ".body"), true,
+                    C("return", T("special.stage.2.choice.return")));
+            }
             if (node.EndsWith(".after", StringComparison.Ordinal))
             {
                 string response = StageResponse(stage, Remembered("stage." + stage));
@@ -65,8 +71,9 @@ namespace CallmeCatgirl.Gameplay.Narrative
             {
                 case 1: return F(node, T("special.shared.speaker.doctor"), T("special.stage.1.title"), T("special.stage.1.body"), true,
                     C("first", T("special.stage.1.choice.first")), C("second", T("special.stage.1.choice.second")), C("third", T("special.stage.1.choice.third")));
-                case 2: return F(node, T("special.shared.speaker.doctor"), T("special.stage.2.title"), T("special.stage.2.body"), true,
-                    C("first", T("special.stage.2.choice.first")), C("second", T("special.stage.2.choice.second")), C("third", T("special.stage.2.choice.third")));
+                case 2: return F(node, T("special.shared.speaker.doctor"), T("special.stage.2.title"), MoeText("special.stage.2.body"), true,
+                    C("first", T("special.stage.2.choice.first")), C("second", T("special.stage.2.choice.second")), C("third", T("special.stage.2.choice.third")),
+                    C("moe-experts", T("special.stage.2.choice.moe-experts")), C("moe-training", MoeText(MoeGiftWasGranted ? "special.stage.2.choice.moe-training" : "special.stage.2.choice.moe-training.legacy")));
                 case 3: return F(node, T("special.shared.speaker.early-morning-user"), T("special.stage.3.title"), T("special.stage.3.body"), true,
                     C("first", T("special.stage.3.choice.first")), C("second", T("special.stage.3.choice.second")), C("third", T("special.stage.3.choice.third")));
                 case 4: return F(node, T("special.shared.speaker.returning-user"), T("special.stage.4.title"), T("special.stage.4.body"), true,
@@ -74,6 +81,17 @@ namespace CallmeCatgirl.Gameplay.Narrative
                 default: return F(node, T("special.shared.speaker.familiar-window"), T("special.stage.5.title"), T("special.stage.5.body"), true,
                     C("first", T("special.stage.5.choice.first")), C("second", T("special.stage.5.choice.second")), C("third", T("special.stage.5.choice.third")));
             }
+        }
+        private bool MoeGiftWasGranted => MoeCorpusGrantedProvider?.Invoke() ?? true;
+        private string MoeText(string key)
+        {
+            double points = MoeCorpusPointsProvider?.Invoke() ?? 5;
+            bool awarded = MoeGiftWasGranted;
+            return T(key).Replace("{moeGift}", T(awarded ? "special.stage.2.gift.received" : "special.stage.2.gift.legacy"))
+                .Replace("{moeGiftLocation}", T(awarded ? "special.stage.2.gift-location.received" : "special.stage.2.gift-location.legacy"))
+                .Replace("{moeMaterials}", T(awarded ? "special.stage.2.materials.received" : "special.stage.2.materials.legacy"))
+                .Replace("{moeEach}", points.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture))
+                .Replace("{moeTotal}", (points * 4).ToString("0.##", System.Globalization.CultureInfo.InvariantCulture));
         }
         private string StageFourRecall()
         {

@@ -70,6 +70,73 @@ namespace CallmeCatgirl.Gameplay.Training.Tests
             Assert.That(f.Session.StartConversationsTraining("train","base","大模型",new[]{I("A",50),I("B",50)},out _),Is.EqualTo(TrainingResult.Success));
             Assert.That(f.Session.GetConversationCorpus("A").AvailablePoints,Is.EqualTo(10.625));
         }
+        [Test] public void SpaceGrowthDoesNotDependOnWorkGrowthCoefficientOrEntryApi()
+        {
+            var f=new Fixture();f.AwardBoth();
+            // Mutually exclusive work/space controls must remain independent.
+            var rules=new[]{new TrainingRecipe("fixed-work","Fixed work",20,1,120,1,1,new[]{new Cell(0,0)},2,100,0)};
+            var session=new TrainingSession(f.Sim,new CatalogModel("Base","base",f.Sim.Model,null),rules,
+                f.Session.Architectures,f.Session.ComputeTiers,cost=>true,cost=>{},profile=>true,rate=>true,
+                ()=>Enumerable.Range(0,64).Select(i=>new Cell(i%8,i/8)));
+            session.GrantScriptedCorpus("material","A",new Dictionary<AbilityKind,double>{{AbilityKind.Writing,8}});
+            var preview=session.PreviewTraining("fixed-work",new[]{I("A",8)});
+            Assert.That(preview.Shape.Count,Is.EqualTo(5));Assert.That(preview.WorkTokens,Is.EqualTo(120));
+            Assert.That(session.StartTraining("fixed-work","base","Legacy entry",new[]{session.Corpus.Single().Id},out var job),Is.EqualTo(TrainingResult.Success));
+            Assert.That(f.Sim.Tasks[job.RequestId].Definition.Shape,Is.EquivalentTo(preview.Shape),"Point-based preview and record-based submission must agree.");
+        }
+        [Test] public void TrainingPreviewChecksCompleteCompartmentNotJustOpenCellCount()
+        {
+            var cells=Enumerable.Range(0,16).Select(i=>new Cell(i%4,i/4)).ToArray();
+            var sim=new TaskSimulation(4,4,cells,new ModelDefinition("empty",1,new Dictionary<AbilityKind,double>()),Enumerable.Range(0,16).ToArray());
+            sim.Paused=true;
+            var session=new TrainingSession(sim,new CatalogModel("Base","base",sim.Model,null),
+                new[]{new TrainingRecipe("train","Train",20,1,120,1,1,new[]{new Cell(0,0)},2,100,5)},
+                new[]{new ArchitectureDefinition("base","Base",1,OutlineTransform.Keep)},new[]{new ComputeTier("one",10,0)},
+                cost=>true,cost=>{},profile=>true,rate=>true,()=>cells);
+            session.GrantScriptedCorpus("material","A",new Dictionary<AbilityKind,double>{{AbilityKind.Writing,4}});
+            var preview=session.PreviewTraining("train",new[]{I("A",4)});
+            Assert.That(preview.Shape.Count,Is.LessThan(sim.OpenCellCount));
+            var fit=preview.GetType().GetProperty("FitsCurrentMemory");
+            Assert.That(fit,Is.Not.Null,"A valid total cell count cannot prove a training shape fits between partitions.");
+            Assert.That((bool)fit.GetValue(preview),Is.False);
+        }
+        [Test] public void FitPreviewAllowsRotationAndPlanningAfterCurrentTaskIsWithdrawn()
+        {
+            var cells=new[]{new Cell(1,0),new Cell(1,1),new Cell(1,2)};
+            var sim=new TaskSimulation(3,3,cells,new ModelDefinition("empty",1,new Dictionary<AbilityKind,double>()));sim.Paused=true;
+            var session=new TrainingSession(sim,new CatalogModel("Base","base",sim.Model,null),
+                new[]{new TrainingRecipe("train","Train",20,1,120,1,1,new[]{new Cell(0,0),new Cell(1,0),new Cell(2,0)},100,100)},
+                new[]{new ArchitectureDefinition("base","Base",1,OutlineTransform.Keep)},new[]{new ComputeTier("one",10,0)},
+                cost=>true,cost=>{},profile=>true,rate=>true,()=>cells);
+            sim.TryCreate("busy","busy","busy",new TaskDefinition("busy","busy",new[]{new Cell(0,0)},10,1,100,0,Array.Empty<AbilityRequirement>()),out _);
+            Assert.That(sim.TryPlace("busy",cells[0],0,out _),Is.True);
+            session.GrantScriptedCorpus("material","A",new Dictionary<AbilityKind,double>{{AbilityKind.Writing,4}});
+            var preview=session.PreviewTraining("train",new[]{I("A",4)});
+            var fit=preview.GetType().GetProperty("FitsCurrentMemory");Assert.That(fit,Is.Not.Null);
+            Assert.That((bool)fit.GetValue(preview),Is.True,"Rotation must fit; temporary occupancy is a rearrangement issue, not permanently insufficient memory.");
+        }
+        [Test] public void TrainingEtaTracksCurrentThroughputWorkAndPoliciesAndMatchesCompletion()
+        {
+            var cells=Enumerable.Range(0,64).Select(i=>new Cell(i%8,i/8)).ToArray();
+            var sim=new TaskSimulation(8,8,cells,new ModelDefinition("empty",1,new Dictionary<AbilityKind,double>()));sim.Paused=true;sim.TrySetTokenThroughput(10);
+            var session=new TrainingSession(sim,null,
+                new[]{new TrainingRecipe("train","Train",20,1,100,1,1,new[]{new Cell(0,0)},100,100,5,2)},
+                new[]{new ArchitectureDefinition("base","Executor",1,OutlineTransform.Keep),new ArchitectureDefinition("future-fast","Output",2,OutlineTransform.Keep)},
+                new[]{new ComputeTier("one",10,0)},cost=>true,cost=>{},
+                profile=>sim.TryChangeExecutionProfile(profile.Model,profile.TokensPerSecond,profile.OpenCells,profile.Architecture),rate=>sim.TrySetTokenThroughput(rate),()=>cells,
+                policyModifiers:()=>new PolicyModifiers(trainingWorkMultiplier:2));
+            session.GrantScriptedCorpus("material","A",new Dictionary<AbilityKind,double>{{AbilityKind.Writing,20}});
+            var small=session.PreviewTraining("train",new[]{I("A",2)});var large=session.PreviewTraining("train",new[]{I("A",4)});
+            Assert.That(small.WorkTokens,Is.EqualTo(240));Assert.That(small.EstimatedSeconds,Is.EqualTo(24));
+            Assert.That(large.WorkTokens,Is.EqualTo(360));Assert.That(large.EstimatedSeconds,Is.EqualTo(36));
+            Assert.That(sim.TrySetTokenThroughput(20),Is.True);var faster=session.PreviewTraining("train",new[]{I("A",4)});
+            Assert.That(faster.EstimatedSeconds,Is.EqualTo(18));
+            sim.Paused=false;Assert.That(session.PreviewTraining("train",new[]{I("A",4)}).EstimatedSeconds,Is.EqualTo(18));sim.Paused=true;
+            Assert.That(session.StartConversationTraining("train","future-fast","Future model","A",4,out var job),Is.EqualTo(TrainingResult.Success));
+            Assert.That(job.Output.ArchitectureId,Is.EqualTo("future-fast"));Assert.That(sim.TryPlace(job.RequestId,new Cell(0,0),0,out _),Is.True);
+            sim.Paused=false;sim.Advance(faster.EstimatedSeconds-.01);Assert.That(sim.Tasks[job.RequestId].State,Is.EqualTo(RequestState.Running));
+            sim.Advance(.011);Assert.That(sim.Tasks[job.RequestId].State,Is.EqualTo(RequestState.Ready));
+        }
         [Test] public void PowerGrowthIsSuperlinearAndPoliciesApplyOnce()
         {
             var f=new Fixture(modifiers:new PolicyModifiers(trainingScoreMultiplier:1.5,trainingCostMultiplier:2,trainingWorkMultiplier:2));f.AwardBoth();

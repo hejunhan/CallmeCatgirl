@@ -12,11 +12,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6088543fabad47388d0ab9c75beca688, type: 3}
   m_Name: TaskGenerationConfiguration
   m_EditorClassIdentifier: Assembly-CSharp::CallmeCatgirl.Gameplay.TaskGenerationConfiguration
-  RequestsPerRefresh: 1
+  RequestsPerRefresh: 4
   RefreshByDay: 1
   DaysPerRefresh: 1
   MonthsPerRefresh: 1
   RandomSeed: -1
+  OperatingTasks:
+  - Id: ops-log
+    Title: "\u65E5\u5FD7\u5F52\u6863"
+    Shape: []
+    Calculation: 600
+    Speed: 10
+    Patience: 240
+    Tokens: 15
+    Minimum: {x: 1, y: 0, z: 0}
+    Excellent: {x: 3, y: 3, z: 3}
+  - Id: ops-format
+    Title: "\u6279\u91CF\u683C\u5F0F\u8F6C\u6362"
+    Shape: []
+    Calculation: 800
+    Speed: 10
+    Patience: 300
+    Tokens: 18
+    Minimum: {x: 0, y: 1, z: 0}
+    Excellent: {x: 3, y: 3, z: 3}
+  - Id: ops-dedupe
+    Title: "\u8D44\u6599\u53BB\u91CD"
+    Shape: []
+    Calculation: 1000
+    Speed: 10
+    Patience: 360
+    Tokens: 22
+    Minimum: {x: 0, y: 0, z: 1}
+    Excellent: {x: 3, y: 3, z: 3}
+  - Id: ops-records
+    Title: "\u65E7\u8BB0\u5F55\u6574\u7406"
+    Shape: []
+    Calculation: 1200
+    Speed: 10
+    Patience: 420
+    Tokens: 25
+    Minimum: {x: 1, y: 0, z: 0}
+    Excellent: {x: 3, y: 3, z: 3}
+  - Id: ops-check
+    Title: "\u6279\u91CF\u6570\u636E\u6821\u5BF9"
+    Shape: []
+    Calculation: 1500
+    Speed: 10
+    Patience: 480
+    Tokens: 30
+    Minimum: {x: 0, y: 1, z: 1}
+    Excellent: {x: 3, y: 3, z: 3}
   Shapes:
   - Name: "\u56DB\u683C"
     Pattern:
@@ -70,49 +116,3 @@ MonoBehaviour:
     - '#...'
     - '#...'
     - '###.'
-  OperatingTasks:
-  - Id: ops-log
-    Title: "\u65E5\u5FD7\u5F52\u6863"
-    Shape: []
-    Calculation: 600
-    Speed: 10
-    Patience: 240
-    Tokens: 15
-    Minimum: {x: 1, y: 0, z: 0}
-    Excellent: {x: 3, y: 3, z: 3}
-  - Id: ops-format
-    Title: "\u6279\u91CF\u683C\u5F0F\u8F6C\u6362"
-    Shape: []
-    Calculation: 800
-    Speed: 10
-    Patience: 300
-    Tokens: 18
-    Minimum: {x: 0, y: 1, z: 0}
-    Excellent: {x: 3, y: 3, z: 3}
-  - Id: ops-dedupe
-    Title: "\u8D44\u6599\u53BB\u91CD"
-    Shape: []
-    Calculation: 1000
-    Speed: 10
-    Patience: 360
-    Tokens: 22
-    Minimum: {x: 0, y: 0, z: 1}
-    Excellent: {x: 3, y: 3, z: 3}
-  - Id: ops-records
-    Title: "\u65E7\u8BB0\u5F55\u6574\u7406"
-    Shape: []
-    Calculation: 1200
-    Speed: 10
-    Patience: 420
-    Tokens: 25
-    Minimum: {x: 1, y: 0, z: 0}
-    Excellent: {x: 3, y: 3, z: 3}
-  - Id: ops-check
-    Title: "\u6279\u91CF\u6570\u636E\u6821\u5BF9"
-    Shape: []
-    Calculation: 1500
-    Speed: 10
-    Patience: 480
-    Tokens: 30
-    Minimum: {x: 0, y: 1, z: 1}
-    Excellent: {x: 3, y: 3, z: 3}

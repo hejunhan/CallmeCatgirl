@@ -24,6 +24,11 @@ namespace CallmeCatgirl.Gameplay.Training
         };
         public string InitialArchitectureId = "baseline";
         public string InitialModelName = "初始模型";
+        [InspectorName("MoE解锁赠送的每项语料点数"), Min(0.01f), Tooltip("首次解锁MoE时，博士对话获得写作、代码、推理、检索各一份语料；不直接增加模型能力。")]
+        public double MoeUnlockCorpusPointsPerAbility = 5;
+        [InspectorName("长时间训练提示阈值（游戏秒）"), Min(0), Tooltip("预计训练时长超过此值时，在训练前显示提示；不阻止确认训练。")]
+        public double LongTrainingWarningSeconds = 300;
+
 
         [Serializable] public sealed class RecipeEntry
         {

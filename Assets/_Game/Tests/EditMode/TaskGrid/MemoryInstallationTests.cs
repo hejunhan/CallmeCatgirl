@@ -85,7 +85,7 @@ namespace CallmeCatgirl.Tests
             Assert.That(task.Result.Overall,Is.GreaterThanOrEqualTo(Quality.Complete),id);
             Api(owner,"{\"kind\":\"submit\",\"id\":\""+id+"\"}");
         }
-        private static IEnumerator PrepareEligibleRun(object owner)
+        internal static IEnumerator PrepareEligibleRun(object owner)
         {
             // Production starts at zero RAM/zero money. Qualify the isolated transaction fixture through real gameplay.
             ManualClock(owner);var simulation=Get<TaskSimulation>(owner,"Simulation");
@@ -97,15 +97,19 @@ namespace CallmeCatgirl.Tests
             var session=Get<object>(Get<object>(owner,"Training"),"Session");
             var job=((IEnumerable)Get<object>(session,"Jobs")).Cast<object>().Single();
             FinishRequest(owner,Get<string>(job,"RequestId"));yield return null;CloseNarrative(owner);yield return null;
-            string doctor=(string)narrative.GetType().GetField("FirstDoctorRequestId").GetValue(null);
-            string ordinary=(string)narrative.GetType().GetField("FirstOrdinaryRequestId").GetValue(null);
-            FinishRequest(owner,doctor);yield return null;CloseNarrative(owner);yield return null;
-            FinishRequest(owner,ordinary);yield return null;CloseNarrative(owner);
+            Api(owner,"{\"kind\":\"train\",\"recipe\":\"tutorial-corpus-model\",\"architecture\":\"baseline\",\"displayName\":\"Upgrade fixture model 2\",\"investments\":[{\"ConversationId\":\"narrative-doctor\",\"Points\":9}]}");
+            var secondJob=((IEnumerable)Get<object>(session,"Jobs")).Cast<object>().Last();
+            FinishRequest(owner,Get<string>(secondJob,"RequestId"));yield return null;CloseNarrative(owner);yield return null;
+            foreach(string field in new[]{"SecondDoctorRequestId","ThirdDoctorRequestId","FirstOrdinaryRequestId"})
+            {
+                string id=(string)narrative.GetType().GetField(field).GetValue(null);
+                FinishRequest(owner,id);yield return null;CloseNarrative(owner);yield return null;
+            }
             var story=Get<object>(owner,"Story");
             for(int i=0;i<20&&Get<bool>(story,"IsReply");i++)Call(owner,"ChooseReplyAtRevision",0,Get<int>(story,"Revision"));
             Call(owner,"CloseConversationHistory");yield return null;CloseNarrative(owner);yield return null;
-            Assert.That(Get<int>(owner,"CompletedTasks"),Is.EqualTo(2));Assert.That(Get<int>(owner,"Funds"),Is.EqualTo(120));
-            Assert.That(Get<bool>(owner,"CanUpgradeMemory"),Is.True,"The test must isolate upgrade behavior after meeting the real tutorial requirements.");
+            Assert.That(Get<int>(owner,"CompletedTasks"),Is.EqualTo(3));Assert.That(Get<int>(owner,"Funds"),Is.EqualTo(280));
+            Assert.That(Get<bool>(owner,"CanUpgradeMemory"),Is.True,"Real tutorial requirements must be met before testing installation.");
         }
         private static void Click(object game, string field)
         {
@@ -159,22 +163,22 @@ namespace CallmeCatgirl.Tests
             Assert.That(Physics(game).Solved, Is.True, "Real mouse down/drag/up and passive settling must solve the installation.");
             Assert.That(((Button)Field(game, "finishButton")).gameObject.activeSelf, Is.True);
         }
-        [UnityTest] public IEnumerator UpgradeStartsMinigameAndFinishingAppliesChargeLevelCellsAndPointsExactlyOnce()
+        [UnityTest] public IEnumerator UpgradeStartsMinigameAndFinishingAppliesChargeLevelAndCellsExactlyOnce()
         {
             EditorSceneManager.OpenScene(Core); yield return new EnterPlayMode(); yield return null;
             var owner = Owner(); yield return PrepareEligibleRun(owner); ManualClock(owner);
             var sim = Get<CallmeCatgirl.Gameplay.TaskGrid.TaskSimulation>(owner, "Simulation"); sim.Paused = false;
-            int funds = Get<int>(owner, "Funds"), level = Get<int>(owner, "MemoryLevel"), cells = sim.OpenCellCount, points = Get<int>(owner, "AvailableAbilityPoints");
+            int funds = Get<int>(owner, "Funds"), level = Get<int>(owner, "MemoryLevel"), cells = sim.OpenCellCount;
             var next = Get<object>(owner, "NextMemoryUpgrade");
-            int cost = (int)next.GetType().GetField("Cost").GetValue(next), reward = (int)next.GetType().GetField("AbilityPoints").GetValue(next);
+            int cost = (int)next.GetType().GetField("Cost").GetValue(next);
             double time = sim.GameTime, month = Get<double>(owner, "MonthTimeRemaining");
             Call(owner, "OpenMemoryUpgrade"); Call(owner, "UpgradeMemory");
             var game = Game();
-            // 场景1：开始升级只打开小游戏，资金、等级、格子、点数全部保持不变。
+            // 场景1：开始升级只打开小游戏，资金、等级、格子全部保持不变。
             Assert.That(Get<bool>(owner, "IsMemoryInstallOpen"), Is.True);
             Assert.That(Get<bool>(owner, "IsMemoryInstallPending"), Is.True);
             Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds)); Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(level));
-            Assert.That(sim.OpenCellCount, Is.EqualTo(cells)); Assert.That(Get<int>(owner, "AvailableAbilityPoints"), Is.EqualTo(points));
+            Assert.That(sim.OpenCellCount, Is.EqualTo(cells));
             Assert.That(Get<bool>(owner, "IsModalOpen"), Is.True);
             Assert.That(Get<bool>(owner, "CanUpgradeMemory"), Is.False);
             // 场景7：挂起期间重复开始、推进时间、切换暂停、保存均为无操作，暂停状态保持。
@@ -195,11 +199,11 @@ namespace CallmeCatgirl.Tests
             Capture("MemoryInstallReady.png");
             var completions = new CompletionCounter(); Subscribe(game, completions.Increment);
             Click(game, "finishButton"); ((Button)Field(game, "finishButton")).onClick.Invoke(); ((Button)Field(game, "skipButton")).onClick.Invoke();
-            // 场景2：恰好扣费一次、升一级、开放格子与奖励点数；重复 Finish/Skip 回调不再产生效果。
+            // 场景2：恰好扣费一次、升一级、开放格子；重复 Finish/Skip 回调不再产生效果。
             Assert.That(completions.Count, Is.EqualTo(1)); Assert.That(Get<bool>(game, "IsOpen"), Is.False);
             Assert.That(Get<bool>(owner, "IsMemoryInstallPending"), Is.False);
             Assert.That(Get<int>(owner, "Funds"), Is.EqualTo(funds - cost)); Assert.That(Get<int>(owner, "MemoryLevel"), Is.EqualTo(level + 1));
-            Assert.That(sim.OpenCellCount, Is.GreaterThan(cells)); Assert.That(Get<int>(owner, "AvailableAbilityPoints"), Is.EqualTo(points + reward));
+            Assert.That(sim.OpenCellCount, Is.GreaterThan(cells));
             Assert.That(Get<bool>(owner, "IsMemoryUpgradeOpen"), Is.True);
             Call(owner, "CloseMemoryUpgrade"); CloseNarrative(owner); yield return null;
             Assert.That(Get<bool>(owner, "IsModalOpen"), Is.False);
@@ -237,20 +241,10 @@ namespace CallmeCatgirl.Tests
             Assert.That(Get<int>(owner,"Funds"),Is.EqualTo(beforeSecond-secondCost));
             Call(owner,"CloseMemoryUpgrade");CloseNarrative(owner);yield return null;
             // Earn the third required completed order through the real stage-two request, rather than setting a counter.
-            var narrative=Get<object>(owner,"Narrative");
-            string doctorContact=(string)narrative.GetType().GetField("DoctorId").GetValue(null);
-            for(int i=0;i<3&&!sim.Tasks.ContainsKey("narrative-doctor-stage-2");i++)
-            {
-                Assert.That(Call(narrative,"OpenContact",doctorContact),Is.EqualTo(true));
-                var frame=Get<object>(narrative,"CurrentFrame");
-                var choice=((IEnumerable)Get<object>(frame,"Choices")).Cast<object>().First();
-                Assert.That(Call(narrative,"Choose",Get<string>(choice,"Id")),Is.EqualTo(true));
-                CloseNarrative(owner);yield return null;
-            }
-            Assert.That(sim.Tasks.ContainsKey("narrative-doctor-stage-2"),Is.True);
-            FinishRequest(owner,"narrative-doctor-stage-2");yield return null;CloseNarrative(owner);yield return null;
+            // The real tutorial already completed three orders; no removed stage-two request is needed.
             var third=Get<object>(owner,"NextMemoryUpgrade");Call(owner,"AddFunds",(int)third.GetType().GetField("Cost").GetValue(third));
             // 场景6：重置中止未完成的安装意图，不扣费、不升级；旧回调不能提交之后的意图。
+            Assert.That(Get<int>(owner,"CompletedTasks"),Is.GreaterThanOrEqualTo(Get<int>(third,"RequiredCompletedTasks")));
             Call(owner, "UpgradeMemory"); Assert.That(Get<bool>(owner, "IsMemoryInstallPending"), Is.True);
             Call(owner, "ResetSimulation"); ManualClock(owner);
             Assert.That(Get<bool>(owner, "IsMemoryInstallPending"), Is.False); Assert.That(Get<bool>(game, "IsOpen"), Is.False);

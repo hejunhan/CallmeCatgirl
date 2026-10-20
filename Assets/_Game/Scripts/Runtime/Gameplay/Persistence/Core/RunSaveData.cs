@@ -83,6 +83,7 @@ namespace CallmeCatgirl.Persistence
         public float PlaybackSpeed;
         public int MemoryLevel;
         public int CompletedTasks;
+        // Legacy JSON field only: new saves write zero; restoring a run ignores unused upgrade points.
         public int AvailableAbilityPoints;
         public int RequestSerial;
         public string SelectedRequestId;

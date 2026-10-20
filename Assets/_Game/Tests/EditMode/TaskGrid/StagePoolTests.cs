@@ -341,7 +341,6 @@ namespace CallmeCatgirl.Tests
             Set(host, "PlaybackSpeed", 1f);
             Set(host, "MemoryLevel", 1);
             Set(host, "CompletedTasks", 0);
-            Set(host, "AvailableAbilityPoints", 0);
             Set(host, "RequestSerial", 0);
             Set(host, "SelectedRequestId", null);
             Set(host, "GameEnded", false);

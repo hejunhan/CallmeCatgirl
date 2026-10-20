@@ -38,6 +38,7 @@ namespace CallmeCatgirl.Tests
             EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity");
             yield return new EnterPlayMode(); yield return null;
             var owner = Find("CoreGameplayController"); var game = Find("StandaloneMemoryInstall");
+            yield return MemoryInstallationTests.PrepareEligibleRun(owner);
             int funds = Get<int>(owner, "Funds"), level = Get<int>(owner, "MemoryLevel");
             StartInstall(owner); var oldCompletion = CompletionSnapshot(game);
             Assert.That(oldCompletion, Is.Not.Null);
@@ -59,6 +60,7 @@ namespace CallmeCatgirl.Tests
             EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity");
             yield return new EnterPlayMode(); yield return null;
             var owner = Find("CoreGameplayController"); var game = Find("StandaloneMemoryInstall");
+            yield return MemoryInstallationTests.PrepareEligibleRun(owner);
             int funds = Get<int>(owner, "Funds"), level = Get<int>(owner, "MemoryLevel");
             StartInstall(owner); owner.enabled = false;
             Assert.That(Get<bool>(game, "IsOpen"), Is.False);
@@ -76,6 +78,7 @@ namespace CallmeCatgirl.Tests
             EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity");
             yield return new EnterPlayMode(); yield return null;
             var owner = Find("CoreGameplayController"); var game = Find("StandaloneMemoryInstall");
+            yield return MemoryInstallationTests.PrepareEligibleRun(owner);
             int funds = Get<int>(owner, "Funds"), level = Get<int>(owner, "MemoryLevel");
             StartInstall(owner); var abortedCompletion = CompletionSnapshot(game);
             game.enabled = false; abortedCompletion();
@@ -97,6 +100,7 @@ namespace CallmeCatgirl.Tests
             EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity");
             yield return new EnterPlayMode(); yield return null;
             var owner = Find("CoreGameplayController"); var game = Find("StandaloneMemoryInstall");
+            yield return MemoryInstallationTests.PrepareEligibleRun(owner);
             var economy = Get<object>(owner, "Economy"); var simulation = Get<object>(owner, "Simulation");
             int funds = Get<int>(economy, "CurrentFunds"), cells = Get<int>(simulation, "OpenCellCount");
             StartInstall(owner); var oldCompletion = CompletionSnapshot(game);
@@ -115,9 +119,10 @@ namespace CallmeCatgirl.Tests
             EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity");
             yield return new EnterPlayMode(); yield return null;
             var owner = Find("CoreGameplayController"); var game = Find("StandaloneMemoryInstall");
+            yield return MemoryInstallationTests.PrepareEligibleRun(owner);
             FieldInfo control = null;
             for (var type = game.GetType(); type != null && control == null; type = type.BaseType)
-                control = type.GetField("pressRightButton", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+                control = type.GetField("finishButton", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
             Assert.That(control, Is.Not.Null); var original = control.GetValue(game);
             int funds = Get<int>(owner, "Funds"), level = Get<int>(owner, "MemoryLevel");
             try

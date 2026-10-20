@@ -47,6 +47,71 @@ namespace CallmeCatgirl.Gameplay.Training.Tests
             Assert.That(scores.Count,Is.EqualTo(1));Assert.That(scores[AbilityKind.Writing],Is.EqualTo(2.5));
             Assert.Throws<ArgumentOutOfRangeException>(()=>CorpusRewards.FromRequirements(Array.Empty<AbilityRequirement>(),double.NaN));
         }
+        [Test] public void AllRequirementsUseEveryCompletionThresholdAtFixedRatio()
+        {
+            var requirements=new[]{new AbilityRequirement(AbilityKind.Writing,10,25),new AbilityRequirement(AbilityKind.Code,2,100),
+                new AbilityRequirement(AbilityKind.Reasoning,4,8),new AbilityRequirement(AbilityKind.Retrieval,6,12)};
+            var scores=CorpusRewards.FromAllRequirements(requirements,.25);
+            Assert.That(scores.Count,Is.EqualTo(4));Assert.That(scores[AbilityKind.Writing],Is.EqualTo(2.5));
+            Assert.That(scores[AbilityKind.Code],Is.EqualTo(.5));Assert.That(scores[AbilityKind.Reasoning],Is.EqualTo(1));
+            Assert.That(scores[AbilityKind.Retrieval],Is.EqualTo(1.5));
+        }
+        [Test] public void AllRequirementsUseIndependentRatios()
+        {
+            var requirements=new[]{new AbilityRequirement(AbilityKind.Writing,20,100),new AbilityRequirement(AbilityKind.Code,40,100),
+                new AbilityRequirement(AbilityKind.Reasoning,60,100),new AbilityRequirement(AbilityKind.Retrieval,80,100)};
+            var ratios=new[]{.05,.1,.075,.025};var selected=new List<AbilityRequirement>();
+            var scores=CorpusRewards.FromAllRequirements(requirements,requirement=>{selected.Add(requirement);return ratios[selected.Count-1];});
+            CollectionAssert.AreEqual(requirements,selected);Assert.That(scores.Count,Is.EqualTo(4));
+            Assert.That(scores[AbilityKind.Writing],Is.EqualTo(1).Within(1e-12));Assert.That(scores[AbilityKind.Code],Is.EqualTo(4).Within(1e-12));
+            Assert.That(scores[AbilityKind.Reasoning],Is.EqualTo(4.5).Within(1e-12));Assert.That(scores[AbilityKind.Retrieval],Is.EqualTo(2).Within(1e-12));
+        }
+        [Test] public void AllRequirementsSkipZeroRatios()
+        {
+            var requirements=new[]{new AbilityRequirement(AbilityKind.Writing,10,100),new AbilityRequirement(AbilityKind.Code,20,100),
+                new AbilityRequirement(AbilityKind.Reasoning,30,100)};
+            Assert.That(CorpusRewards.FromAllRequirements(requirements,0),Is.Empty);
+            Assert.That(CorpusRewards.FromAllRequirements(requirements,requirement=>0),Is.Empty);
+            var scores=CorpusRewards.FromAllRequirements(requirements,requirement=>requirement.Kind==AbilityKind.Code ? .1 : 0);
+            Assert.That(scores.Count,Is.EqualTo(1));Assert.That(scores[AbilityKind.Code],Is.EqualTo(2));
+        }
+        [Test] public void AllRequirementsSkipZeroMinimumWithoutSelectingRatio()
+        {
+            var requirements=new[]{new AbilityRequirement(AbilityKind.Writing,0,100),new AbilityRequirement(AbilityKind.Code,20,100),
+                new AbilityRequirement(AbilityKind.Reasoning,0,100),new AbilityRequirement(AbilityKind.Retrieval,40,100)};
+            var selected=new List<AbilityRequirement>();
+            var scores=CorpusRewards.FromAllRequirements(requirements,requirement=>{selected.Add(requirement);return .1;});
+            CollectionAssert.AreEqual(new[]{requirements[1],requirements[3]},selected);
+            Assert.That(scores.Count,Is.EqualTo(2));Assert.That(scores[AbilityKind.Code],Is.EqualTo(2));
+            Assert.That(scores[AbilityKind.Retrieval],Is.EqualTo(4));
+        }
+        [Test] public void NullEmptyAndAllZeroRequirementsReturnNoScores()
+        {
+            var cases=new IEnumerable<AbilityRequirement>[]{null,Array.Empty<AbilityRequirement>(),
+                new[]{new AbilityRequirement(AbilityKind.Writing,0,10),new AbilityRequirement(AbilityKind.Code,0,20)}};
+            int selections=0;
+            foreach(var requirements in cases)
+            {
+                Assert.That(CorpusRewards.FromAllRequirements(requirements,.1),Is.Empty);
+                Assert.That(CorpusRewards.FromAllRequirements(requirements,requirement=>{selections++;return .1;}),Is.Empty);
+            }
+            Assert.That(selections,Is.Zero);
+        }
+        [TestCase(-.1)] [TestCase(double.NaN)] [TestCase(double.PositiveInfinity)] [TestCase(double.NegativeInfinity)]
+        public void AllRequirementsRejectInvalidRatios(double ratio)
+        {
+            var requirements=new[]{new AbilityRequirement(AbilityKind.Writing,10,20)};
+            Assert.Throws<ArgumentOutOfRangeException>(()=>CorpusRewards.FromAllRequirements(requirements,ratio));
+            Assert.Throws<ArgumentOutOfRangeException>(()=>CorpusRewards.FromAllRequirements(requirements,requirement=>ratio));
+            Assert.Throws<ArgumentOutOfRangeException>(()=>CorpusRewards.FromAllRequirements(null,ratio));
+            Assert.Throws<ArgumentOutOfRangeException>(()=>CorpusRewards.FromAllRequirements(Array.Empty<AbilityRequirement>(),ratio));
+        }
+        [Test] public void AllRequirementsRejectNullRatioSelector()
+        {
+            var cases=new IEnumerable<AbilityRequirement>[]{null,Array.Empty<AbilityRequirement>(),new[]{new AbilityRequirement(AbilityKind.Writing,10,20)}};
+            foreach(var requirements in cases)
+                Assert.Throws<ArgumentNullException>(()=>CorpusRewards.FromAllRequirements(requirements,(Func<AbilityRequirement,double>)null));
+        }
         [Test] public void PartialSpendingPreservesAbilityProportionsAndRemainingPoints()
         {
             var f=new Fixture();f.Award();

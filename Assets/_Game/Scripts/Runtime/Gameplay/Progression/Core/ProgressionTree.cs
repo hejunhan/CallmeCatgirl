@@ -174,7 +174,7 @@ namespace CallmeCatgirl.Gameplay.Progression
                 double previous = unlocked.Where(id => nodes[id].Ability == ability).Sum(id => nodes[id].PointsPerTick);
                 double next = target.Where(id => nodes[id].Ability == ability).Sum(id => nodes[id].PointsPerTick);
                 points.TryGetValue(ability, out var value);
-                // Add only the change; preserves independent AllocateAbility increments.
+                // Add only the policy change; preserve the model's existing base abilities.
                 points[ability] = value + (next - previous);
             }
             return new ModelDefinition(current.Id, current.Interval, points);

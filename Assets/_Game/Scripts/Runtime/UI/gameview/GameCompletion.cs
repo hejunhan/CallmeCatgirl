@@ -19,6 +19,7 @@ namespace CallmeCatgirl.Gameplay
     public sealed partial class CoreGameplayController
     {
         private const string NarrativeExtensionId = "callmecatgirl.narrative";
+        private const string MoeUnlockCorpusEventId = "narrative-architecture-2:doctor-corpus";
         public NarrativeSession Narrative { get; private set; }
         public string EndReason { get; private set; } = string.Empty;
         private NarrativePanel narrativePanel;
@@ -33,7 +34,7 @@ namespace CallmeCatgirl.Gameplay
         private bool endingSceneUnavailable;
         private bool narrativePanelHiddenForEnding;
         private readonly MemoryUpgradeConfiguration.UpgradeStep firstMemoryInstallation = new MemoryUpgradeConfiguration.UpgradeStep
-            { TargetLevel = 1, Cost = 100, RequiredCompletedTasks = 2, AbilityPoints = 0, ModelName = "Transformer" };
+            { TargetLevel = 1, Cost = 100, RequiredCompletedTasks = 2, ModelName = "Transformer" };
         public bool HasSystemPauseClaim => systemMenu != null && systemMenu.IsPauseClaimed;
         public bool IsNarrativeContact(string conversationId) => Narrative != null
             && Narrative.PinnedContacts.Any(c => c.Id == conversationId);
@@ -95,10 +96,16 @@ namespace CallmeCatgirl.Gameplay
 
         private void BeginCompletionRun()
         {
-            Narrative = NarrativeSession.CreateNew(); EndReason = string.Empty; appliedPolicySpeed = -1;
+            Narrative = NarrativeSession.CreateNew();
+            Narrative.MoeCorpusPointsProvider = () => training?.Configuration?.MoeUnlockCorpusPointsPerAbility ?? 5;
+            Narrative.MoeCorpusGrantedProvider = HasMoeUnlockCorpus;
+            EndReason = string.Empty; appliedPolicySpeed = -1;
             systemMenu?.CloseAll();
             if (narrativePanel != null) narrativePanel.Bind(Narrative, CompletionFont());
         }
+
+        private bool HasMoeUnlockCorpus() => TrainingEnabled && training.Session.Corpus.Any(r =>
+            r.SourceKind == CorpusSourceKind.ScriptedReward && r.EventId == MoeUnlockCorpusEventId);
 
         private Font CompletionFont() => canvasView == null ? Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")
             : canvasView.GetComponentsInChildren<Text>(true).Select(t => t.font).FirstOrDefault(f => f != null)
@@ -122,7 +129,7 @@ namespace CallmeCatgirl.Gameplay
             }
             if (systemMenu == null)
                 systemMenu = SystemMenuHost.Create((RectTransform)canvasView.transform, CompletionFont(), true,
-                    _ => { }, ConsumeEscapeBeforeSystemMenu, SaveAndReturnFromSystemMenu);
+                    _ => { }, ConsumeEscapeBeforeSystemMenu, SaveAndReturnFromSystemMenu, resumeGameplay: ResumeFromSystemMenu);
             if (!policyViewPrepared)
             {
                 var policyPanel = canvasView.GetComponentInChildren<ProgressionPanel>(true);
@@ -155,6 +162,15 @@ namespace CallmeCatgirl.Gameplay
             if (overlay == null || panel == null) { Message = "政策界面暂不可用。"; return; }
             panel.gameObject.SetActive(true); overlay.gameObject.SetActive(true);
             canvasView.CancelDrag(); canvasView.WindowLayers?.Synchronize(); canvasView.Refresh();
+        }
+
+        private void ResumeFromSystemMenu()
+        {
+            // The menu is already closed; another modal or ending still owns its own pause.
+            if (Simulation == null || GameEnded || IsModalOpen) return;
+            Simulation.Paused = false;
+            canvasView?.SetManualPlanningVisual(false);
+            canvasView?.Refresh();
         }
 
         private MenuSaveResult SaveAndReturnFromSystemMenu()
@@ -321,7 +337,17 @@ namespace CallmeCatgirl.Gameplay
                 case NarrativeEffectKind.QueueStageDoctorRequest:
                     return CreateNarrativeRequest(effect);
                 case NarrativeEffectKind.ShowUpgradeHint:
+                    Message = effect.Title + "：" + effect.Description; return true;
                 case NarrativeEffectKind.IntroduceArchitecture:
+                    if (effect.ArchitectureId == "alternate")
+                    {
+                        if (!TrainingEnabled) return false;
+                        double points = training.Configuration.MoeUnlockCorpusPointsPerAbility;
+                        var grant = training.Session.GrantScriptedCorpus(effect.EventId + ":doctor-corpus", NarrativeSession.DoctorId,
+                            new Dictionary<AbilityKind, double> { { AbilityKind.Writing, points }, { AbilityKind.Code, points },
+                                { AbilityKind.Reasoning, points }, { AbilityKind.Retrieval, points } }, "博士 · MoE解锁训练语料");
+                        if (grant != TrainingResult.Success && grant != TrainingResult.AlreadyRecorded) return false;
+                    }
                     Message = effect.Title + "：" + effect.Description; return true;
                 case NarrativeEffectKind.EndRun:
                     string reason = NarrativeSession.HostEndReason(effect.EndingReason);

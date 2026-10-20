@@ -110,7 +110,7 @@ namespace CallmeCatgirl.Tests
                 Set(Memory,"InitialLevel",1);Range(Field(Memory,"InitialTaskMultipliers"),1,1,1,1);
                 foreach(object step in (Array)Field(Memory,"Levels"))
                 {
-                    int level=(int)Field(step,"TargetLevel");Set(step,"Cost",0);Set(step,"RequiredCompletedTasks",0);Set(step,"AbilityPoints",0);
+                    int level=(int)Field(step,"TargetLevel");Set(step,"Cost",0);Set(step,"RequiredCompletedTasks",0);
                     Range(Field(step,"TaskMultipliers"),level==2?2:4,level==2?2:4,level==2?3:5,level==2?3:5);
                 }
                 Set(Generation,"RequestsPerRefresh",2);Set(Generation,"MonthsPerRefresh",1);Set(Generation,"RandomSeed",20);

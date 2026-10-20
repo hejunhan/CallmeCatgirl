@@ -39,7 +39,7 @@ namespace CallmeCatgirl.Persistence
             StateRules.Require((h.Version == 1 || h.Version == 2 || h.Version == 3) && h.CurrentMonth >= 1 && StateRules.Finite(h.MonthElapsed) && h.MonthElapsed >= 0
                 && StateRules.Finite(h.SecondsPerMonth) && h.SecondsPerMonth > 0 && h.MonthElapsed < h.SecondsPerMonth
                 && h.MonthlyMaintenanceFee >= 0 && StateRules.Finite(h.PlaybackSpeed) && h.PlaybackSpeed > 0
-                && h.MemoryLevel >= (h.Version >= 3 ? 0 : 1) && h.MemoryLevel <= 5 && h.CompletedTasks >= 0 && h.AvailableAbilityPoints >= 0 && h.RequestSerial >= 0
+                && h.MemoryLevel >= (h.Version >= 3 ? 0 : 1) && h.MemoryLevel <= 5 && h.CompletedTasks >= 0 && h.RequestSerial >= 0
                 && h.TaskBases != null && h.GenerationRandom != null && h.GenerationRandom.Version == 1
                 && !string.IsNullOrWhiteSpace(h.GenerationRandom.AlgorithmId) && !string.IsNullOrWhiteSpace(h.GenerationRandom.StateJson)
                 && (string.IsNullOrEmpty(h.SelectedRequestId) || s.Tasks.ContainsKey(h.SelectedRequestId)), "Invalid host clock/memory/selection/random state.");

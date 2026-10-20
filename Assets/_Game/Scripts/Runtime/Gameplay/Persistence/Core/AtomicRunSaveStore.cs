@@ -68,8 +68,8 @@ namespace CallmeCatgirl.Persistence
             {
                 if (File.Exists(ActivePath))
                 {
-                    try { Read(ActivePath); }
-                    catch (SaveCompatibilityException) { throw; } // Older clients must not replace newer/content-incompatible saves.
+                    try { Read(ActivePath, data.RunId); }
+                    catch (SaveCompatibilityException) { throw; } // Keep future format/module protection and same-run content compatibility.
                     catch (ArgumentException) { }
                     catch (InvalidDataException) { } // Atomic replacement preserves the corrupt bytes in a unique backup.
                 }
@@ -111,7 +111,7 @@ namespace CallmeCatgirl.Persistence
                 throw new InvalidDataException("No valid committed run save. Existing files were preserved. Rejected: " + rejected.Count);
             }
         }
-        private RunSaveData Read(string path)
+        private RunSaveData Read(string path, string replacingRunId = null)
         {
             var info = new FileInfo(path);
             if (info.Length <= 0 || info.Length > MaxFileBytes) throw new InvalidDataException("Invalid save size.");
@@ -127,7 +127,12 @@ namespace CallmeCatgirl.Persistence
             RunSaveData data;
             try { data = codec.Decode<RunSaveData>(envelope.PayloadJson); }
             catch (Exception ex) when (IsJsonFailure(ex)) { throw new InvalidDataException("Invalid run JSON.", ex); }
-            RunSaveValidation.Validate(data, revision, extensions, legacyStoryV1Revision, compatiblePresentationRevisions); return data;
+            // A new run may replace an older configuration's run, keeping its complete bytes in the backup.
+            // Still validate every schema/component/extension and ledger; loading or updating the same run stays strict.
+            bool differentRun = data != null && Guid.TryParse(data.RunId, out var savedRun)
+                && Guid.TryParse(replacingRunId, out var newRun) && savedRun != newRun;
+            RunSaveValidation.Validate(data, differentRun ? data.ContentRevision : revision,
+                extensions, legacyStoryV1Revision, compatiblePresentationRevisions); return data;
         }
         private static bool IsJsonFailure(Exception ex) => ex is ArgumentException || ex is FormatException || ex.GetType().Name == "JsonException";
         private static string Hash(string text)

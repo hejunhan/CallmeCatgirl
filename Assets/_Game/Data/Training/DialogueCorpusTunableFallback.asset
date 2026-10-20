@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70ba38db89108a10bc62286862dbbdf5, type: 3}
   m_Name: DialogueCorpusTunableFallback
   m_EditorClassIdentifier:
-  UseHighestRequirement: 1
-  HighestRequirementRatio: 0.5
+  UseHighestRequirement: 0
+  HighestRequirementRatio: 0.1
+  RequirementRatioMin: 0.05
+  RequirementRatioMax: 0.1
   Entries: []
   AllowRequirementFallback: 1
   CompleteScore: 1

@@ -60,17 +60,12 @@ namespace CallmeCatgirl.Gameplay
         public int MonthlyMaintenanceFee => configuration.MonthlyMaintenanceFee;
         private double monthTimer;
         public int CompletedTasks { get; private set; }
-        public int AvailableAbilityPoints { get; private set; }
-        public bool CanAllocateAbility => !TrainingEnabled && !GameEnded && !IsMemoryInstallPending && !IsMemoryInstallOpen && IsMemoryUpgradeOpen && AvailableAbilityPoints > 0;
         public MemoryUpgradeConfiguration.UpgradeStep NextMemoryUpgrade
             => MemoryLevel == 0 ? firstMemoryInstallation : configuration.MemoryUpgrades.TryGetNextLevel(MemoryLevel, out var step) ? step : null;
         public bool CanUpgradeMemory => isActiveAndEnabled && !GameEnded && Economy != null && !Economy.IsBankrupt
             && !IsMemoryInstallPending && !IsMemoryInstallOpen && NextMemoryUpgrade != null
-            && (NextMemoryUpgrade.TaskMultipliers == null || NextMemoryUpgrade.TaskMultipliers.IsValid) && NextMemoryUpgrade.Cost >= 0 && NextMemoryUpgrade.AbilityPoints >= 0
-            && AvailableAbilityPoints <= int.MaxValue - NextMemoryUpgrade.AbilityPoints
+            && (NextMemoryUpgrade.TaskMultipliers == null || NextMemoryUpgrade.TaskMultipliers.IsValid) && NextMemoryUpgrade.Cost >= 0
             && CanAfford(NextMemoryUpgrade.Cost) && CompletedTasks >= NextMemoryUpgrade.RequiredCompletedTasks;
-        public string NextMemoryPointRewardText => NextMemoryUpgrade == null ? string.Empty
-            : NextMemoryUpgrade.AbilityPoints < 0 ? "奖励点数配置无效" : $"升级奖励：{NextMemoryUpgrade.AbilityPoints} 点，由玩家自由分配";
         public string NextTaskMultiplierText => NextMemoryUpgrade == null ? string.Empty
             : configuration.MemoryUpgrades.GetTaskMultipliers(NextMemoryUpgrade.TargetLevel)?.Description ?? "计算量 ×1 · 奖励 ×1";
         public int NextMemoryCellCount => NextMemoryUpgrade == null ? 0
@@ -146,7 +141,7 @@ namespace CallmeCatgirl.Gameplay
                     new ModelDefinition(configuredSimulation.Model.Id, configuredSimulation.Model.Interval, new Dictionary<AbilityKind,double>()), configuration.MemoryUpgrades.GetCompartments());
                 Simulation.Paused = true; definitions.Clear(); taskBases.Clear(); operatingTasks.Clear(); logs.Clear(); serial = 0;
                 Array.Clear(fillerGenerated, 0, fillerGenerated.Length);
-                MemoryLevel = 0; CompletedTasks = 0; AvailableAbilityPoints = 0;
+                MemoryLevel = 0; CompletedTasks = 0;
                 if (configuration.DaysPerGameMonth < 1 || configuration.SecondsPerGameDay <= 0
                     || configuration.SecondsPerGameMonth <= 0 || float.IsNaN(configuration.SecondsPerGameMonth)
                     || float.IsInfinity(configuration.SecondsPerGameMonth)) throw new InvalidOperationException("每天游戏秒数必须为正数、维护周期天数至少为1，周期时长必须有限。");
@@ -254,6 +249,8 @@ namespace CallmeCatgirl.Gameplay
         private void EnsureVisitorQueue()
         {
             if (GameEnded || Simulation == null || configuration == null) return;
+            // Daily mode has one shared arrival budget; do not top it up again, including after RAM upgrades.
+            if (configuration.TaskGeneration?.RefreshByDay == true) return;
             if (Narrative != null && !Narrative.OrdinaryRequestsUnlocked) return;
             int stage = Math.Max(1, Math.Min(5, MemoryLevel));
             OrdinaryStagePool.StageRule rule;
@@ -267,6 +264,16 @@ namespace CallmeCatgirl.Gameplay
             if (sources.Count == 0) return;
             for (int i = 0; i < arrivals; i++)
                 if (CreateVisitorRequest(stage, rule, sources) == null) break;
+        }
+        // Fallback visits consume the same daily slot as an ordinary scheduled request.
+        private TaskInstance CreateDailyVisitor()
+        {
+            int stage = Math.Max(1, Math.Min(5, MemoryLevel));
+            if (!OrdinaryStagePool.TryGetRule(stage, out var rule)
+                || VisitorQueuePolicy.ArrivalCount(stage, int.MaxValue, rule.TargetRequests, fillerGenerated[stage - 1], 0) <= 0) return null;
+            var sources = LightweightVisitorQueue.Sources(configuration.Story, configuration.OrdinaryDialoguePool,
+                OrdinaryStagePool.Load(), stage);
+            return sources.Count == 0 ? null : CreateVisitorRequest(stage, rule, sources);
         }
         private TaskInstance CreateVisitorRequest(int stage, OrdinaryStagePool.StageRule rule, IReadOnlyList<VisitorSource> sources)
         {
@@ -324,18 +331,39 @@ namespace CallmeCatgirl.Gameplay
             if (generation == null || generation.RefreshByDay != daily) return;
             long day = (CurrentMonth - 1L) * DaysPerMonth + CurrentDay;
             if (daily ? !generation.ShouldRefreshDay(day) : !generation.ShouldRefresh(CurrentMonth)) return;
+            int removed = daily ? DiscardPreviousDayCandidates() : 0;
             int count = 0;
-            double expected = generation.RequestsPerRefresh * (PolicyTree?.Effects.CustomerArrivalMultiplier ?? 1);
-            int arrivals = (int)Math.Min(1000, Math.Floor(expected));
+            double expected = generation.RequestsPerRefresh * (daily ? 1 : PolicyTree?.Effects.CustomerArrivalMultiplier ?? 1);
+            int arrivals = daily ? generation.RequestsPerRefresh : (int)Math.Min(1000, Math.Floor(expected));
             if (expected - Math.Floor(expected) > 0 && requestRandom.NextDouble() < expected - Math.Floor(expected)) arrivals++;
             for (int i = 0; i < arrivals; i++)
             {
-                if (CreateScheduledRequest() == null) break;
+                if (CreateScheduledRequest() == null && (!daily || CreateDailyVisitor() == null)) break;
                 count++;
             }
             ReadEvents();
-            Message = (daily ? $"第{CurrentMonth}月第{CurrentDay}天" : $"第{CurrentMonth}月") + $"：新增{count}个请求，已有请求继续保留。";
+            Message = (daily ? $"第{CurrentMonth}月第{CurrentDay}天" : $"第{CurrentMonth}月") + $"：新增{count}个请求，"
+                + (daily ? $"移除{removed}个上一天未处理候选；内存中的请求继续保留。" : "已有请求继续保留。");
             AddEconomyLog(Message);
+        }
+        private int DiscardPreviousDayCandidates()
+        {
+            ReadEvents();
+            double dayStartedAt = Simulation.GameTime - monthTimer % SecondsPerDay;
+            int removed = 0;
+            foreach (var task in Simulation.Tasks.Values.Where(t => t.ArrivedAt < dayStartedAt
+                && (t.State == RequestState.Waiting || t.State == RequestState.Withdrawn)).ToArray())
+            {
+                if ((TrainingEnabled && training.IsTrainingRequest(task.Id)) || IsNarrativeContact(task.ConversationId)
+                    || task.Id.StartsWith("narrative-", StringComparison.Ordinal) || Story.AwaitingReply(task.Id)) continue;
+                if (!Simulation.TryDiscardCandidate(task.Id)) continue;
+                Story.ForgetCandidate(task);
+                taskBases.Remove(task.Id);
+                operatingTasks.Remove(task.Id);
+                if (SelectedId == task.Id) SelectedId = null;
+                removed++;
+            }
+            return removed;
         }
         public void NextRound()
         {
@@ -385,8 +413,6 @@ namespace CallmeCatgirl.Gameplay
             if (next == null) { Message = "内存已满级。"; return; }
             if (next.TaskMultipliers != null && !next.TaskMultipliers.IsValid)
             { Message = "新任务倍率范围配置无效，未升级或扣费。"; canvasView?.Refresh(); return; }
-            if (next.AbilityPoints < 0 || AvailableAbilityPoints > int.MaxValue - next.AbilityPoints)
-            { Message = "奖励点数配置无效或超过上限，未升级或扣费。"; canvasView?.Refresh(); return; }
             if (!CanUpgradeMemory)
             { Message = CompletedTasks < next.RequiredCompletedTasks ? $"需要累计达标提交 {next.RequiredCompletedTasks} 个任务。" : "升级资金不足。"; return; }
             IReadOnlyList<Cell> outline;
@@ -429,7 +455,6 @@ namespace CallmeCatgirl.Gameplay
             if (GameEnded) failure = "经营已结束";
             else if (!ReferenceEquals(NextMemoryUpgrade, step)) failure = "升级目标已变化";
             else if (step.TaskMultipliers != null && !step.TaskMultipliers.IsValid) failure = "新任务倍率范围配置无效";
-            else if (step.AbilityPoints < 0 || AvailableAbilityPoints > int.MaxValue - step.AbilityPoints) failure = "奖励点数配置无效或超过上限";
             else if (step.Cost < 0) failure = "升级价格配置无效";
             else if (CompletedTasks < step.RequiredCompletedTasks) failure = $"需要累计达标提交 {step.RequiredCompletedTasks} 个任务";
             else if (Economy.IsBankrupt || !CanAfford(step.Cost)) failure = "升级资金不足";
@@ -455,10 +480,10 @@ namespace CallmeCatgirl.Gameplay
                 if (!geometryFailed) canvasView?.Refresh();
                 return;
             }
-            MemoryLevel = step.TargetLevel; AvailableAbilityPoints += step.AbilityPoints;
+            MemoryLevel = step.TargetLevel;
             Narrative?.ObserveMemoryCount(MemoryLevel);
             EnsureVisitorQueue();
-            Message = $"内存升级至 Lv{MemoryLevel}：新增 {Simulation.OpenCellCount - before} 格，花费 {step.Cost}，获得 {step.AbilityPoints} 点（剩余 {AvailableAbilityPoints} 点）";
+            Message = $"内存升级至 Lv{MemoryLevel}：新增 {Simulation.OpenCellCount - before} 格，花费 {step.Cost}";
             logs.Insert(0, Message);
             if (logs.Count > 7) logs.RemoveAt(logs.Count - 1);
             canvasView?.Refresh();
@@ -479,22 +504,6 @@ namespace CallmeCatgirl.Gameplay
                 memoryInstallGame.InstallCompleted -= installCompletionHandler;
             installCompletionHandler = null;
         }
-        public void AllocateAbility(AbilityKind ability)
-        {
-            if (!CanAllocateAbility || !Enum.IsDefined(typeof(AbilityKind), ability)) return;
-            var current = Simulation.Model;
-            var points = current.Points.ToDictionary(p => p.Key, p => p.Value);
-            points.TryGetValue(ability, out double before); points[ability] = before + 1;
-            var model = new ModelDefinition(current.Id, current.Interval, points);
-            bool paused = Simulation.Paused, applied;
-            try { Simulation.Paused = true; applied = Simulation.TryChangeModel(model); }
-            finally { Simulation.Paused = paused; }
-            if (!applied) return;
-            AvailableAbilityPoints--;
-            Message = $"{AbilityText(ability)}每周期产出 {before:0.##} → {before + 1:0.##}，剩余 {AvailableAbilityPoints} 点。";
-            canvasView?.Refresh();
-        }
-
         public TaskInstance ConversationTask => Story == null || string.IsNullOrEmpty(Story.UserId) ? null
             : LatestConversationTask(Story.UserId);
         public IReadOnlyList<StoryConfiguration.ReplyChoice> ConversationReplyChoices => Story.IsReply ? Story.Choices

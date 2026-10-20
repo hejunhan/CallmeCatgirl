@@ -185,7 +185,7 @@ namespace CallmeCatgirl.Gameplay.Training.Tests
         private static void TrainingWithdraw()
         {
             var f = new Fixture(); var job = f.Start(f.Record()); var t=f.Sim.Tasks[job.RequestId]; f.Place(t);f.Run(1);
-            True(f.Sim.TryPlace(t.Id,new Cell(2,0),0,out _)); Equal(10d,t.Progress); True(f.Sim.TryWithdraw(t.Id));
+            True(f.Sim.TryPlace(t.Id,new Cell(1,0),0,out _)); Equal(10d,t.Progress); True(f.Sim.TryWithdraw(t.Id));
             f.Run(1);Equal(10d,t.Progress);f.Place(t);f.Run(3);Equal(RequestState.Ready,t.State);
         }
         private static void CompleteOnce()

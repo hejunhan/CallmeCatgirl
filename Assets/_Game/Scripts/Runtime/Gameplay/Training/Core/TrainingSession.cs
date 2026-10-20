@@ -50,6 +50,7 @@ namespace CallmeCatgirl.Gameplay.Training
         public IReadOnlyList<ComputeTier> ComputeTiers => Array.AsReadOnly(compute);
         public ComputeTier NextCompute => ComputeIndex + 1 < compute.Length ? compute[ComputeIndex + 1] : null;
         public double TokensPerSecond => ActiveModel == null ? BaseTokensPerSecond : Throughput(ActiveModel.ArchitectureId, ComputeIndex);
+        public double ComputeAbilityMultiplier => Compute.TokensPerSecond / compute[0].TokensPerSecond;
         private double BaseTokensPerSecond => compute[ComputeIndex].TokensPerSecond * policyModifiers().InferenceSpeedMultiplier;
         public double PreviewTokensPerSecond(string modelId)
         {
@@ -100,8 +101,13 @@ namespace CallmeCatgirl.Gameplay.Training
                     throw new ArgumentException("Compute tiers must strictly increase.");
             foreach (var architecture in this.architectures.Keys)
                 for (int i = 0; i < this.compute.Length; i++) Throughput(architecture, i);
-            if (restoring) return; // Detached restore never applies profiles, UUID migration, money or task commands.
-            if (initial == null) return; // Tutorial starts without a model; the first training creates model 1.
+            foreach (var tier in this.compute) Check.Number(tier.TokensPerSecond / this.compute[0].TokensPerSecond, true);
+            // Detached restore and the model-less tutorial only bind the read-only hardware source.
+            if (restoring || initial == null)
+            {
+                simulation.BindHardwareAbilityMultiplier(() => ComputeAbilityMultiplier);
+                return;
+            }
             if (!this.architectures.ContainsKey(initial.ArchitectureId)) throw new ArgumentException("Missing initial model architecture.");
             if (initial.Id != simulation.Model.Id && initial.LegacyId != simulation.Model.Id)
                 throw new ArgumentException("Initial catalog must match the live model ID or its migration alias.");
@@ -117,6 +123,7 @@ namespace CallmeCatgirl.Gameplay.Training
                 var migrated = new ModelDefinition(initial.Id, simulation.Model.Interval, simulation.Model.Points.ToDictionary(p => p.Key, p => p.Value));
                 if (!simulation.TryChangeModel(migrated)) throw new ArgumentException("Initial UUID migration requires a paused simulation.");
             }
+            simulation.BindHardwareAbilityMultiplier(() => ComputeAbilityMultiplier);
         }
 
         private double Throughput(string architectureId, int tier)
@@ -178,7 +185,7 @@ namespace CallmeCatgirl.Gameplay.Training
             var uses = ids.Select(id => new CorpusUse { CorpusId=id, Points=RemainingPoints(id) }).ToArray();
             try
             {
-                var shape = recipe.WorkGrowthCoefficient > 0 ? GrowShape(recipe, uses.Sum(u=>u.Points), simulation.Width, simulation.Height) : recipe.Shape;
+                var shape = GrowShape(recipe, uses.Sum(u=>u.Points), simulation.Width, simulation.Height);
                 return StartTrainingCore(recipeId, architectureId, name, uses, shape, out job);
             }
             catch (ArgumentException) { return TrainingResult.InvalidInput; }

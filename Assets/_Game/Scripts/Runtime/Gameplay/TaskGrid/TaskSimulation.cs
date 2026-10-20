@@ -133,10 +133,25 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
             return true;
         }
 
+        /// <summary>Remove only an unsubmitted candidate, without settlement or timeout events.</summary>
+        public bool TryDiscardCandidate(string requestId)
+        {
+            if (requestId == null || !tasks.TryGetValue(requestId, out var task)
+                || (task.State != RequestState.Waiting && task.State != RequestState.Withdrawn)) return false;
+            Release(task);
+            tasks.Remove(requestId);
+            roundRequests.Remove(Tuple.Create(task.ConversationId, task.RoundId));
+            if (activeConversations.TryGetValue(task.ConversationId, out var active) && active == requestId)
+                activeConversations.Remove(task.ConversationId);
+            debugQualityOverrides.Remove(requestId);
+            pendingEvents.RemoveAll(item => item.RequestId == requestId);
+            return true;
+        }
+
         public bool TrySubmit(string requestId)
         {//尝试提交
             if (!tasks.TryGetValue(requestId, out var task) || task.State != RequestState.Ready) return false;
-            Release(task); task.State = RequestState.Submitted;
+            Release(task); task.State = RequestState.Submitted; task.ReadyInCandidate = false;
             Emit(TaskEventKind.Submitted, task, GameTime, task.Definition.Tokens);
             return true;
         }
@@ -146,7 +161,7 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
         {
             if (!tasks.TryGetValue(requestId, out var task)
                 || (task.State != RequestState.Submitted && task.State != RequestState.TimedOut)) return false;
-            task.State = RequestState.Closed; activeConversations.Remove(task.ConversationId);
+            task.State = RequestState.Closed; task.ReadyInCandidate = false; activeConversations.Remove(task.ConversationId);
             Emit(TaskEventKind.FeedbackClosed, task, GameTime);
             return true;
         }
@@ -164,6 +179,23 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
         // Optional integration hook; leaves TaskGrid independent of Training assembly.
         // A null/invalid profile is an atomic no-op. Canonical capacity is owned by the memory system.
         public double TokenThroughput { get; private set; }
+        private Func<double> hardwareAbilityMultiplier;
+        public double HardwareAbilityMultiplier
+        {
+            get
+            {
+                double value = hardwareAbilityMultiplier?.Invoke() ?? 1;
+                return double.IsNaN(value) || double.IsInfinity(value) || value <= 0 ? 1 : value;
+            }
+        }
+        public double EffectiveAbilityRateMultiplier => HardwareAbilityMultiplier * Architecture.AbilityRateMultiplier;
+        // Training owns the hardware tier. Restore binds the new session without serializing a duplicate multiplier.
+        public void BindHardwareAbilityMultiplier(Func<double> provider)
+        {
+            if (provider == null) throw new ArgumentNullException(nameof(provider));
+            Rules.Positive(provider(), nameof(provider));
+            hardwareAbilityMultiplier = provider;
+        }
         public ArchitectureRuntime Architecture { get; private set; } = ArchitectureRuntime.Neutral;
         public bool TrySetArchitecture(ArchitectureRuntime architecture)
         {
@@ -276,7 +308,7 @@ GameTime = end;
         }
         private void AddAbilities(TaskInstance task, double runTime)
         {//给任务赋予能力值
-            double elapsed = task.AbilityRemainder + runTime * (task.Architecture ?? Architecture).AbilityRateMultiplier;
+            double elapsed = task.AbilityRemainder + runTime * HardwareAbilityMultiplier * (task.Architecture ?? Architecture).AbilityRateMultiplier;
             double count = Math.Floor((elapsed + Epsilon) / Model.Interval);
             task.AbilityRemainder = Math.Max(0, elapsed - count * Model.Interval);
             if (count == 0) return;

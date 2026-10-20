@@ -302,7 +302,7 @@ namespace CallmeCatgirl.UI
             pauseButton.interactable = !controller.GameEnded && !controller.IsModalOpen;
             SetControlSelected(pauseButton, sim.Paused || controller.IsModalOpen, feedback != null ? feedback.PauseSelected : pauseActiveColor, pauseIdleColor);
             if (conversationPopup != null) conversationPopup.Refresh(controller, GetAvatar(controller.Story.UserId), feedback);
-            clockLabel.text = $"时间 {sim.GameTime:0.0}s · 周期 {sim.Model.Interval / sim.Architecture.AbilityRateMultiplier:0.##}s";
+            clockLabel.text = $"时间 {sim.GameTime:0.0}s · 周期 {sim.Model.Interval / sim.EffectiveAbilityRateMultiplier:0.##}s";
             messageLabel.text = controller.Message.StartsWith("拖动请求") ? "R 旋转 · 空格 暂停 · Esc 取消" : controller.Message; logLabel.text = string.Join("\n", controller.Logs);
             pauseLabel.text = controller.IsMemoryInstallOpen ? "安装中" : controller.IsMemoryUpgradeOpen ? "内存升级中" : controller.GameEnded ? "经营结束" : sim.Paused ? (sim.GameTime == 0 ? "开始" : "继续") : "暂停";
 
@@ -313,8 +313,8 @@ namespace CallmeCatgirl.UI
             if (memoryUpgradeButton != null)
             {
                 memoryUpgradeButton.interactable = !controller.GameEnded && !controller.IsModalOpen;
-                memoryUpgradeButtonLabel.text = "内存 / 加点";
-                memoryUpgradeLabel.text = $"内存 Lv{controller.MemoryLevel}   资金 <b>{DisplayFunds}</b>   点数 {controller.AvailableAbilityPoints}";
+                memoryUpgradeButtonLabel.text = "内存升级";
+                memoryUpgradeLabel.text = $"内存 Lv{controller.MemoryLevel}   资金 <b>{DisplayFunds}</b>";
             }
             float width = board.rect.width / sim.Width, height = board.rect.height / sim.Height;
             int open = 0;
@@ -327,8 +327,18 @@ namespace CallmeCatgirl.UI
             if (occupancyLabel != null) occupancyLabel.text = $"已用 <size=42>{sim.Occupancy.Count} / {open}</size> 格";
             if (modelLabel != null) modelLabel.text = $"{controller.ModelName}\n"
                 + (controller.TrainingEnabled ? $"{controller.Training.Session.TokensPerSecond:0.##} token/s\n" : string.Empty)
-                + $"能力周期 {sim.Model.Interval / sim.Architecture.AbilityRateMultiplier:0.##}s\n\n"
+                + $"能力周期 {sim.Model.Interval / sim.EffectiveAbilityRateMultiplier:0.##}s · 算力×{sim.HardwareAbilityMultiplier:0.##}\n\n"
                 + string.Join("\n", sim.Model.Points.Select(p => $"{CoreGameplayController.AbilityText(p.Key)}  {p.Value:0.##}"));
+            foreach (var id in cards.Keys.Where(id => !sim.Tasks.ContainsKey(id)).ToArray())
+            {
+                if (cards[id] != null) { cards[id].gameObject.SetActive(false); Destroy(cards[id].gameObject); }
+                cards.Remove(id);
+            }
+            foreach (var id in modules.Keys.Where(id => !sim.Tasks.ContainsKey(id)).ToArray())
+            {
+                if (modules[id] != null) { modules[id].gameObject.SetActive(false); Destroy(modules[id].gameObject); }
+                modules.Remove(id);
+            }
             foreach (var task in sim.Tasks.Values.OrderByDescending(t => controller.TrainingEnabled && controller.Training.IsTrainingRequest(t.Id)))
             {
                 bool candidate = task.State == RequestState.Waiting || task.State == RequestState.Withdrawn || (task.State == RequestState.Ready && task.ReadyInCandidate);

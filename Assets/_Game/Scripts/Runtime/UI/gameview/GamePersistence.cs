@@ -21,6 +21,7 @@ namespace CallmeCatgirl.Gameplay
         private RunSaveService saveService;
         private TrainingSaveExtension trainingSave;
         private int lastAutoSaveDay = -1;
+        private float nextAutoSaveAttemptAt;
         private string endingLoadMessage = string.Empty;
         public string EndingLoadMessage => endingLoadMessage;
 #if UNITY_EDITOR
@@ -81,6 +82,9 @@ namespace CallmeCatgirl.Gameplay
                 if(source==training?.Configuration)
                 {
                     json=Regex.Replace(json,@",""PointsPerExtraCell"":2(?:\.0+)?,""MaximumCorpusPoints"":20(?:\.0+)?","");
+                    // Appended defaults do not change existing save fingerprints; customized values still do.
+                    json=Regex.Replace(json,@",""MoeUnlockCorpusPointsPerAbility"":5(?:\.0+)?(?=[,}])","");
+                    json=Regex.Replace(json,@",""LongTrainingWarningSeconds"":300(?:\.0+)?(?=[,}])","");
                     if (formerArchitectureTitles)
                         foreach (var pair in new[] { new[] { "baseline", "学习型" }, new[] { "alternate", "高速型" }, new[] { "architecture-slot-3", "均衡型" } })
                             json = Regex.Replace(json, "(\\\"Id\\\"\\s*:\\s*\\\"" + pair[0] + "\\\"\\s*,\\s*\\\"Title\\\"\\s*:\\s*)\\\"[^\\\"]*\\\"", "$1\"" + pair[1] + "\"");
@@ -108,13 +112,33 @@ namespace CallmeCatgirl.Gameplay
         {
             if (IsMemoryInstallPending || IsMemoryInstallOpen)
             { Message = "请先完成或取消内存安装后再保存。"; canvasView?.ShowPersistenceFeedback(Message, false); return false; }
-            try { ReadEvents(); EnsureSaveService(); saveService.Save(); Message = "游戏已保存。"; canvasView?.ShowPersistenceFeedback(Message, true); return true; }
-            catch (Exception error) { Message = "保存失败：" + error.Message; canvasView?.ShowPersistenceFeedback(Message, false); return false; }
+            try
+            {
+                ReadEvents(); EnsureSaveService(); saveService.Save();
+                lastAutoSaveDay = AbsoluteGameDay; nextAutoSaveAttemptAt = 0;
+                Message = "游戏已保存。"; canvasView?.ShowPersistenceFeedback(Message, true); return true;
+            }
+            catch (Exception error)
+            {
+                Debug.LogWarning("Run save failed: " + error, this);
+                Message = "保存失败：" + error.Message; canvasView?.ShowPersistenceFeedback(Message, false); return false;
+            }
         }
         public bool ContinueRun()
         {
-            try { EnsureSaveService(); saveService.Continue(); Message="存档已恢复。"; return true; }
-            catch(Exception error) { Message="读取失败："+error.Message; return false; }
+            try
+            {
+                EnsureSaveService(); var loaded = saveService.Continue();
+                Message = loaded.RecoveredBackup ? "主存档不可用，已从备份恢复。" : "存档已恢复。";
+                nextAutoSaveAttemptAt = 0;
+                canvasView?.ShowPersistenceFeedback(Message, true);
+                return true;
+            }
+            catch(Exception error)
+            {
+                Debug.LogWarning("Run restore failed: " + error, this);
+                Message="读取失败："+error.Message; return false;
+            }
         }
         public int AbsoluteGameDay => (CurrentMonth - 1) * DaysPerMonth + CurrentDay;
         public void ClearEndingLoadMessage() => endingLoadMessage = string.Empty;
@@ -148,18 +172,23 @@ namespace CallmeCatgirl.Gameplay
             canvasView?.Refresh();
             return true;
         }
-        /// <summary>One silent main-slot save per absolute game day; a failed attempt waits for the next day.</summary>
+        /// <summary>One successful silent main-slot save per absolute game day; transient failures retry every ten real seconds.</summary>
         private void TryAutoSaveDay()
         {
             int day = AbsoluteGameDay;
             if (!DailyAutoSavePolicy.ShouldSave(day, lastAutoSaveDay, Application.isPlaying, GameEnded,
                 IsModalOpen, IsMemoryInstallPending, IsMemoryInstallOpen, TrainingEnabled)) return;
-            lastAutoSaveDay = day;
-            try { EnsureSaveService(); saveService.Save(); }
+            if (Time.realtimeSinceStartup < nextAutoSaveAttemptAt) return;
+            try
+            {
+                EnsureSaveService(); saveService.Save();
+                lastAutoSaveDay = day; nextAutoSaveAttemptAt = 0;
+            }
             catch (Exception error)
             {
+                nextAutoSaveAttemptAt = Time.realtimeSinceStartup + 10f;
                 Message = "自动存档失败：" + error.Message;
-                Debug.LogWarning("Daily autosave failed on day " + day + ": " + error.Message, this);
+                Debug.LogWarning("Daily autosave failed on day " + day + ": " + error, this);
             }
         }
         public RunSaveData CaptureRun()
@@ -169,7 +198,7 @@ namespace CallmeCatgirl.Gameplay
                 Simulation=Simulation.CaptureState(),Economy=Economy.CaptureState(),Story=Story.CaptureState(),Policies=policy.Tree.Capture(),Extensions=Array.Empty<SaveExtensionState>(),
                 Host=new HostState {Version=3,CurrentMonth=CurrentMonth,MonthElapsed=monthTimer,SecondsPerMonth=configuration.SecondsPerGameMonth,
                     MonthlyMaintenanceFee=configuration.MonthlyMaintenanceFee,PlaybackSpeed=PlaybackSpeed,MemoryLevel=MemoryLevel,CompletedTasks=CompletedTasks,
-                    AvailableAbilityPoints=AvailableAbilityPoints,RequestSerial=serial,SelectedRequestId=SelectedId,GameEnded=GameEnded,EndingText=EndingText,EndReason=EndReason,
+                    AvailableAbilityPoints=0,RequestSerial=serial,SelectedRequestId=SelectedId,GameEnded=GameEnded,EndingText=EndingText,EndReason=EndReason,
                     OperatingRequestIds=operatingTasks.OrderBy(id=>id,StringComparer.Ordinal).ToArray(),
                     FillerCounts=(int[])fillerGenerated.Clone(),
                     MemoryUpgradeOpen=IsMemoryUpgradeOpen,GenerationRandom=((SaveableRandom)requestRandom).Capture(),
@@ -185,6 +214,8 @@ namespace CallmeCatgirl.Gameplay
             if (host.Version >= 3 && narrativePayload == null) throw new ArgumentException("Current run is missing its narrative ledger.");
             var restoredNarrative = narrativePayload == null ? NarrativeSession.AdoptLegacy(host.MemoryLevel)
                 : NarrativeSession.Restore(narrativeSave.DecodeForRestore(narrativePayload));
+            restoredNarrative.MoeCorpusPointsProvider = () => training?.Configuration?.MoeUnlockCorpusPointsPerAbility ?? 5;
+            restoredNarrative.MoeCorpusGrantedProvider = HasMoeUnlockCorpus;
             var ordinaryPoolForRestore = data.Story.Version >= 5 ? (OrdinaryStagePool.Load() ?? configuration.OrdinaryDialoguePool) : configuration.OrdinaryDialoguePool;
             var restored=RunRestoreBuilder.Build(data,ContentRevision,configuration.Story,configuration.TaskGeneration,policy.Nodes,SaveableRandom.Restore,Story.Revision,runExtensions,LegacyStoryV1ContentRevision,ordinaryPoolForRestore,configuration.InitialAffinity,configuration.SuccessAffinity,configuration.FailureAffinity,CompatiblePresentationRevisions,() => host.MemoryLevel);
             if(host.MemoryLevel<0 || host.MemoryLevel>5 || (host.Version<3 && host.MemoryLevel<1)) throw new ArgumentException("Invalid stage.");
@@ -215,10 +246,10 @@ namespace CallmeCatgirl.Gameplay
                 taskBases.Clear(); foreach(var pair in restored.TaskBases) taskBases.Add(pair.Key,pair.Value);
                 CurrentMonth=host.CurrentMonth;monthTimer=host.MonthElapsed;PlaybackSpeed=host.PlaybackSpeed;MemoryLevel=host.MemoryLevel;
                 RestoreFillerCounters(host.FillerCounts,restored.Simulation);
-                CompletedTasks=host.CompletedTasks;AvailableAbilityPoints=host.AvailableAbilityPoints;serial=host.RequestSerial;SelectedId=host.SelectedRequestId;
+                CompletedTasks=host.CompletedTasks;serial=host.RequestSerial;SelectedId=host.SelectedRequestId;
                 GameEnded=host.GameEnded;EndingText=host.EndingText;EndReason=RunSaveValidation.ResolveEndReason(host);IsMemoryUpgradeOpen=host.MemoryUpgradeOpen;runId=data.RunId;
                 Narrative=restoredNarrative;appliedPolicySpeed=-1;
-                lastAutoSaveDay=AbsoluteGameDay;endingLoadMessage=string.Empty;
+                lastAutoSaveDay=AbsoluteGameDay;nextAutoSaveAttemptAt=0;endingLoadMessage=string.Empty;
                 endingSceneRequested=false;endingSceneUnavailable=false;narrativePanelHiddenForEnding=false;
                 if(narrativePanel!=null)narrativePanel.gameObject.SetActive(true);
                 if(narrativePanel!=null)narrativePanel.Bind(Narrative,CompletionFont());

@@ -132,6 +132,7 @@ namespace CallmeCatgirl.Gameplay.Narrative
                 "doctor.first-visitor", "doctor.first-income", "doctor.upgrade", "doctor.legacy",
                 "companion.wait", "friend.wait", "ending.choose", "ending.low", "ending.normal", "ending.good", "ending.companion" }.Contains(node, StringComparer.Ordinal)) return true;
             if (Enumerable.Range(1, 5).Any(n => node == "stage." + n || node == "stage." + n + ".after")) return true;
+            if (node == "stage.2.moe" || node == "stage.2.training") return true;
             if (Enumerable.Range(1, 7).Any(n => node == "companion." + n || node == "companion." + n + ".after")) return true;
             return new[] { "ending.low.closed.destroy", "ending.normal.closed.comply", "ending.normal.closed.decline", "ending.normal.closed.analyze",
                 "ending.good.closed.play", "ending.good.closed.joke", "ending.companion.closed.together" }.Contains(node, StringComparer.Ordinal);

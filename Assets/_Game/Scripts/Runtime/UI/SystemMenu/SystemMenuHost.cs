@@ -26,6 +26,7 @@ namespace CallmeCatgirl.UI.SystemMenu
         private bool refreshing, configured, wasBlocking;
         private GameObject previousSelection;
         private SystemMenuSession session;
+        private Action resumeGameplay;
         public SystemSettingsService Settings { get; private set; }
         public bool IsPauseClaimed => session != null && session.IsPauseClaimed;
         public bool IsBlockingInput => session != null && session.IsBlockingInput;
@@ -34,19 +35,19 @@ namespace CallmeCatgirl.UI.SystemMenu
 
         public static SystemMenuHost Create(RectTransform parent, Font font, bool gameplay,
             Action<bool> pauseClaimChanged = null, Func<bool> consumeEscapeBeforeMenu = null,
-            Func<MenuSaveResult> saveAndReturnToMenu = null, SystemSettingsService service = null, bool applySavedSettings = true)
+            Func<MenuSaveResult> saveAndReturnToMenu = null, SystemSettingsService service = null, bool applySavedSettings = true, Action resumeGameplay = null)
         {
             if (parent == null) throw new ArgumentNullException(nameof(parent));
             var host = parent.GetComponentsInChildren<SystemMenuHost>(true).FirstOrDefault();
             if(host==null && Application.isPlaying)throw new InvalidOperationException("System menu UI is missing. Save its authored scene layout before Play.");
             if (host == null) { var rect = Rect("SystemMenuHost", parent); Stretch(rect); host = rect.gameObject.AddComponent<SystemMenuHost>(); }
-            host.Configure(font, gameplay, pauseClaimChanged, consumeEscapeBeforeMenu, saveAndReturnToMenu, service, applySavedSettings);
+            host.Configure(font, gameplay, pauseClaimChanged, consumeEscapeBeforeMenu, saveAndReturnToMenu, service, applySavedSettings, resumeGameplay);
             return host;
         }
 
         public void Configure(Font sharedFont, bool gameplay, Action<bool> pauseClaimChanged = null,
             Func<bool> consumeEscapeBeforeMenu = null, Func<MenuSaveResult> saveAndReturnToMenu = null,
-            SystemSettingsService service = null, bool applySavedSettings = true)
+            SystemSettingsService service = null, bool applySavedSettings = true, Action resumeGameplay = null)
         {
             if (configured) throw new InvalidOperationException("This system menu is already configured.");
             if (sharedFont == null) throw new ArgumentNullException(nameof(sharedFont), "Pass the existing game's Chinese UI font.");
@@ -56,6 +57,7 @@ namespace CallmeCatgirl.UI.SystemMenu
                 PrepareSceneLayout(sharedFont);
                 Settings = service ?? new SystemSettingsService(new UnitySystemSettingsBackend(), new PlayerPrefsSystemSettingsStore());
                 session = new SystemMenuSession(gameplay, pauseClaimChanged, consumeEscapeBeforeMenu, saveAndReturnToMenu);
+                this.resumeGameplay = resumeGameplay;
                 BindActions(); session.Changed += RefreshVisibility; Settings.Changed += RefreshSettings;
                 if (applySavedSettings) Run(Settings.LoadAndApply);
                 RefreshSettings(); RefreshVisibility();
@@ -94,7 +96,7 @@ namespace CallmeCatgirl.UI.SystemMenu
         }
         private void BindActions()
         {
-            Wire(resumeButton, CloseAll); Wire(settingsButton, OpenSettings); Wire(saveButton, () => session.SaveAndReturn());
+            Wire(resumeButton, ResumeGameplay); Wire(settingsButton, OpenSettings); Wire(saveButton, () => session.SaveAndReturn());
             Wire(settingsBackButton, CloseSettings);
             Wire(previewConfirm, () => Run(() => Settings.ConfirmDisplayPreview()));
             Wire(previewCancel, () => Run(Settings.RevertDisplayPreview));
@@ -115,6 +117,13 @@ namespace CallmeCatgirl.UI.SystemMenu
         }
         public void OpenPause() { CaptureSelection(); session?.OpenPause(); }
         public void OpenSettings() { CaptureSelection(); if (Settings != null) Run(Settings.RefreshDisplayState); session?.OpenSettings(); }
+        // Resume is an explicit user action. Generic close/Escape/disable only release this menu's claim.
+        public void ResumeGameplay()
+        {
+            if (session == null || !session.IsPauseOpen || session.IsSettingsOpen) return;
+            CloseAll();
+            resumeGameplay?.Invoke();
+        }
         public void CloseAll() { if (Settings != null) Run(Settings.RevertDisplayPreview); session?.CloseAll(); }
         public void CloseSettings() { if (Settings != null) Run(Settings.RevertDisplayPreview); session?.CloseSettings(); }
 
@@ -160,8 +169,8 @@ namespace CallmeCatgirl.UI.SystemMenu
             drawerScroll.viewport = drawerViewport; drawerScroll.content = drawerContent;
             var stack = Vertical(drawerContent, 18); stack.childForceExpandHeight = false;
             RowLabel(drawerContent, "已暂停", 36, 58, Ink);
-            RowLabel(drawerContent, "继续时保留原来的暂停与倍速设置。", 22, 78, Muted);
-            resumeButton = RowButton(drawerContent, "继续游戏", () => CloseAll(), 64);
+            RowLabel(drawerContent, "继续游戏恢复运行；Esc收起保留暂停状态。倍速保持不变。", 22, 78, Muted);
+            resumeButton = RowButton(drawerContent, "继续游戏", ResumeGameplay, 64);
             settingsButton = RowButton(drawerContent, "系统设置", OpenSettings, 64);
             saveButton = RowButton(drawerContent, "保存并返回主菜单", () => session.SaveAndReturn(), 82);
             saveError = RowLabel(drawerContent, "", 22, 154, new Color32(143, 47, 42, 255));

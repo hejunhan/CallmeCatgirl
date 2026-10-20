@@ -147,7 +147,7 @@ namespace CallmeCatgirl.UI
                 square.anchoredPosition=new Vector2(cell.X*cellSize,-cell.Y*cellSize);square.sizeDelta=Vector2.one*Mathf.Max(1,cellSize-1);
             }
             string shape=arch.Outline==OutlineTransform.Keep?"标准":arch.Outline==OutlineTransform.Transpose?"转置":"镜像";
-            SetCardText(card,"OutlineSummary","模型轮廓："+shape+" · "+cells.Count+"格");SetCardText(card,"Interval","能力产出间隔："+(model.Definition.Interval/arch.Runtime.AbilityRateMultiplier).ToString("0.###")+"s");
+            SetCardText(card,"OutlineSummary","模型轮廓："+shape+" · "+cells.Count+"格");SetCardText(card,"Interval","能力间隔："+(model.Definition.Interval/(controller.Session.ComputeAbilityMultiplier*arch.Runtime.AbilityRateMultiplier)).ToString("0.###")+"s · 算力×"+controller.Session.ComputeAbilityMultiplier.ToString("0.##"));
             SetCardText(card,"ModelState",(current?"● 当前使用":"○ 可切换")+"   训练语料 "+model.CorpusIds.Count+"条");SetCardText(card,"ModelUuid",id);
             var rename=card.Find("Rename").GetComponent<InputField>();rename.SetTextWithoutNotify(model.Name);
             var renameButton=card.Find("改名").GetComponent<Button>();renameButton.onClick.RemoveAllListeners();renameButton.onClick.AddListener(()=>owner.ExecuteCommand(new CallmeCatgirl.Gameplay.GameCommand{kind="renameModel",id=id,displayName=rename.text}));
@@ -213,7 +213,7 @@ namespace CallmeCatgirl.UI
             }
             string outline=arch.Outline==OutlineTransform.Keep?"标准":arch.Outline==OutlineTransform.Transpose?"转置":"镜像";
             Label(card,"模型轮廓："+outline+" · "+cells.Count+"格",200,232,356,28,16);
-            Label(card,"能力产出间隔："+model.Definition.Interval.ToString("0.###")+"s",200,260,356,28,16);
+            Label(card,"能力间隔："+(model.Definition.Interval/(controller.Session.ComputeAbilityMultiplier*arch.Runtime.AbilityRateMultiplier)).ToString("0.###")+"s · 算力×"+controller.Session.ComputeAbilityMultiplier.ToString("0.##"),200,260,356,28,16);
             Label(card,(current?"● 当前使用":"○ 可切换")+"   训练语料 "+model.CorpusIds.Count+"条",200,288,356,26,15);
             var rename=Input(card,"Rename",model.Name,20,322,422,40);
             Button(card,"改名",454,322,102,()=>owner.ExecuteCommand(new CallmeCatgirl.Gameplay.GameCommand{kind="renameModel",id=id,displayName=rename.text}));

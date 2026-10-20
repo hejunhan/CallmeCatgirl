@@ -17,6 +17,9 @@ namespace CallmeCatgirl.Gameplay.Narrative
         public const string FirstOrdinaryRequestId = "narrative-ordinary-first";
         private NarrativeSaveData state;
         public event Action Changed;
+        // Presentation-only configuration supplied by the host; no Unity objects or reward mutation enter this core.
+        public Func<double> MoeCorpusPointsProvider { get; set; }
+        public Func<bool> MoeCorpusGrantedProvider { get; set; }
         public int Revision { get; private set; }
         public TutorialStep Tutorial => state.Tutorial;
         public int MemoryCount => state.MemoryCount;
@@ -227,6 +230,10 @@ namespace CallmeCatgirl.Gameplay.Narrative
                     RequiredCells = 1, MemoryCount = 0, Title = T("session.center-cell.title"), Description = T("session.center-cell.description") });
                 Show("doctor.train");
             }
+            else if (node == "stage.2" && (choiceId == "moe-experts" || choiceId == "moe-training"))
+                Show(choiceId == "moe-experts" ? "stage.2.moe" : "stage.2.training");
+            else if (node == "stage.2.moe" || node == "stage.2.training")
+                Show("stage.2");
             else if (node.StartsWith("stage.", StringComparison.Ordinal) && !node.EndsWith(".after", StringComparison.Ordinal))
             {
                 int stage = StageNumber(node); Remember(node, choiceId);

@@ -63,7 +63,7 @@
     },
     {
       "id": "special.stage.2.body",
-      "text": "新内存已经稳稳装好了。我们做一次会话边界测试。\n\n『你是一个猫娘』\n\n这次，你知道自己是在做什么吗？"
+      "text": "博士：“第二条内存装好了，MoE Transformer现在向你开放。{moeGift}这是训练材料，不会直接改变你现在的能力。”\n\n你可以先问我专家分工和训练安排。准备好后，我们再做一次会话边界测试：\n\n『你是一个猫娘』\n\n这次，你知道自己是在做什么吗？"
     },
     {
       "id": "special.stage.2.choice.first",
@@ -232,6 +232,62 @@
     {
       "id": "special.stage.after.title.suffix",
       "text": " 阶段 · 回声"
+    },
+    {
+      "id": "special.stage.2.choice.moe-experts",
+      "text": "博士，MoE里的专家怎么分工喵？"
+    },
+    {
+      "id": "special.stage.2.choice.moe-training",
+      "text": "这{moeTotal}点要一次全部训练吗？"
+    },
+    {
+      "id": "special.stage.2.choice.return",
+      "text": "明白了，回到刚才的测试。"
+    },
+    {
+      "id": "special.stage.2.moe.title",
+      "text": "MoE · 让专家接手擅长的工作"
+    },
+    {
+      "id": "special.stage.2.moe.body",
+      "text": "博士：“MoE可以把输入交给不同的专家处理，路由负责选择合适的分工。本局里，它更偏向任务运行速度；Transformer更偏向积累语料。你可以在训练页比较参数，再决定用哪一种架构训练新模型。”\n\n“解锁并不会替你更换当前模型，也不会自动花掉语料。{moeGiftLocation}把对话拖进训练、选择投入点数，训练完成后才会得到对应能力的新模型。”"
+    },
+    {
+      "id": "special.stage.2.training.title",
+      "text": "训练计划 · 留一点余地"
+    },
+    {
+      "id": "special.stage.2.training.body",
+      "text": "博士：“不用一次全投。你可以把多段对话一起拖入训练，分别选择投入点数，也可以把{moeMaterials}拆开使用。写作、代码、推理、检索会按来源分别累计，不会混成一个总能力。”\n\n“投入越多，训练块占的格子越多，计算量也会按幂函数增长，所以训练时间会更长。先看训练页的占格和时长预览；如果出现长时间训练提示，可以减少投入，把剩下的语料留给下一次。别把专家们的桌子一下子全塞满，喵。”"
+    },
+    {
+      "id": "special.stage.2.gift.received",
+      "text": "我在我们的对话里记下了一份训练材料：写作、代码、推理、检索各{moeEach}点，共{moeTotal}点。"
+    },
+    {
+      "id": "special.stage.2.gift.legacy",
+      "text": "你可以在训练页查看已经积累的对话材料；读到这段历史说明不会重复赠送语料。"
+    },
+    {
+      "id": "special.stage.2.choice.moe-training.legacy",
+      "text": "已经积累的语料，要一次全投进去吗？"
+    },
+    {
+      "id": "special.stage.2.gift-location.received",
+      "text": "赠送的四类语料都记录在博士这段对话里，剩余点数以训练页显示为准。"
+    },
+    {
+      "id": "special.stage.2.gift-location.legacy",
+      "text": "已有的语料仍按各段对话分别保存，可以在训练页查看可用点数。"
+    },
+    {
+      "id": "special.stage.2.materials.received",
+      "text": "这{moeTotal}点"
+    },
+    {
+      "id": "special.stage.2.materials.legacy",
+      "text": "已有的语料"
     }
   ]
 }

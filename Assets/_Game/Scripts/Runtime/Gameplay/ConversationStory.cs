@@ -120,6 +120,12 @@ namespace CallmeCatgirl.Gameplay
             else state.History.Add($"{Name(task.ConversationId)}：{task.Definition.Title}");
             Revision++;
         }
+        // Candidate turnover is neither failure nor completion. Keep the conversation progress and history.
+        public void ForgetCandidate(TaskInstance task)
+        {
+            if (task == null || (task.State != RequestState.Waiting && task.State != RequestState.Withdrawn)) return;
+            if (arrived.Remove(task.Id)) Revision++;
+        }
         public void Submitted(TaskInstance task)
         {
             if (task == null || task.State != RequestState.Submitted || task.Result == null) return;

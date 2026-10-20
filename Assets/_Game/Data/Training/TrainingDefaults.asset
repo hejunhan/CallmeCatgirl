@@ -67,3 +67,5 @@ MonoBehaviour:
     UpgradeCost: 100
   InitialArchitectureId: baseline
   InitialModelName: "初始模型"
+  MoeUnlockCorpusPointsPerAbility: 5
+  LongTrainingWarningSeconds: 300

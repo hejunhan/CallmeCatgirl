@@ -28,7 +28,8 @@ namespace CallmeCatgirl.UI
         [SerializeField] private Button start,remove,modelsButton,closeButton,cancelButton;
         [SerializeField] private List<Button> slots=new List<Button>();
         [SerializeField] private List<Button> recommendations=new List<Button>();
-        private bool actionsBound;
+        [SerializeField] private CorpusShapeGraphic actualShapePreview;
+        private bool actionsBound,selectTutorialOnOpen=true;
         private TrainingRecipe[] recipeOptions;
         private ArchitectureDefinition[] architectureOptions;
         private string selected,recipe,architecture,search="";
@@ -40,7 +41,7 @@ namespace CallmeCatgirl.UI
         public double InvestedPoints=>Investments.FirstOrDefault(i=>i.ConversationId==selected)?.Points??0;
         public event Action TrainingStarted;
         public void ConfigureNavigation(Action models)=>returnToModels=models;
-        private void OnEnable(){if(query!=null)EventSystem.current?.SetSelectedGameObject(query.gameObject);}
+        private void OnEnable(){selectTutorialOnOpen=true;if(query!=null)EventSystem.current?.SetSelectedGameObject(query.gameObject);}
         private void OnDisable(){draft.Clear();selected=null;}
 
         public void ConfigureArrangement(int columns,int rows)
@@ -62,12 +63,14 @@ namespace CallmeCatgirl.UI
                 if(available<=1e-9)draft.Remove(item.ConversationId);
                 else draft.SetPoints(item.ConversationId,Math.Min(item.Points,available));
             }
-            if(recipe==null||!session.Recipes.Any(r=>r.Id==recipe)||(recipe==TrainingSession.StarterRecipeId&&!session.StarterTrainingAvailable))
+            if((selectTutorialOnOpen&&(session.CompactTrainingAvailable||session.StarterTrainingAvailable))
+                ||recipe==null||!session.Recipes.Any(r=>r.Id==recipe)||(recipe==TrainingSession.StarterRecipeId&&!session.StarterTrainingAvailable))
                 recipe=session.CompactTrainingAvailable?TrainingSession.TutorialCorpusRecipeId
                     :session.StarterTrainingAvailable?TrainingSession.StarterRecipeId
                     :session.Recipes.First(r=>r.Id!=TrainingSession.StarterRecipeId).Id;
             if(architecture==null||session.ArchitectureAvailability(architecture)!=TrainingResult.Success)
                 architecture=session.Architectures.First(a=>session.ArchitectureAvailability(a.Id)==TrainingResult.Success).Id;
+            selectTutorialOnOpen=false;
             RefreshPickers();RefreshInventory();RefreshDraft();
         }
         private void EnsurePage()
@@ -231,6 +234,7 @@ namespace CallmeCatgirl.UI
             remove.interactable=controller.CanManage&&selected!=null;
             selection.text=selected==null?"点击库存卡片添加，或拖入空位":CorpusName(selected)+" · 投入 "+InvestedPoints.ToString("0.###")+" / "+available.ToString("0.###")+" 点";
             bool valid=false;
+            if(actualShapePreview!=null)actualShapePreview.SetCells(Array.Empty<Cell>());
             bool compact=recipe==TrainingSession.TutorialCorpusRecipeId;
             double total=Investments.Sum(i=>i.Points);
             bool compactPointsValid=!compact||Math.Abs(total-TrainingSession.TutorialCorpusPoints)<=1e-9;
@@ -244,9 +248,15 @@ namespace CallmeCatgirl.UI
                 try
                 {
                     var preview=session.PreviewTraining(recipe,Investments);
-                    valid=session.ArchitectureAvailability(architecture)==TrainingResult.Success&&preview.Shape.Count<=controller.Simulation.OpenCellCount;
-                    summary.text="共 "+Investments.Count+" 份 / "+preview.TotalPoints.ToString("0.###")+" 点 · 费用 "+preview.Cost+" · 实际占 "+preview.Shape.Count+" 格\n"+Scores(preview.Abilities)+" · 约 "+preview.EstimatedSeconds.ToString("0.#")+" 游戏秒";
-                    message.text=valid?"草稿有效，尚未消耗语料。":session.ArchitectureAvailability(architecture)!=TrainingResult.Success?"此架构尚未解锁。":"实际运算区不足；请减少投入或升级内存。";
+                    valid=session.ArchitectureAvailability(architecture)==TrainingResult.Success&&preview.FitsCurrentMemory;
+                    if(actualShapePreview!=null)actualShapePreview.SetCells(preview.Shape);
+                    double warningSeconds=controller.Configuration==null?300:controller.Configuration.LongTrainingWarningSeconds;
+                    string duration="预计训练时间 "+preview.EstimatedSeconds.ToString("0.#")+" 游戏秒（按当前模型与算力）";
+                    if(preview.EstimatedSeconds>warningSeconds)
+                        duration="<color=#C0392B>"+duration+" · 超过 "+warningSeconds.ToString("0.#")+" 秒</color>";
+                    summary.supportRichText=true;
+                    summary.text="共 "+Investments.Count+" 份 / "+preview.TotalPoints.ToString("0.###")+" 点 · 费用 "+preview.Cost+" · 实际占 "+preview.Shape.Count+" 格\n"+Scores(preview.Abilities)+"\n"+duration;
+                    message.text=valid?"草稿有效，尚未消耗语料。":session.ArchitectureAvailability(architecture)!=TrainingResult.Success?"此架构尚未解锁。":"没有能完整容纳此形状的开放隔间；请减少投入、调整配方或升级内存。";
                 }
                 catch(ArgumentException){summary.text="尚未形成有效配方 · 草稿不扣款、不消耗\n首训选免费配方并投入准确 1 点；普通训练可调节。";}
                 catch(OverflowException){summary.text="投入过大，请减少语料点数。";}
@@ -330,7 +340,21 @@ namespace CallmeCatgirl.UI
             card.gameObject.AddComponent<CorpusCardDetails>();button.gameObject.AddComponent<CorpusCardDetails>();
             templates.gameObject.SetActive(false);
         }
-        public void PrepareCorpusInvestment(){ }
+        public void PrepareCorpusInvestment()
+        {
+            if(page==null)return;
+            if(actualShapePreview==null)
+            {
+                var right=page.Find("ArrangementPanel");
+                if(right==null)return;
+                var preview=Area(right,"ActualTrainingShape",.70f,.055f,.965f,.235f);
+                actualShapePreview=preview.gameObject.AddComponent<CorpusShapeGraphic>();
+                actualShapePreview.color=new Color32(38,78,73,255);actualShapePreview.raycastTarget=false;
+                Label(Area(right,"ActualTrainingShapeTitle",.70f,.235f,.975f,.285f),"实际运算占格",14);
+                var details=right.Find("DetailsScroll") as RectTransform;
+                if(details!=null)details.anchorMax=new Vector2(.68f,details.anchorMax.y);
+            }
+        }
 #endif
     }
 }

@@ -21,9 +21,9 @@
       "speed": 10,
       "tokens": 120,
       "fillerTokens": 12,
-      "writing": 90,
-      "code": 90,
-      "reasoning": 90,
+      "writing": 50,
+      "code": 50,
+      "reasoning": 50,
       "targetConcurrent": 6,
       "targetRequests": 60
     },
@@ -34,9 +34,9 @@
       "speed": 10,
       "tokens": 120,
       "fillerTokens": 12,
-      "writing": 144,
-      "code": 144,
-      "reasoning": 144,
+      "writing": 120,
+      "code": 120,
+      "reasoning": 120,
       "targetConcurrent": 9,
       "targetRequests": 150
     },
@@ -60,9 +60,9 @@
       "speed": 10,
       "tokens": 120,
       "fillerTokens": 12,
-      "writing": 306,
-      "code": 306,
-      "reasoning": 306,
+      "writing": 300,
+      "code": 300,
+      "reasoning": 300,
       "targetConcurrent": 12,
       "targetRequests": 120
     }

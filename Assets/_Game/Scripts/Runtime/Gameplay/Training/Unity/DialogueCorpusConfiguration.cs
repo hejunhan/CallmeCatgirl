@@ -10,9 +10,13 @@ namespace CallmeCatgirl.Gameplay.Training
     [CreateAssetMenu(menuName = "CallmeCatgirl/Training/Dialogue Corpus Configuration")]
     public sealed class DialogueCorpusConfiguration : ScriptableObject
     {
-        [InspectorName("按最高能力要求发放语料")] public bool UseHighestRequirement = true;
-        [InspectorName("最高达标要求的语料比例"), Min(0)] public double HighestRequirementRatio = 0.5;
-        [Tooltip("使用任务达标值最高的能力；并列时按能力枚举顺序取一项。无正数要求不发放。")]
+        [InspectorName("按最高能力要求发放语料（旧模式）"), Tooltip("开启后只奖励要求最高的一项能力；关闭后每项能力都会获得语料。")]
+        public bool UseHighestRequirement;
+        [InspectorName("旧模式语料比例"), Min(0), Tooltip("仅在旧模式开启时使用。")]
+        public double HighestRequirementRatio = 0.1;
+        [InspectorName("每项能力要求的最低语料比例"), Min(0)] public double RequirementRatioMin = 0.05;
+        [InspectorName("每项能力要求的最高语料比例"), Min(0), Tooltip("关闭旧模式后，每项能力要求都会在最小值和最大值之间独立抽取比例。")]
+        public double RequirementRatioMax = 0.1;
         public DialogueScores[] Entries = Array.Empty<DialogueScores>();
         [Tooltip("正式剧情缺数值时是否启用暂定补齐。优先使用传入的剧情显式数值，其次精确对话侧表。")]
         public bool AllowRequirementFallback;
@@ -44,6 +48,19 @@ namespace CallmeCatgirl.Gameplay.Training
             if (matches.Length == 1)
             {
                 scores = matches[0].Scores.ToDictionary(p => p.Kind, p => p.Value); source = "dialogue-sidecar"; return true;
+            }
+            if (double.IsNaN(RequirementRatioMin) || double.IsInfinity(RequirementRatioMin)
+                || double.IsNaN(RequirementRatioMax) || double.IsInfinity(RequirementRatioMax)
+                || RequirementRatioMin < 0 || RequirementRatioMax < RequirementRatioMin)
+                throw new InvalidOperationException("Dialogue corpus ratio range is invalid.");
+            if (RequirementRatioMax > 0)
+            {
+                scores = CorpusRewards.FromAllRequirements(task.Definition.Requirements,
+                    _ => RequirementRatioMin + (RequirementRatioMax - RequirementRatioMin) * UnityEngine.Random.value);
+                if (scores.Count > 0)
+                {
+                    source = "all-requirements-random-range"; return true;
+                }
             }
             if (!AllowRequirementFallback) return false;
             double amount = task.Result != null && task.Result.Overall == Quality.Excellent ? ExcellentScore : CompleteScore;

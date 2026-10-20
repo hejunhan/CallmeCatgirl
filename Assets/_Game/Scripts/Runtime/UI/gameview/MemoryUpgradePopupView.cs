@@ -17,9 +17,6 @@ namespace CallmeCatgirl.UI
         [SerializeField] private Text confirmLabel;
         [SerializeField] private Image[] previewCells;
         [SerializeField] private MemoryPartitionView partitions;
-        [SerializeField] private Text abilityPointsLabel;
-        [SerializeField] private Text[] abilityLabels;
-        [SerializeField] private Button[] allocationButtons;
         private CoreGameplayController bound;
         private int shownLevel, shownFunds;
         private float upgradedAt = -100;
@@ -48,23 +45,7 @@ namespace CallmeCatgirl.UI
                 $"下一等级 Lv{next.TargetLevel} · 新增 {owner.NextMemoryCellCount} 格\n"
                 + $"资金：{owner.Funds} / {next.Cost}（{(owner.DebugIgnoreCosts ? "调试忽略" : owner.Funds >= next.Cost ? "满足" : "不足")}）\n"
                 + $"达标提交：{owner.CompletedTasks} / {next.RequiredCompletedTasks}（{(owner.CompletedTasks >= next.RequiredCompletedTasks ? "满足" : "不足")}）\n"
-                + owner.NextMemoryPointRewardText + "\n新请求：" + owner.NextTaskMultiplierText;
-            if (abilityPointsLabel != null) abilityPointsLabel.text = $"可分配点数：{owner.AvailableAbilityPoints} · 每{sim.Model.Interval:0.##}秒产出";
-            if (allocationButtons != null)
-                for (int i = 0; i < allocationButtons.Length; i++)
-                {
-                    if (allocationButtons[i] == null) continue;
-                    int index = i;
-                    if (bound != owner)
-                    {
-                        allocationButtons[i].onClick.RemoveAllListeners();
-                        allocationButtons[i].onClick.AddListener(() => owner.AllocateAbility((AbilityKind)index));
-                    }
-                    allocationButtons[i].interactable = owner.CanAllocateAbility;
-                    sim.Model.Points.TryGetValue((AbilityKind)i, out double value);
-                    if (abilityLabels != null && i < abilityLabels.Length && abilityLabels[i] != null)
-                        abilityLabels[i].text = $"{CoreGameplayController.AbilityText((AbilityKind)i)}：{value:0.##} → {value + 1:0.##}";
-                }
+                + "新请求：" + owner.NextTaskMultiplierText;
             bound = owner;
             feedbackLabel.text = owner.Message;
             previewLabel.text = (next == null ? "当前布局 · 内存已满级" : $"升级到 Lv{next.TargetLevel} 后的布局")

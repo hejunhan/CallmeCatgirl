@@ -1,6 +1,6 @@
 {
   "name": "CallmeCatgirl.Persistence.Tests",
-  "references": ["CallmeCatgirl.Persistence"],
+  "references": ["CallmeCatgirl.Persistence", "CallmeCatgirl.TaskGrid", "CallmeCatgirl.Progression"],
   "includePlatforms": ["Editor"],
   "optionalUnityReferences": ["TestAssemblies"],
   "autoReferenced": false

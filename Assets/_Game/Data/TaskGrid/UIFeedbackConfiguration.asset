@@ -32,7 +32,7 @@ MonoBehaviour:
   - {r: 0.58, g: 0.79, b: 0.65, a: 1}
   - {r: 0.83, g: 0.62, b: 0.57, a: 1}
   - {r: 0.57, g: 0.67, b: 0.9, a: 1}
-  SelectedBorder: {r: 0.86, g: 0.78, b: 1, a: 1}
+  SelectedBorder: {r: 0.50935274, g: 0.26779994, b: 0.9622642, a: 1}
   BorderWidth: 1.5
   Animate: 1
   ScanOpacity: 0.12

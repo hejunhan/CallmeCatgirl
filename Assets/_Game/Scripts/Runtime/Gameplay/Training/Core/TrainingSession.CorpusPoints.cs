@@ -23,6 +23,7 @@ namespace CallmeCatgirl.Gameplay.Training
         public double WorkTokens { get; internal set; }
         public double EstimatedSeconds { get; internal set; }
         public int Cost { get; internal set; }
+        public bool FitsCurrentMemory { get; internal set; }
         public IReadOnlyList<Cell> Shape { get; internal set; }
         public IReadOnlyDictionary<AbilityKind,double> Abilities { get; internal set; }
     }
@@ -117,13 +118,44 @@ namespace CallmeCatgirl.Gameplay.Training
             double total=uses.Sum(u=>u.Points); Check.Number(total,true);
             var modifiers=policyModifiers();
             double work=rule.WorkForPoints(total)*modifiers.TrainingWorkMultiplier; Check.Number(work,true);
+            // Training tasks have zero billable Tokens and definition speed 1. Until placement,
+            // the executor is the current model/throughput, not the output model's selected architecture.
+            // These are simulation seconds; playback speed and pause do not change required work.
             double speed=simulation.TokenThroughput>0?simulation.TokenThroughput:simulation.Architecture.SpeedMultiplier;
             var abilities=uses.Select(Portion).SelectMany(r=>r.Scores).GroupBy(p=>p.Key)
                 .ToDictionary(g=>g.Key,g=>g.Sum(p=>p.Value)*rule.PointsPerScore*modifiers.TrainingScoreMultiplier);
             foreach(double value in abilities.Values) Check.Number(value);
+            var shape=GrowShape(rule,total,simulation.Width,simulation.Height);
             return new TrainingPreview { TotalPoints=total,WorkTokens=work,EstimatedSeconds=work/speed,
                 Cost=checked((int)Math.Ceiling(rule.Cost*modifiers.TrainingCostMultiplier)),
-                Shape=Array.AsReadOnly(GrowShape(rule,total,simulation.Width,simulation.Height)),Abilities=abilities };
+                Shape=Array.AsReadOnly(shape),Abilities=abilities,FitsCurrentMemory=FitsCurrentMemory(shape) };
+        }
+
+        // Existing tasks may be rearranged or withdrawn. Validate permanent geometry only,
+        // including rotation and partitions, without reserving space or consuming corpus.
+        private bool FitsCurrentMemory(IEnumerable<Cell> shape)
+        {
+            var definition=new TaskDefinition("training-preview","training-preview",shape,1,1,1,0,Array.Empty<AbilityRequirement>());
+            for(int rotation=0;rotation<4;rotation++)
+            {
+                var offsets=definition.RotatedShape(rotation);
+                for(int y=0;y<simulation.Height;y++)
+                    for(int x=0;x<simulation.Width;x++)
+                    {
+                        var origin=new Cell(x,y);int? compartment=null;bool fits=true;
+                        foreach(var offset in offsets)
+                        {
+                            var cell=origin+offset;
+                            if(cell.X<0||cell.Y<0||cell.X>=simulation.Width||cell.Y>=simulation.Height||!simulation.IsOpen(cell))
+                            {fits=false;break;}
+                            int current=simulation.CompartmentAt(cell);
+                            if(compartment.HasValue&&compartment.Value!=current){fits=false;break;}
+                            compartment=current;
+                        }
+                        if(fits)return true;
+                    }
+            }
+            return false;
         }
 
         public TrainingResult StartConversationsTraining(string recipeId, string architectureId, string name,

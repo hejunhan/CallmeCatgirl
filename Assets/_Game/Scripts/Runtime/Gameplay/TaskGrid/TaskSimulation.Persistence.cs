@@ -133,7 +133,7 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
                     VisitorDisplayName = t.Visitor?.DisplayName, VisitorSourceText = t.Visitor?.SourceText,
                     VisitorRequestFamily = t.Visitor?.RequestFamily, VisitorSourceCustomerId = t.Visitor?.SourceCustomerId,
 #if CALLMECATGIRL_TRAINING_GRID
-                    ReadyInCandidate = t.ReadyInCandidate
+                    ReadyInCandidate = t.State == RequestState.Ready && t.ReadyInCandidate
 #else
                     ReadyInCandidate = false
 #endif

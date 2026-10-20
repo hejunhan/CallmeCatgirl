@@ -8,7 +8,7 @@ namespace CallmeCatgirl.Gameplay
     [CreateAssetMenu(menuName = "CallmeCatgirl/Task Generation Configuration")]
     public sealed class TaskGenerationConfiguration : ScriptableObject
     {
-        [Min(0), InspectorName("每次新增请求数"), Tooltip("0关闭自动刷新。已有请求保留，超时按任务自身忍耐时间处理。")]
+        [Min(0), InspectorName("每次新增请求数"), Tooltip("按日模式为每次到达总数，不受来客数量天赋倍率影响；0关闭自动刷新。刷新日移除上一天未放置/已撤回的普通候选，运行中、待结算、训练及剧情关键请求保留；按月模式仍保留已有请求。")]
         public int RequestsPerRefresh = 1;
         [InspectorName("按天刷新"), Tooltip("开启按游戏日刷新；关闭时兼容原来的按月刷新。")]
         public bool RefreshByDay = true;
