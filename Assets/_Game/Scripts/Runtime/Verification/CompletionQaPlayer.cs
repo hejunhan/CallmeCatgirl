@@ -153,30 +153,52 @@ namespace CallmeCatgirl.Verification
             Record("training-arrangement", "Real draft survived filtering; GameCommand created and completed the one-point, one-cell starter job without payment.");
 
             Stage("tutorial-orders");
-            Require(owner.Simulation.Tasks.ContainsKey(NarrativeSession.FirstDoctorRequestId), "Doctor's real first order was not created.");
-            yield return FinishTask(NarrativeSession.FirstDoctorRequestId); CloseNarrative(); yield return Frames(2);
+            Require(!owner.Simulation.Tasks.ContainsKey(NarrativeSession.FirstDoctorRequestId),
+                "The first doctor order must auto-complete without a task.");
+            Require(owner.Funds == 100, "The first doctor order must pay exactly 100 once; actual=" + owner.Funds);
+            Require(owner.Simulation.Tasks.ContainsKey(NarrativeSession.SecondDoctorRequestId), "Doctor's second order was not created.");
+            var secondDefinition = owner.Simulation.Tasks[NarrativeSession.SecondDoctorRequestId].Definition;
+            Require(secondDefinition.Requirements.Single().Minimum == 6 && secondDefinition.Calculation == 20
+                && secondDefinition.Shape.Count == 1, "The second doctor order must use the explicit 6 / 20 / one-cell bar.");
+            Require(training.Corpus.Count == 2, "The doctor's 9-point corpus grant must be recorded once.");
+            Command(new GameCommand { kind = "train", recipe = TrainingSession.TutorialCorpusRecipeId, architecture = "baseline",
+                displayName = "第二台模型", investments = new[] { new ConversationInvestment { ConversationId = NarrativeSession.DoctorId, Points = TrainingSession.TutorialCorpusPoints } } });
+            var secondTraining = training.Jobs.Last();
+            Require(secondTraining.PaidCost == 20 && owner.Simulation.Tasks[secondTraining.RequestId].Definition.Shape.Count == 1,
+                "The second tutorial training must cost 20 and occupy one cell.");
+            yield return FinishTask(secondTraining.RequestId);
+            Require(secondTraining.Completed && training.ActiveModelId == secondTraining.Output.Id
+                && secondTraining.Output.Definition.Points.Values.Sum() == 9,
+                "The second tutorial training must create and equip model 9.");
+            CloseNarrative(); yield return Frames(2);
+            yield return FinishTask(NarrativeSession.SecondDoctorRequestId); CloseNarrative(); yield return Frames(2);
+            Require(owner.Simulation.Tasks.ContainsKey(NarrativeSession.ThirdDoctorRequestId), "The third doctor order was not created.");
+            var thirdDefinition = owner.Simulation.Tasks[NarrativeSession.ThirdDoctorRequestId].Definition;
+            Require(thirdDefinition.Requirements.Single().Minimum == 6 && thirdDefinition.Calculation == 20,
+                "The third doctor order must reuse the explicit 6 / 20 bar.");
+            yield return FinishTask(NarrativeSession.ThirdDoctorRequestId); CloseNarrative(); yield return Frames(2);
             Require(owner.Simulation.Tasks.ContainsKey(NarrativeSession.FirstOrdinaryRequestId), "First ordinary order was not created after doctor settlement.");
             yield return FinishTask(NarrativeSession.FirstOrdinaryRequestId); CloseNarrative(); yield return Frames(2);
             if (owner.Story.IsReply) Command(new GameCommand { kind = "reply", choice = 0, storyRevision = owner.Story.Revision });
             if (owner.Story.IsOpen && !owner.Story.IsReply) Command(new GameCommand { kind = "closeHistory" });
             CloseNarrative(); yield return Frames(3);
-            Require(owner.CompletedTasks == 2 && owner.Funds == 120, "Two tutorial orders must really settle: expected completed=2 and funds=120; actual=" + owner.CompletedTasks + "/" + owner.Funds);
-            Record("tutorial-orders", "Both real task submissions settled through GameCommand; completed=2, funds=120.");
+            Require(owner.CompletedTasks == 3 && owner.Funds == 280, "Three tutorial orders must really settle: expected completed=3 and funds=280; actual=" + owner.CompletedTasks + "/" + owner.Funds);
+            Record("tutorial-orders", "First order auto-paid 100; model 9 passed the second and third orders; completed=3, funds=280.");
 
             Stage("memory-install-commit");
             owner.UpgradeMemory(); Require(owner.IsMemoryInstallPending, "First installation did not open a pending transaction.");
             var install = FindObjectsByType<MemoryInstallGame>(FindObjectsInactive.Include).Single(i => i.IsOpen);
-            Require(owner.MemoryLevel == 0 && owner.Funds == 120, "Opening installation changed memory or paid before commit.");
+            Require(owner.MemoryLevel == 0 && owner.Funds == 280, "Opening installation changed memory or paid before commit.");
             install.SkipInstall(); yield return Frames(3);
-            Require(owner.MemoryLevel == 1 && owner.Narrative.MemoryCount == 1 && owner.Funds == 20, "Skip commit did not install exactly once and pay 100.");
+            Require(owner.MemoryLevel == 1 && owner.Narrative.MemoryCount == 1 && owner.Funds == 180, "Skip commit did not install exactly once and pay 100.");
             report.tutorialCompleted = true; report.completedTasks = owner.CompletedTasks;
             report.fundsAfterInstall = owner.Funds; report.physicalRamAfterInstall = owner.MemoryLevel;
-            Record("memory-install-commit", "Actual SkipInstall committed physical RAM 0→1 and funds 120→20; no direct state assignment.");
+            Record("memory-install-commit", "Actual SkipInstall committed physical RAM 0→1 and funds 280→180; no direct state assignment.");
             yield return CaptureBoth("main-after-first-install", false);
 
             Stage("save-menu-continue");
             CloseNarrative();
-            int savedFunds = owner.Funds, savedCorpus = owner.Training.Session.Corpus.Count, savedJobs = owner.Training.Session.Jobs.Count;
+            int savedFunds = owner.Funds, savedCompleted = owner.CompletedTasks, savedCorpus = owner.Training.Session.Corpus.Count, savedJobs = owner.Training.Session.Jobs.Count;
             string savedNarrative = JsonUtility.ToJson(owner.Narrative.Capture());
             Command(new GameCommand { kind = "save" });
             navigation = FindAnyObjectByType<SceneNavigation>(); Require(navigation != null, "Gameplay menu navigation is missing.");
@@ -188,7 +210,7 @@ namespace CallmeCatgirl.Verification
                 30, "ContinueSlot did not reload gameplay.");
             owner = FindAnyObjectByType<CoreGameplayController>(); yield return Frames(4);
             Command(new GameCommand { kind = "clock", paused = true });
-            Require(owner.Funds == savedFunds && owner.MemoryLevel == 1 && owner.CompletedTasks == 2
+            Require(owner.Funds == savedFunds && owner.MemoryLevel == 1 && owner.CompletedTasks == savedCompleted
                 && owner.Training.Session.Corpus.Count == savedCorpus && owner.Training.Session.Jobs.Count == savedJobs
                 && JsonUtility.ToJson(owner.Narrative.Capture()) == savedNarrative, "Continue changed saved balances, tutorial ledger, jobs or narrative state.");
             report.saveContinueVerified = true; Record("save-menu-continue", "Named isolated slot survived normal save/menu/ContinueSlot without repeating rewards or orders.");

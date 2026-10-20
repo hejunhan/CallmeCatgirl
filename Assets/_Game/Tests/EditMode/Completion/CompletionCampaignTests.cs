@@ -161,15 +161,29 @@ namespace CallmeCatgirl.Tests
             yield return FinishOne(starter.RequestId, 10);
             Assert.That(starter.Completed, Is.True); Assert.That(Training.ActiveModelId, Is.EqualTo(starter.Output.Id));
             CloseDialogs(); yield return null;
-            yield return FinishOne(NarrativeSession.FirstDoctorRequestId, 10); CloseDialogs(); yield return null;
+            Assert.That(Sim.Tasks.ContainsKey(NarrativeSession.FirstDoctorRequestId), Is.False,
+                "The first doctor order is narrative-only.");
+            Assert.That(Funds, Is.EqualTo(100));
+            Assert.That(Sim.Tasks.ContainsKey(NarrativeSession.SecondDoctorRequestId), Is.True);
+            Assert.That(Sim.Tasks[NarrativeSession.SecondDoctorRequestId].Definition.Requirements.Single().Minimum, Is.EqualTo(6));
+            Api("{\"kind\":\"train\",\"recipe\":\"tutorial-corpus-model\",\"architecture\":\"baseline\",\"displayName\":\"第二台模型\",\"investments\":[{\"ConversationId\":\"narrative-doctor\",\"Points\":9}]}");
+            var secondTraining = Training.Jobs.Last();
+            Assert.That(secondTraining.PaidCost, Is.EqualTo(20));
+            Assert.That(Sim.Tasks[secondTraining.RequestId].Definition.Shape.Count, Is.EqualTo(1));
+            yield return FinishOne(secondTraining.RequestId, 10);
+            Assert.That(secondTraining.Completed, Is.True); Assert.That(Training.ActiveModelId, Is.EqualTo(secondTraining.Output.Id));
+            CloseDialogs(); yield return null;
+            yield return FinishOne(NarrativeSession.SecondDoctorRequestId, 10); CloseDialogs(); yield return null;
+            Assert.That(Sim.Tasks.ContainsKey(NarrativeSession.ThirdDoctorRequestId), Is.True);
+            yield return FinishOne(NarrativeSession.ThirdDoctorRequestId, 10); CloseDialogs(); yield return null;
             yield return FinishOne(NarrativeSession.FirstOrdinaryRequestId, 20); CloseDialogs(); yield return null;
-            Assert.That(Get<int>(owner, "CompletedTasks"), Is.EqualTo(2)); Assert.That(Funds, Is.EqualTo(120));
+            Assert.That(Get<int>(owner, "CompletedTasks"), Is.EqualTo(3)); Assert.That(Funds, Is.EqualTo(280));
             yield return InstallNext(1);
-            Assert.That(Funds, Is.EqualTo(20));
+            Assert.That(Funds, Is.EqualTo(180));
             Checkpoint("first-install"); Api("{\"kind\":\"save\"}");
 
-            // The pre-tutorial catalogue entry has ZERO abilities. The trained Writing model is the genuine bootstrap.
-            Assert.That(Training.Models.First(m => m.CorpusIds.Count == 0).Definition.Points.Values.Sum(), Is.Zero);
+            // No pre-tutorial zero-ability catalogue entry exists; the trained models are the genuine bootstrap.
+            Assert.That(Training.Models.All(m => m.CorpusIds.Count > 0), Is.True);
             yield return WorkUntil(() => Funds >= 100, "earn-code-policy");
             Purchase("Code-1", 100); yield return null;
             Assert.That(Sim.Model.Points[AbilityKind.Code], Is.GreaterThanOrEqualTo(1));

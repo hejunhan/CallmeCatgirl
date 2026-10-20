@@ -22,6 +22,16 @@ Unity 游戏项目。当前可在编辑器验证任务调度、会话、语料�
 
 也可直接打开 `Assets/_Game/Scenes/Prototypes/CoreGameplay.unity` 验证玩法。SampleScene 仅保留为模板。
 
+## 调试快捷键
+
+Demo/正式演示构建保留，Release 也启用：
+
+- `1`：跳过当前剧情对话
+- `2`：切换“无视金币消耗”
+- `3`：把当前可完成任务瞬间完成到 Ready，随后可提交
+
+主页面右上角显示对应提示；这不是 Debug-only 功能。
+
 ## 文件放在哪里
 
 | 内容 | 位置 |

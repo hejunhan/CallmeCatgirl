@@ -372,12 +372,17 @@ namespace CallmeCatgirl.Gameplay
             if (Narrative == null || item.Kind != TaskEventKind.Submitted) return;
             if (TrainingEnabled && training.IsTrainingRequest(item.RequestId))
             {
-                if (training.Session.TryGetJob(item.RequestId, out var job) && job.Completed
-                    && Narrative.ObserveTrainingCompleted(item.RequestId))
+                if (training.Session.TryGetJob(item.RequestId, out var job) && job.Completed)
                 {
-                    bool paused = Simulation.Paused;
-                    try { Simulation.Paused = true; training.Session.SelectModel(job.Output.Id); }
-                    finally { Simulation.Paused = paused; }
+                    bool advanced = Narrative.ObserveTrainingCompleted(item.RequestId);
+                    // Both tutorial trainings equip their output: model 1 for the second order, model 9 for the third.
+                    if (advanced || Narrative.Tutorial == TutorialStep.AwaitDoctorSecond
+                        || Narrative.Tutorial == TutorialStep.AwaitDoctorThird)
+                    {
+                        bool paused = Simulation.Paused;
+                        try { Simulation.Paused = true; training.Session.SelectModel(job.Output.Id); }
+                        finally { Simulation.Paused = paused; }
+                    }
                 }
             }
             else Narrative.ObserveRequestSettled(item.RequestId, item.Result?.Overall >= Quality.Complete);

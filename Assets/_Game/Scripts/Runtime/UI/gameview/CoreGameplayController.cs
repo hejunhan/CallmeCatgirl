@@ -106,14 +106,12 @@ namespace CallmeCatgirl.Gameplay
                 CancelPendingMemoryInstall();
             if (!ManualCommandClock) AdvanceGame(Time.unscaledDeltaTime * PlaybackSpeed);
             if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame) systemMenu?.HandleEscape();
-#if (UNITY_EDITOR || DEVELOPMENT_BUILD) && !CATGIRL_DISABLE_DEBUG
             if (Keyboard.current != null && !IsDebugShortcutEditing())
             {
                 if (Keyboard.current[Key.Digit1].wasPressedThisFrame) SkipCurrentNarrative();
                 if (Keyboard.current[Key.Digit2].wasPressedThisFrame) ToggleDebugIgnoreCosts();
                 if (Keyboard.current[Key.Digit3].wasPressedThisFrame) FinishAllTasks();
             }
-#endif
             if (!GameEnded && !IsModalOpen && !CallmeCatgirl.Debugging.InlineDebugInput.IsEditing && Keyboard.current != null)
             {
                 if (Keyboard.current.rKey.wasPressedThisFrame) RotateSelected();
@@ -655,7 +653,6 @@ namespace CallmeCatgirl.Gameplay
             if (model == null) return cells;
             return training.Session.Architectures.First(a => a.Id == model.ArchitectureId).Transform(cells, Simulation.Width, Simulation.Height);
         }
-#if (UNITY_EDITOR || DEVELOPMENT_BUILD) && !CATGIRL_DISABLE_DEBUG
         private static bool IsDebugShortcutEditing()
         {
             if (CallmeCatgirl.Debugging.InlineDebugInput.IsEditing) return true;
@@ -705,7 +702,6 @@ namespace CallmeCatgirl.Gameplay
             Message = finished > 0 ? $"已瞬间完成 {finished} 个任务，可提交。" : "没有可瞬间完成的任务。";
             canvasView?.Refresh();
         }
-#endif
         public IReadOnlyList<Cell> ModelOutlineFor(string modelId)
         {
             var cells=CapacityForNarrative(Narrative,MemoryLevel).ToArray();

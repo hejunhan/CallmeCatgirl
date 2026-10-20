@@ -192,6 +192,8 @@ namespace CallmeCatgirl.Gameplay.Training
             var recipe = recipes[recipeId];
             if (recipeId == StarterRecipeId && (!StarterTrainingAvailable || Math.Abs(uses.Sum(u=>u.Points)-1)>1e-9))
                 return TrainingResult.InvalidInput;
+            if (recipeId == TutorialCorpusRecipeId && Math.Abs(uses.Sum(u=>u.Points)-TutorialCorpusPoints)>1e-9)
+                return TrainingResult.InvalidInput;
             var availability = ArchitectureAvailability(architectureId);
             if (availability != TrainingResult.Success) return availability;
             if (!ModelNames.TryNormalize(name, out name) || uses.Length == 0) return TrainingResult.InvalidInput;

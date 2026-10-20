@@ -1,4 +1,3 @@
-#if (UNITY_EDITOR || DEVELOPMENT_BUILD) && !CATGIRL_DISABLE_DEBUG
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,4 +40,3 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
         }
     }
 }
-#endif

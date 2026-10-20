@@ -54,6 +54,28 @@ namespace CallmeCatgirl.Gameplay.Training.Tests
             Assert.That(f.Sim.Model.Points[AbilityKind.Writing], Is.EqualTo(9d));
         }
 
+        [Test]
+        public void CompactTutorialTrainingRejectsOnePointAndKeepsNineAvailable()
+        {
+            var f = new Fixture();
+            var opening = f.Grant("opening", AbilityKind.Writing, 1);
+            var first = f.Start(TrainingSession.StarterRecipeId, opening);
+            f.Finish(first);
+            var nine = f.Grant("narrative-doctor-corpus-nine", AbilityKind.Writing, 9);
+            Assert.That(f.Session.CompactTrainingAvailable, Is.True);
+
+            Assert.That(f.Session.StartConversationTraining(TrainingSession.TutorialCorpusRecipeId, "baseline",
+                "模型9", "narrative-doctor", 1, out _), Is.EqualTo(TrainingResult.InvalidInput));
+            Assert.That(f.Session.Jobs.Count, Is.EqualTo(1));
+            Assert.That(f.Session.CompactTrainingAvailable, Is.True, "A rejected draft must keep the recipe available.");
+            Assert.That(f.Session.RemainingPoints(nine), Is.EqualTo(9d), "A rejected draft must not consume corpus.");
+
+            Assert.That(f.Session.StartConversationTraining(TrainingSession.TutorialCorpusRecipeId, "baseline",
+                "模型9", "narrative-doctor", 9, out var job), Is.EqualTo(TrainingResult.Success));
+            Assert.That(job.PaidCost, Is.EqualTo(20));
+            Assert.That(f.Sim.Tasks[job.RequestId].Definition.Shape.Count, Is.EqualTo(1));
+        }
+
         [TestCase(1d, Quality.BelowStandard)]
         [TestCase(9d, Quality.Excellent)]
         public void SecondRequestBarDiscriminatesModelOneFromModelNine(double modelPoints, Quality expected)

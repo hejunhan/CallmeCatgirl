@@ -9,10 +9,14 @@ namespace CallmeCatgirl.Gameplay.Training
     {
         public const string StarterRecipeId = "tutorial-first-model";
         public const string TutorialCorpusRecipeId = "tutorial-corpus-model";
+        public const int TutorialCorpusPoints = 9;
         public bool StarterTrainingAvailable => jobs.Count == 0 && models.Values.All(m=>m.CorpusIds.Count==0);
         // The second tutorial training receives 9 corpus points before any memory install.
-        // It stays one cell wide and is only offered between model 1 and model 9.
-        public bool CompactTrainingAvailable => models.Count == 1 && jobs.Count == 1;
+        // Keep it offered until a 9-point model exists; a rejected or pending start must not hide it.
+        public bool CompactTrainingAvailable => models.Count > 0
+            && !models.Values.Any(m => m.Definition.Points.Values.Sum() >= TutorialCorpusPoints)
+            && !jobs.Values.Any(j => j.RecipeId == TutorialCorpusRecipeId && j.Completed
+                && j.Output.Definition.Points.Values.Sum() >= TutorialCorpusPoints);
         public double BestAvailableCorpusPoints => corpus.Values.Select(r=>RemainingPoints(r.Id)).DefaultIfEmpty(0).Max();
 
         private static void AddStarterRecipe(IDictionary<string,TrainingRecipe> rules)
@@ -25,7 +29,7 @@ namespace CallmeCatgirl.Gameplay.Training
         private static void AddTutorialCorpusRecipe(IDictionary<string,TrainingRecipe> rules)
         {
             if (!rules.ContainsKey(TutorialCorpusRecipeId))
-                rules.Add(TutorialCorpusRecipeId,new TrainingRecipe(TutorialCorpusRecipeId,"第二次训练 · 1格 / 20金币",20,1,10,1,1,
+                rules.Add(TutorialCorpusRecipeId,new TrainingRecipe(TutorialCorpusRecipeId,"第二次训练 · 9点 / 1格 / 20金币",20,1,10,1,1,
                     new[]{new Cell(0,0)},100,100,0));
         }
 

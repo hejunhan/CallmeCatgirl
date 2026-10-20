@@ -191,7 +191,8 @@ namespace CallmeCatgirl.UI
             double available=session.GetConversationCorpus(id).AvailablePoints;
             double other=Investments.Where(i=>i.ConversationId!=id).Sum(i=>i.Points);
             double limit=Math.Min(available,Math.Max(0,Rule.MaximumCorpusPoints-other));
-            double existing=Investments.FirstOrDefault(i=>i.ConversationId==id)?.Points??Math.Min(1,limit);
+            double defaultPoints=recipe==TrainingSession.TutorialCorpusRecipeId?Math.Min(TrainingSession.TutorialCorpusPoints,limit):Math.Min(1,limit);
+            double existing=Investments.FirstOrDefault(i=>i.ConversationId==id)?.Points??defaultPoints;
             if(limit<=1e-9){message.text="已达到当前配方点数上限。";return false;}
             if(!draft.TryPlace(id,slot,Math.Min(existing,limit)))return false;
             selected=id;message.text="已放入草稿，尚未消耗语料。";RefreshDraft();return true;
@@ -230,20 +231,34 @@ namespace CallmeCatgirl.UI
             remove.interactable=controller.CanManage&&selected!=null;
             selection.text=selected==null?"点击库存卡片添加，或拖入空位":CorpusName(selected)+" · 投入 "+InvestedPoints.ToString("0.###")+" / "+available.ToString("0.###")+" 点";
             bool valid=false;
-            try
+            bool compact=recipe==TrainingSession.TutorialCorpusRecipeId;
+            double total=Investments.Sum(i=>i.Points);
+            bool compactPointsValid=!compact||Math.Abs(total-TrainingSession.TutorialCorpusPoints)<=1e-9;
+            if(!compactPointsValid)
             {
-                var preview=session.PreviewTraining(recipe,Investments);
-                valid=session.ArchitectureAvailability(architecture)==TrainingResult.Success&&preview.Shape.Count<=controller.Simulation.OpenCellCount;
-                summary.text="共 "+Investments.Count+" 份 / "+preview.TotalPoints.ToString("0.###")+" 点 · 费用 "+preview.Cost+" · 实际占 "+preview.Shape.Count+" 格\n"+Scores(preview.Abilities)+" · 约 "+preview.EstimatedSeconds.ToString("0.#")+" 游戏秒";
-                if(!valid)message.text=session.ArchitectureAvailability(architecture)!=TrainingResult.Success?"此架构尚未解锁。":"实际运算区不足；请减少投入或升级内存。";
+                summary.text="第二次训练需要正好 "+TrainingSession.TutorialCorpusPoints+" 点语料 · 草稿不扣款、不消耗\n当前 "+total.ToString("0.###")+" 点，请继续拖入或调整到 9 点。";
+                message.text="第二次训练需要正好 9 点同域语料；当前 "+total.ToString("0.###")+" 点。";
             }
-            catch(ArgumentException){summary.text="尚未形成有效配方 · 草稿不扣款、不消耗\n首训选免费配方并投入准确 1 点；普通训练可调节。";}
-            catch(OverflowException){summary.text="投入过大，请减少语料点数。";}
+            else
+            {
+                try
+                {
+                    var preview=session.PreviewTraining(recipe,Investments);
+                    valid=session.ArchitectureAvailability(architecture)==TrainingResult.Success&&preview.Shape.Count<=controller.Simulation.OpenCellCount;
+                    summary.text="共 "+Investments.Count+" 份 / "+preview.TotalPoints.ToString("0.###")+" 点 · 费用 "+preview.Cost+" · 实际占 "+preview.Shape.Count+" 格\n"+Scores(preview.Abilities)+" · 约 "+preview.EstimatedSeconds.ToString("0.#")+" 游戏秒";
+                    message.text=valid?"草稿有效，尚未消耗语料。":session.ArchitectureAvailability(architecture)!=TrainingResult.Success?"此架构尚未解锁。":"实际运算区不足；请减少投入或升级内存。";
+                }
+                catch(ArgumentException){summary.text="尚未形成有效配方 · 草稿不扣款、不消耗\n首训选免费配方并投入准确 1 点；普通训练可调节。";}
+                catch(OverflowException){summary.text="投入过大，请减少语料点数。";}
+            }
             start.interactable=valid&&controller.CanManage&&!submitting&&ModelNames.TryNormalize(modelName.text,out _);
         }
         private void StartTraining()
         {
-            if(submitting||!start.interactable)return;submitting=true;start.interactable=false;var frozen=Investments.ToArray();
+            if(submitting||!start.interactable)return;
+            if(recipe==TrainingSession.TutorialCorpusRecipeId&&Math.Abs(Investments.Sum(i=>i.Points)-TrainingSession.TutorialCorpusPoints)>1e-9)
+            {message.text="第二次训练需要正好 9 点同域语料；当前 "+Investments.Sum(i=>i.Points).ToString("0.###")+" 点。";RefreshDraft();return;}
+            submitting=true;start.interactable=false;var frozen=Investments.ToArray();
             bool ok=owner!=null?owner.ExecuteCommand(new GameCommand{kind="train",recipe=recipe,architecture=architecture,displayName=modelName.text,investments=frozen}).ok
                 :controller.StartConversationsTraining(recipe,architecture,modelName.text,frozen)==TrainingResult.Success;
             submitting=false;if(!ok){message.text=controller.Message;RefreshDraft();return;}

@@ -85,10 +85,10 @@ namespace CallmeCatgirl.Gameplay.Narrative
                             && s.Tutorial >= TutorialStep.AwaitDoctorOrder;
                     bool second = e.EventId == "narrative-queue-doctor-second" && e.RequestId == SecondDoctorRequestId
                         && e.ConversationId == DoctorId && e.RequiredCells == 1 && e.Calculation == 20
-                        && e.MinimumAbility == 6 && e.ExcellentAbility >= 6 && s.Tutorial >= TutorialStep.AwaitDoctorSecond;
+                        && e.MinimumAbility == 6 && e.ExcellentAbility > 6 && s.Tutorial >= TutorialStep.AwaitDoctorSecond;
                     bool third = e.EventId == "narrative-queue-doctor-third" && e.RequestId == ThirdDoctorRequestId
                         && e.ConversationId == DoctorId && e.RequiredCells == 1 && e.Calculation == 20
-                        && e.MinimumAbility == 6 && e.ExcellentAbility >= 6 && s.Tutorial >= TutorialStep.AwaitDoctorThird;
+                        && e.MinimumAbility == 6 && e.ExcellentAbility > 6 && s.Tutorial >= TutorialStep.AwaitDoctorThird;
                     return (second || third) && Enum.IsDefined(typeof(NarrativeCorpusDomain), e.CorpusDomain)
                         && s.Memories.Any(m => m.Key == "opening" && (m.Value == "mew") == (e.CorpusDomain == NarrativeCorpusDomain.Writing));
                 case NarrativeEffectKind.QueueOrdinaryRequest:

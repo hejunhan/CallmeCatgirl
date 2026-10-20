@@ -116,13 +116,11 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
             ByAbility = new ReadOnlyDictionary<AbilityKind, Quality>(grades);
             Produced = new ReadOnlyDictionary<AbilityKind, double>(produced);
         }
-#if (UNITY_EDITOR || DEVELOPMENT_BUILD) && !CATGIRL_DISABLE_DEBUG
         internal static QualityResult WithDebugOverride(QualityResult natural,Quality quality)
         {
             if(!Enum.IsDefined(typeof(Quality),quality)) throw new ArgumentException("Invalid debug quality.");
             return new QualityResult(quality,natural.ByAbility.ToDictionary(p=>p.Key,p=>p.Value),natural.Produced.ToDictionary(p=>p.Key,p=>p.Value));
         }
-#endif
         public static QualityResult Evaluate(TaskDefinition definition, IReadOnlyDictionary<AbilityKind, double> points)
         {
             var grades = new Dictionary<AbilityKind, Quality>();

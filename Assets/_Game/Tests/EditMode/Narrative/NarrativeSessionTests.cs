@@ -32,6 +32,7 @@ namespace CallmeCatgirl.Tests
             var session = NarrativeSession.CreateNew();
             Assert.That(session.ObserveTrainingCompleted("premature"), Is.False);
             session.Choose("mew"); session.ObserveCenterCellRevealed();
+            session.AcknowledgeEffect("narrative-opening-corpus"); session.AcknowledgeEffect("narrative-reveal-center");
             Assert.That(session.MemoryCount, Is.Zero, "The center compute cell is not a physical RAM upgrade.");
             Assert.That(session.ObserveRequestSettled(NarrativeSession.FirstDoctorRequestId), Is.False, "The first doctor order is narrative-only.");
             Assert.That(session.ObserveTrainingCompleted("training-1"), Is.True);
@@ -71,6 +72,7 @@ namespace CallmeCatgirl.Tests
         {
             var session = NarrativeSession.CreateNew();
             session.Choose("accept"); session.ObserveCenterCellRevealed();
+            session.AcknowledgeEffect("narrative-opening-corpus"); session.AcknowledgeEffect("narrative-reveal-center");
             Assert.That(session.ObserveTrainingCompleted("training-1"), Is.True);
             var saved = NarrativeSession.Restore(session.Capture());
             Assert.That(saved.PendingEffects.Count(e => e.Kind == NarrativeEffectKind.GrantFunds), Is.EqualTo(1));
