@@ -355,7 +355,7 @@ namespace CallmeCatgirl.UI
                     if (onBoard)
                     {
                         existingModule.Rect.anchoredPosition = new Vector2(task.Origin.X * width, -task.Origin.Y * height);
-                        existingModule.Render(task, task.Rotation, width, height, task.Id == controller.SelectedId || IsAssociationHighlighted(task.ConversationId));
+                        existingModule.Render(task, task.Rotation, width, height, task.Id == controller.SelectedId || IsAssociationHighlighted(task.Id));
                     }
                 }
             }
@@ -468,14 +468,15 @@ namespace CallmeCatgirl.UI
                 index = (serial + 2) % userAvatars.Length;
             return userAvatars[index % userAvatars.Length];
         }
-        public bool IsAssociationHighlighted(string conversation)=>conversationWorkspace!=null&&conversationWorkspace.IsHighlighted(conversation);
-        public void HoverConversation(string id,UnityEngine.Object source)=>conversationWorkspace?.Hover(id,source);
-        public void HoverRequest(string id,UnityEngine.Object source){if(controller.Simulation.Tasks.TryGetValue(id,out var task))HoverConversation(task.ConversationId,source);}
+        public bool IsAssociationHighlighted(string requestId)=>conversationWorkspace!=null&&conversationWorkspace.IsHighlighted(requestId);
+        public void HoverConversation(string id,UnityEngine.Object source){var task=controller==null?null:controller.LatestConversationTask(id);if(task!=null)conversationWorkspace?.HoverRequest(task.Id,source);}
+        public void HoverRequest(string id,UnityEngine.Object source)=>conversationWorkspace?.HoverRequest(id,source);
         public void ClearAssociationHover(UnityEngine.Object source)=>conversationWorkspace?.Clear(source);
-        public IEnumerable<RectTransform> AssociationTargets(string conversation)
+        public IEnumerable<RectTransform> AssociationTargets(string requestId)
         {
-            foreach(var pair in cards)if(pair.Value.gameObject.activeInHierarchy&&controller.Simulation.Tasks[pair.Key].ConversationId==conversation)yield return pair.Value.ShapeRect;
-            foreach(var pair in modules)if(pair.Value.gameObject.activeInHierarchy&&controller.Simulation.Tasks[pair.Key].ConversationId==conversation)yield return pair.Value.Rect;
+            if(string.IsNullOrEmpty(requestId))yield break;
+            foreach(var pair in cards)if(pair.Key==requestId&&pair.Value.gameObject.activeInHierarchy)yield return pair.Value.ShapeRect;
+            foreach(var pair in modules)if(pair.Key==requestId&&pair.Value.gameObject.activeInHierarchy)yield return pair.Value.Rect;
         }
         public void OpenRequestConversation(string id)
         {
