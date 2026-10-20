@@ -21,6 +21,12 @@ namespace CallmeCatgirl.EditorTools
             RequireEditMode();
             var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             if(scene.path!=SceneNavigation.GameplayPath)throw new InvalidOperationException("Open CoreGameplay before authoring its UI.");
+            var authored=UnityEngine.Object.FindAnyObjectByType<CoreGameplayCanvasView>();
+            if(authored!=null && new SerializedObject(authored).FindProperty("sceneLayoutReady").boolValue)
+            {
+                Debug.LogWarning("CoreGameplay UI is already authored; legacy Bake skipped to protect the saved layout.");
+                return;
+            }
             var owner=UnityEngine.Object.FindAnyObjectByType<CoreGameplayController>();
             var view=UnityEngine.Object.FindAnyObjectByType<CoreGameplayCanvasView>();
             if(!new SerializedObject(view).FindProperty("sceneLayoutReady").boolValue)

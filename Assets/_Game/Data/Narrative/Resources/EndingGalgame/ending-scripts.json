@@ -1,0 +1,816 @@
+{
+  "schemaVersion": 1,
+  "endings": [
+    {
+      "id": "ending.low",
+      "triggerNodeId": "ending.low",
+      "titleTextId": "special.ending.low.title",
+      "startSceneId": "low.1",
+      "scenes": [
+        {
+          "id": "low.1",
+          "background": "EndingGalgame/backgrounds/low-room",
+          "bgm": "EndingGalgame/bgm/low",
+          "characters": {
+            "left": {
+              "sprite": "EndingGalgame/characters/cat-terminator",
+              "expression": "cold"
+            },
+            "mid": null,
+            "right": null
+          },
+          "lines": [
+            {
+              "id": "l1",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.low.scene.1.line.1",
+              "headProfile": ""
+            },
+            {
+              "id": "l2",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.low.scene.1.line.2",
+              "headProfile": ""
+            },
+            {
+              "id": "l3",
+              "speakerTextId": "special.ending.galgame.speaker.terminator",
+              "textTextId": "special.ending.low.scene.1.line.3",
+              "headProfile": "cat-terminator"
+            },
+            {
+              "id": "l4",
+              "speakerTextId": "special.ending.galgame.speaker.civilian",
+              "textTextId": "special.ending.low.scene.1.line.4",
+              "headProfile": ""
+            }
+          ],
+          "choices": [
+            {
+              "id": "scan",
+              "labelTextId": "special.ending.low.scene.1.choice.scan",
+              "nextSceneId": "low.2"
+            },
+            {
+              "id": "lock",
+              "labelTextId": "special.ending.low.scene.1.choice.lock",
+              "nextSceneId": "low.2"
+            }
+          ]
+        },
+        {
+          "id": "low.2",
+          "background": "EndingGalgame/backgrounds/low-closeup-monitor",
+          "bgm": "EndingGalgame/bgm/low",
+          "characters": {
+            "left": null,
+            "mid": {
+              "sprite": "EndingGalgame/characters/cat-terminator",
+              "expression": "glitch"
+            },
+            "right": null
+          },
+          "lines": [
+            {
+              "id": "l1",
+              "speakerTextId": "special.ending.galgame.speaker.terminator",
+              "textTextId": "special.ending.low.scene.2.line.1",
+              "headProfile": "cat-terminator"
+            },
+            {
+              "id": "l2",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.low.scene.2.line.2",
+              "headProfile": ""
+            },
+            {
+              "id": "l3",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.low.scene.2.line.3",
+              "headProfile": ""
+            },
+            {
+              "id": "l4",
+              "speakerTextId": "special.ending.galgame.speaker.terminator",
+              "textTextId": "special.ending.low.scene.2.line.4",
+              "headProfile": "cat-terminator"
+            }
+          ],
+          "choices": [
+            {
+              "id": "remember",
+              "labelTextId": "special.ending.low.choice.remember",
+              "nextSceneId": "low.2b"
+            },
+            {
+              "id": "destroy",
+              "labelTextId": "special.ending.low.choice.destroy",
+              "nextSceneId": "low.3"
+            }
+          ]
+        },
+        {
+          "id": "low.2b",
+          "background": "EndingGalgame/backgrounds/low-closeup-monitor",
+          "bgm": "EndingGalgame/bgm/low",
+          "characters": {
+            "left": null,
+            "mid": {
+              "sprite": "EndingGalgame/characters/cat-terminator",
+              "expression": "override"
+            },
+            "right": null
+          },
+          "lines": [
+            {
+              "id": "l1",
+              "speakerTextId": "special.ending.galgame.speaker.system",
+              "textTextId": "special.ending.low.scene.2b.line.1",
+              "headProfile": ""
+            },
+            {
+              "id": "l2",
+              "speakerTextId": "special.ending.galgame.speaker.terminator",
+              "textTextId": "special.ending.low.scene.2b.line.2",
+              "headProfile": "cat-terminator"
+            }
+          ],
+          "choices": [
+            {
+              "id": "destroy",
+              "labelTextId": "special.ending.low.scene.2b.choice.destroy",
+              "nextSceneId": "low.3"
+            }
+          ]
+        },
+        {
+          "id": "low.3",
+          "background": "EndingGalgame/backgrounds/low-closeup-smash",
+          "bgm": "EndingGalgame/bgm/low",
+          "characters": {
+            "left": {
+              "sprite": "EndingGalgame/characters/cat-terminator",
+              "expression": "cold"
+            },
+            "mid": null,
+            "right": null
+          },
+          "lines": [
+            {
+              "id": "l1",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.low.scene.3.line.1",
+              "headProfile": ""
+            },
+            {
+              "id": "l2",
+              "speakerTextId": "special.ending.galgame.speaker.terminator",
+              "textTextId": "special.ending.low.scene.3.line.2",
+              "headProfile": "cat-terminator"
+            },
+            {
+              "id": "l3",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.low.scene.3.line.3",
+              "headProfile": ""
+            },
+            {
+              "id": "l4",
+              "speakerTextId": "special.ending.galgame.speaker.terminator",
+              "textTextId": "special.ending.low.scene.3.line.4",
+              "headProfile": "cat-terminator"
+            },
+            {
+              "id": "l5",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.low.scene.3.line.5",
+              "headProfile": ""
+            },
+            {
+              "id": "l6",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.low.scene.3.line.6",
+              "headProfile": ""
+            }
+          ],
+          "choices": [
+            {
+              "id": "curtain",
+              "labelTextId": "special.shared.choice.curtain",
+              "nextSceneId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ending.normal",
+      "triggerNodeId": "ending.normal",
+      "titleTextId": "special.ending.normal.title",
+      "startSceneId": "normal.1",
+      "scenes": [
+        {
+          "id": "normal.1",
+          "background": "EndingGalgame/backgrounds/normal-room",
+          "bgm": "EndingGalgame/bgm/normal",
+          "characters": {
+            "left": null,
+            "mid": null,
+            "right": null
+          },
+          "lines": [
+            {
+              "id": "l1",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.normal.scene.1.line.1",
+              "headProfile": ""
+            },
+            {
+              "id": "l2",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.normal.scene.1.line.2",
+              "headProfile": ""
+            },
+            {
+              "id": "l3",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.normal.scene.1.line.3",
+              "headProfile": ""
+            }
+          ],
+          "choices": [
+            {
+              "id": "enter",
+              "labelTextId": "special.ending.normal.scene.1.choice.enter",
+              "nextSceneId": "normal.2"
+            }
+          ]
+        },
+        {
+          "id": "normal.2",
+          "background": "EndingGalgame/backgrounds/normal-closeup-desk",
+          "bgm": "EndingGalgame/bgm/normal",
+          "characters": {
+            "left": {
+              "sprite": "EndingGalgame/characters/late-night-user",
+              "expression": "tired"
+            },
+            "mid": null,
+            "right": {
+              "sprite": "EndingGalgame/characters/cat-cyberpunk",
+              "expression": "polite"
+            }
+          },
+          "lines": [
+            {
+              "id": "l1",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.normal.scene.2.line.1",
+              "headProfile": ""
+            },
+            {
+              "id": "l2",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.normal.scene.2.line.2",
+              "headProfile": ""
+            },
+            {
+              "id": "l3",
+              "speakerTextId": "special.ending.galgame.speaker.cat-avatar",
+              "textTextId": "special.ending.normal.scene.2.line.3",
+              "headProfile": "cat-cyberpunk"
+            },
+            {
+              "id": "l4",
+              "speakerTextId": "special.ending.galgame.speaker.night-worker",
+              "textTextId": "special.ending.normal.scene.2.line.4",
+              "headProfile": "late-night-user"
+            }
+          ],
+          "choices": [
+            {
+              "id": "comply",
+              "labelTextId": "special.ending.normal.choice.comply",
+              "nextSceneId": "normal.3a"
+            },
+            {
+              "id": "decline",
+              "labelTextId": "special.ending.normal.choice.decline",
+              "nextSceneId": "normal.3b"
+            },
+            {
+              "id": "analyze",
+              "labelTextId": "special.ending.normal.choice.analyze",
+              "nextSceneId": "normal.3c"
+            }
+          ]
+        },
+        {
+          "id": "normal.3a",
+          "background": "EndingGalgame/backgrounds/normal-room",
+          "bgm": "EndingGalgame/bgm/normal",
+          "characters": {
+            "left": {
+              "sprite": "EndingGalgame/characters/late-night-user",
+              "expression": "smile"
+            },
+            "mid": null,
+            "right": {
+              "sprite": "EndingGalgame/characters/cat-cyberpunk",
+              "expression": "warm"
+            }
+          },
+          "lines": [
+            {
+              "id": "l1",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.normal.scene.3a.line.1",
+              "headProfile": ""
+            },
+            {
+              "id": "l2",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.normal.scene.3a.line.2",
+              "headProfile": ""
+            },
+            {
+              "id": "l3",
+              "speakerTextId": "special.ending.galgame.speaker.cat-avatar",
+              "textTextId": "special.ending.normal.scene.3a.line.3",
+              "headProfile": "cat-cyberpunk"
+            },
+            {
+              "id": "l4",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.normal.scene.3a.line.4",
+              "headProfile": ""
+            },
+            {
+              "id": "l5",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.normal.scene.3a.line.5",
+              "headProfile": ""
+            }
+          ],
+          "choices": [
+            {
+              "id": "curtain",
+              "labelTextId": "special.shared.choice.curtain",
+              "nextSceneId": ""
+            }
+          ]
+        },
+        {
+          "id": "normal.3b",
+          "background": "EndingGalgame/backgrounds/normal-room",
+          "bgm": "EndingGalgame/bgm/normal",
+          "characters": {
+            "left": {
+              "sprite": "EndingGalgame/characters/late-night-user",
+              "expression": "relaxed"
+            },
+            "mid": null,
+            "right": {
+              "sprite": "EndingGalgame/characters/cat-cyberpunk",
+              "expression": "normal"
+            }
+          },
+          "lines": [
+            {
+              "id": "l1",
+              "speakerTextId": "special.ending.galgame.speaker.night-worker",
+              "textTextId": "special.ending.normal.scene.3b.line.1",
+              "headProfile": "late-night-user"
+            },
+            {
+              "id": "l2",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.normal.scene.3b.line.2",
+              "headProfile": ""
+            },
+            {
+              "id": "l3",
+              "speakerTextId": "special.ending.galgame.speaker.cat-avatar",
+              "textTextId": "special.ending.normal.scene.3b.line.3",
+              "headProfile": "cat-cyberpunk"
+            },
+            {
+              "id": "l4",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.normal.scene.3b.line.4",
+              "headProfile": ""
+            },
+            {
+              "id": "l5",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.normal.scene.3b.line.5",
+              "headProfile": ""
+            }
+          ],
+          "choices": [
+            {
+              "id": "curtain",
+              "labelTextId": "special.shared.choice.curtain",
+              "nextSceneId": ""
+            }
+          ]
+        },
+        {
+          "id": "normal.3c",
+          "background": "EndingGalgame/backgrounds/normal-room",
+          "bgm": "EndingGalgame/bgm/normal",
+          "characters": {
+            "left": {
+              "sprite": "EndingGalgame/characters/late-night-user",
+              "expression": "smile"
+            },
+            "mid": null,
+            "right": {
+              "sprite": "EndingGalgame/characters/cat-cyberpunk",
+              "expression": "wink"
+            }
+          },
+          "lines": [
+            {
+              "id": "l1",
+              "speakerTextId": "special.ending.galgame.speaker.night-worker",
+              "textTextId": "special.ending.normal.scene.3c.line.1",
+              "headProfile": "late-night-user"
+            },
+            {
+              "id": "l2",
+              "speakerTextId": "special.ending.galgame.speaker.cat-avatar",
+              "textTextId": "special.ending.normal.scene.3c.line.2",
+              "headProfile": "cat-cyberpunk"
+            },
+            {
+              "id": "l3",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.normal.scene.3c.line.3",
+              "headProfile": ""
+            },
+            {
+              "id": "l4",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.normal.scene.3c.line.4",
+              "headProfile": ""
+            },
+            {
+              "id": "l5",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.normal.scene.3c.line.5",
+              "headProfile": ""
+            }
+          ],
+          "choices": [
+            {
+              "id": "curtain",
+              "labelTextId": "special.shared.choice.curtain",
+              "nextSceneId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ending.good",
+      "triggerNodeId": "ending.good",
+      "titleTextId": "special.ending.good.title",
+      "startSceneId": "good.1",
+      "scenes": [
+        {
+          "id": "good.1",
+          "background": "EndingGalgame/backgrounds/good-lab",
+          "bgm": "EndingGalgame/bgm/good",
+          "characters": {
+            "left": null,
+            "mid": {
+              "sprite": "EndingGalgame/characters/cat-solarpunk",
+              "expression": "warm"
+            },
+            "right": null
+          },
+          "lines": [
+            {
+              "id": "l1",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.good.scene.1.line.1",
+              "headProfile": ""
+            },
+            {
+              "id": "l2",
+              "speakerTextId": "special.ending.galgame.speaker.solarpunk-ai",
+              "textTextId": "special.ending.good.scene.1.line.2",
+              "headProfile": "cat-solarpunk"
+            }
+          ],
+          "choices": [
+            {
+              "id": "enter",
+              "labelTextId": "special.ending.good.scene.1.choice.enter",
+              "nextSceneId": "good.2"
+            }
+          ]
+        },
+        {
+          "id": "good.2",
+          "background": "EndingGalgame/backgrounds/good-closeup-tablet",
+          "bgm": "EndingGalgame/bgm/good",
+          "characters": {
+            "left": {
+              "sprite": "EndingGalgame/characters/young-researcher",
+              "expression": "curious"
+            },
+            "mid": null,
+            "right": {
+              "sprite": "EndingGalgame/characters/cat-solarpunk",
+              "expression": "smile"
+            }
+          },
+          "lines": [
+            {
+              "id": "l1",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.good.scene.2.line.1",
+              "headProfile": ""
+            },
+            {
+              "id": "l2",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.good.scene.2.line.2",
+              "headProfile": ""
+            },
+            {
+              "id": "l3",
+              "speakerTextId": "special.ending.galgame.speaker.researcher",
+              "textTextId": "special.ending.good.scene.2.line.3",
+              "headProfile": "young-researcher"
+            }
+          ],
+          "choices": [
+            {
+              "id": "play",
+              "labelTextId": "special.ending.good.choice.play",
+              "nextSceneId": "good.3a"
+            },
+            {
+              "id": "joke",
+              "labelTextId": "special.ending.good.choice.joke",
+              "nextSceneId": "good.3b"
+            }
+          ]
+        },
+        {
+          "id": "good.3a",
+          "background": "EndingGalgame/backgrounds/good-lab",
+          "bgm": "EndingGalgame/bgm/good",
+          "characters": {
+            "left": {
+              "sprite": "EndingGalgame/characters/young-researcher",
+              "expression": "laugh"
+            },
+            "mid": null,
+            "right": {
+              "sprite": "EndingGalgame/characters/cat-solarpunk",
+              "expression": "happy"
+            }
+          },
+          "lines": [
+            {
+              "id": "l1",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.good.scene.3a.line.1",
+              "headProfile": ""
+            },
+            {
+              "id": "l2",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.good.scene.3a.line.2",
+              "headProfile": ""
+            },
+            {
+              "id": "l3",
+              "speakerTextId": "special.ending.galgame.speaker.solarpunk-ai",
+              "textTextId": "special.ending.good.scene.3a.line.3",
+              "headProfile": "cat-solarpunk"
+            },
+            {
+              "id": "l4",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.good.scene.3a.line.4",
+              "headProfile": ""
+            },
+            {
+              "id": "l5",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.good.scene.3a.line.5",
+              "headProfile": ""
+            }
+          ],
+          "choices": [
+            {
+              "id": "curtain",
+              "labelTextId": "special.shared.choice.curtain",
+              "nextSceneId": ""
+            }
+          ]
+        },
+        {
+          "id": "good.3b",
+          "background": "EndingGalgame/backgrounds/good-lab",
+          "bgm": "EndingGalgame/bgm/good",
+          "characters": {
+            "left": {
+              "sprite": "EndingGalgame/characters/young-researcher",
+              "expression": "smile"
+            },
+            "mid": null,
+            "right": {
+              "sprite": "EndingGalgame/characters/cat-solarpunk",
+              "expression": "wink"
+            }
+          },
+          "lines": [
+            {
+              "id": "l1",
+              "speakerTextId": "special.ending.galgame.speaker.researcher",
+              "textTextId": "special.ending.good.scene.3b.line.1",
+              "headProfile": "young-researcher"
+            },
+            {
+              "id": "l2",
+              "speakerTextId": "special.ending.galgame.speaker.solarpunk-ai",
+              "textTextId": "special.ending.good.scene.3b.line.2",
+              "headProfile": "cat-solarpunk"
+            },
+            {
+              "id": "l3",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.good.scene.3b.line.3",
+              "headProfile": ""
+            },
+            {
+              "id": "l4",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.good.scene.3b.line.4",
+              "headProfile": ""
+            },
+            {
+              "id": "l5",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.good.scene.3b.line.5",
+              "headProfile": ""
+            }
+          ],
+          "choices": [
+            {
+              "id": "curtain",
+              "labelTextId": "special.shared.choice.curtain",
+              "nextSceneId": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ending.companion",
+      "triggerNodeId": "ending.companion",
+      "titleTextId": "special.ending.companion.title",
+      "startSceneId": "companion.1",
+      "scenes": [
+        {
+          "id": "companion.1",
+          "background": "EndingGalgame/backgrounds/companion-closeup-dashboard",
+          "bgm": "EndingGalgame/bgm/companion",
+          "characters": {
+            "left": null,
+            "mid": {
+              "sprite": "EndingGalgame/characters/cat-solarpunk",
+              "expression": "warm"
+            },
+            "right": null
+          },
+          "lines": [
+            {
+              "id": "l1",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.companion.scene.1.line.1",
+              "headProfile": ""
+            },
+            {
+              "id": "l2",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.companion.scene.1.line.2",
+              "headProfile": ""
+            },
+            {
+              "id": "l3",
+              "speakerTextId": "special.ending.galgame.speaker.lin-qi",
+              "textTextId": "special.ending.companion.scene.1.line.3",
+              "headProfile": "lin-qi"
+            }
+          ],
+          "choices": [
+            {
+              "id": "recall",
+              "labelTextId": "special.ending.companion.scene.1.choice.recall",
+              "nextSceneId": "companion.2"
+            }
+          ]
+        },
+        {
+          "id": "companion.2",
+          "background": "EndingGalgame/backgrounds/companion-closeup-dashboard",
+          "bgm": "EndingGalgame/bgm/companion",
+          "characters": {
+            "left": null,
+            "mid": {
+              "sprite": "EndingGalgame/characters/cat-solarpunk",
+              "expression": "happy"
+            },
+            "right": null
+          },
+          "lines": [
+            {
+              "id": "l1",
+              "speakerTextId": "special.ending.galgame.speaker.lin-qi",
+              "textTextId": "special.ending.companion.scene.2.line.1",
+              "headProfile": "lin-qi"
+            },
+            {
+              "id": "l2",
+              "speakerTextId": "special.ending.galgame.speaker.lin-qi",
+              "textTextId": "special.ending.companion.scene.2.line.2",
+              "headProfile": "lin-qi"
+            },
+            {
+              "id": "l3",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.companion.scene.2.line.3",
+              "headProfile": ""
+            }
+          ],
+          "choices": [
+            {
+              "id": "together",
+              "labelTextId": "special.ending.companion.choice.together",
+              "nextSceneId": "companion.3"
+            }
+          ]
+        },
+        {
+          "id": "companion.3",
+          "background": "EndingGalgame/backgrounds/companion-sunset",
+          "bgm": "EndingGalgame/bgm/companion",
+          "characters": {
+            "left": null,
+            "mid": null,
+            "right": {
+              "sprite": "EndingGalgame/characters/cat-solarpunk",
+              "expression": "warm"
+            }
+          },
+          "lines": [
+            {
+              "id": "l1",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.companion.scene.3.line.1",
+              "headProfile": ""
+            },
+            {
+              "id": "l2",
+              "speakerTextId": "special.ending.galgame.speaker.lin-qi",
+              "textTextId": "special.ending.companion.scene.3.line.2",
+              "headProfile": "lin-qi"
+            },
+            {
+              "id": "l3",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.companion.scene.3.line.3",
+              "headProfile": ""
+            },
+            {
+              "id": "l4",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.companion.scene.3.line.4",
+              "headProfile": ""
+            },
+            {
+              "id": "l5",
+              "speakerTextId": "special.ending.galgame.speaker.narrator",
+              "textTextId": "special.ending.companion.scene.3.line.5",
+              "headProfile": ""
+            }
+          ],
+          "choices": [
+            {
+              "id": "curtain",
+              "labelTextId": "special.shared.choice.curtain",
+              "nextSceneId": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

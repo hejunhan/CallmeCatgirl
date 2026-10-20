@@ -7,6 +7,7 @@ using CallmeCatgirl.Gameplay.TaskGrid;
 using CallmeCatgirl.Gameplay.Training;
 using CallmeCatgirl.Persistence;
 using CallmeCatgirl.UI;
+using CallmeCatgirl.UI.EndingGalgame;
 using CallmeCatgirl.UI.SystemMenu;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -28,6 +29,9 @@ namespace CallmeCatgirl.Gameplay
         private double appliedPolicySpeed = -1;
         private bool policyViewPrepared;
         private bool narrativeViewRegistered;
+        private bool endingSceneRequested;
+        private bool endingSceneUnavailable;
+        private bool narrativePanelHiddenForEnding;
         private readonly MemoryUpgradeConfiguration.UpgradeStep firstMemoryInstallation = new MemoryUpgradeConfiguration.UpgradeStep
             { TargetLevel = 1, Cost = 100, RequiredCompletedTasks = 2, AbilityPoints = 0, ModelName = "Transformer" };
         public bool HasSystemPauseClaim => systemMenu != null && systemMenu.IsPauseClaimed;
@@ -38,6 +42,7 @@ namespace CallmeCatgirl.Gameplay
             var contact = Narrative?.PinnedContacts.FirstOrDefault(c => c.Id == conversationId);
             if (contact != null) return contact.Name;
             if (conversationId == "policy-book-scan") return "绝版书籍扫描";
+            if (conversationId == VisitorQueuePolicy.ConversationId) return "轻量来客";
             var reward = TrainingEnabled ? training.Session.Corpus.FirstOrDefault(r => r.ConversationId == conversationId
                 && r.SourceKind == CorpusSourceKind.ScriptedReward) : null;
             if (reward != null && !Simulation.Tasks.Values.Any(t => t.ConversationId == conversationId)) return reward.ScoreSource;
@@ -162,6 +167,8 @@ namespace CallmeCatgirl.Gameplay
 
         private bool ConsumeEscapeBeforeSystemMenu()
         {
+            // The additive ending scene owns the screen until it reports through the loader callbacks.
+            if (endingSceneRequested) return true;
             var selected = EventSystem.current?.currentSelectedGameObject;
             var input = selected == null ? null : selected.GetComponent<InputField>();
             var tmpInput = selected == null ? null : selected.GetComponent<TMPro.TMP_InputField>();
@@ -176,6 +183,72 @@ namespace CallmeCatgirl.Gameplay
             if (Narrative?.RequiresPause == true) { narrativePanel?.HandleEscape(); return true; }
             if (canvasView != null && canvasView.IsConversationVisible) { canvasView.DismissConversation(); return true; }
             return false;
+        }
+
+        /// <summary>
+        /// The host keeps the session and its ledger. The additive galgame scene replaces only the ending presentation;
+        /// the narrative panel is hidden until the scene reports completion or failure.
+        /// </summary>
+        private void UpdateEndingScene()
+        {
+            if (endingSceneRequested || endingSceneUnavailable || Narrative == null || GameEnded) return;
+            var frame = Narrative.CurrentFrame;
+            if (frame == null || Narrative.EndingClosed || !EndingRunReasons.TryResolve(frame.Id, out _)) return;
+            endingSceneRequested = true;
+            narrativePanelHiddenForEnding = narrativePanel != null && narrativePanel.gameObject.activeSelf;
+            if (narrativePanel != null) narrativePanel.gameObject.SetActive(false);
+            StartCoroutine(EndingGalgameSceneLoader.Load(frame.Id, OnEndingSceneCompleted, OnEndingSceneUnavailable));
+        }
+
+        private void OnEndingSceneCompleted(EndingRunRequest request)
+        {
+            if (!CloseNarrativeEnding())
+                Debug.LogError("Ending scene completed but the narrative ending could not be closed: " + request.EndingId, this);
+            RestoreNarrativePanel();
+            StartCoroutine(EndingGalgameSceneLoader.Unload());
+        }
+
+        private void OnEndingSceneUnavailable(string message)
+        {
+            endingSceneUnavailable = true;
+            RestoreNarrativePanel();
+            Message = "结局演出加载失败：" + message;
+            Debug.LogError("Ending scene unavailable: " + message, this);
+        }
+
+        /// <summary>Reaches the existing curtain closure; Enqueue deduplicates the narrative-end-run effect.</summary>
+        private bool CloseNarrativeEnding()
+        {
+            if (Narrative == null) return false;
+            if (Narrative.EndingClosed) return true;
+            if (!string.IsNullOrEmpty(Narrative.Notice)) Narrative.DismissNotice();
+            var frame = Narrative.CurrentFrame;
+            if (frame == null) return false;
+            if (!frame.Choices.Any(choice => choice.Id == "curtain"))
+            {
+                // "remember" only posts a notice at ending.low and does not open the closure frame.
+                var branch = frame.Choices.FirstOrDefault(choice => choice.Id != "remember");
+                if (branch == null || !Narrative.Choose(branch.Id)) return false;
+                frame = Narrative.CurrentFrame;
+                if (frame == null) return false;
+            }
+            return Narrative.Choose("curtain");
+        }
+
+        private void RestoreNarrativePanel()
+        {
+            if (narrativePanel != null && narrativePanelHiddenForEnding) narrativePanel.gameObject.SetActive(true);
+            narrativePanelHiddenForEnding = false;
+        }
+
+        private void ResetEndingScene()
+        {
+            endingSceneRequested = false;
+            endingSceneUnavailable = false;
+            narrativePanelHiddenForEnding = false;
+            if (narrativePanel != null) narrativePanel.gameObject.SetActive(true);
+            if (UnityEngine.SceneManagement.SceneManager.GetSceneByName(EndingGalgameSceneLoader.SceneName).isLoaded)
+                StartCoroutine(EndingGalgameSceneLoader.Unload());
         }
 
         private void ProcessCompletion()
@@ -234,6 +307,11 @@ namespace CallmeCatgirl.Gameplay
                     var result = training.Session.GrantScriptedCorpus(effect.EventId, effect.ConversationId,
                         new Dictionary<AbilityKind, double> { { ability, effect.CorpusPoints } }, effect.Title);
                     return result == TrainingResult.Success || result == TrainingResult.AlreadyRecorded;
+                case NarrativeEffectKind.GrantFunds:
+                    if (effect.FundsAmount <= 0) return false;
+                    Economy.AddFunds(effect.FundsAmount);
+                    Message = "第一单报酬已入账：+" + effect.FundsAmount + " 金币。";
+                    return true;
                 case NarrativeEffectKind.RevealCenterMemory:
                     if (!Simulation.TryUnlockCells(new[] { CenterMemoryCell })) return false;
                     Narrative.ObserveCenterCellRevealed(); Message = "中心运算格已开放。打开训练，投入刚得到的 1 点语料。";
@@ -259,11 +337,29 @@ namespace CallmeCatgirl.Gameplay
         {
             if (Simulation.Tasks.ContainsKey(effect.RequestId)) return true;
             if (Simulation.Tasks.Values.Any(t => t.ConversationId == effect.ConversationId && t.State != RequestState.Closed)) return false;
-            var best = Simulation.Model.Points.OrderByDescending(p => p.Value).FirstOrDefault();
-            var requirement = new AbilityRequirement(best.Key, Math.Max(0.1, best.Value), Math.Max(0.2, best.Value * 2));
+            AbilityRequirement requirement;
+            if (effect.MinimumAbility > 0)
+            {
+                var ability = effect.CorpusDomain == NarrativeCorpusDomain.Reasoning ? AbilityKind.Reasoning : AbilityKind.Writing;
+                // The third order waits until the selected model really meets its explicit bar; the second stays attemptable.
+                if (effect.RequestId == NarrativeSession.ThirdDoctorRequestId)
+                {
+                    var active = TrainingEnabled ? training.Session.ActiveModel : null;
+                    double points = active != null && active.Definition.Points.TryGetValue(ability, out var value) ? value : 0;
+                    if (points < effect.MinimumAbility) return false;
+                }
+                requirement = new AbilityRequirement(ability, effect.MinimumAbility, Math.Max(effect.MinimumAbility, effect.ExcellentAbility));
+            }
+            else
+            {
+                var best = Simulation.Model.Points.OrderByDescending(p => p.Value).FirstOrDefault();
+                requirement = new AbilityRequirement(best.Key, Math.Max(0.1, best.Value), Math.Max(0.2, best.Value * 2));
+            }
+            double calculation = effect.Calculation > 0 ? effect.Calculation : 20;
+            double tokens = effect.RewardTokens > 0 ? effect.RewardTokens : 60;
             var shape = Enumerable.Range(0, Math.Max(1, effect.RequiredCells)).Select(x => new Cell(x, 0)).ToArray();
             var definition = new TaskDefinition(effect.RequestId + ":definition", effect.Title, shape,
-                20, 1, 600, 60, new[] { requirement },
+                calculation, 1, 600, tokens, new[] { requirement },
                 usesCalculationBudget: effect.Kind != NarrativeEffectKind.QueueOrdinaryRequest);
             if (!Simulation.TryCreate(effect.RequestId, effect.ConversationId, effect.RequestId, definition, out var task)) return false;
             taskBases.Add(task.Id, definition);
@@ -284,7 +380,7 @@ namespace CallmeCatgirl.Gameplay
                     finally { Simulation.Paused = paused; }
                 }
             }
-            else if (item.Result?.Overall >= Quality.Complete) Narrative.ObserveRequestSettled(item.RequestId);
+            else Narrative.ObserveRequestSettled(item.RequestId, item.Result?.Overall >= Quality.Complete);
         }
 
         private void AutoPlaceCandidates()

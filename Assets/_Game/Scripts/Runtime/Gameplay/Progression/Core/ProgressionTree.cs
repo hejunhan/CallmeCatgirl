@@ -38,7 +38,7 @@ namespace CallmeCatgirl.Gameplay.Progression
         public bool TerminalAcknowledged;
     }
 
-    public enum PurchaseResult { Success, UnknownNode, AlreadyUnlocked, MissingPrerequisite, InsufficientFunds, Busy, ExcludedByChoice }
+    public enum PurchaseResult { Success, UnknownNode, AlreadyUnlocked, MissingPrerequisite, MemoryLocked, InsufficientFunds, Busy, ExcludedByChoice }
 
     /// <summary>Uses the host wallet and simulation; never advances time or settles task events.</summary>
     public sealed partial class ProgressionTree
@@ -49,6 +49,8 @@ namespace CallmeCatgirl.Gameplay.Progression
         private readonly Func<int, bool> spend;
         private bool busy;
         public event Action Changed;
+        /// <summary>Host memory level used only for policy purchase gates; restored saves are not retroactively rejected.</summary>
+        public Func<int> MemoryLevelProvider { get; set; }
         // Return copies: configuration/state cannot be mutated behind the transaction boundary.
         public IReadOnlyList<ProgressionNode> Nodes => nodes.Values.Select(Clone).ToArray();
         public bool IsUnlocked(string id) => id != null && unlocked.Contains(id);
@@ -92,7 +94,28 @@ namespace CallmeCatgirl.Gameplay.Progression
                 return PurchaseResult.ExcludedByChoice;
             if (node.Prerequisites.Any(p => !unlocked.Contains(p))) return PurchaseResult.MissingPrerequisite;
             if (node.AnyPrerequisites.Length > 0 && !node.AnyPrerequisites.Any(unlocked.Contains)) return PurchaseResult.MissingPrerequisite;
+            int requiredMemory = RequiredMemoryLevel(id);
+            int memoryLevel = MemoryLevelProvider?.Invoke() ?? 5; // Detached trees/tests have no memory context; only the live host gates.
+            if (requiredMemory > 0 && memoryLevel < requiredMemory)
+                return PurchaseResult.MemoryLocked;
             return PurchaseResult.Success;
+        }
+
+        /// <summary>Mainline policy gates. Ability nodes and unknown IDs stay ungated.</summary>
+        public static int RequiredMemoryLevel(string id)
+        {
+            switch (id)
+            {
+                case "policy-foundations": return 1;
+                case "route-open": case "route-closed": return 2;
+                case "branch-book-scan": return 2;
+                case "branch-distillation-claim": case "branch-technology-share": return 3;
+                case "main-emergence": return 3;
+                case "branch-efficient-training": case "branch-auto-placement": return 4;
+                case "branch-open-stewardship": case "branch-closed-consolidation": return 4;
+                case "main-public-future": return 5;
+                default: return 0;
+            }
         }
 
         public PurchaseResult TryPurchase(string id)

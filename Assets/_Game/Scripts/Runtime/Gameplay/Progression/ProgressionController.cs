@@ -20,6 +20,7 @@ namespace CallmeCatgirl.Gameplay.Progression
             if (simulation == null || tree == null || !ReferenceEquals(owner.Simulation,simulation)) throw new ArgumentException("Restored graph must belong to owner.");
             if (Tree != null) Tree.Changed -= NotifyChanged;
             boundSimulation=simulation; Tree=tree; Tree.Changed += NotifyChanged;
+            Tree.MemoryLevelProvider = () => owner.MemoryLevel;
         }
         public int Funds { get { EnsureBound(); return owner.Funds; } }
         public bool CanPurchase { get { EnsureBound(); return owner.CanPurchasePolicy; } }
@@ -36,6 +37,7 @@ namespace CallmeCatgirl.Gameplay.Progression
             boundSimulation = owner.Simulation;
             Tree = new ProgressionTree(configuration == null ? ProgressionTree.CreateDefaultNodes() : configuration.Nodes,
                 boundSimulation, amount => owner.Economy.TrySpendFunds(amount));
+            Tree.MemoryLevelProvider = () => owner.MemoryLevel;
             Tree.Changed += NotifyChanged;
             Changed?.Invoke();
         }
@@ -55,6 +57,7 @@ namespace CallmeCatgirl.Gameplay.Progression
                 case PurchaseResult.Success: return "可购买";
                 case PurchaseResult.AlreadyUnlocked: return "已购买";
                 case PurchaseResult.MissingPrerequisite: return "需先购买连线前置";
+                case PurchaseResult.MemoryLocked: return "内存等级不足";
                 case PurchaseResult.InsufficientFunds: return "金币不足";
                 case PurchaseResult.ExcludedByChoice: return "互斥路线已选择";
                 case PurchaseResult.Busy: return "当前不可购买";

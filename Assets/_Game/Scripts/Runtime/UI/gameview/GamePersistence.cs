@@ -20,6 +20,9 @@ namespace CallmeCatgirl.Gameplay
         private string saveSlot="main";
         private RunSaveService saveService;
         private TrainingSaveExtension trainingSave;
+        private int lastAutoSaveDay = -1;
+        private string endingLoadMessage = string.Empty;
+        public string EndingLoadMessage => endingLoadMessage;
 #if UNITY_EDITOR
         // Explicit opt-in from the authoring menu; never serialized into a scene or Player.
         public static string EditorSaveRoot { get; set; }
@@ -38,6 +41,8 @@ namespace CallmeCatgirl.Gameplay
             var canvas=GameObject.Find("GameplayCanvas"); if(canvas==null)return;
             foreach(var button in canvas.GetComponentsInChildren<UnityEngine.UI.Button>(true))
             {
+                if (button.name == "EndingLoadButton")
+                { button.onClick.RemoveAllListeners(); button.onClick.AddListener(() => LoadLatestSaveFromEnding()); continue; }
                 string command=button.name=="SaveRun"?"save":button.name=="LoadRun"?"restore":null;
                 if(command==null)continue;button.onClick.RemoveAllListeners();
                 button.onClick.AddListener(()=>ExecuteCommand(new GameCommand{kind=command}));
@@ -69,7 +74,7 @@ namespace CallmeCatgirl.Gameplay
         private string CalculateContentRevision(bool legacyStoryV1, bool formerArchitectureTitles = false)
         {
             string content="gamejam-state-v1-xorshift32|";
-            UnityEngine.Object[] sources={configuration,configuration.Story,configuration.OrdinaryDialoguePool,configuration.TaskGeneration,configuration.MemoryUpgrades,configuration.OpeningBalance,training?.Configuration};
+            UnityEngine.Object[] sources={configuration,configuration.Story,configuration.OrdinaryDialoguePool,OrdinaryStagePool.Load(),configuration.TaskGeneration,configuration.MemoryUpgrades,configuration.OpeningBalance,training?.Configuration};
             foreach(var source in sources) if(source != null)
             {
                 string json=JsonUtility.ToJson(source);
@@ -111,6 +116,52 @@ namespace CallmeCatgirl.Gameplay
             try { EnsureSaveService(); saveService.Continue(); Message="存档已恢复。"; return true; }
             catch(Exception error) { Message="读取失败："+error.Message; return false; }
         }
+        public int AbsoluteGameDay => (CurrentMonth - 1) * DaysPerMonth + CurrentDay;
+        public void ClearEndingLoadMessage() => endingLoadMessage = string.Empty;
+        /// <summary>True when the newest committed save (or backup) is valid and does not describe a finished run.</summary>
+        public bool HasResumableSave()
+        {
+            try
+            {
+                EnsureSaveService();
+                var loaded = saveService.Peek();
+                return loaded.Data != null && loaded.Data.Host != null && !loaded.Data.Host.GameEnded;
+            }
+            catch (Exception) { return false; }
+        }
+        /// <summary>Ending-screen entry; reuses ContinueRun and leaves the ending panel untouched on failure.</summary>
+        public bool LoadLatestSaveFromEnding()
+        {
+            if (!HasResumableSave())
+            {
+                endingLoadMessage = "没有可读取的未结束存档。";
+                canvasView?.Refresh();
+                return false;
+            }
+            endingLoadMessage = string.Empty;
+            if (!ContinueRun())
+            {
+                endingLoadMessage = Message;
+                canvasView?.Refresh();
+                return false;
+            }
+            canvasView?.Refresh();
+            return true;
+        }
+        /// <summary>One silent main-slot save per absolute game day; a failed attempt waits for the next day.</summary>
+        private void TryAutoSaveDay()
+        {
+            int day = AbsoluteGameDay;
+            if (!DailyAutoSavePolicy.ShouldSave(day, lastAutoSaveDay, Application.isPlaying, GameEnded,
+                IsModalOpen, IsMemoryInstallPending, IsMemoryInstallOpen, TrainingEnabled)) return;
+            lastAutoSaveDay = day;
+            try { EnsureSaveService(); saveService.Save(); }
+            catch (Exception error)
+            {
+                Message = "自动存档失败：" + error.Message;
+                Debug.LogWarning("Daily autosave failed on day " + day + ": " + error.Message, this);
+            }
+        }
         public RunSaveData CaptureRun()
         {
             var policy=GetComponent<ProgressionController>(); policy.EnsureBound();
@@ -120,6 +171,7 @@ namespace CallmeCatgirl.Gameplay
                     MonthlyMaintenanceFee=configuration.MonthlyMaintenanceFee,PlaybackSpeed=PlaybackSpeed,MemoryLevel=MemoryLevel,CompletedTasks=CompletedTasks,
                     AvailableAbilityPoints=AvailableAbilityPoints,RequestSerial=serial,SelectedRequestId=SelectedId,GameEnded=GameEnded,EndingText=EndingText,EndReason=EndReason,
                     OperatingRequestIds=operatingTasks.OrderBy(id=>id,StringComparer.Ordinal).ToArray(),
+                    FillerCounts=(int[])fillerGenerated.Clone(),
                     MemoryUpgradeOpen=IsMemoryUpgradeOpen,GenerationRandom=((SaveableRandom)requestRandom).Capture(),
                     TaskBases=taskBases.Select(p=>new TaskBasisState{RequestId=p.Key,Definition=DefinitionState.Capture(p.Value)}).ToArray()}};
         }
@@ -133,7 +185,8 @@ namespace CallmeCatgirl.Gameplay
             if (host.Version >= 3 && narrativePayload == null) throw new ArgumentException("Current run is missing its narrative ledger.");
             var restoredNarrative = narrativePayload == null ? NarrativeSession.AdoptLegacy(host.MemoryLevel)
                 : NarrativeSession.Restore(narrativeSave.DecodeForRestore(narrativePayload));
-            var restored=RunRestoreBuilder.Build(data,ContentRevision,configuration.Story,configuration.TaskGeneration,policy.Nodes,SaveableRandom.Restore,Story.Revision,runExtensions,LegacyStoryV1ContentRevision,configuration.OrdinaryDialoguePool,configuration.InitialAffinity,configuration.SuccessAffinity,configuration.FailureAffinity,CompatiblePresentationRevisions);
+            var ordinaryPoolForRestore = data.Story.Version >= 5 ? (OrdinaryStagePool.Load() ?? configuration.OrdinaryDialoguePool) : configuration.OrdinaryDialoguePool;
+            var restored=RunRestoreBuilder.Build(data,ContentRevision,configuration.Story,configuration.TaskGeneration,policy.Nodes,SaveableRandom.Restore,Story.Revision,runExtensions,LegacyStoryV1ContentRevision,ordinaryPoolForRestore,configuration.InitialAffinity,configuration.SuccessAffinity,configuration.FailureAffinity,CompatiblePresentationRevisions,() => host.MemoryLevel);
             if(host.MemoryLevel<0 || host.MemoryLevel>5 || (host.Version<3 && host.MemoryLevel<1)) throw new ArgumentException("Invalid stage.");
             if (restoredNarrative.MemoryCount != host.MemoryLevel) throw new ArgumentException("Narrative memory milestone differs from installed memory.");
             if (RunEndReasons.IsNarrative(RunSaveValidation.ResolveEndReason(host)) && (!restoredNarrative.EndingClosed
@@ -144,8 +197,10 @@ namespace CallmeCatgirl.Gameplay
                 composePermanentBonuses:model=>ComposePolicyAbilities(model,ReferenceEquals(Simulation,restored.Simulation)?PolicyTree:restored.Policies),
                 policies:()=>TrainingModifiers(ReferenceEquals(Simulation,restored.Simulation)?PolicyTree:restored.Policies),
                 restoredStage:()=>Math.Max(1,ReferenceEquals(Simulation,restored.Simulation)?MemoryLevel:host.MemoryLevel));
-            var active=session.Models.Single(m=>m.Id==session.ActiveModelId);
-            var expected=session.Architectures.Single(a=>a.Id==active.ArchitectureId).Transform(CapacityForNarrative(restoredNarrative,host.MemoryLevel),restored.Simulation.Width,restored.Simulation.Height);
+            var expected=CapacityForNarrative(restoredNarrative,host.MemoryLevel).ToArray();
+            var active=session.ActiveModel;
+            if(active!=null)
+                expected=session.Architectures.Single(a=>a.Id==active.ArchitectureId).Transform(expected,restored.Simulation.Width,restored.Simulation.Height);
             var actual=Enumerable.Range(0,restored.Simulation.Width*restored.Simulation.Height).Select(i=>new Cell(i%restored.Simulation.Width,i/restored.Simulation.Width)).Where(restored.Simulation.IsOpen).ToArray();
             if(!new System.Collections.Generic.HashSet<Cell>(expected).SetEquals(actual)) throw new ArgumentException("Saved model outline differs from stage capacity.");
             foreach(string id in restored.Simulation.Tasks.Keys)
@@ -159,9 +214,13 @@ namespace CallmeCatgirl.Gameplay
                 operatingTasks.Clear(); foreach(var id in host.OperatingRequestIds ?? Array.Empty<string>()) operatingTasks.Add(id);
                 taskBases.Clear(); foreach(var pair in restored.TaskBases) taskBases.Add(pair.Key,pair.Value);
                 CurrentMonth=host.CurrentMonth;monthTimer=host.MonthElapsed;PlaybackSpeed=host.PlaybackSpeed;MemoryLevel=host.MemoryLevel;
+                RestoreFillerCounters(host.FillerCounts,restored.Simulation);
                 CompletedTasks=host.CompletedTasks;AvailableAbilityPoints=host.AvailableAbilityPoints;serial=host.RequestSerial;SelectedId=host.SelectedRequestId;
                 GameEnded=host.GameEnded;EndingText=host.EndingText;EndReason=RunSaveValidation.ResolveEndReason(host);IsMemoryUpgradeOpen=host.MemoryUpgradeOpen;runId=data.RunId;
                 Narrative=restoredNarrative;appliedPolicySpeed=-1;
+                lastAutoSaveDay=AbsoluteGameDay;endingLoadMessage=string.Empty;
+                endingSceneRequested=false;endingSceneUnavailable=false;narrativePanelHiddenForEnding=false;
+                if(narrativePanel!=null)narrativePanel.gameObject.SetActive(true);
                 if(narrativePanel!=null)narrativePanel.Bind(Narrative,CompletionFont());
                 policy.BindRestoredTree(Simulation,restored.Policies);
                 try { training.BindRestoredSession(Simulation,session,()=>!GameEnded&&!IsMemoryUpgradeOpen&&!IsMemoryInstallOpen); }

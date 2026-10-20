@@ -51,12 +51,23 @@ namespace CallmeCatgirl.UI.SystemMenu
             if (configured) throw new InvalidOperationException("This system menu is already configured.");
             if (sharedFont == null) throw new ArgumentNullException(nameof(sharedFont), "Pass the existing game's Chinese UI font.");
             if(Application.isPlaying && drawer==null)throw new InvalidOperationException("System menu references must be authored before Play.");
-            configured = true; PrepareSceneLayout(sharedFont);
-            Settings = service ?? new SystemSettingsService(new UnitySystemSettingsBackend(), new PlayerPrefsSystemSettingsStore());
-            session = new SystemMenuSession(gameplay, pauseClaimChanged, consumeEscapeBeforeMenu, saveAndReturnToMenu);
-            BindActions(); session.Changed += RefreshVisibility; Settings.Changed += RefreshSettings;
-            if (applySavedSettings) Run(Settings.LoadAndApply);
-            RefreshSettings(); RefreshVisibility();
+            try
+            {
+                PrepareSceneLayout(sharedFont);
+                Settings = service ?? new SystemSettingsService(new UnitySystemSettingsBackend(), new PlayerPrefsSystemSettingsStore());
+                session = new SystemMenuSession(gameplay, pauseClaimChanged, consumeEscapeBeforeMenu, saveAndReturnToMenu);
+                BindActions(); session.Changed += RefreshVisibility; Settings.Changed += RefreshSettings;
+                if (applySavedSettings) Run(Settings.LoadAndApply);
+                RefreshSettings(); RefreshVisibility();
+                configured = true;
+            }
+            catch (Exception exception)
+            {
+                if (Settings != null) Settings.Changed -= RefreshSettings;
+                if (session != null) session.Changed -= RefreshVisibility;
+                Debug.LogException(exception, this);
+                configured = false;
+            }
         }
 
         public void PrepareSceneLayout(Font sharedFont)
@@ -109,7 +120,7 @@ namespace CallmeCatgirl.UI.SystemMenu
 
         private void Update()
         {
-            if (!configured) return;
+            if (!configured || Settings == null || session == null) return;
             Settings.Tick(Time.unscaledDeltaTime);
             float target = IsPauseOpen ? 1 : 0;
             drawerProgress = Mathf.MoveTowards(drawerProgress, target, Time.unscaledDeltaTime / .15f);
@@ -119,17 +130,19 @@ namespace CallmeCatgirl.UI.SystemMenu
             if (Settings.IsDisplayPreviewPending) { UpdatePreviewText(); previewConfirm.interactable = Settings.CanConfirmDisplayPreview; }
             Layout();
         }
-        private void OnApplicationFocus(bool focused) { if (configured) Run(() => Settings.OnFocusChanged(focused)); }
-        private void OnApplicationQuit() { if (configured) Run(Settings.OnLeavingApplication); }
+        private void OnApplicationFocus(bool focused) { if (configured && Settings != null) Run(() => Settings.OnFocusChanged(focused)); }
+        private void OnApplicationQuit() { if (configured && Settings != null) Run(Settings.OnLeavingApplication); }
         private void OnDisable()
         {
             if (!configured) return;
-            Run(Settings.RevertDisplayPreview); session.CloseAll();
+            if (Settings != null) Run(Settings.RevertDisplayPreview);
+            session?.CloseAll();
         }
         private void OnDestroy()
         {
             if (!configured) return;
-            Settings.Changed -= RefreshSettings; session.Changed -= RefreshVisibility;
+            if (Settings != null) Settings.Changed -= RefreshSettings;
+            if (session != null) session.Changed -= RefreshVisibility;
         }
 
         private void Build()

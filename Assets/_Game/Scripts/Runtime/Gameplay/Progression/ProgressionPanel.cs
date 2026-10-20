@@ -197,9 +197,14 @@ namespace CallmeCatgirl.Gameplay.Progression
                 + "\n前置：" + prerequisites + (n.ReputationDelta == 0 ? "" : "\n声望 " + (n.ReputationDelta > 0 ? "+" : "") + n.ReputationDelta)
                 + "\n\n故事\n" + n.FlavorText;
             detailStatus.text = ProgressionController.PurchaseResultText(state)
-                + (state == PurchaseResult.Success && controller.Funds < n.Cost ? " · 金币不足" : "");
-            buy.interactable = controller.CanPurchase && state == PurchaseResult.Success && controller.Funds >= n.Cost;
+                + (state == PurchaseResult.Success && !CanAfford(n.Cost) ? " · 金币不足" : "");
+            buy.interactable = controller.CanPurchase && state == PurchaseResult.Success && CanAfford(n.Cost);
             buy.GetComponentInChildren<Text>().text = (n.Kind == PolicyNodeKind.Terminal ? "确认进入终局 · " : "购买 · ") + n.Cost + " 金币";
+        }
+        private bool CanAfford(int cost)
+        {
+            var owner = controller == null ? null : controller.GetComponent<CoreGameplayController>();
+            return owner != null && owner.CanAfford(cost);
         }
         private ScrollRect ScrollArea(string name,Transform parent,Vector2 minimum,Vector2 maximum,bool horizontal)
         {

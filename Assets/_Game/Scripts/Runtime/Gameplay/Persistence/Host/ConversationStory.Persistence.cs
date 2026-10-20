@@ -13,10 +13,12 @@ namespace CallmeCatgirl.Gameplay
             if (choosing) throw new InvalidOperationException("Cannot save inside a reply reward transaction.");
             return new StoryState
             {
-                Version = 4, Users = users.Select(p => new StoryUserState
+                Version = 5, Users = users.Select(p => new StoryUserState
                 { UserId = p.Key, NodeId = p.Value.NodeId, PoolEntryId = p.Value.PoolEntryId,
                     Affinity = p.Value.Affinity, CompletedSessions = p.Value.CompletedSessions.OrderBy(id => id, StringComparer.Ordinal).ToArray(),
                     ConversationKind = (int)Kind(p.Key), History = p.Value.History.ToArray() }).ToArray(),
+                UsesStagePool = stagePool,
+                UsedPoolEntryIds = usedPoolEntries.OrderBy(id => id, StringComparer.Ordinal).ToArray(),
                 ArrivedRequestIds = arrived.OrderBy(id => id, StringComparer.Ordinal).ToArray(),
                 SettledRequestIds = settled.OrderBy(id => id, StringComparer.Ordinal).ToArray(),
                 SubmittedRequestIds = submitted.OrderBy(id => id, StringComparer.Ordinal).ToArray(),
@@ -44,9 +46,10 @@ namespace CallmeCatgirl.Gameplay
 
         public static ConversationStory RestoreState(StoryState s, TaskSimulation simulation, StoryConfiguration config,
             TaskGenerationConfiguration generation, System.Random random, EconomyManager economy, int previousLiveRevision,
-            StoryConfiguration ordinaryDialoguePool = null, double initialAffinity = 0, double successAffinity = 1, double failureAffinity = -0.5)
+            StoryConfiguration ordinaryDialoguePool = null, double initialAffinity = 0, double successAffinity = 1, double failureAffinity = -0.5,
+            Func<int> stageProvider = null)
         {
-            StateRules.Require(s != null && (s.Version == 1 || s.Version == 2 || s.Version == 3 || s.Version == 4) && s.Users != null && s.ArrivedRequestIds != null
+            StateRules.Require(s != null && (s.Version == 1 || s.Version == 2 || s.Version == 3 || s.Version == 4 || s.Version == 5) && s.Users != null && s.ArrivedRequestIds != null
                 && s.SubmittedRequestIds != null && s.PendingRequestIds != null && s.VisibleChoices != null
                 && (s.Version == 1 || (s.VisibleCorpusChoiceIds != null
                     && s.VisibleCorpusChoiceIds.Length == s.VisibleChoices.Length && s.OrdinaryConversations != null))
@@ -54,10 +57,36 @@ namespace CallmeCatgirl.Gameplay
                 && Enum.IsDefined(typeof(Quality), s.Result) && (!s.IsReply || s.IsOpen), "Invalid story state.");
             if (simulation == null || economy == null) throw new ArgumentNullException("simulation/economy");
             var story = new ConversationStory(config, generation, random, ordinaryDialoguePool, initialAffinity, successAffinity, failureAffinity) { Economy = economy };
+            story.StageProvider = stageProvider;
+            bool savedStagePool = s.Version >= 5 && s.UsesStagePool;
+            if (s.Version >= 5)
+            {
+                StateRules.Require(s.UsedPoolEntryIds != null, "Missing stage pool usage ledger.");
+                if (savedStagePool)
+                {
+                    StateRules.Require(story.stagePool, "Saved stage pool content is not installed.");
+                    foreach (string id in s.UsedPoolEntryIds)
+                        StateRules.Require(id != null && ordinaryDialoguePool?.Users?.Any(u => u != null && u.UserId == id
+                            && OrdinaryStagePool.IsStageCustomer(id)) == true && story.usedPoolEntries.Add(id), "Invalid stage pool usage ledger.");
+                }
+                else
+                {
+                    // v5 legacy saves must identify themselves and carry no stage reservations.
+                    StateRules.Require(s.UsedPoolEntryIds.Length == 0, "Legacy story cannot carry stage pool usage.");
+                    StateRules.Require(!story.stagePool, "Saved legacy story requires the legacy ordinary pool.");
+                }
+            }
+            var boundPoolEntries = new HashSet<string>(StringComparer.Ordinal);
             foreach (var u in s.Users)
             {
                 StateRules.Require(u != null && !string.IsNullOrWhiteSpace(u.UserId) && u.History != null
                     && u.History.All(h => h != null) && !story.users.ContainsKey(u.UserId), "Invalid/duplicate story user.");
+                if (savedStagePool && story.IsSlot(u.UserId) && u.ConversationKind == (int)StoryConfiguration.ConversationKind.Ordinary)
+                {
+                    StateRules.Require(OrdinaryStagePool.IsStageCustomer(u.PoolEntryId)
+                        && story.usedPoolEntries.Contains(u.PoolEntryId), "Stage slot binding is missing from the usage ledger.");
+                    StateRules.Require(boundPoolEntries.Add(u.PoolEntryId), "Duplicate stage customer binding.");
+                }
                 var user = story.BindUser(u.UserId, s.Version >= 3 ? u.PoolEntryId : null, true);
                 if (s.Version >= 3)
                     StateRules.Require(Enum.IsDefined(typeof(StoryConfiguration.ConversationKind), u.ConversationKind)
@@ -140,10 +169,11 @@ namespace CallmeCatgirl.Gameplay
             }
             var submittedTasks = s.SubmittedRequestIds.Select(id => simulation.Tasks[id]);
             story.ordinaryLifecycle = s.Version == 1
-                ? OrdinaryConversationLifecycle.RestoreLegacyV1(config?.OrdinaryLifecycle ?? new OrdinaryConversationPolicy(), submittedTasks, story.IsScriptedConversation)
+                ? OrdinaryConversationLifecycle.RestoreLegacyV1(config?.OrdinaryLifecycle ?? new OrdinaryConversationPolicy(), submittedTasks,
+                    id => !story.UsesRandomOrdinaryEnding(id))
                 : OrdinaryConversationLifecycle.RestoreState(s.OrdinaryConversations,
                 config?.OrdinaryLifecycle ?? new OrdinaryConversationPolicy(),
-                submittedTasks, story.IsScriptedConversation);
+                submittedTasks, id => !story.UsesRandomOrdinaryEnding(id));
             story.Revision = Math.Max(s.Revision, previousLiveRevision) + 1;
             return story;
         }

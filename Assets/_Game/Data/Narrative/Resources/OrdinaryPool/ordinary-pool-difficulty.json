@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "stages": [
+    {
+      "stage": 1,
+      "calculation": 100,
+      "patience": 120,
+      "speed": 10,
+      "tokens": 120,
+      "fillerTokens": 12,
+      "writing": 10,
+      "code": 10,
+      "reasoning": 10,
+      "targetConcurrent": 3,
+      "targetRequests": 0
+    },
+    {
+      "stage": 2,
+      "calculation": 900,
+      "patience": 120,
+      "speed": 10,
+      "tokens": 120,
+      "fillerTokens": 12,
+      "writing": 90,
+      "code": 90,
+      "reasoning": 90,
+      "targetConcurrent": 6,
+      "targetRequests": 60
+    },
+    {
+      "stage": 3,
+      "calculation": 900,
+      "patience": 120,
+      "speed": 10,
+      "tokens": 120,
+      "fillerTokens": 12,
+      "writing": 144,
+      "code": 144,
+      "reasoning": 144,
+      "targetConcurrent": 9,
+      "targetRequests": 150
+    },
+    {
+      "stage": 4,
+      "calculation": 900,
+      "patience": 120,
+      "speed": 10,
+      "tokens": 120,
+      "fillerTokens": 12,
+      "writing": 216,
+      "code": 216,
+      "reasoning": 216,
+      "targetConcurrent": 11,
+      "targetRequests": 220
+    },
+    {
+      "stage": 5,
+      "calculation": 900,
+      "patience": 120,
+      "speed": 10,
+      "tokens": 120,
+      "fillerTokens": 12,
+      "writing": 306,
+      "code": 306,
+      "reasoning": 306,
+      "targetConcurrent": 12,
+      "targetRequests": 120
+    }
+  ]
+}

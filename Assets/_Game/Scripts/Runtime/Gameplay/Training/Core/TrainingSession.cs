@@ -30,11 +30,12 @@ namespace CallmeCatgirl.Gameplay.Training
         private bool busy;
         private int serial;
         public string ActiveModelId { get; private set; }
+        public CatalogModel ActiveModel => ActiveModelId != null && models.TryGetValue(ActiveModelId, out var model) ? model : null;
         public int ComputeIndex { get; private set; }
         public IReadOnlyList<CorpusRecord> Corpus => corpus.Values.ToArray();
         public IReadOnlyList<CatalogModel> Models => models.Values.ToArray();
         public IReadOnlyList<TrainingJob> Jobs => jobs.Values.ToArray();
-        public IReadOnlyList<TrainingRecipe> Recipes => recipes.Values.ToArray();
+        public IReadOnlyList<TrainingRecipe> Recipes => recipes.Values.Where(r => r.Id != TutorialCorpusRecipeId || CompactTrainingAvailable).ToArray();
         public IReadOnlyList<ArchitectureDefinition> Architectures => architectures.Values.ToArray();
         public int CurrentStage
         {
@@ -48,7 +49,8 @@ namespace CallmeCatgirl.Gameplay.Training
         public ComputeTier Compute => compute[ComputeIndex];
         public IReadOnlyList<ComputeTier> ComputeTiers => Array.AsReadOnly(compute);
         public ComputeTier NextCompute => ComputeIndex + 1 < compute.Length ? compute[ComputeIndex + 1] : null;
-        public double TokensPerSecond => Throughput(models[ActiveModelId].ArchitectureId, ComputeIndex);
+        public double TokensPerSecond => ActiveModel == null ? BaseTokensPerSecond : Throughput(ActiveModel.ArchitectureId, ComputeIndex);
+        private double BaseTokensPerSecond => compute[ComputeIndex].TokensPerSecond * policyModifiers().InferenceSpeedMultiplier;
         public double PreviewTokensPerSecond(string modelId)
         {
             string id = Identities.ResolveKnown(modelId);
@@ -92,13 +94,15 @@ namespace CallmeCatgirl.Gameplay.Training
             if (this.recipes.Count == 0 || this.compute.Length == 0 || this.architectures.Count == 0)
                 throw new ArgumentException("Incomplete training configuration.");
             AddStarterRecipe(this.recipes);
+            AddTutorialCorpusRecipe(this.recipes);
             for (int i = 0; i < this.compute.Length; i++)
                 if (this.compute[i] == null || (i > 0 && this.compute[i].TokensPerSecond <= this.compute[i-1].TokensPerSecond))
                     throw new ArgumentException("Compute tiers must strictly increase.");
             foreach (var architecture in this.architectures.Keys)
                 for (int i = 0; i < this.compute.Length; i++) Throughput(architecture, i);
             if (restoring) return; // Detached restore never applies profiles, UUID migration, money or task commands.
-            if (initial == null || !this.architectures.ContainsKey(initial.ArchitectureId)) throw new ArgumentException("Missing initial model.");
+            if (initial == null) return; // Tutorial starts without a model; the first training creates model 1.
+            if (!this.architectures.ContainsKey(initial.ArchitectureId)) throw new ArgumentException("Missing initial model architecture.");
             if (initial.Id != simulation.Model.Id && initial.LegacyId != simulation.Model.Id)
                 throw new ArgumentException("Initial catalog must match the live model ID or its migration alias.");
             if (ArchitectureAvailability(initial.ArchitectureId) != TrainingResult.Success)
@@ -161,6 +165,7 @@ namespace CallmeCatgirl.Gameplay.Training
         {
             job = null;
             if (busy) return TrainingResult.Busy;
+            if (recipeId == TutorialCorpusRecipeId && !CompactTrainingAvailable) return TrainingResult.UnknownRecipe;
             if (recipeId == null || !recipes.TryGetValue(recipeId, out var recipe)) return TrainingResult.UnknownRecipe;
             var availability = ArchitectureAvailability(architectureId);
             if (availability != TrainingResult.Success) return availability;
@@ -287,8 +292,9 @@ namespace CallmeCatgirl.Gameplay.Training
         {
             if (busy) return TrainingResult.Busy;
             if (!simulation.Paused) return TrainingResult.MustPause;
+            if (ActiveModel == null) return TrainingResult.UnknownModel;
             if (NextCompute == null) return TrainingResult.NoUpgrade;
-            double rate = Throughput(models[ActiveModelId].ArchitectureId, ComputeIndex + 1);
+            double rate = Throughput(ActiveModel.ArchitectureId, ComputeIndex + 1);
             int cost = NextCompute.UpgradeCost;
             busy = true;
             try

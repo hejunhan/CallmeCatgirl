@@ -2,6 +2,10 @@
 
 Unity 游戏项目。当前可在编辑器验证任务调度、会话、语料训练、模型广场、原子存档和菜单继续；游戏内容仍在开发。
 
+## 分组协作
+
+从 [agent/README.md](agent/README.md) 进入数值、系统和 UIUX 三组。公共约束、跨组交接与常用资料集中在那里；`docs/` 保留其他专题和历史报告。
+
 ## 开发环境
 
 - Unity **6000.5.2f1**，准确版本以 `ProjectSettings/ProjectVersion.txt` 为准。

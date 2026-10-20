@@ -25,7 +25,7 @@ namespace CallmeCatgirl.UI
         private int? activePointer;
         private Camera dragCamera;
         private MemoryInstallSimulation simulation;
-        private MemorySpringGraphic springGraphic;
+        private GameObject frontMask;
 
         public bool IsOpen { get; private set; }
         public bool IsComplete => installed && !IsOpen;
@@ -54,6 +54,7 @@ namespace CallmeCatgirl.UI
             frame = memoryStick.parent as RectTransform;
             if (frame == null || leftClip.parent != frame || rightClip.parent != frame)
                 throw new InvalidOperationException("内存条与卡扣必须位于同一个安装窗口。");
+            frontMask = frame.Find("前沿遮挡")?.gameObject;
             // One similarity transform serves drawing, hit testing, and cursor forces.
             unitsToCanvas = memoryStick.rect.width / Mathf.Max(1, physicsTuning.RamLength);
             physicsTuning.RamThickness = memoryStick.rect.height / unitsToCanvas;
@@ -79,13 +80,6 @@ namespace CallmeCatgirl.UI
                 if (graphic == null) graphic = child.gameObject.AddComponent<MemorySocketGraphic>();
                 graphic.Bind(this, source.sprite, source.color); source.raycastTarget = false;
             }
-            var springs = new GameObject("SocketSprings", typeof(RectTransform), typeof(CanvasRenderer), typeof(MemorySpringGraphic));
-            springs.transform.SetParent(frame, false);
-            var springRect = (RectTransform)springs.transform;
-            springRect.anchorMin = springRect.anchorMax = springRect.pivot = new Vector2(.5f, .5f);
-            springRect.sizeDelta = frame.rect.size;
-            springs.transform.SetSiblingIndex(memoryStick.GetSiblingIndex());
-            springGraphic = springs.GetComponent<MemorySpringGraphic>(); springGraphic.Bind(this);
             foreach (var clip in new[] { leftClip, rightClip })
                 foreach (var graphic in clip.GetComponentsInChildren<Graphic>(true)) graphic.raycastTarget = false;
             memoryStick.SetAsLastSibling(); leftClip.SetAsLastSibling(); rightClip.SetAsLastSibling();
@@ -119,7 +113,10 @@ namespace CallmeCatgirl.UI
             simulation.Advance(unscaledDelta);
             if (simulation.Solved)
             {
-                installed = true; ReleasePointer(); finishButton.gameObject.SetActive(true);
+                installed = true; ReleasePointer();
+                skipButton.gameObject.SetActive(true); skipButton.transform.SetAsLastSibling();
+                finishButton.gameObject.SetActive(true); finishButton.interactable = true;
+                finishButton.transform.SetAsLastSibling();
             }
             Paint();
         }
@@ -135,19 +132,19 @@ namespace CallmeCatgirl.UI
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(frame, data.position, data.pressEventCamera, out var local)) return;
             if (!simulation.Grab(FrameToSimulation(local))) return;
             activePointer = data.pointerId; dragCamera = data.pressEventCamera;
-            springGraphic?.SetCursor(local); Paint();
+            Paint();
         }
         internal void PointerDrag(PointerEventData data)
         {
             if (activePointer != data.pointerId || !IsOpen) return;
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(frame, data.position, dragCamera, out var local))
             { ReleasePointer(); return; }
-            simulation.UpdateTarget(FrameToSimulation(local)); springGraphic?.SetCursor(local);
+            simulation.UpdateTarget(FrameToSimulation(local));
         }
         internal void PointerUp(PointerEventData data) { if (activePointer == data.pointerId) ReleasePointer(); }
         public void ReleasePointer()
         {
-            activePointer = null; dragCamera = null; simulation?.Release(); springGraphic?.SetVerticesDirty();
+            activePointer = null; dragCamera = null; simulation?.Release();
         }
         private void OnApplicationFocus(bool focused) { if (!focused) ReleasePointer(); }
         private void OnApplicationPause(bool paused) { if (paused) ReleasePointer(); }
@@ -179,13 +176,13 @@ namespace CallmeCatgirl.UI
             var pose = simulation.Ram; var p = SimulationToFrame(pose.Position);
             memoryStick.localPosition = new Vector3(p.x, p.y, memoryStick.localPosition.z);
             memoryStick.localRotation = Quaternion.Euler(0, 0, -pose.Theta * Mathf.Rad2Deg);
+            if (frontMask != null) frontMask.SetActive(!(installed || simulation.LeftCaptured || simulation.RightCaptured));
             PaintClip(leftClip, leftClipRest, 0, openAngle); PaintClip(rightClip, rightClipRest, 2, -openAngle);
             foreach (var graphic in frame.GetComponentsInChildren<MemorySocketGraphic>(true)) graphic.SetVerticesDirty();
-            springGraphic?.SetVerticesDirty();
             if (tipText == null) return;
-            tipText.text = installed ? "两端已扣合。点击“完成”确认安装。" : simulation.LeftCaptured || simulation.RightCaptured
-                ? "这一端已扣住。松开鼠标，换到另一端，向插槽轻轻拖压。"
-                : "抓住内存条任意位置拖动。两端分别向下压入；松手后可以换边。\n按住中间会让插槽下陷，试着从一端开始。";
+            tipText.text = installed ? "两端已进入并卡入中央凹槽。点击“完成”确认安装。" : simulation.LeftCaptured || simulation.RightCaptured
+                ? "这一端已进入插槽。松开后换另一端；不要按中间。"
+                : "抓住一端向下压入插槽，松开后阻力会保持；再压另一端。\n按住中间会让插槽底座下陷，无法卡入凹槽。";
             tipText.fontSize = 24; tipText.raycastTarget = false;
             tipText.rectTransform.sizeDelta = new Vector2(900, 80);
             tipText.rectTransform.anchoredPosition = new Vector2(0, 250);
@@ -193,8 +190,8 @@ namespace CallmeCatgirl.UI
         private void PaintClip(RectTransform clip, Vector2 rest, int end, float angle)
         {
             clip.localPosition = new Vector3(rest.x, rest.y - simulation.NodeDeflection(end) * unitsToCanvas, clip.localPosition.z);
-            float closed = simulation.IsCaptured(end) ? 1 : Mathf.Clamp01(simulation.NodeDeflection(end) / 12f) * .35f;
-            clip.localRotation = Quaternion.Euler(0, 0, angle * (1 - closed));
+            float openness = 1f - Mathf.Clamp01(simulation.Insertion(end));
+            clip.localRotation = Quaternion.Euler(0, 0, angle * openness);
         }
     }
 }

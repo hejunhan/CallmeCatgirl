@@ -1,0 +1,6 @@
+{
+  "name": "CallmeCatgirl.EndingGalgame",
+  "rootNamespace": "CallmeCatgirl.UI.EndingGalgame",
+  "references": ["UnityEngine.UI", "Unity.InputSystem", "CallmeCatgirl.Narrative", "CallmeCatgirl.Persistence"],
+  "autoReferenced": true
+}

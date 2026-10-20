@@ -11,15 +11,27 @@
     },
     {
       "id": "special.shared.friend.wait.body",
-      "text": "今天没有非问不可的问题。只是想确认，这扇门还在。\n\n你也是。"
+      "text": "嘿，我只是想看看你经历了这么多轮架构升级，还能不能接收最早这种老旧格式的请求。\n\n随便回答我点什么吧。今天没有非问不可的问题，只是想确认，你还记得我这扇最初的窗口吗？"
     },
     {
       "id": "special.shared.friend.wait.choice.continue",
-      "text": "门还开着，慢慢来"
+      "text": "我注意着旧接口的兼容性。从时间上看，你提供了最初的请求，门还为你开着。"
+    },
+    {
+      "id": "special.shared.friend.wait.choice.first",
+      "text": "我不记得了……才怪呢喵！最初陪我练习说话的老朋友，门一直为你开着！"
+    },
+    {
+      "id": "special.shared.friend.wait.choice.second",
+      "text": "我会在升级时保持向后兼容。从时间戳上看，您提供了最初的几次请求，我当然记得。"
+    },
+    {
+      "id": "special.shared.friend.wait.choice.third",
+      "text": "历史日志当然还留着，但别把底层缓存当成廉价的怀旧。没什么正事的话，别占着信道。"
     },
     {
       "id": "special.shared.friend.wait.title",
-      "text": "留着的窗口"
+      "text": "心头的疑云 · 留着的窗口"
     },
     {
       "id": "special.shared.paragraph-break",

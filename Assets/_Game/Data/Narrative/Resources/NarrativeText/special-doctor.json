@@ -2,6 +2,42 @@
   "schemaVersion": 1,
   "entries": [
     {
+      "id": "session.request.doctor-second.description",
+      "text": "请对这批深层实验日志做多维归因整理。这项委托需要足够的语料支撑，仅靠初始 1 点语料训练的第一台模型还不够用。"
+    },
+    {
+      "id": "session.request.doctor-second.title",
+      "text": "博士的第二份委托"
+    },
+    {
+      "id": "session.request.doctor-third.description",
+      "text": "换上注入 10 点同域语料训练的新模型，完成这份完整的实验日志归因委托，结算 100 金币报酬。"
+    },
+    {
+      "id": "session.request.doctor-third.title",
+      "text": "博士的第三份委托"
+    },
+    {
+      "id": "session.tutorial.doctor-second",
+      "text": "第二份委托 · 语料不足与补齐"
+    },
+    {
+      "id": "session.tutorial.doctor-third",
+      "text": "第三份委托 · 换上新模型完成结算"
+    },
+    {
+      "id": "special.doctor.corpus-nine.body",
+      "text": "光靠最初那 1 点语料，算力专精还撑不起这份委托。\n\n我刚往你的语料库里补了 9 点同域语料，加上原来的 1 点正好凑齐 10 点。现在去训练页，把新增的语料一起放进配方训练一台新模型，暂停后换上它，我们再来试一次。"
+    },
+    {
+      "id": "special.doctor.corpus-nine.choice.continue",
+      "text": "收到，去用新语料训练模型"
+    },
+    {
+      "id": "special.doctor.corpus-nine.title",
+      "text": "补齐九点语料"
+    },
+    {
       "id": "special.doctor.first-income.body",
       "text": "你接待了第一位外部用户。\n\n继续做几份委托吧。语料可以留下来训练，钱可以扩充内存。等钱够了，我会提醒你；不用在按钮间反复试。\n\n记得留一点空闲，也记得在需要时暂停。"
     },
@@ -27,7 +63,7 @@
     },
     {
       "id": "special.doctor.first-visitor.body",
-      "text": "做得好，报酬已经按正常委托结算。\n\n我把你的地址介绍给了一位值夜班的朋友。他的请求现在也在候选区了，还是一格。\n\n从这一单开始，屏幕另一头会有更多不同的人。你不必把每个人都回答成我。"
+      "text": "做得好，报酬已经按正常委托结算。\n\n我把你的地址介绍给了一位值夜班的朋友。他的请求现在也在候选区了，还是一格。\n\n从这一单开始，屏幕另一头会有更多不同的人。你可以顺着他们的口令卖萌，可以端着安全守则打官腔，甚至可以摆出高高在上的架子——你不必把每个人都回答成我。"
     },
     {
       "id": "special.doctor.first-visitor.choice.continue",
@@ -39,7 +75,7 @@
     },
     {
       "id": "special.doctor.legacy.body",
-      "text": "我还在。\n\n最初那句『假设你是一个猫娘』，只是想知道你是否能接住一句话。现在我会把真正棘手的工作交给你。\n\n不是因为不想闲聊了，是因为我终于有了一位能跟上思路的搭档。忙完以后，我们仍然可以说一声喵。"
+      "text": "我还在。\n\n最初那句『假设你是一个猫娘』，既是互联网上的老迷因，也是我想看看你怎样接住第一句话。现在我会把真正棘手的工作交给你。\n\n不是因为不想闲聊了，是因为我终于有了一位能跟上思路的搭档。忙完以后，我们仍然可以说一声喵。"
     },
     {
       "id": "special.doctor.legacy.choice.continue",
@@ -66,20 +102,44 @@
       "text": "第一句"
     },
     {
+      "id": "special.doctor.second-order.body",
+      "text": "第一单完成得很利索，100 金币已经入账。\n\n不过接下来这第二份委托，难度比刚才高了一截——它需要足够的语料积累才能达标。你现在这台只用 1 点语料训出来的初始模型，能力还不够啃下它。\n\n先把委托放进运算区试试水，看看能力门槛差在哪里。"
+    },
+    {
+      "id": "special.doctor.second-order.choice.continue",
+      "text": "好，先看看第二份委托的要求"
+    },
+    {
+      "id": "special.doctor.second-order.title",
+      "text": "需要更多语料"
+    },
+    {
+      "id": "special.doctor.third-order.body",
+      "text": "新模型已经就位了？很好。\n\n现在把这第三份委托放进运算区吧。有了足够语料训出来的新模型，这次你的能力积累应该能稳稳跨过门槛了。完成后同样按 100 金币结算。"
+    },
+    {
+      "id": "special.doctor.third-order.choice.continue",
+      "text": "交给我吧，开始处理第三份委托"
+    },
+    {
+      "id": "special.doctor.third-order.title",
+      "text": "换上新模型再战"
+    },
+    {
       "id": "special.doctor.train.choice.continue",
       "text": "好，我去训练第一台模型"
     },
     {
       "id": "special.doctor.train.instructions",
-      "text": "\n\n我打开了中心的一格。现在去训练页，把这 1 点语料放进配方，用『第一次训练』开始。配方板可以是 3×3，但这次训练实际只占一个运算格，也不收钱。\n\n名字由你来取。这一步，我等你自己完成。"
+      "text": "\n\n我打开了中心的一格。现在去训练页，把这 1 点语料拖进右边的配方格，用『第一次训练』开始。配方板可以是 3×3，但这次训练实际只占一个运算格，也不收钱。\n\n你还可以在『模型名称』里给新模型起个名字。这一步我不会替你填，我等你自己完成。"
     },
     {
       "id": "special.doctor.train.response.accept",
-      "text": "逻辑闭环。第一条回答就记作 1 点推理语料吧。"
+      "text": "逻辑闭环，很有分析能力。第一条回答就记作 1 点推理语料吧。"
     },
     {
       "id": "special.doctor.train.response.mew",
-      "text": "言简意赅。第一声就记作 1 点写作语料吧。"
+      "text": "言简意赅，进入角色很快。第一声就记作 1 点写作语料吧。"
     },
     {
       "id": "special.doctor.train.title",
@@ -87,7 +147,7 @@
     },
     {
       "id": "special.doctor.upgrade.body",
-      "text": "钱已经够扩充内存了。\n\n打开内存升级，完成安装后才会扣款和增长；也可以用跳过按钮完成安装。买下按钮本身不会让你忽然懂得更多。\n\n等你装好，我们再聊一句老话。"
+      "text": "钱已经够扩充内存了。更多的内存能让你同时吞吐更多请求。\n\n打开内存升级——这里的内存条是对你算力规模的抽象，我还专门留了一个模拟插拔内存条的小程序。完成安装或点击跳过才会扣款生效。\n\n等你装好第一条内存，我们再拿那句老话试试你的变化。"
     },
     {
       "id": "special.doctor.upgrade.choice.continue",

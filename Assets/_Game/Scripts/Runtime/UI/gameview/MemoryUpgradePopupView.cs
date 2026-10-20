@@ -46,7 +46,7 @@ namespace CallmeCatgirl.UI
             confirmLabel.text = next == null ? "已满级" : $"确认升级 · {next.Cost}";
             conditionsLabel.text = next == null ? "全部升级已完成。" :
                 $"下一等级 Lv{next.TargetLevel} · 新增 {owner.NextMemoryCellCount} 格\n"
-                + $"资金：{owner.Funds} / {next.Cost}（{(owner.Funds >= next.Cost ? "满足" : "不足")}）\n"
+                + $"资金：{owner.Funds} / {next.Cost}（{(owner.DebugIgnoreCosts ? "调试忽略" : owner.Funds >= next.Cost ? "满足" : "不足")}）\n"
                 + $"达标提交：{owner.CompletedTasks} / {next.RequiredCompletedTasks}（{(owner.CompletedTasks >= next.RequiredCompletedTasks ? "满足" : "不足")}）\n"
                 + owner.NextMemoryPointRewardText + "\n新请求：" + owner.NextTaskMultiplierText;
             if (abilityPointsLabel != null) abilityPointsLabel.text = $"可分配点数：{owner.AvailableAbilityPoints} · 每{sim.Model.Interval:0.##}秒产出";

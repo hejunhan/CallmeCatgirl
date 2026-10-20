@@ -13,9 +13,9 @@ namespace CallmeCatgirl.Gameplay.Training
         public string DefaultsNotice = "暂定：语料一次消耗、无退款取消、能力不继承旧模型。速度为每任务token/s，并发不分摊。";
         public RecipeEntry[] Recipes = { new RecipeEntry() };
         public ArchitectureEntry[] Architectures = {
-            new ArchitectureEntry { Id = "baseline", Title = "学习型", UnlockStage = 1, CorpusMultiplier = 1.6, SpeedMultiplier = 1, Outline = OutlineTransform.Keep },
-            new ArchitectureEntry { Id = "alternate", Title = "高速型", UnlockStage = 2, CorpusMultiplier = 1, SpeedMultiplier = 1.6, Outline = OutlineTransform.Keep },
-            new ArchitectureEntry { Id = "architecture-slot-3", Title = "均衡型", TechnicalDescription = "语料与速度均衡", UnlockStage = 4, ContentReady = true, CorpusMultiplier = 1.25, SpeedMultiplier = 1.25, Outline = OutlineTransform.Keep }
+            new ArchitectureEntry { Id = "baseline", Title = "Transformer", UnlockStage = 1, CorpusMultiplier = 1.6, SpeedMultiplier = 1, Outline = OutlineTransform.Keep },
+            new ArchitectureEntry { Id = "alternate", Title = "MoE Transformer", UnlockStage = 2, CorpusMultiplier = 1, SpeedMultiplier = 1.6, Outline = OutlineTransform.Keep },
+            new ArchitectureEntry { Id = "architecture-slot-3", Title = "协调状态架构", TechnicalDescription = "语料与速度均衡", UnlockStage = 4, ContentReady = true, CorpusMultiplier = 1.25, SpeedMultiplier = 1.25, Outline = OutlineTransform.Keep }
         };
         public ComputeEntry[] Compute = {
             new ComputeEntry { Id = "compute-1", TokensPerSecond = 10, UpgradeCost = 0 },
@@ -63,12 +63,10 @@ namespace CallmeCatgirl.Gameplay.Training
             Func<ModelDefinition, ModelDefinition> compose = null, Func<PolicyModifiers> policy = null,
             ModelDefinition initialBaseDefinition = null, Func<int> currentStage = null, ModelIdentityRegistry identities = null)
         {
-            if (compose != null && initialBaseDefinition == null)
-                throw new InvalidOperationException("Supplying permanent bonuses requires an explicit unmodified initial base model.");
+            // A new run starts without a model. The first training creates model 1 from the opening corpus;
+            // the legacy fields stay serialized only so older configuration assets keep loading.
             identities = identities ?? new ModelIdentityRegistry();
-            var basis = initialBaseDefinition ?? simulation.Model;
-            return new TrainingSession(simulation,
-                new CatalogModel(InitialModelName, InitialArchitectureId, basis, Array.Empty<string>(), identities.ResolveOrCreate(basis.Id)),
+            return new TrainingSession(simulation, null,
                 Recipes.Select(r => r.Build()), Architectures.Select(a => a.Build()), Compute.Select(c => c.Build()),
                 wallet.TrySpendFunds, wallet.AddFunds, apply, updateRate, capacity, compose, policy, currentStage, identities);
         }

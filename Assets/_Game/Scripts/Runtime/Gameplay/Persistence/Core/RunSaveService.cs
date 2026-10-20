@@ -42,6 +42,8 @@ namespace CallmeCatgirl.Persistence
             retained = loaded.Data.Extensions.Where(x => !extensions.Any(e => e.Id == x.Id)).ToArray();
             return loaded;
         }
+        /// <summary>Reads the newest committed save, or a backup, without committing a restore.</summary>
+        public SaveLoadResult Peek() => store.Load();
         // Call when the host starts a genuinely new run, so optional payloads cannot leak across runs.
         public void BeginNewRun() => retained = Array.Empty<SaveExtensionState>();
     }

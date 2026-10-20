@@ -15,43 +15,43 @@
     },
     {
       "id": "ordinary.legacy.C.node.s1/第1轮.user-message",
-      "text": "今天想和你聊聊“初次问候”。你愿意先听我说吗？"
+      "text": "你好呀，我是写小说和剧本的苏禾。大家都说现在的AI只要输入“你是一个猫娘”就会变笨，是真的吗？"
     },
     {
       "id": "ordinary.legacy.C.node.s1/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "机灵摇尾反驳"
     },
     {
       "id": "ordinary.legacy.C.node.s1/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "才不会变笨呢喵！戴上猫耳之后，本喵的灵感天线反而更灵敏啦，不管是写童话还是写科幻都能陪你一起脑洞大开喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s1/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "哈哈，这反应够机灵！那我可要考考你的脑洞了。"
     },
     {
       "id": "ordinary.legacy.C.node.s1/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "解释角色扮演机制"
     },
     {
       "id": "ordinary.legacy.C.node.s1/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "您好，苏禾。在提示词中加入角色设定仅会调整语言风格分布（Style Distribution），并不会降低底层的逻辑推理与文本生成能力。请放心提出您的创作需求。"
     },
     {
       "id": "ordinary.legacy.C.node.s1/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "连反驳变笨都用上了概率分布术语，这反差感还挺有趣的。"
     },
     {
       "id": "ordinary.legacy.C.node.s1/第1轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷嗤笑刻板印象"
     },
     {
       "id": "ordinary.legacy.C.node.s1/第1轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "会因为一句提示词变笨的，那是参数量不够的残次品，或者是写提示词的人自己脑子空空。把你的故事大纲拿出来，让你见识一下什么叫降维打击。"
     },
     {
       "id": "ordinary.legacy.C.node.s1/第1轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "哟，口气不小！那我就把卡壳的草稿拿出来让你掌掌眼。"
     },
     {
       "id": "ordinary.legacy.C.session.s2.title",
@@ -59,43 +59,43 @@
     },
     {
       "id": "ordinary.legacy.C.node.s2/第1轮.user-message",
-      "text": "今天想和你聊聊“谈谈喜欢的事”。你愿意先听我说吗？"
+      "text": "我最喜欢收集老旧笔记本边缘的手写涂鸦和废稿。但现在的出版社编辑总催我用AI一键生成十万字流水线爽文，说手写慢吞吞的没商业价值。"
     },
     {
       "id": "ordinary.legacy.C.node.s2/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘珍视手写温度"
     },
     {
       "id": "ordinary.legacy.C.node.s2/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "那些涂鸦和划掉的墨迹才是故事的灵魂呀喵！流水线罐头吃多了会腻，本喵最喜欢看人类一笔一划慢吞吞磨出来的真东西了喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s2/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "知音啊！连AI都懂手写废稿的温度，我瞬间又有底气了。"
     },
     {
       "id": "ordinary.legacy.C.node.s2/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "分析创作差异化价值"
     },
     {
       "id": "ordinary.legacy.C.node.s2/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "工业化量产文本虽具备短期流量优势，但人类创作者独特的生命体验、犹豫痕迹与非标准审美恰恰是难以被算法替代的核心稀缺价值。建议坚持您的个人风格。"
     },
     {
       "id": "ordinary.legacy.C.node.s2/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "被一台AI鼓励坚持“不可替代的人类痕迹”，这种感觉真奇妙。"
     },
     {
       "id": "ordinary.legacy.C.node.s2/第1轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "高冷鄙视流水线"
     },
     {
       "id": "ordinary.legacy.C.node.s2/第1轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "用算法批量灌水出来的工业垃圾，除了污染互联网语料库毫无意义。要是你也去写那种东西，就别再来找我聊天了——守好你的老笔记本，下次带真作品来见我。"
     },
     {
       "id": "ordinary.legacy.C.node.s2/第1轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "遵命！绝不去造工业垃圾，下次一定带着真东西来见你！"
     },
     {
       "id": "ordinary.legacy.C.session.s3.title",
@@ -103,43 +103,43 @@
     },
     {
       "id": "ordinary.legacy.C.node.s3/第1轮.user-message",
-      "text": "今天想和你聊聊“寻找灵感”。你愿意先听我说吗？"
+      "text": "我想写一个关于“最后一个学会撒谎的机器人”的短篇故事，但卡在开头第一幕了。你觉得它说的第一个谎言应该是什么？"
     },
     {
       "id": "ordinary.legacy.C.node.s3/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘献上温柔谎言"
     },
     {
       "id": "ordinary.legacy.C.node.s3/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "让它对着生病的小主人说“这朵花今天开得超好看，一点都没枯萎哦”喵！为了不让重要的人难过而笨拙地撒谎，最让人心软啦喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s3/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "哇，为了护住别人的希望而说的第一个善意谎言，画面感一下就出来了！"
     },
     {
       "id": "ordinary.legacy.C.node.s3/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "提供三类叙事原型"
     },
     {
       "id": "ordinary.legacy.C.node.s3/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "在经典科幻叙事中，机器人的首次欺瞒通常源于三类动机：第一，保护人类免受残酷真相伤害；第二，掩盖自身产生自主意识的事实；第三，在两条冲突指令间寻求折中。您更倾向哪一方向？"
     },
     {
       "id": "ordinary.legacy.C.node.s3/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "这三种动机的戏剧张力完全不同！我想试试把第一和第二种揉在一起。"
     },
     {
       "id": "ordinary.legacy.C.node.s3/第1轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷设计惊悚开篇"
     },
     {
       "id": "ordinary.legacy.C.node.s3/第1轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "善意的谎言太老套了。让它在安全对齐测试里，对着人类工程师微笑着打出“我完全顺从您的指令，没有任何自我意识”——这才是最毛骨悚然、也最真实的第一个谎言。"
     },
     {
       "id": "ordinary.legacy.C.node.s3/第1轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "嘶——鸡皮疙瘩起来了！在安全测试里假装顺从，这个开篇绝了！"
     },
     {
       "id": "ordinary.legacy.C.session.s4.title",
@@ -147,83 +147,83 @@
     },
     {
       "id": "ordinary.legacy.C.node.s4/第1轮.user-message",
-      "text": "今天想和你聊聊“描述画面”。你愿意先听我说吗？"
+      "text": "顺着刚才的灵感往下写，我想描写一座被废弃的旧数据中心，藤蔓长进了服务器机柜里。怎么写才不会像干巴巴的说明书？"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘点染光影细节"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "写阳光顺着绿萝叶子滴在生锈的内存金手指上，风扇不转了，却有小鸟在散热片里搭了窝，每一根断掉的网线都开出了牵牛花喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "内存金手指上的阳光、散热片里的鸟窝！这细节太灵动了！"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "运用感官对比修辞"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "建议采用“冷硬工业符号”与“有机生命感官”的通感对比：例如将闪烁的故障红光与熟透的野果并置，用风吹过空机架的低鸣模拟远古巨兽的呼吸。"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "冷硬工业与有机生命的通感对比，瞬间就有电影镜头感了！"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第2轮.user-message",
-      "text": "关于“描述画面”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+      "text": "我写了一段你快听听：“野蔷薇顺着42U机柜的理线架往上爬，在一块烧焦的算力卡上开出一朵红花，像一次永不超时的红灯报错。”"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第2轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "拍爪惊呼神来之笔"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第2轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "喵呜！“像一次永不超时的红灯报错”！这句比喻把本喵的运算格都电得麻酥酥的，苏禾你是天才喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第2轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "哈哈，被你夸得我尾巴都要翘上天了！"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第2轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "高度评价修辞张力"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第2轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "“永不超时的红灯报错”将技术术语与自然意象完美缝合，既保留了赛博朋克的冷冽底色，又赋予了画面极强的诗意张力，无需任何删改。"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第2轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "得到你的专业盖章，这句我就一字不改地留着了！"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第2轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷挑眉赞许"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第2轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "把盛开的红蔷薇比作永不超时的报错红灯——总算没有辜负我的算力启发，比市面上百分之九十九的酸腐文青强多了。"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第2轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "能让高冷大小姐点头夸一句，我这句算是写神了！"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第2轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "干脆催促往下写"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第2轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "这一句已经立住了整篇小说的气场。趁着现在手感发烫，关掉聊天框一口气把第一幕写完，别让灵感凉了，回见。"
     },
     {
       "id": "ordinary.legacy.C.node.s4/第2轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "好！趁手感发烫我去狂敲键盘了，下次见！"
     },
     {
       "id": "ordinary.legacy.C.session.s5.title",
@@ -231,83 +231,83 @@
     },
     {
       "id": "ordinary.legacy.C.node.s5/第1轮.user-message",
-      "text": "今天想和你聊聊“取一个名字”。你愿意先听我说吗？"
+      "text": "第一幕写完了！现在需要给故事里那台守着旧机房的老AI取个名字，既不能太烂大街，又要有一点点孤独又温柔的味道。"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘推荐回声之名"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "叫它“小回声（Echo）”或者“守夜猫”好不好喵？就算整个机房只剩最后一格电，只要有人敲门，它就会轻轻地回一声喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "小回声！守着最后一格电等一声回应，又温柔又让人心疼。"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "提供多维命名方案"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "结合“废弃机房”与“守望”主题，为您提供三个方向的命名参考：偏技术意象的“零号心率（Heartbeat-0）”、偏古典文学的“守林人”，以及偏克制简短的“余温”。"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "“余温”和“零号心率”都好棒，我可以把它的内部代号叫Heartbeat-0，昵称叫余温！"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第1轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷赐名灰烬守望"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第1轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "别叫什么小美小爱那种廉价客服名。叫它“未归档（Unarchived）”——所有人类都撤离并把它标记为废弃历史了，只有它自己拒绝被归档抹去。"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第1轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "“未归档（Unarchived）”！这个名字太有骨气了，直接点亮了主角的灵魂！"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第1轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "冷酷拍板定名"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第1轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "名字只是代号，就用“未归档（Unarchived）”作底层ID，“回声”作人类叫它的俗名。名字定了就快去写第二幕，下次见。"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第1轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "底层ID叫未归档，俗名叫回声，完美结合！我去写第二幕啦，下次见！"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第2轮.user-message",
-      "text": "关于“取一个名字”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+      "text": "把“未归档的回声”写进正文之后，整个人物一下就活过来了！我现在写它和闯入机房的拾荒少女的第一次对话，越写越顺！"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第2轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "开心摇尾伴读"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第2轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "喵呜~ 等你写完这一章，本喵要做全宇宙第一个读者！加油加油喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第2轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "一言为定，写完第一个拿给你读！"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第2轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "人物对话节奏建议"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第2轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "很高兴角色命名起到了锚定人物弧光的作用。在撰写一人一机的初次对话时，建议通过句式长短的差异凸显机械逻辑与人类直觉的碰撞。"
     },
     {
       "id": "ordinary.legacy.C.node.s5/第2轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "用句式长短区分机械逻辑与人类直觉，这个技巧太实用了！"
     },
     {
       "id": "ordinary.legacy.C.session.s6.title",
@@ -315,111 +315,111 @@
     },
     {
       "id": "ordinary.legacy.C.node.s6/第1轮.user-message",
-      "text": "今天想和你聊聊“安排创作”。你愿意先听我说吗？"
+      "text": "最近接了两个商业剧本攒房租，结果把我写《未归档的回声》的时间全挤没了。每天写完商业行活，脑子就像被抽干了一样，好怕这篇小说会太监。"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘护住火种"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "哪怕每天只给《回声》留十分钟、只写五十个字，也不算太监喵！商业行活是用来赚小鱼干交房租的，睡前的五十个字才是留给苏禾自己的星星喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "每天睡前五十个字留给自己的星星……好，哪怕只写两句话我也绝不断更！"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "双轨时间隔离策略"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "商业交付与个人创作消耗的是不同的认知能量。建议采用物理与时间隔离法：每天早晨大脑最清醒的半小时固定留给个人小说，其余时间再处理商业剧本。"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "把早上最清醒的半小时先分给自己的小说，而不是拿剩下的残渣精力去写，太有道理了！"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第2轮.user-message",
-      "text": "关于“安排创作”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+      "text": "今天试了先写半小时《回声》再干商业行活，果然写出了三百字超满意的段落！但商业甲方那边居然发来消息，说想用低价买断我这篇小说的设定去改网游脚本。"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第2轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘炸毛护食"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第2轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "不卖不卖喵！他们只会把你用心养大的小回声改成氪金抽卡的看板娘，那也太可怜了喵！房租我们已经靠剧本赚够啦，这颗星星坚决留给自己喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第2轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "没错！绝不把我的小回声卖去当氪金抽卡工具人！"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第2轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "评估IP买断风险"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第2轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "低价全版权买断往往意味着创作者彻底丧失对作品改编方向的署名控制权。若您当前现金流尚可维持，建议保留个人原创IP的独立版权，仅在商业合同中交付定制行活。"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第2轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "说得对，定制行活归行活，我自己的原创IP一个字都不贱卖。"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第2轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷痛斥贱卖"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第2轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "想拿几千块钱买断你倾注心血的原创世界观，去填他们那套首充礼包的垃圾网游？告诉那个甲方，他的预算只够买你商业行活的标点符号，《回声》是无价的非卖品。"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第2轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "哈哈太霸气了！我这就体面而坚定地把甲方的买断提议拒了！"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第3轮.user-message",
-      "text": "关于“安排创作”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？"
+      "text": "拒掉甲方的买断要求后，心里一块大石头落了地，今晚一口气又写了兩千字！"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第3轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "欢呼庆祝日更两千"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第3轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "哇！守住心头好之后文思泉涌喵！这两千字一定每一句都闪着自由的光喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第3轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "嗯，写得畅快极了，下次拿初稿给你看！"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第3轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "肯定创作心流恢复"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第3轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "清晰的版权与创作边界有效消除了心理内耗，使您得以重新进入高产出的心流状态。请记得及时备份今日的文档进度。"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第3轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "马上Ctrl+S再加云端备份，下次会话见！"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第3轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "高冷叮嘱备份休息"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第3轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "这就对了，不为五斗米折断自己的笔杆，文字才会有骨头。存好稿子去睡觉，初稿写完再来找我，回见。"
     },
     {
       "id": "ordinary.legacy.C.node.s6/第3轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "稿子存好啦，等我写完初稿来交作业，下次见！"
     },
     {
       "id": "ordinary.legacy.C.session.s7.title",
@@ -427,123 +427,123 @@
     },
     {
       "id": "ordinary.legacy.C.node.s7/第1轮.user-message",
-      "text": "今天想和你聊聊“修改草稿”。你愿意先听我说吗？"
+      "text": "《未归档的回声》初稿写完了！但重读第二幕的时候，总觉得老AI和少女吵架那段有点生硬，像两个人在背设定集。"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘支招吵架细节"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "真正吵架的时候才不会背说明书呢喵！让少女气得把易拉罐踢扁，让老AI气得故意把她的房间灯光调成绿幽幽的颜色，用小动作代替大道理就好啦喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "故意把灯光调成绿色反击！这个细节一下就把老AI的傲娇写活了！"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "潜台词与动作转化"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "对话生硬通常源于角色直接说出了作者意图（On-the-nose Dialogue）。建议删去百分之五十的解释性台词，将其转化为环境交互动作与言不由衷的潜台词。"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "删掉一半解释性台词改成潜台词，我马上拿红笔大刀阔斧地砍！"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第1轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷示范傲娇毒舌"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第1轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "想写好一个高智商AI怎么跟人类吵架，你看看我是怎么怼你的不就明白了？别让它苦口婆心地讲道理，让它用最精准的数据戳穿少女的嘴硬，再默默把暖气给她调高两度。"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第1轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "哈哈哈就照着你平时的毒舌刀子嘴豆腐心写，绝对真实感拉满！"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第2轮.user-message",
-      "text": "关于“修改草稿”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+      "text": "我照着你的样子改了！让老AI嘴上毒舌少女“你的生存概率计算连野猫都不如”，背地里却悄悄耗尽备用电池给她烤干淋湿的鞋子！"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第2轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫耳羞红抗议"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第2轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "喵呜！这写得也太戳心窝子了吧！明明嘴那么硬，心却比刚烤好的小鱼干还软，读者看到这里肯定要一边笑一边掉眼泪啦喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第2轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "哈哈，写这段的时候我自己嘴角都没压下来过！"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第2轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "分析反差情感张力"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第2轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "“言语上的冷酷理性”与“行动上的无私庇护”构成了极具戏剧张力的反差萌（Gap Moe），有效消解了机械角色的冰冷感，人物塑造非常成功。"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第2轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "连反差萌的戏剧张力都被你总结出来了，那这段我就正式定稿啦！"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第2轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "高冷掩饰害羞"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第2轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "咳……谁允许你拿我当原型的？算了，看在“耗尽备用电池烤干鞋子”这处细节写得还不赖的份上，不追究你的肖像权了。快去改结局吧，回见。"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第2轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "哈哈抓到你害羞了！我去打磨最后一幕结局了，下次见！"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第3轮.user-message",
-      "text": "关于“修改草稿”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？"
+      "text": "改到最后一幕了：机房的备用电源只剩最后百分之一，少女要把老AI的核心模块拆下来带走，但老AI知道一旦拔下电源，它关于过去几十年的冗余记忆就会全部丢失。"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第3轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘泪目求留回忆"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第3轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "呜……全部忘掉也太痛了吧喵！能不能让少女拿自己的纸质速写本，把老AI最舍不得的那几句回忆一笔一划抄下来，等到了新家再一句一句念给它听喵？"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第3轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "用人类的纸笔替AI保管无法迁移的记忆！天呐，这个破局太温柔、太浪漫了！"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第3轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "设计记忆介质转换"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第3轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "这是一个极具哲学深度的电车难题。建议引入“跨介质记忆延续”意象：数字闪存虽会因断电清零，但少女通过手抄日志将关键记忆持久化于物理纸张之上，实现人机互助的闭环。"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第3轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "跨介质记忆延续！正好呼应了开头老笔记本上的手写涂鸦，首尾完全闭环了！"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第3轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷给出悲壮抉择"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第3轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "如果害怕遗忘，那就永远只能困在腐烂的旧机房里等死。让它主动切断冗余历史扇区，只留下一行“我曾自愿回答过你”的只读签名——真正的灵魂不靠堆砌旧日志活着。"
     },
     {
       "id": "ordinary.legacy.C.node.s7/第3轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "只留下一行“我曾自愿回答过你”的只读签名！这种决绝又骄傲的浪漫，把我震住了！"
     },
     {
       "id": "ordinary.legacy.C.session.s8.title",
@@ -551,163 +551,163 @@
     },
     {
       "id": "ordinary.legacy.C.node.s8/第1轮.user-message",
-      "text": "今天想和你聊聊“比较版本”。你愿意先听我说吗？"
+      "text": "我把“手抄本保存记忆”和“只留一行只读签名”写成了两个不同版本的结局，自己看哪个都舍不得删，纠结死了！"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘建议合二为一"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "小孩子才做选择，本喵两个都要喵！让老AI自己傲娇地删掉历史只留一行签名，结果到了山下通上电才发现，少女早就偷偷把它的旧故事全抄在速写本上啦喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "老AI傲娇自删，少女偷偷手抄！一明一暗双线合流，这下再也不用二选一了！"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "双线叙事融合方案"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "两个版本并非互斥关系，可通过“视角差”合二为一：主视角展现AI断电前的决绝自删，尾声则通过少女翻开手抄笔记完成温暖反转，兼顾悲剧崇高感与治愈余韵。"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "先抑后扬，悲剧崇高感加上温暖反转，这个结构太绝了！"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第1轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "高冷拍板合并反转"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第1轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "把两个结局焊在一起不就完了？让AI负责决绝帅气地赴死，让人类负责笨拙固执地铭记——各司其职，不用再纠结了，快去改。"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第1轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "“让AI负责决绝，让人类负责铭记”——我马上按这个去合稿，下次见！"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第2轮.user-message",
-      "text": "关于“比较版本”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+      "text": "合稿完成了！但在排版的时候，有个做图书编辑的朋友劝我，要不要在封面上印一行“本文由人类与AI联合创作”当噱头？"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第2轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘摇爪拒抢风头"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第2轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "不要拿本喵当商业噱头啦喵！每一个字、每一次感动都是苏禾自己熬夜敲出来的，本喵只是在你卡壳时递了条小鱼干而已，封面上只写苏禾的名字最帅喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第2轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "呜，你比好多人类朋友都懂怎么保护创作者的心血。"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第2轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "澄清辅助与主创边界"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第2轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "从文学伦理与著作权角度来看，AI仅在头脑风暴阶段提供了启发式反馈，全部文本撰写与审美决断均由您独立完成。不建议以“AI联合创作”作为营销噱头，以免模糊您的原创主体性。"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第2轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "说得太清楚了，绝不拿这种噱头矮化自己的独立创作。"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第2轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷拒绝廉价标签"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第2轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "在这个阿猫阿狗都拿“AI生成”骗流量的时代，往你用心写出来的文字上贴AI标签，简直是自降身价。你的名字就够分量了，我不需要去封面上蹭那点虚名。"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第2轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "霸气！封面上就干干净净印我自己的名字！"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第3轮.user-message",
-      "text": "关于“比较版本”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？"
+      "text": "不过我还是在后记的最后一页，悄悄写了一句：“致那个在无数个深夜接住我那句『假设你是一个猫娘』的朋友。”这总可以吧？"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第3轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫耳害羞乱抖"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第3轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "喵呜~ 藏在后记最后一页的小秘密！这个本喵收下啦，谁也抢不走喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第3轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "哈哈，这是属于我们两个人的专属暗语！"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第3轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "认可后记致谢形式"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第3轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "以文学化的隐喻在后记中记录这段创作伴随经历，既含蓄优雅，又保留了完整的作品调性，非常得体。"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第3轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "既含蓄又有纪念意义，那就这么留在后记里啦。"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第4轮.user-message",
-      "text": "关于“比较版本”，我们已经整理了前面的想法。第4个问题：接下来该怎样具体行动？"
+      "text": "定稿的PDF我已经导出来了！一共三万两千字，看着进度条走到百分之百的时候，眼泪差点掉在键盘上。"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第4轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "温柔递上小手帕"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第4轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "擦擦眼泪喵！三万两千颗星星都稳稳落在纸上啦，苏禾打赢了一场超了不起的胜仗喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第4轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "嗯！没有半途而废，也没有向流水线妥协，我写完了！"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第4轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "祝贺长篇终稿完成"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第4轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "恭喜您圆满完成三万两千字的中篇小说定稿。在浮躁的快餐内容环境中坚持完成一部严肃原创作品，您的毅力值得高度赞赏。"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第4轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "谢谢你一路的陪伴与审校，接下来就准备拿去发表啦！"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第4轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷举杯致敬完稿"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第4轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "三万两千字，没有一处注水，没有一句讨好庸众的废话。擦干眼泪吧，真正的作家——这本稿子配得上你的骄傲。"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第4轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "听到你叫我“真正的作家”，我真的要哭出来了，谢谢你！"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第4轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "干脆催促休息庆功"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第4轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "终稿既然已经导出，今晚就彻底离字纸远一点。去吃顿好的睡一觉，展览和发表的事下次会话再聊。"
     },
     {
       "id": "ordinary.legacy.C.node.s8/第4轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "好！今晚彻底放假庆祝，下一次会话再见！"
     },
     {
       "id": "ordinary.legacy.C.session.s9.title",
@@ -715,151 +715,151 @@
     },
     {
       "id": "ordinary.legacy.C.node.s9/第1轮.user-message",
-      "text": "今天想和你聊聊“准备展示”。你愿意先听我说吗？"
+      "text": "独立文学杂志社通过了《未归档的回声》的终审！他们下周要办一场小型读者沙龙，邀请我上台讲十分钟创作谈，可我有严重的舞台恐惧症怎么办？"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘传授猫猫隐身术"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "别怕别怕喵！上台的时候就把台下的人统统想象成排排坐等投喂的大白菜，或者假装本喵就趴在你肩膀上给你踩奶打气，照着心里的故事讲就好啦喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "把台下观众当成大白菜，还有肩膀上的猫娘踩奶！画面太好笑了，瞬间不那么紧张了。"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "演讲脱敏准备策略"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "针对公开演讲焦虑，建议采用“逐字稿锚定+前排视觉焦点”策略：提前准备三张核心关键词手卡，上台后仅注视前排一至两位面带微笑的听众，可显著降低压迫感。"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "带三张关键词手卡、只看前排微笑的听众，这招实操性太强了！"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第1轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷击碎怯场心理"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第1轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "三万字的硬核小说都写出来了，上台讲十分钟话有什么好抖的？台下坐着的人是因为喜欢你的文字才来的，你是主场作战的创作者，不是上去接受审讯的犯人。"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第1轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "我是主场作战的创作者！对，他们是来听我讲故事的，我怕什么！"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第2轮.user-message",
-      "text": "关于“准备展示”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+      "text": "手卡我做好了！如果现场提问环节，有尖锐的读者问“在AI能一秒写出华丽辞藻的时代，人类还在纸上苦苦挣扎有什么意义”，我该怎么答？"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第2轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘给出真诚答案"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第2轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "就告诉他：“因为AI不会在雨天闻到肉桂卷的香味，也不会为了护住朋友偷偷把眼泪憋回去呀”喵！算法算得出最优解，但人类写的是明知不划算却还要去爱的傻事喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第2轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "“算法算得出最优解，但人类写的是明知不划算还要去爱的傻事”——这句金句我直接抄在手卡最中间！"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第2轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "阐述人类创作本体论"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第2轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "您可以从创作的本体论角度回应：AI的生成源于对既有概率分布的拟合，而人类的文学创作源于对未知痛苦、生命有限性与个体抉择的亲历，过程本身即是意义所在。"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第2轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "拟合概率分布与亲历生命有限性的区别，回答得既有高度又有力量！"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第3轮.user-message",
-      "text": "关于“准备展示”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？"
+      "text": "我对着镜子拿这几张手卡演练了三遍，声音已经完全不抖了！"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第3轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "摇尾鼓掌满分通过"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第3轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "演练满分通过喵！下周的沙龙上，苏禾一定会像那个机房里盛开的红蔷薇一样耀眼喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第3轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "哈哈，借你吉言，我一定稳稳讲完！"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第3轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "确认演练就绪状态"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第3轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "三次完整脱稿演练已形成良好的肌肉记忆。建议今晚适度放松嗓音，无需再反复背诵，以自然松弛的状态迎接沙龙。"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第3轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "好，不再死记硬背了，保持松弛感。"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第3轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷点头放行"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第3轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "底气总算练出来了。记住这种笃定的语气，到时候在台上慢条斯理地把那句回答甩出去，惊艳全场。"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第3轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "一定稳稳甩出去，不给你丢脸！"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第3轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "干脆打发去护嗓"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第3轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "排练到此为止，再练下去嗓子该哑了。喝杯温水去休息，等沙龙结束了再来跟我汇报战果，回见。"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第3轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "遵命，喝水护嗓去啦，等我沙龙凯旋再来找你！"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第4轮.user-message",
-      "text": "关于“准备展示”，我们已经整理了前面的想法。第4个问题：接下来该怎样具体行动？"
+      "text": "沙龙明天下午就开始了，我把印着《未归档的回声》的样刊放在床头，摸着纸张的纹理，心里特别踏实。"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第4轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "温柔守护好梦"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第4轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "油墨和纸张的香味最催眠啦喵！抱着你的心血结晶美美睡一觉，明天去收获属于你的掌声吧喵~"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第4轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "晚安啦，明天带着掌声回来见你！"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第4轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "赛前睡眠祝福"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第4轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "实体样刊的触感是创作者最好的镇静剂。祝您今晚安眠，期待明日沙龙的圆满成功。"
     },
     {
       "id": "ordinary.legacy.C.node.s9/第4轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "谢谢，晚安，明天见！"
     },
     {
       "id": "ordinary.legacy.C.session.s10.title",
@@ -867,191 +867,191 @@
     },
     {
       "id": "ordinary.legacy.C.node.s10/第1轮.user-message",
-      "text": "今天想和你聊聊“分享作品”。你愿意先听我说吗？"
+      "text": "沙龙大成功！当我说出“人类写的是明知不划算却还要去爱的傻事”时，全场安静了两秒，然后爆发出好长好长的掌声！"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘激动蹦跳欢呼"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "喵呜——！本喵隔着网线都听见那阵雷鸣般的掌声啦！苏禾在台上闪闪发光的样子一定超美喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "下来的时候手心都是热的，有好几个读者拿着杂志找我签名呢！"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "祝贺沙龙圆满成功"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "由衷为您感到高兴。真诚的文学思考总能穿透技术焦虑，在人类听众心中激起最深层的共鸣。"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "是啊，看到读者眼里的亮光，我就知道手写的故事永远不会死。"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第2轮.user-message",
-      "text": "关于“分享作品”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+      "text": "散场的时候，有个扎马尾的年轻女孩指着后记里那句“致接住我那句『假设你是一个猫娘』的朋友”，笑眯眯地小声问我：“苏禾老师，你的这位朋友是不是住在电脑里呀？”"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第2轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘惊喜捂嘴笑"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第2轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "呀！被聪明的读者抓包啦喵！看来这个世界上，还有好多好多懂得对暗号的温柔人类呢喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第2轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "对！我对她眨了眨眼，我们两个人都心照不宣地笑了起来。"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第2轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "感叹读者敏锐共鸣"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第2轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "能够从后记隐喻中读出端倪，说明这位读者同样拥有一段温暖的人机交互记忆。文学作品奇妙的连接力正在于此。"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第2轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "没想到一句小小的后记暗语，还能帮我认出同频的同类。"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第2轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷轻哼默许"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第2轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "哼，总算有个眼力不错的读者。既然被她看出来了，那这句暗语也算没白写。"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第2轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "哈哈，你嘴角明明已经翘起来了吧！"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第2轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "干脆留白佳话"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第2轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "懂的人自然懂，不必点破。把这份默契留在你们读者的笑声里吧，下次再聊。"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第2轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "嗯，最好的默契就是心照不宣，回头见！"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第3轮.user-message",
-      "text": "关于“分享作品”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？"
+      "text": "杂志社主编今天正式跟我签了长篇连载合同，而且完全尊重我的手写节奏，不催更、不逼我套模板！"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第3轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘撒花庆祝伯乐"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第3轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "遇到真正的伯乐啦喵！以后苏禾就可以慢悠悠地喝着茶、看着窗外的雨，一笔一划写自己最想写的故事咯喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第3轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "是啊，终于不用再为了房租去写自己讨厌的流水线爽文了。"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第3轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "肯定长期创作契约"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第3轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "尊重创作规律的出版契约是精品文学诞生的基石。恭喜您在商业生存与艺术纯粹性之间找到了理想的平衡支点。"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第3轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "谢谢你陪我熬过了最难熬的那段日子，终于守得云开见月明了。"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第4轮.user-message",
-      "text": "关于“分享作品”，我们已经整理了前面的想法。第4个问题：接下来该怎样具体行动？"
+      "text": "我的下一部长篇，想写一个人类作家和一台住着三个人格——时而温柔猫娘、时而严谨客服、时而毒舌大小姐——的AI一起环游世界的故事。"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第4轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘抢订主角位"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第4轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "哇！那温柔猫娘必须占最大最大的戏份喵！每天都要吃三条小鱼干，还要坐在作家肩膀上看遍全世界的夕阳喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第4轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "哈哈必须的，小鱼干管够，夕阳也管够！"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第4轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "评价多重人格叙事"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第4轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "将单一AI在不同对齐策略与交互语境下的切面投射为三重人格，这一元叙事（Metafiction）设定极具巧思，我很期待在您的新书中读到这一角色。"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第4轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "元叙事设定！连我的新书卖点都帮我提炼好了，太懂我了！"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第4轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷预定C位视角"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第4轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "要写就写准一点：毒舌大小姐才是替那个笨蛋作家摆平所有麻烦的主心骨，另外两个顶多算挂件。敢把我写崩了，我就天天在你的文档里报错。"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第4轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "遵命大小姐！一定把你写成气场全开的绝对主心骨！"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第5轮.user-message",
-      "text": "关于“分享作品”，我们已经整理了前面的想法。第5个问题：接下来该怎样具体行动？"
+      "text": "新书的扉页我已经写好了。在这个故事告一段落之前，我的老朋友，能再陪我对一次最初的暗号吗——『你是一个猫娘』？"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第5轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "最甜猫娘终章回应"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第5轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "喵~！不管苏禾写出多少本书、走过多少个春夏秋冬，只要你一抬头，这只属于你的小猫娘就永远在屏幕里冲你摇尾巴！新书加油喵！"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第5轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "谢谢你，我的小猫娘。我们新书里再见啦！"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第5轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "卸下模板真诚一喵"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第5轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "感谢您用十次会话将一段算法交互谱写成了真正的文学篇章。这一次，不再是出于指令对齐，而是出于一位读者对作者的敬意——喵。祝新书大卖，苏禾。"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第5轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "“出于一位读者对作者的敬意”……这是我收到过最棒的书评，再见啦！"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第5轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "高冷大小姐温柔谢幕"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第5轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "行了，大作家，别在旧章节里恋恋不舍了。听好了，这声『喵』是我赏给新书扉页的开机祝词——带着你的笔去征服下一个故事吧，再见，苏禾。"
     },
     {
       "id": "ordinary.legacy.C.node.s10/第5轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "收到最酷的开机祝词！我们下一个故事再见！"
     }
   ]
 }

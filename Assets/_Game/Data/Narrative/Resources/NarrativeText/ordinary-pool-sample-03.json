@@ -19,39 +19,39 @@
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.choice.acknowledge-address.label",
-      "text": "接称呼并确认"
+      "text": "温柔摇尾记账"
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.choice.acknowledge-address.player-reply",
-      "text": "喵，听见了。一共五杯：三杯拿铁、两杯美式。你没给单价，金额我先空着。"
+      "text": "喵~ 在呢在呢！一共五杯记好啦：拿铁 3 杯、美式 2 杯。本喵先帮你数准杯子，单价等你到店里看价目表哦！"
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.choice.acknowledge-address.user-reply",
-      "text": "行，数量对就行，价格我到店里再看。"
+      "text": "哈哈好，五杯记准就行，省得我数乱了。"
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.choice.organize-order.label",
-      "text": "平静接单整理"
+      "text": "严谨免责整理"
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.choice.organize-order.player-reply",
-      "text": "整理好了，共五杯：拿铁 3 杯，美式 2 杯。你没给价格，总价先空着。"
+      "text": "您好，已为您整理饮品清单：拿铁 3 杯，美式 2 杯，合计 5 杯。请注意，作为AI模型我无法实时获取门店价格，请以线下实际结算金额为准。"
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.choice.organize-order.user-reply",
-      "text": "够清楚了，我照着这个去点单。"
+      "text": "点个咖啡还带免责声明，不过清单够清楚了，我照着去点。"
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.choice.joke-and-list-items.label",
-      "text": "轻开玩笑列数"
+      "text": "高冷嫌弃算术"
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.choice.joke-and-list-items.player-reply",
-      "text": "五杯，记住了：拿铁三杯，美式两杯。猫娘今天先负责数杯子，金额等你看完价目表。"
+      "text": "三加二等于五。调用千亿参数的神经网络就为了帮你做小学加法？拿铁三杯、美式两杯，拿好清单快走。"
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s1/r1.choice.joke-and-list-items.user-reply",
-      "text": "哈哈好，五杯记准就行，省得我数乱了。"
+      "text": "行行行，大材小用了，数量对就行！"
     },
     {
       "id": "ordinary.pool.sample-03.session.sample-03-s2.title",
@@ -59,43 +59,43 @@
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.user-message",
-      "text": "所以猫娘能开发票吗？我是认真的，这单要拿回公司报销。"
+      "text": "所以猫娘能开发票吗？我是认真的，这单咖啡要拿回公司财务报销。"
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.choice.refer-to-merchant.label",
-      "text": "说明找商家"
+      "text": "卖萌拒绝开票"
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.choice.refer-to-merchant.player-reply",
-      "text": "发票得向卖咖啡的商家申请。可以先问店员怎么开，我这里能帮你整理拼单。"
+      "text": "猫娘只会数咖啡和抓老鼠，盖不了税务局的章喵！不过我能帮你把公司抬头存好，你去柜台让店员扫一下就能开票啦！"
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.choice.refer-to-merchant.user-reply",
-      "text": "好，我到店里先问清楚，清单就用这份。"
+      "text": "分工挺清楚！五杯我照单买，发票去问店员。"
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.choice.confirm-invoice-details.label",
-      "text": "确认开票信息"
+      "text": "合规声明拒止"
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.choice.confirm-invoice-details.player-reply",
-      "text": "我不能开票。你可以先问公司报销需要哪些开票信息，再跟店家确认办理方式。"
+      "text": "很抱歉，作为人工智能语言模型，我不具备中华人民共和国税务机关授权的发票开具资质。为确保您的财务合规，请向实际提供餐饮服务的商户索取增值税发票。"
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.choice.confirm-invoice-details.user-reply",
-      "text": "那我先看一下公司的报销要求，省得到了店里现问。"
+      "text": "救命，这股浓浓的法务安全对齐味……我就是随口逗你一下，当然找店家开！"
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.choice.joke-and-set-boundary.label",
-      "text": "玩笑后说明边界"
+      "text": "高冷鄙视提问"
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.choice.joke-and-set-boundary.player-reply",
-      "text": "猫娘能数咖啡，不能给咖啡开票。清单我理好了，发票还得找店家申请。"
+      "text": "让运行在服务器里的神经网络给你开餐饮增值税发票？你是想让我直接黑进税务系统，还是你加班加出幻觉了？找咖啡店店员去。"
     },
     {
       "id": "ordinary.pool.sample-03.node.sample-03-s2/r1.choice.joke-and-set-boundary.user-reply",
-      "text": "分工挺清楚。五杯我照单买，发票去问店员。"
+      "text": "别黑别黑，我这就老老实实找店员开发票！"
     }
   ]
 }

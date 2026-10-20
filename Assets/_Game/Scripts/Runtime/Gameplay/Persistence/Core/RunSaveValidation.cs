@@ -21,7 +21,7 @@ namespace CallmeCatgirl.Persistence
             bool presentationOnlyMigration = d.Host?.Version <= 2
                 && (compatiblePresentationRevisions ?? Array.Empty<string>()).Contains(d.ContentRevision, StringComparer.Ordinal);
             if (d.ContentRevision != contentRevision && !legacyRevision && !presentationOnlyMigration) throw new SaveCompatibilityException("Save content revision differs from installed content.");
-            if (d.Host?.Version > 3 || d.Economy?.Version > 1 || d.Story?.Version > 4 || d.Simulation?.Version > 1
+            if (d.Host?.Version > 3 || d.Economy?.Version > 1 || d.Story?.Version > 5 || d.Simulation?.Version > 1
                 || d.Policies?.Version > 2 || d.Host?.GenerationRandom?.Version > 1 || d.Simulation?.ExecutionProfileVersion > 2)
                 throw new SaveCompatibilityException("Unsupported component state version.");
             StateRules.Require(Guid.TryParse(d.RunId, out _) && DateTimeOffset.TryParse(d.SavedAtUtc, out _)
@@ -33,7 +33,8 @@ namespace CallmeCatgirl.Persistence
             var customerTasks = s.Tasks.Values.Where(t => !nonCustomerIds.Contains(t.Id)).ToArray();
             var operating = d.Host.Version >= 2 ? Ids(d.Host.OperatingRequestIds) : new HashSet<string>(StringComparer.Ordinal);
             StateRules.Require(operating.All(id => s.Tasks.ContainsKey(id) && !nonCustomerIds.Contains(id)), "Invalid operating task role.");
-            var storyTasks = customerTasks.Where(t => !operating.Contains(t.Id)).ToArray();
+            var fillerIds = new HashSet<string>(s.Tasks.Values.Where(t => t.IsFiller).Select(t => t.Id), StringComparer.Ordinal);
+            var storyTasks = customerTasks.Where(t => !operating.Contains(t.Id) && !fillerIds.Contains(t.Id)).ToArray();
             var h = d.Host; var e = d.Economy; var story = d.Story;
             StateRules.Require((h.Version == 1 || h.Version == 2 || h.Version == 3) && h.CurrentMonth >= 1 && StateRules.Finite(h.MonthElapsed) && h.MonthElapsed >= 0
                 && StateRules.Finite(h.SecondsPerMonth) && h.SecondsPerMonth > 0 && h.MonthElapsed < h.SecondsPerMonth
@@ -42,6 +43,16 @@ namespace CallmeCatgirl.Persistence
                 && h.TaskBases != null && h.GenerationRandom != null && h.GenerationRandom.Version == 1
                 && !string.IsNullOrWhiteSpace(h.GenerationRandom.AlgorithmId) && !string.IsNullOrWhiteSpace(h.GenerationRandom.StateJson)
                 && (string.IsNullOrEmpty(h.SelectedRequestId) || s.Tasks.ContainsKey(h.SelectedRequestId)), "Invalid host clock/memory/selection/random state.");
+            if (h.FillerCounts != null)
+                StateRules.Require(h.FillerCounts.Length == 5 && h.FillerCounts.All(count => count >= 0), "Invalid filler counters.");
+            else
+                StateRules.Require(fillerIds.Count == 0, "Filler tasks lack generated counters.");
+            foreach (string fillerId in fillerIds)
+            {
+                int fillerStage, fillerSerial;
+                StateRules.Require(VisitorQueuePolicy.TryParseRequestId(fillerId, out fillerStage, out fillerSerial)
+                    && h.FillerCounts[fillerStage - 1] >= fillerSerial, "Filler counter is behind an existing visitor.");
+            }
             StateRules.Require(e.Version == 1 && e.Funds >= 0 && e.TokenPricePerUnit >= 0 && e.Debt >= 0
                 && (e.GracePeriod || (e.Debt == 0 && !e.Bankrupt)), "Invalid wallet state.");
             ValidateEndState(h, e, s.Paused);
@@ -56,10 +67,17 @@ namespace CallmeCatgirl.Persistence
                 b.Definition.Build();
             }
             StateRules.Require(bases.SetEquals(customerTasks.Select(t => t.Id)), "Missing unscaled customer task bases would multiply a future round twice.");
-            StateRules.Require((story.Version == 1 || story.Version == 2 || story.Version == 3 || story.Version == 4) && story.Users != null && story.VisibleChoices != null
+            StateRules.Require((story.Version == 1 || story.Version == 2 || story.Version == 3 || story.Version == 4 || story.Version == 5) && story.Users != null && story.VisibleChoices != null
                 && (story.Version == 1 || (story.VisibleCorpusChoiceIds != null
-                    && story.VisibleCorpusChoiceIds.Length == story.VisibleChoices.Length && story.OrdinaryConversations != null)) && story.Revision >= 0
+                    && story.VisibleCorpusChoiceIds.Length == story.VisibleChoices.Length && story.OrdinaryConversations != null))
+                && (story.Version < 5 || story.UsedPoolEntryIds != null) && story.Revision >= 0
                 && story.Revision < int.MaxValue && (!story.IsReply || story.IsOpen), "Invalid story header.");
+            if (story.Version >= 5)
+            {
+                Ids(story.UsedPoolEntryIds);
+                if (!story.UsesStagePool && story.UsedPoolEntryIds.Length > 0)
+                    throw new SaveCompatibilityException("Legacy story cannot carry stage pool usage.");
+            }
             StateRules.Require(Ids(story.ArrivedRequestIds).SetEquals(storyTasks.Select(t => t.Id)), "Arrived ledger differs from customer task state.");
             var submitted = Ids(story.SubmittedRequestIds);
             StateRules.Require(submitted.SetEquals(storyTasks.Where(t => t.Result != null

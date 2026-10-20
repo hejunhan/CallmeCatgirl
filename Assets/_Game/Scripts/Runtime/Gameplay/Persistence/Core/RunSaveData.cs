@@ -36,6 +36,8 @@ namespace CallmeCatgirl.Persistence
     {
         public int Version;
         public StoryUserState[] Users;
+        public bool UsesStagePool;
+        public string[] UsedPoolEntryIds;
         public string[] ArrivedRequestIds;
         public string[] SubmittedRequestIds;
         public string[] SettledRequestIds;
@@ -92,6 +94,7 @@ namespace CallmeCatgirl.Persistence
         public bool MemoryUpgradeOpen;
         public TaskBasisState[] TaskBases;
         public string[] OperatingRequestIds;
+        public int[] FillerCounts;
         public RandomStreamState GenerationRandom;
     }
     [Serializable] public sealed class SaveExtensionState

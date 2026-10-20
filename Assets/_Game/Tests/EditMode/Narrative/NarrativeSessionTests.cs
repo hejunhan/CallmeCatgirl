@@ -33,20 +33,59 @@ namespace CallmeCatgirl.Tests
             Assert.That(session.ObserveTrainingCompleted("premature"), Is.False);
             session.Choose("mew"); session.ObserveCenterCellRevealed();
             Assert.That(session.MemoryCount, Is.Zero, "The center compute cell is not a physical RAM upgrade.");
-            Assert.That(session.ObserveRequestSettled(NarrativeSession.FirstDoctorRequestId), Is.False);
+            Assert.That(session.ObserveRequestSettled(NarrativeSession.FirstDoctorRequestId), Is.False, "The first doctor order is narrative-only.");
             Assert.That(session.ObserveTrainingCompleted("training-1"), Is.True);
             Assert.That(session.ObserveTrainingCompleted("training-1"), Is.False);
+            Assert.That(session.Tutorial, Is.EqualTo(TutorialStep.AwaitDoctorSecond));
+            Assert.That(session.PendingEffects.Count(e => e.Kind == NarrativeEffectKind.GrantFunds), Is.EqualTo(1));
+            Assert.That(session.PendingEffects.Single(e => e.Kind == NarrativeEffectKind.GrantFunds).FundsAmount, Is.EqualTo(100));
+            Assert.That(session.PendingEffects.Count(e => e.Kind == NarrativeEffectKind.GrantCorpus), Is.EqualTo(1));
+            Assert.That(session.PendingEffects.Single(e => e.Kind == NarrativeEffectKind.GrantCorpus).CorpusPoints, Is.EqualTo(9));
             Assert.That(session.PendingEffects.Count(e => e.Kind == NarrativeEffectKind.QueueDoctorRequest), Is.EqualTo(1));
-            Assert.That(session.PendingEffects.Single(e => e.Kind == NarrativeEffectKind.QueueDoctorRequest).RequiredCells, Is.EqualTo(1));
+            var second = session.PendingEffects.Single(e => e.Kind == NarrativeEffectKind.QueueDoctorRequest);
+            Assert.That(second.RequestId, Is.EqualTo(NarrativeSession.SecondDoctorRequestId));
+            Assert.That(second.RequiredCells, Is.EqualTo(1));
+            Assert.That(second.Calculation, Is.EqualTo(20));
+            Assert.That(second.MinimumAbility, Is.EqualTo(6));
+            Assert.That(session.Capture().ObservedCompletedRequestIds, Does.Contain(NarrativeSession.FirstDoctorRequestId));
             Assert.That(session.ObserveRequestSettled("unrelated"), Is.False);
             Assert.That(session.ObserveRequestSettled(NarrativeSession.FirstOrdinaryRequestId), Is.False);
-            Assert.That(session.ObserveRequestSettled(NarrativeSession.FirstDoctorRequestId), Is.True);
-            Assert.That(session.ObserveRequestSettled(NarrativeSession.FirstDoctorRequestId), Is.False);
-            Assert.That(session.ObserveRequestSettled(NarrativeSession.FirstOrdinaryRequestId), Is.True);
+            Assert.That(session.ObserveRequestSettled(NarrativeSession.SecondDoctorRequestId, false), Is.True);
+            Assert.That(session.ObserveRequestSettled(NarrativeSession.SecondDoctorRequestId, false), Is.False);
+            Assert.That(session.Tutorial, Is.EqualTo(TutorialStep.AwaitDoctorThird));
+            var third = session.PendingEffects.Single(e => e.Kind == NarrativeEffectKind.QueueDoctorRequest && e.RequestId == NarrativeSession.ThirdDoctorRequestId);
+            Assert.That(third.MinimumAbility, Is.EqualTo(6));
+            Assert.That(third.Calculation, Is.EqualTo(20));
+            Assert.That(session.ObserveRequestSettled(NarrativeSession.ThirdDoctorRequestId, true), Is.True);
+            Assert.That(session.Tutorial, Is.EqualTo(TutorialStep.AwaitOrdinaryOrder));
+            Assert.That(session.PendingEffects.Single(e => e.Kind == NarrativeEffectKind.QueueOrdinaryRequest).RequestId,
+                Is.EqualTo(NarrativeSession.FirstOrdinaryRequestId));
+            Assert.That(session.ObserveRequestSettled(NarrativeSession.FirstOrdinaryRequestId, true), Is.True);
             Assert.That(session.ObserveUpgradeFunds(99, 100), Is.False);
             Assert.That(session.ObserveUpgradeFunds(100, 100), Is.True);
             Assert.That(session.ObserveUpgradeFunds(100, 100), Is.False);
             Assert.That(session.Tutorial, Is.EqualTo(TutorialStep.Complete));
+        }
+
+        [Test] public void TutorialRewardsAndRequestEffectsSurviveRestoreWithoutDuplication()
+        {
+            var session = NarrativeSession.CreateNew();
+            session.Choose("accept"); session.ObserveCenterCellRevealed();
+            Assert.That(session.ObserveTrainingCompleted("training-1"), Is.True);
+            var saved = NarrativeSession.Restore(session.Capture());
+            Assert.That(saved.PendingEffects.Count(e => e.Kind == NarrativeEffectKind.GrantFunds), Is.EqualTo(1));
+            Assert.That(saved.PendingEffects.Count(e => e.Kind == NarrativeEffectKind.GrantCorpus), Is.EqualTo(1));
+            Assert.That(saved.PendingEffects.Single(e => e.Kind == NarrativeEffectKind.GrantCorpus).CorpusDomain,
+                Is.EqualTo(NarrativeCorpusDomain.Reasoning));
+            var grant = saved.PendingEffects.Single(e => e.Kind == NarrativeEffectKind.GrantCorpus);
+            Assert.That(saved.AcknowledgeEffect(grant.EventId), Is.True);
+            var restored = NarrativeSession.Restore(saved.Capture());
+            Assert.That(restored.PendingEffects.Any(e => e.EventId == grant.EventId), Is.False);
+            Assert.That(restored.PendingEffects.Count(e => e.Kind == NarrativeEffectKind.GrantCorpus), Is.Zero);
+            // Replaying the same training cannot enqueue a second 100-coin or 9-point reward.
+            Assert.That(restored.ObserveTrainingCompleted("training-1"), Is.False);
+            Assert.That(restored.PendingEffects.Count(e => e.Kind == NarrativeEffectKind.GrantFunds), Is.EqualTo(1));
+            Assert.That(restored.PendingEffects.Count(e => e.Kind == NarrativeEffectKind.GrantCorpus), Is.Zero);
         }
 
         [Test] public void StageCountsAreMonotonicAndArchitectureIntroductionsUseOneTwoFour()

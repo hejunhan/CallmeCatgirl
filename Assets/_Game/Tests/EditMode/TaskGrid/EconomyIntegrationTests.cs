@@ -25,6 +25,7 @@ namespace CallmeCatgirl.Tests
         private static object Wallet(int funds = 80, int price = 1) => Activator.CreateInstance(WalletType, funds, price);
         private static object Call(object target, string method, params object[] args) => target.GetType().GetMethod(method).Invoke(target, args);
         private static T Value<T>(object target, string property) => (T)target.GetType().GetProperty(property).GetValue(target);
+        private static void Set(object target, string property, object value) => target.GetType().GetProperty(property).SetValue(target, value);
         private static TaskEvent Terminal(bool submitted, double calculation = 100, double patience = 40, double tokens = 100)
         {
             var model = new ModelDefinition("model", 3, new Dictionary<AbilityKind, double> { { AbilityKind.Writing, 4 } });
@@ -83,16 +84,35 @@ namespace CallmeCatgirl.Tests
             Assert.That(Call(wallet, "TrySpendFunds", 60), Is.EqualTo(true));
             Assert.That(Value<int>(wallet, "CurrentFunds"), Is.EqualTo(20));
         }
+        [Test] public void DebugIgnoreSpendingSkipsChargesUntilDisabled()
+        {
+            var wallet = Wallet();
+            Call(wallet, "SettleMonth", 50); Call(wallet, "SettleMonth", 50); Call(wallet, "SettleMonth", 50);
+            Assert.That(Value<bool>(wallet, "IsBankrupt"), Is.True);
+            Set(wallet, "DebugIgnoreSpending", true);
+            Assert.That(Call(wallet, "TrySpendFunds", 60), Is.True);
+            Assert.That(Value<int>(wallet, "CurrentFunds"), Is.Zero);
+            Assert.That(Call(wallet, "SettleMonth", 500), Is.True);
+            Assert.That(Value<int>(wallet, "DebtAmount"), Is.Zero);
+            Assert.That(Value<bool>(wallet, "IsInGracePeriod"), Is.False);
+            Assert.That(Value<bool>(wallet, "IsBankrupt"), Is.False);
+            Set(wallet, "DebugIgnoreSpending", false);
+            Assert.That(Call(wallet, "TrySpendFunds", 1), Is.False);
+            Call(wallet, "AddFunds", 10);
+            Assert.That(Call(wallet, "TrySpendFunds", 4), Is.True);
+            Assert.That(Value<int>(wallet, "CurrentFunds"), Is.EqualTo(6));
+        }
         [UnityTest] public IEnumerator MultipleMonthsAreSettledAndPauseFreezesMonthlyClock()
         {
             EditorSceneManager.OpenScene("Assets/_Game/Scenes/Prototypes/CoreGameplay.unity");
             yield return new EnterPlayMode(); yield return null;
             var controller=Controller();controller.GetType().GetProperty("ManualCommandClock").SetValue(controller,true);
             var sim=Value<TaskSimulation>(controller,"Simulation");
+            Call(controller,"AddFunds",1500);
             Assert.That(Value<double>(controller,"SecondsPerDay"),Is.EqualTo(120));
-            Assert.That(Value<int>(controller,"DaysPerMonth"),Is.EqualTo(30));
-            Assert.That(Value<int>(controller,"MonthlyMaintenanceFee"),Is.EqualTo(1500));
-            Assert.That(Value<double>(controller,"MonthTimeRemaining"),Is.EqualTo(3600));
+            Assert.That(Value<int>(controller,"DaysPerMonth"),Is.EqualTo(7));
+            Assert.That(Value<int>(controller,"MonthlyMaintenanceFee"),Is.EqualTo(350));
+            Assert.That(Value<double>(controller,"MonthTimeRemaining"),Is.EqualTo(840));
             Call(controller,"AdvanceGame",120d);Assert.That(sim.GameTime,Is.Zero);
             sim.Paused=false;Call(controller,"AdvanceGame",119d);
             Assert.That(Value<int>(controller,"CurrentDay"),Is.EqualTo(1));
@@ -101,21 +121,24 @@ namespace CallmeCatgirl.Tests
             Assert.That(Value<int>(controller,"CurrentDay"),Is.EqualTo(2));
             Assert.That(Value<double>(controller,"DayTimeRemaining"),Is.EqualTo(120));
             Assert.That(Value<int>(controller,"Funds"),Is.EqualTo(1500),"Daily boundaries never charge maintenance.");
-            Call(controller,"AdvanceGame",3479d);
-            Assert.That(Value<int>(controller,"CurrentDay"),Is.EqualTo(30));
+            Call(controller,"AdvanceGame",719d);
+            Assert.That(Value<int>(controller,"CurrentDay"),Is.EqualTo(7));
             Assert.That(Value<int>(controller,"Funds"),Is.EqualTo(1500));
             Call(controller,"AdvanceGame",1d);
             Assert.That(Value<int>(controller,"CurrentMonth"),Is.EqualTo(2));
             Assert.That(Value<int>(controller,"CurrentDay"),Is.EqualTo(1));
-            Assert.That(Value<int>(controller,"Funds"),Is.Zero);
-            Call(controller,"AdvanceGame",3600d);
-            Assert.That(Value<int>(controller,"CurrentMonth"),Is.EqualTo(3));
+            Assert.That(Value<int>(controller,"Funds"),Is.EqualTo(1150));
+            Call(controller,"AdvanceGame",840d); Assert.That(Value<int>(controller,"Funds"),Is.EqualTo(800));
+            Call(controller,"AdvanceGame",840d); Assert.That(Value<int>(controller,"Funds"),Is.EqualTo(450));
+            Call(controller,"AdvanceGame",840d); Assert.That(Value<int>(controller,"Funds"),Is.EqualTo(100));
+            Call(controller,"AdvanceGame",840d);
+            Assert.That(Value<int>(controller,"CurrentMonth"),Is.EqualTo(6));
             Assert.That(Value<bool>(controller,"IsInGracePeriod"),Is.True);
-            Assert.That(Value<int>(controller,"DebtAmount"),Is.EqualTo(1500));
+            Assert.That(Value<int>(controller,"DebtAmount"),Is.EqualTo(250));
             Assert.That(Value<bool>(controller,"GameEnded"),Is.False);
-            Call(controller,"AdvanceGame",7200d);
+            Call(controller,"AdvanceGame",840d);
             Assert.That(Value<bool>(controller,"GameEnded"),Is.True);
-            Assert.That(sim.GameTime,Is.EqualTo(10800));
+            Assert.That(sim.GameTime,Is.EqualTo(5040));
             Assert.That(sim.Paused,Is.True);
             Assert.That(Value<double>(controller,"DayTimeRemaining"),Is.Zero);
             Assert.That(Value<double>(controller,"MonthTimeRemaining"),Is.Zero);

@@ -1,40 +1,9 @@
-# CallmeCatgirl 项目协作规范
+# CallmeCatgirl 协作入口
 
-## 当前 UI 与原生窗口要求
+先读 [共享约束](agent/PROJECT.md) 和 [分组入口](agent/README.md)，按用户意图选择数值、系统或 UIUX。进入该组 `AGENTS.md`，先读本次相关 `spec/`，再核对任务、交接和实现；无需加载全部资料。
 
-- 以 1920×1080 为主要设计和视觉验收基准；1280×720、960×600 检查合理缩放、命中区和遮挡，不反向压缩正常 1080p 的布局。
-- 保留用户绘制的底图、边框、图标和装饰；可变文字使用同源真实 Text/TMP，不把带字小图片放大代替文字。固定 UI 仍须保存在 Scene/Prefab 中。
-- Windows Player 首次启动采用 1920×1080 Windowed，在目标显示器工作区居中；工作区容不下客户区及标题栏时安全缩小，不改系统分辨率，不覆盖已保存显示设置，不影响 Editor。
-- 原生窗口位置与 Canvas 锚点分别验证。记录启动几何前不让测试器移动/缩放窗口；测试器摆放的窗口不得冒充原生启动结果。
+默认由组长监管、派单、审查和验收，执行子代理完成实际实现、具体测试及修复。组织行为统一在 [组长与执行](agent/公共/组长与执行.md)，自主文档维护及跨组交接统一在 [协作协议](agent/公共/跨组协作.md)。用户干预及时传达，跨组任务引用双方 spec；达到本次目标后停止。
 
-## 当前工作副本
+主工程、Unity/Web 分工、剧情作者与稳定 ID、原画/作者场景、正式存档和执行边界均只引用 [PROJECT.md](agent/PROJECT.md)，不在此另写副本。共同工具入口见 [Unity MCP](agent/公共/Unity-MCP.md)。
 
-- 用户已于 2026-10-19 明确指定 `D:/Unity/CallmeCatgirl` 为后续主开发目录。操作 Unity 前核对实例和 `Application.dataPath`；保留的 C 盘隔离候选与历史构建不能冒充当前 D 盘运行版本。
-- 保留目标现有用户修改，不覆盖正式存档，不擅自关闭未保存的编辑器。迁移前的文件、Git 历史及旧 Play 运行态已备份在 `C:/Users/81004/Documents/Codex/2026-10-17/task-10/migration-to-d-20261019/backup`。测试和预览使用独立存档；全局安全、网络、代理及凭据配置不在项目修改范围内。
-
-## 可编辑场景与运行一致性
-
-- 持久 UI 容器、布局、关键组件、字体、交互模板和配置引用必须保存在 Scene/Prefab/序列化字段中。设计者应能在编辑器检查和调整；交付不能依赖 Initialize/Awake 静默生成另一套静态界面。
-- 运行时负责会话绑定、状态更新、响应式边界，以及从可追踪模板实例化真正动态的数据。请求列表、消息、选项、运行中的任务和临时拖动预览不需机械烘焙。
-- 不在 Play 中重新覆盖设计者的 Inspector 布局、字体或引用来伪装一致。动态布局的必要规则需有明确配置来源。
-- 提供清晰的编辑器预览/定位入口。预览不得污染已保存场景；不得为可见性给所有组件加 ExecuteAlways。不得 Apply All/Revert All 覆盖无关 Prefab overrides。
-- 同一候选、同一参考分辨率对比 Edit、Play 和实际 Player，注明动态数据、教程和动画造成的必要差异。示意图和离屏夹具不能冒充真实运行截图。
-
-## 功能和 QA
-
-- 推进以功能完整度与体验优化为重，减少不必要的纯代码测试。旧场景断言不应限制最新获批需求；真实回归仍需保留并修复。
-- 按 `.agents/skills/game-qa-workflow/SKILL.md` 分工。开发自测和独立 QA 分开，稳定候选才能交快速 QA；制作人负责手感、节奏、视觉与叙事判断。
-- 单一桌面同一时间只由一个代理操作。安全确认由用户处理，不能把“继续”当成网络放行或已关闭弹窗的证据。
-- 用户正在决定成长阶段计数、终局门槛、感情独立终局和林栖身份；答案前不猜改这些玩法与剧情规则。
-- 重要进度提供裁在游戏区域内的真实截图并标明版本和 Edit/Play/Player，优先上传为可向手机端交付的 Library 文件。
-
-编辑入口：`CallmeCatgirl/Preview Authored UI` 在独立预览场景显示持久 UI 副本，`Select Source` 定位真正的场景对象。`Save Current UI Layout To Scene` 与 `Save Main Menu Settings Layout` 为显式、增量作者操作。
-
-需要隔离 Editor Play 存档时，显式开启 `CallmeCatgirl/Use Isolated Saves In This Editor`。它仅在当前编辑器会话使用项目 `Library/AuthoringPlaySaves`；默认关闭，独立 Player 不使用该开关。
-
-## 开发监督与当前边界
-
-- 在本目录 `D:/Unity/CallmeCatgirl` 打开 OpenCode 即进入当前主工程。会话是否正在运行必须核实；不得把直接 Magpie API 调用称为 OpenCode 对话开发。
-- 今后新增或改写的玩家可见剧情文本必须由 argon4 输出；主代理只负责大纲和一致性审核。新 Argon4 文案当前仅待审候选，未纳入本次运行代码迁移；感情线后续和新政策树仍未获批。
-- 训练个体随机倍率及“随机取最大值”当前仍是未实现提案，不得报告为已有功能。
-- `.opencode/plugins/dot-notifier` 仅监听本工程精确目录，未扩展权限；自动排队不代表自动发回 dot。发送仍依赖人工核对的适配器，未完成无人值守接收通道。旧通知队列和发送状态没有迁入，禁止重放旧通知。
+项目技能发现入口保留：[.agents/skills/game-qa-workflow/SKILL.md](.agents/skills/game-qa-workflow/SKILL.md)。

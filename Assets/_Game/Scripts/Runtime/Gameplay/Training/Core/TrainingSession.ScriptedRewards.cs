@@ -8,7 +8,11 @@ namespace CallmeCatgirl.Gameplay.Training
     public sealed partial class TrainingSession
     {
         public const string StarterRecipeId = "tutorial-first-model";
+        public const string TutorialCorpusRecipeId = "tutorial-corpus-model";
         public bool StarterTrainingAvailable => jobs.Count == 0 && models.Values.All(m=>m.CorpusIds.Count==0);
+        // The second tutorial training receives 9 corpus points before any memory install.
+        // It stays one cell wide and is only offered between model 1 and model 9.
+        public bool CompactTrainingAvailable => models.Count == 1 && jobs.Count == 1;
         public double BestAvailableCorpusPoints => corpus.Values.Select(r=>RemainingPoints(r.Id)).DefaultIfEmpty(0).Max();
 
         private static void AddStarterRecipe(IDictionary<string,TrainingRecipe> rules)
@@ -16,6 +20,13 @@ namespace CallmeCatgirl.Gameplay.Training
             if (!rules.ContainsKey(StarterRecipeId))
                 rules.Add(StarterRecipeId,new TrainingRecipe(StarterRecipeId,"第一次训练 · 1点 / 1格 / 免费",0,1,10,1,1,
                     new[]{new Cell(0,0)},2,1));
+        }
+
+        private static void AddTutorialCorpusRecipe(IDictionary<string,TrainingRecipe> rules)
+        {
+            if (!rules.ContainsKey(TutorialCorpusRecipeId))
+                rules.Add(TutorialCorpusRecipeId,new TrainingRecipe(TutorialCorpusRecipeId,"第二次训练 · 1格 / 20金币",20,1,10,1,1,
+                    new[]{new Cell(0,0)},100,100,0));
         }
 
         /// <summary>Story/policy reward only. The stable event ID is stored with the immutable record;

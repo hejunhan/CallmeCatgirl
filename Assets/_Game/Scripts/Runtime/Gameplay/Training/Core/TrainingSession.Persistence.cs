@@ -98,12 +98,13 @@ namespace CallmeCatgirl.Gameplay.Training
             var recipeMap=recipeSource?.ToDictionary(r=>r.Id,StringComparer.Ordinal) ?? throw new ArgumentNullException(nameof(recipeSource));
             RequireState(recipeMap.Count>0,"training configuration has no normal recipes");
             AddStarterRecipe(recipeMap);
+            AddTutorialCorpusRecipe(recipeMap);
             var archMap=architectureSource?.ToDictionary(a=>a.Id,StringComparer.Ordinal) ?? throw new ArgumentNullException(nameof(architectureSource));
             var tiers=computeSource?.ToArray() ?? throw new ArgumentNullException(nameof(computeSource));
             RequireState(recipeMap.Count>0 && archMap.Count>0 && s.ComputeIndex>=0 && s.ComputeIndex<tiers.Length
                 && tiers[s.ComputeIndex]!=null && tiers[s.ComputeIndex].Id==s.ComputeTierId,"installed compute tier");
             Check.Number(s.TokensPerSecond,true);
-            RequireState(s.Corpus!=null && s.Corpus.Length<=100000 && s.Models!=null && s.Models.Length>0 && s.Models.Length<=10000
+            RequireState(s.Corpus!=null && s.Corpus.Length<=100000 && s.Models!=null && s.Models.Length<=10000
                 && s.Jobs!=null && s.Jobs.Length<=100000 && s.ConsumedCorpusIds!=null && s.RecordedFragments!=null,"collections");
             var decoded=new DecodedState();RequireState(decoded.Identities.TryRestore(s.Identities),"identity map");
             var rewardEvents=new HashSet<string>(StringComparer.Ordinal);
@@ -138,7 +139,7 @@ namespace CallmeCatgirl.Gameplay.Training
             {
                 var model=readModel(item);RequireState(!decoded.Models.ContainsKey(model.Id),"duplicate model UUID");decoded.Models.Add(model.Id,model);
             }
-            RequireState(s.ActiveModelId!=null && decoded.Models.ContainsKey(s.ActiveModelId),"active model reference");
+            RequireState(string.IsNullOrEmpty(s.ActiveModelId) || decoded.Models.ContainsKey(s.ActiveModelId),"active model reference");
             var outputIds=new HashSet<string>(StringComparer.Ordinal);
             foreach(var j in s.Jobs)
             {
@@ -193,7 +194,8 @@ namespace CallmeCatgirl.Gameplay.Training
             var restored=new TrainingSession(restoredSimulation,null,recipeArray,architectureArray,computeArray,spend,refund,
                 applyProfile,applyThroughput,capacityCells,composeBonuses,policyModifiers,currentStage,decoded.Identities,true);
             RequireState(restored.CurrentStage==state.Stage,"host stage differs from training stage");
-            restored.serial=state.Serial;restored.ComputeIndex=state.ComputeIndex;restored.ActiveModelId=state.ActiveModelId;
+            restored.serial=state.Serial;restored.ComputeIndex=state.ComputeIndex;
+            restored.ActiveModelId=string.IsNullOrEmpty(state.ActiveModelId)?null:state.ActiveModelId;
             foreach(var p in decoded.Models)restored.models.Add(p.Key,p.Value);
             foreach(var p in decoded.Corpus)restored.corpus.Add(p.Key,p.Value);
             foreach(var p in decoded.Jobs)restored.jobs.Add(p.Key,p.Value);
@@ -216,15 +218,24 @@ namespace CallmeCatgirl.Gameplay.Training
             foreach(var task in restoredSimulation.Tasks.Values.Where(t=>t.Architecture!=null))
                 RequireState(restored.architectures.TryGetValue(task.Architecture.Id,out var source)
                     && source.UnlockStage<=state.Stage && source.Runtime.SameAs(task.Architecture),"frozen architecture differs from configuration");
-            var active=restored.models[state.ActiveModelId];
-            RequireState(restoredSimulation.Architecture.SameAs(restored.architectures[active.ArchitectureId].Runtime),"active architecture differs from simulation");
-            RequireState(SameDefinition(restored.composeBonuses(active.Definition),restoredSimulation.Model),"effective model differs (permanent bonuses must compose once)");
             double expected=restored.TokensPerSecond;
             RequireState(Math.Abs(expected-state.TokensPerSecond)<=1e-9*Math.Max(1,expected),"saved execution rate differs from policy/compute");
             if(restoredTokensPerSecond.HasValue)
                 RequireState(!double.IsNaN(restoredTokensPerSecond.Value) && !double.IsInfinity(restoredTokensPerSecond.Value)
                     && Math.Abs(expected-restoredTokensPerSecond.Value)<=1e-9*Math.Max(1,expected),"TaskGrid execution rate mismatch");
-            var expectedCells=restored.architectures[active.ArchitectureId].Transform(capacityCells(),restoredSimulation.Width,restoredSimulation.Height);
+            Cell[] expectedCells;
+            if(restored.ActiveModelId==null)
+            {
+                // Models may exist while none is selected; the board still uses canonical tutorial capacity.
+                expectedCells=(capacityCells()??Array.Empty<Cell>()).ToArray();
+            }
+            else
+            {
+                var active=restored.models[restored.ActiveModelId];
+                RequireState(restoredSimulation.Architecture.SameAs(restored.architectures[active.ArchitectureId].Runtime),"active architecture differs from simulation");
+                RequireState(SameDefinition(restored.composeBonuses(active.Definition),restoredSimulation.Model),"effective model differs (permanent bonuses must compose once)");
+                expectedCells=restored.architectures[active.ArchitectureId].Transform(capacityCells(),restoredSimulation.Width,restoredSimulation.Height);
+            }
             RequireState(expectedCells.Length==restoredSimulation.OpenCellCount && expectedCells.All(restoredSimulation.IsOpen),"architecture outline differs from TaskGrid snapshot");
             return restored;
         }

@@ -62,6 +62,11 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
         public AbilityState[] Abilities;
         public bool HasResult;
         public bool ReadyInCandidate;
+        public bool IsFiller;
+        public string VisitorDisplayName;
+        public string VisitorSourceText;
+        public string VisitorRequestFamily;
+        public string VisitorSourceCustomerId;
     }
     [Serializable] public sealed class TaskSimulationState
     {
@@ -124,6 +129,9 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
                     HasArchitecture = t.Architecture != null, Architecture = ArchitectureRuntimeState.Capture(t.Architecture),
                     HasFinishedAt = t.FinishedAt.HasValue, FinishedAt = t.FinishedAt ?? 0, Origin = StateRules.Cell(t.Origin),
                     Rotation = t.Rotation, Abilities = StateRules.CaptureAbilities(t.Abilities), HasResult = t.Result != null,
+                    IsFiller = t.IsFiller,
+                    VisitorDisplayName = t.Visitor?.DisplayName, VisitorSourceText = t.Visitor?.SourceText,
+                    VisitorRequestFamily = t.Visitor?.RequestFamily, VisitorSourceCustomerId = t.Visitor?.SourceCustomerId,
 #if CALLMECATGIRL_TRAINING_GRID
                     ReadyInCandidate = t.ReadyInCandidate
 #else
@@ -163,7 +171,24 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
                     && StateRules.Finite(item.Progress) && item.Progress >= 0 && StateRules.Finite(item.AbilityRemainder)
                     && item.AbilityRemainder >= 0 && StateRules.Finite(item.FinishedAt), "Invalid request fields.");
                 var definition = item.Definition.Build();
-                var task = new TaskInstance(item.Id, item.ConversationId, item.RoundId, definition, item.ArrivedAt);
+                // Filler identity is explicit; never infer a role from an arbitrary request name.
+                bool fillerRequestId = VisitorQueuePolicy.TryParseRequestId(item.Id, out _, out _);
+                StateRules.Require(item.IsFiller == fillerRequestId, "Filler flag differs from request id.");
+                if (item.IsFiller)
+                {
+                    StateRules.Require(item.ConversationId == VisitorQueuePolicy.ConversationId, "Filler task uses a different conversation.");
+                }
+                else
+                {
+                    StateRules.Require(string.IsNullOrEmpty(item.VisitorDisplayName) && string.IsNullOrEmpty(item.VisitorSourceText)
+                        && string.IsNullOrEmpty(item.VisitorRequestFamily) && string.IsNullOrEmpty(item.VisitorSourceCustomerId),
+                        "Non-filler request carries visitor identity.");
+                }
+                var visitor = item.IsFiller
+                    ? new VisitorIdentity(item.VisitorDisplayName, item.VisitorSourceText, item.VisitorRequestFamily, item.VisitorSourceCustomerId)
+                    : null;
+                var task = new TaskInstance(item.Id, item.ConversationId, item.RoundId, definition, item.ArrivedAt)
+                    { Visitor = visitor };
                 StateRules.Require(StateRules.Finite(task.Deadline) && item.Progress <= definition.Calculation
                     && (!item.HasFinishedAt || (item.FinishedAt >= item.ArrivedAt && item.FinishedAt <= task.Deadline && item.FinishedAt <= s.GameTime)), "Invalid request timing.");
                 bool unfinished = item.State == RequestState.Waiting || item.State == RequestState.Running || item.State == RequestState.Withdrawn;
@@ -192,7 +217,7 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
                 if (item.HasResult) task.Result = QualityResult.Evaluate(definition, task.Abilities);
                 simulation.tasks.Add(task.Id, task);
                 simulation.roundRequests.Add(Tuple.Create(task.ConversationId, task.RoundId), task.Id);
-                if (task.State != RequestState.Closed) simulation.activeConversations.Add(task.ConversationId, task.Id);
+                if (task.State != RequestState.Closed && !task.IsFiller) simulation.activeConversations.Add(task.ConversationId, task.Id);
                 if (task.State == RequestState.Running || (task.State == RequestState.Ready && !item.ReadyInCandidate))
                 {
                     int? compartment = null;

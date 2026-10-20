@@ -21,35 +21,31 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
         }
     }
 
-    /// <summary>安装物理的调参集合；构造即默认值，Sanitize 保证有限且非负。</summary>
+    /// <summary>安装调参。旧弹簧字段保留用于场景序列化兼容，但不再产生捕获力。</summary>
     [Serializable]
     public sealed class MemoryInstallTuning
     {
-        // 内存条刚体（单位约为像素、秒、质量 1）。
         public float RamLength = 240, RamThickness = 24, RamMass = 1;
-        public float HoverHeight = 70;              // 初始悬停在插槽上方的距离。
-        // 鼠标弹簧：力 = 刚度*(光标-当前抓取点) - 阻尼*抓取点速度，并限额。
+        public float HoverHeight = 70;
+        // 旧鼠标弹簧字段：保留序列化兼容，不再参与捕获。
         public float MouseStiffness = 90, MouseDamping = 20, MouseForceCap = 600;
-        // 抓取期间的手持角阻尼（模拟手握姿态，不锁定角度）。
         public float GripAngularDamping = 20000;
-        // 插槽/主板：左中右三个顺从节点，锚定弹簧 + 相邻弯曲弹簧；中端更软，按压中间会凹陷。
+        // 只有插槽座中心节点可弯；左右节点保持刚性。
         public float NodeMass = .2f, AnchorStiffnessEnd = 300, AnchorStiffnessCenter = 60;
         public float AnchorDamping = 8, BendStiffness = 80, BendDamping = 4, MaxDeflection = 40;
-        // 单边接触（只推不拉）：槽底在开口下方 FloorDepth，卡扣喉深 LatchDepth。
-        public float FloorDepth = 4, LatchDepth = 7, ContactStiffness = 120, ContactDamping = 20;
-        // 端部卡扣：深度/倾角/板弯条件持续 LatchHoldTime 才捕获；过度倾斜或拔出会脱扣。
-        public float LatchHoldTime = .08f, LatchTiltLimit = .45f, ReleaseTiltLimit = .55f;
+        public float FloorDepth = 4, LatchDepth = 10, ContactStiffness = 120, ContactDamping = 20;
+        // 旧卡扣字段：保留序列化兼容，不再用于捕获。
+        public float LatchHoldTime = .18f, LatchTiltLimit = .42f, ReleaseTiltLimit = .62f;
         public float ReleaseDepthFactor = .35f, ReleaseHoldTime = .12f;
-        // 卡扣捕获后是强定位销：另一端按压时内存条绕该销杠杆转动。
-        public float LatchStiffness = 800, LatchDamping = 24, LatchBendLimit = 4, LatchAlignTolerance = 24;
+        public float LatchStiffness = 800, LatchDamping = 24, LatchBendLimit = 4, LatchAlignTolerance = 12;
         public float ContactForceCap = 1200;
-        // 被动阻力与行程边界：松手后漂移会衰减，状态始终有界。
         public float PassiveLinearDrag = 1.5f, PassiveAngularDrag = 4000;
         public float BoundX = 200, BoundUp = -160, BoundDown = 60;
-        // 成功判定：两端捕获、松开鼠标、低倾角、低板弯、低速，稳定 StableTimeRequired。
-        public float SolveTiltLimit = .09f, SolveBendLimit = 3, SolveSpeedLimit = 15;
-        public float SolveAngularLimit = .6f, StableTimeRequired = .3f;
-        // 积分与数值安全。
+        public float SolveTiltLimit = .08f, SolveBendLimit = 3, SolveSpeedLimit = 15;
+        public float SolveAngularLimit = .6f, StableTimeRequired = .12f, SeatHoldTime = .12f;
+        // 新几何参数：插槽行程、左右最大倾角、深度速度、中央按压行程。
+        public float SlotTravel = 100, MaxTilt = .35f, DepthSpeed = 2.4f, CenterPressTravel = 80;
+        public float HeldDepth = .35f, SeatDepth = .5f, SeatLevelTolerance = .12f, CenterSeatLimit = .25f;
         public float FixedStep = 1f / 120, MaxAdvance = .25f, MaxLinearSpeed = 600, MaxAngularSpeed = 20;
         public int MaxStepsPerAdvance = 8;
         public void Sanitize()
@@ -61,44 +57,50 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
                 if (!float.IsFinite(value)) value = 0;
                 field.SetValue(this, Math.Max(0, value));
             }
-            if (!float.IsFinite(BoundUp) || BoundUp > 0) BoundUp = -160; // 上界必须为负（悬停区）。
+            if (!float.IsFinite(BoundUp) || BoundUp > 0) BoundUp = -160;
             RamLength = Math.Max(1, RamLength); RamThickness = Math.Max(1, RamThickness); RamMass = Math.Max(.0001f, RamMass);
             NodeMass = Math.Max(.0001f, NodeMass); FixedStep = Math.Clamp(FixedStep, 1f / 480, 1f / 30);
-            LatchDepth = Math.Clamp(LatchDepth, 0, FloorDepth + 20);
             MaxStepsPerAdvance = Math.Clamp(MaxStepsPerAdvance, 1, 32);
+            SlotTravel = Math.Max(1, SlotTravel); MaxTilt = Math.Clamp(MaxTilt, .02f, .8f);
+            CenterPressTravel = Math.Max(1, CenterPressTravel);
+            SeatDepth = Math.Clamp(SeatDepth, .5f, 1f); SeatLevelTolerance = Math.Clamp(SeatLevelTolerance, .01f, .5f);
+            CenterSeatLimit = Math.Clamp(CenterSeatLimit, .05f, .9f);
         }
     }
 
     /// <summary>
-    /// 纯数值内存安装物理：整根内存条可在任意点抓取，鼠标弹簧作用于随刚体变换的固定局部抓取点，
-    /// 插槽/主板为三个顺从节点加弯曲弹簧，单边接触，端部卡扣支持单只鼠标换边。
-    /// 不包含任何 UnityEngine 依赖；Advance 使用非缩放时间累加器与 1/120 半隐式定步。
+    /// 现实内存条安装的几何模型：左右端进入插槽后受阻力，倾斜时另一端无法同时进入；
+    /// 中央凸起对应内存条凹槽，按压中间只会让插槽座下弯，不能完成安装。
+    /// 只有中央底座是弹性的；鼠标拖拽直接映射为插槽深度，不再用弹簧捕获。
     /// </summary>
     public sealed class MemoryInstallSimulation
     {
-        public const int NodeCount = 3; // 0 左 1 中 2 右。
+        public const int NodeCount = 3;
         private readonly MemoryInstallTuning tuning;
-        private Vec2 position, linearVelocity, target, gripLocal, appliedForce;
-        private float theta, angularVelocity, accumulator;
-        private readonly float[] nodeY = new float[NodeCount], nodeVelocity = new float[NodeCount], holdTimer = new float[NodeCount];
-        private readonly float[] releaseTimer = new float[NodeCount];
-        private readonly bool[] captured = new bool[NodeCount]; // 只用 0 与 2（两端）。
+        private Vec2 position, target;
+        private float theta, accumulator;
         private bool grabbed;
+        private Vec2 gripLocal;
+        private int grabbedEnd = -1;
+        private float leftDepth, rightDepth, leftTarget, rightTarget;
+        private float centerBend, centerTarget;
+        private float seatTimer;
         public MemoryInstallTuning Tuning => tuning;
         public RamPose Ram => new RamPose(position, theta);
-        public Vec2 LinearVelocity => linearVelocity;
-        public float AngularVelocity => angularVelocity;
+        public Vec2 LinearVelocity => Vec2.Zero;
+        public float AngularVelocity => 0;
         public bool IsGrabbed => grabbed;
         public Vec2 GripLocal => gripLocal;
         public Vec2 GripWorld => Ram.LocalToWorld(gripLocal);
-        public Vec2 AppliedForce => appliedForce;
-        public bool LeftCaptured => captured[0];
-        public bool RightCaptured => captured[2];
-        public bool IsCaptured(int end) => captured[end == 0 ? 0 : 2];
+        public Vec2 AppliedForce => Vec2.Zero;
+        public bool LeftCaptured => leftDepth >= tuning.SeatDepth;
+        public bool RightCaptured => rightDepth >= tuning.SeatDepth;
+        public bool IsCaptured(int end) => Insertion(end) >= tuning.SeatDepth;
+        public float Insertion(int end) => end == 0 ? leftDepth : rightDepth;
         public float NodeRestX(int index) => (index - 1) * tuning.RamLength * .5f;
-        public float NodeDeflection(int index) => nodeY[index];
-        public Vec2 NodePosition(int index) => new Vec2(NodeRestX(index), nodeY[index]);
-        public float BoardBend { get; private set; }
+        public float NodeDeflection(int index) => index == 1 ? centerBend * tuning.MaxDeflection : 0;
+        public Vec2 NodePosition(int index) => new Vec2(NodeRestX(index), NodeDeflection(index));
+        public float BoardBend => centerBend * tuning.MaxDeflection;
         public float StableTime { get; private set; }
         public bool Solved { get; private set; }
 
@@ -107,177 +109,100 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
             tuning = settings ?? new MemoryInstallTuning();
             tuning.Sanitize(); ResetSimulation();
         }
+
         public void ResetSimulation()
         {
-            position = new Vec2(0, -tuning.HoverHeight); theta = 0;
-            linearVelocity = Vec2.Zero; angularVelocity = 0; appliedForce = Vec2.Zero;
-            gripLocal = Vec2.Zero; target = Vec2.Zero; grabbed = false; accumulator = 0;
-            Array.Clear(nodeY, 0, NodeCount); Array.Clear(nodeVelocity, 0, NodeCount);
-            Array.Clear(holdTimer, 0, NodeCount); Array.Clear(releaseTimer, 0, NodeCount);
-            Array.Clear(captured, 0, NodeCount);
-            BoardBend = 0; StableTime = 0; Solved = false;
+            position = new Vec2(0, -tuning.HoverHeight); theta = 0; target = position; accumulator = 0;
+            grabbed = false; grabbedEnd = -1; gripLocal = Vec2.Zero;
+            leftDepth = rightDepth = leftTarget = rightTarget = 0;
+            centerBend = centerTarget = 0; seatTimer = 0; StableTime = 0; Solved = false;
         }
-        /// <summary>整根内存条可点：指针落在条内则记录 RAM 局部抓取点；该局部点在拖拽期间不随旋转改变。</summary>
+
+        /// <summary>整根内存条可点；抓取中间进入“按压底座”模式，抓左右端进入插槽模式。</summary>
         public bool Grab(Vec2 worldPoint)
         {
             if (!worldPoint.IsFinite) { Release(); return false; }
             var local = Ram.WorldToLocal(worldPoint);
-            // 端角往返变换有浮点误差，保留半像素容差；整根条可点但不接受远离条体的点。
             if (Math.Abs(local.X) > tuning.RamLength * .5f + .5f || Math.Abs(local.Y) > tuning.RamThickness * .5f + .5f) return false;
             gripLocal = local; target = worldPoint; grabbed = true;
+            grabbedEnd = local.X < -tuning.LatchAlignTolerance ? 0 : local.X > tuning.LatchAlignTolerance ? 2 : 1;
+            if (grabbedEnd == 0) leftTarget = leftDepth;
+            else if (grabbedEnd == 2) rightTarget = rightDepth;
+            else centerTarget = centerBend;
             return true;
         }
+
         public void UpdateTarget(Vec2 worldCursor)
         {
-            if (!worldCursor.IsFinite) { Release(); return; } // 非有限输入等价于失去焦点：解除鼠标约束。
+            if (!worldCursor.IsFinite) { Release(); return; }
             target = worldCursor;
         }
-        public void Release() { grabbed = false; appliedForce = Vec2.Zero; }
-        /// <summary>非缩放时间推进：定步 1/120，长帧有界追帧，状态保持有限。</summary>
+
+        public void Release()
+        {
+            grabbed = false; grabbedEnd = -1;
+            leftTarget = leftDepth; rightTarget = rightDepth; centerTarget = 0;
+        }
+
         public void Advance(float unscaledDelta)
         {
-            tuning.Sanitize();
             if (!float.IsFinite(unscaledDelta) || unscaledDelta < 0) unscaledDelta = 0;
+            tuning.Sanitize();
             accumulator = Math.Min(accumulator + unscaledDelta, tuning.MaxAdvance);
             int steps = 0;
             while (accumulator >= tuning.FixedStep && steps < tuning.MaxStepsPerAdvance)
             { Step(tuning.FixedStep); accumulator -= tuning.FixedStep; steps++; }
             if (steps == tuning.MaxStepsPerAdvance) accumulator = Math.Min(accumulator, tuning.FixedStep);
         }
+
         private void Step(float dt)
         {
-            var pose = Ram;
-            float inertia = tuning.RamMass * (tuning.RamLength * tuning.RamLength + tuning.RamThickness * tuning.RamThickness) / 12;
-            var force = Vec2.Zero; float torque = 0;
-            var nodeForce = new float[NodeCount];
-            // 鼠标弹簧：作用于当前世界抓取点，力矩为 r × F。
-            appliedForce = Vec2.Zero;
+            if (Solved) return;
             if (grabbed)
             {
-                var offset = GripWorld - position;
-                var gripVelocity = linearVelocity + offset.Perpendicular() * angularVelocity;
-                appliedForce = ((target - GripWorld) * tuning.MouseStiffness - gripVelocity * tuning.MouseDamping)
-                    .ClampMagnitude(tuning.MouseForceCap);
-                force += appliedForce; torque += Vec2.Cross(offset, appliedForce);
-                torque -= tuning.GripAngularDamping * angularVelocity; // 手持角阻尼：不锁角度，只耗散旋转。
+                float dragDepth = Clamp01((target.Y + tuning.HoverHeight) / tuning.SlotTravel);
+                if (grabbedEnd == 0) leftTarget = dragDepth;
+                else if (grabbedEnd == 2) rightTarget = dragDepth;
+                else centerTarget = Clamp01((target.Y + tuning.HoverHeight) / tuning.CenterPressTravel);
             }
-            // 单边接触：槽底只推不拉；采样点钳制到条底最近点（旋转时端角仍能接触），
-            // 阻尼只抵抗压入、不在分离时加力，避免向系统泵能。
-            for (int i = 0; i < NodeCount; i++)
-            {
-                float cos = (float)Math.Cos(theta), sin = (float)Math.Sin(theta);
-                if (Math.Abs(cos) < .2f) continue;
-                float localX = (NodeRestX(i) - position.X + tuning.RamThickness * .5f * sin) / cos;
-                if (Math.Abs(localX) > tuning.RamLength * .5f + 30) continue;
-                localX = Math.Clamp(localX, -tuning.RamLength * .5f, tuning.RamLength * .5f);
-                var bottomWorld = pose.LocalToWorld(new Vec2(localX, tuning.RamThickness * .5f));
-                float floorY = nodeY[i] + tuning.FloorDepth;
-                float penetration = bottomWorld.Y - floorY;
-                if (penetration <= 0) continue;
-                var pointVelocity = linearVelocity + (bottomWorld - position).Perpendicular() * angularVelocity;
-                float approach = pointVelocity.Y - nodeVelocity[i];
-                float push = tuning.ContactStiffness * penetration + (approach > 0 ? tuning.ContactDamping * approach : 0);
-                push = Math.Clamp(push, 0, tuning.ContactForceCap);
-                force += new Vec2(0, -push); torque += Vec2.Cross(bottomWorld - position, new Vec2(0, -push));
-                nodeForce[i] += push;
-            }
-            // 端部卡扣：捕获端以强弹簧锚定到静止框架的喉深处（不随节点位移漂移，避免正反馈拖垮整板），同时承担水平对齐。
-            for (int end = 0; end < 3; end += 2)
-            {
-                if (!captured[end]) continue;
-                var attach = pose.LocalToWorld(new Vec2(NodeRestX(end), tuning.RamThickness * .5f));
-                var capture = new Vec2(NodeRestX(end), tuning.LatchDepth);
-                var pointVelocity = linearVelocity + (attach - position).Perpendicular() * angularVelocity;
-                var pull = (capture - attach) * tuning.LatchStiffness - pointVelocity * tuning.LatchDamping;
-                pull = pull.ClampMagnitude(tuning.ContactForceCap * 3);
-                force += pull; torque += Vec2.Cross(attach - position, pull);
-            }
-            // 主板节点：锚定弹簧 + 相邻弯曲弹簧 + 接触下压。
-            for (int i = 0; i < NodeCount; i++)
-            {
-                float anchor = i == 1 ? tuning.AnchorStiffnessCenter : tuning.AnchorStiffnessEnd;
-                nodeForce[i] += -anchor * nodeY[i] - tuning.AnchorDamping * nodeVelocity[i];
-            }
-            for (int i = 0; i + 1 < NodeCount; i++)
-            {
-                float relative = nodeY[i] - nodeY[i + 1], relativeVelocity = nodeVelocity[i] - nodeVelocity[i + 1];
-                float bend = tuning.BendStiffness * relative + tuning.BendDamping * relativeVelocity;
-                nodeForce[i] -= bend; nodeForce[i + 1] += bend;
-            }
-            // 半隐式积分。
-            linearVelocity += force * (dt / tuning.RamMass); angularVelocity += torque * (dt / inertia);
-            linearVelocity = linearVelocity.ClampMagnitude(tuning.MaxLinearSpeed);
-            angularVelocity = Math.Clamp(angularVelocity, -tuning.MaxAngularSpeed, tuning.MaxAngularSpeed);
-            // 被动阻力：松手后的漂移逐渐衰减而不是永动。
-            linearVelocity -= linearVelocity * Math.Min(1, tuning.PassiveLinearDrag * dt);
-            angularVelocity -= angularVelocity * Math.Min(1, tuning.PassiveAngularDrag * dt / inertia);
-            position += linearVelocity * dt; theta = WrapAngle(theta + angularVelocity * dt);
-            // 行程边界：钳制位置并消除指向界外的速度分量。
-            if (position.X < -tuning.BoundX) { position = new Vec2(-tuning.BoundX, position.Y); linearVelocity = new Vec2(Math.Max(0, linearVelocity.X), linearVelocity.Y); }
-            if (position.X > tuning.BoundX) { position = new Vec2(tuning.BoundX, position.Y); linearVelocity = new Vec2(Math.Min(0, linearVelocity.X), linearVelocity.Y); }
-            if (position.Y < tuning.BoundUp) { position = new Vec2(position.X, tuning.BoundUp); linearVelocity = new Vec2(linearVelocity.X, Math.Max(0, linearVelocity.Y)); }
-            if (position.Y > tuning.BoundDown) { position = new Vec2(position.X, tuning.BoundDown); linearVelocity = new Vec2(linearVelocity.X, Math.Min(0, linearVelocity.Y)); }
-            for (int i = 0; i < NodeCount; i++)
-            {
-                nodeVelocity[i] = Math.Clamp(nodeVelocity[i] + nodeForce[i] * (dt / tuning.NodeMass), -tuning.MaxLinearSpeed, tuning.MaxLinearSpeed);
-                nodeY[i] = Math.Clamp(nodeY[i] + nodeVelocity[i] * dt, 0, tuning.MaxDeflection);
-            }
-            UpdateLatches(dt);
-            UpdateSolved(dt);
-            // 有限性护栏：任何非有限状态直接复位动力学，不留残余约束。
-            if (!position.IsFinite || !linearVelocity.IsFinite || !float.IsFinite(theta) || !float.IsFinite(angularVelocity)
-                || !float.IsFinite(nodeY[0]) || !float.IsFinite(nodeY[1]) || !float.IsFinite(nodeY[2])) ResetSimulation();
+            // 插槽阻力：越深越难推；松手后目标保持当前深度，形成静摩擦。
+            leftDepth = MoveTowards(leftDepth, leftTarget, DepthSpeed(dt, leftDepth, rightDepth, 0));
+            rightDepth = MoveTowards(rightDepth, rightTarget, DepthSpeed(dt, rightDepth, leftDepth, 2));
+            centerBend = MoveTowards(centerBend, centerTarget, tuning.DepthSpeed * dt);
+            // 按压中间时底座下弯；左右端已经进入时保留深度，但底座未回弹前不能落座。
+            float depth = (leftDepth + rightDepth) * .5f;
+            position = new Vec2(0, -tuning.HoverHeight + depth * tuning.SlotTravel);
+            theta = (rightDepth - leftDepth) * tuning.MaxTilt;
+            float level = Math.Abs(leftDepth - rightDepth);
+            bool ready = !grabbed && leftDepth >= tuning.SeatDepth && rightDepth >= tuning.SeatDepth
+                && level <= tuning.SeatLevelTolerance && centerBend <= tuning.CenterSeatLimit;
+            seatTimer = ready ? seatTimer + dt : 0;
+            StableTime = seatTimer;
+            if (seatTimer >= tuning.SeatHoldTime) Seat();
         }
-        private void UpdateLatches(float dt)
+
+        private float DepthSpeed(float dt, float depth, float other, int end)
         {
-            var pose = Ram;
-            float bend = ComputeBend();
-            for (int end = 0; end < 3; end += 2)
-            {
-                var attach = pose.LocalToWorld(new Vec2(NodeRestX(end), tuning.RamThickness * .5f));
-                float depth = attach.Y - nodeY[end];
-                if (captured[end])
-                {
-                    // 过度倾斜立即脱扣；端部浮出喉深须持续一段时间（换边按压的瞬时回弹不脱扣）。
-                    if (Math.Abs(theta) > tuning.ReleaseTiltLimit) { captured[end] = false; holdTimer[end] = 0; releaseTimer[end] = 0; continue; }
-                    releaseTimer[end] = depth < tuning.LatchDepth * tuning.ReleaseDepthFactor ? releaseTimer[end] + dt : 0;
-                    if (releaseTimer[end] >= tuning.ReleaseHoldTime) { captured[end] = false; holdTimer[end] = 0; releaseTimer[end] = 0; }
-                    continue;
-                }
-                var pointVelocity = linearVelocity + (attach - position).Perpendicular() * angularVelocity;
-                // 捕获要求：端部与对应卡扣水平对齐、相对变形后的局部插槽达到喉深、低倾角、低板弯、非向上回弹。
-                bool seating = Math.Abs(attach.X - NodeRestX(end)) <= tuning.LatchAlignTolerance
-                    && depth > tuning.LatchDepth && Math.Abs(theta) <= tuning.LatchTiltLimit
-                    && bend <= tuning.LatchBendLimit && pointVelocity.Y >= -5;
-                holdTimer[end] = seating ? holdTimer[end] + dt : 0;
-                if (holdTimer[end] >= tuning.LatchHoldTime) captured[end] = true;
-            }
+            // 已进入的一端被另一端拖动时提供更高阻力；只允许很慢的退出。
+            bool held = !grabbed || grabbedEnd != end;
+            float resistance = held ? .45f : 1f;
+            if (depth > .6f) resistance *= .55f;
+            return tuning.DepthSpeed * resistance * dt;
         }
-        private void UpdateSolved(float dt)
+
+        /// <summary>两端都进入插槽、中心对齐且底座回弹后才允许落座；未齐时为空操作。</summary>
+        public void Seat()
         {
-            BoardBend = ComputeBend();
-            if (Solved) return;
-            bool stable = captured[0] && captured[2] && !grabbed
-                && Math.Abs(theta) <= tuning.SolveTiltLimit && BoardBend <= tuning.SolveBendLimit
-                && linearVelocity.Length <= tuning.SolveSpeedLimit && Math.Abs(angularVelocity) <= tuning.SolveAngularLimit
-                && Math.Abs(nodeVelocity[0]) <= tuning.SolveSpeedLimit && Math.Abs(nodeVelocity[1]) <= tuning.SolveSpeedLimit
-                && Math.Abs(nodeVelocity[2]) <= tuning.SolveSpeedLimit;
-            StableTime = stable ? StableTime + dt : 0;
-            if (StableTime >= tuning.StableTimeRequired) Solved = true;
+            if (Solved || grabbed || leftDepth < tuning.SeatDepth || rightDepth < tuning.SeatDepth
+                || Math.Abs(leftDepth - rightDepth) > tuning.SeatLevelTolerance
+                || centerBend > tuning.CenterSeatLimit) return;
+            leftDepth = rightDepth = 1; centerBend = 0; theta = 0;
+            position = new Vec2(0, tuning.LatchDepth - tuning.RamThickness * .5f);
+            StableTime = Math.Max(StableTime, tuning.SeatHoldTime); Solved = true;
         }
-        private float ComputeBend()
-        {
-            float bend = 0;
-            for (int i = 0; i < NodeCount; i++) bend = Math.Max(bend, Math.Abs(nodeY[i]));
-            return bend;
-        }
-        private static float WrapAngle(float angle)
-        {
-            const float twoPi = (float)(Math.PI * 2);
-            angle %= twoPi;
-            if (angle > Math.PI) angle -= twoPi;
-            if (angle < -Math.PI) angle += twoPi;
-            return angle;
-        }
+
+        private static float Clamp01(float value) => value < 0 ? 0 : value > 1 ? 1 : value;
+        private static float MoveTowards(float current, float target, float maxDelta)
+            => Math.Abs(target - current) <= maxDelta ? target : current + Math.Sign(target - current) * maxDelta;
     }
 }

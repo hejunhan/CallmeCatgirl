@@ -27,9 +27,11 @@ namespace CallmeCatgirl.Gameplay.Narrative
             if (!KnownNode(s.CurrentNode) || (!string.IsNullOrEmpty(s.Notice) && s.Notice != "你没有")
                 || s.PendingStageNodes.Any(n => n != "stage." + StageNumber(n) || StageNumber(n) < 1 || StageNumber(n) > s.MemoryCount
                     || s.Memories.Any(m => m.Key == n))) return Invalid("Invalid narrative node.", out error);
+            bool afterFirstTraining = s.Tutorial != TutorialStep.Opening && s.Tutorial != TutorialStep.AwaitTraining
+                && s.Tutorial != TutorialStep.Legacy;
             if (s.Tutorial == TutorialStep.Opening && (s.MemoryCount != 0 || s.CenterCellRevealed || s.Memories.Any(m => m.Key == "opening"))
                 || s.Tutorial != TutorialStep.Opening && s.Tutorial != TutorialStep.Legacy && !s.Memories.Any(m => m.Key == "opening")
-                || s.Tutorial >= TutorialStep.AwaitDoctorOrder && s.Tutorial <= TutorialStep.Complete && (string.IsNullOrWhiteSpace(s.LastTrainingRequestId) || !s.CenterCellRevealed))
+                || afterFirstTraining && (string.IsNullOrWhiteSpace(s.LastTrainingRequestId) || !s.CenterCellRevealed))
                 return Invalid("Inconsistent tutorial state.", out error);
             if (s.CompanionUnlocked != (s.CompanionBeat > 0) || s.RomanceReady && (s.CompanionBeat < 7 || s.CompanionDeclined
                     || !s.Memories.Any(m => m.Key == "companion.7" && m.Value == "accept-invitation"))
@@ -58,6 +60,8 @@ namespace CallmeCatgirl.Gameplay.Narrative
         {
             return id == "narrative-opening-corpus" || id == "narrative-reveal-center" || id == "narrative-queue-doctor-first"
                 || id == "narrative-queue-ordinary-first" || id == "narrative-first-upgrade-hint" || id == "narrative-end-run"
+                || id == "narrative-doctor-first-payment" || id == "narrative-doctor-corpus-nine"
+                || id == "narrative-queue-doctor-second" || id == "narrative-queue-doctor-third"
                 || new[] { 1, 2, 4 }.Any(n => id == "narrative-architecture-" + n)
                 || new[] { 2, 3, 4, 5 }.Any(n => id == "narrative-stage-doctor-" + n);
         }
@@ -68,17 +72,32 @@ namespace CallmeCatgirl.Gameplay.Narrative
             switch (e.Kind)
             {
                 case NarrativeEffectKind.GrantCorpus:
-                    return e.EventId == "narrative-opening-corpus" && e.ConversationId == DoctorId && e.CorpusPoints == 1
-                        && Enum.IsDefined(typeof(NarrativeCorpusDomain), e.CorpusDomain)
+                    bool opening = e.EventId == "narrative-opening-corpus" && e.ConversationId == DoctorId && e.CorpusPoints == 1;
+                    bool tutorialNine = e.EventId == "narrative-doctor-corpus-nine" && e.ConversationId == DoctorId
+                        && e.CorpusPoints == 9 && s.Tutorial >= TutorialStep.AwaitDoctorSecond;
+                    return (opening || tutorialNine) && Enum.IsDefined(typeof(NarrativeCorpusDomain), e.CorpusDomain)
                         && s.Memories.Any(m => m.Key == "opening" && (m.Value == "mew") == (e.CorpusDomain == NarrativeCorpusDomain.Writing));
                 case NarrativeEffectKind.RevealCenterMemory:
                     return e.EventId == "narrative-reveal-center" && e.RequiredCells == 1 && e.MemoryCount == 0 && s.Tutorial != TutorialStep.Opening;
                 case NarrativeEffectKind.QueueDoctorRequest:
-                    return e.EventId == "narrative-queue-doctor-first" && e.RequestId == FirstDoctorRequestId && e.ConversationId == DoctorId && e.RequiredCells == 1 && s.Tutorial >= TutorialStep.AwaitDoctorOrder;
+                    if (e.EventId == "narrative-queue-doctor-first")
+                        return e.RequestId == FirstDoctorRequestId && e.ConversationId == DoctorId && e.RequiredCells == 1
+                            && s.Tutorial >= TutorialStep.AwaitDoctorOrder;
+                    bool second = e.EventId == "narrative-queue-doctor-second" && e.RequestId == SecondDoctorRequestId
+                        && e.ConversationId == DoctorId && e.RequiredCells == 1 && e.Calculation == 20
+                        && e.MinimumAbility == 6 && e.ExcellentAbility >= 6 && s.Tutorial >= TutorialStep.AwaitDoctorSecond;
+                    bool third = e.EventId == "narrative-queue-doctor-third" && e.RequestId == ThirdDoctorRequestId
+                        && e.ConversationId == DoctorId && e.RequiredCells == 1 && e.Calculation == 20
+                        && e.MinimumAbility == 6 && e.ExcellentAbility >= 6 && s.Tutorial >= TutorialStep.AwaitDoctorThird;
+                    return (second || third) && Enum.IsDefined(typeof(NarrativeCorpusDomain), e.CorpusDomain)
+                        && s.Memories.Any(m => m.Key == "opening" && (m.Value == "mew") == (e.CorpusDomain == NarrativeCorpusDomain.Writing));
                 case NarrativeEffectKind.QueueOrdinaryRequest:
                     return e.EventId == "narrative-queue-ordinary-first" && e.RequestId == FirstOrdinaryRequestId && e.ConversationId == "narrative-first-visitor" && e.RequiredCells == 1 && s.Tutorial >= TutorialStep.AwaitOrdinaryOrder;
                 case NarrativeEffectKind.ShowUpgradeHint:
                     return e.EventId == "narrative-first-upgrade-hint" && s.Tutorial == TutorialStep.Complete;
+                case NarrativeEffectKind.GrantFunds:
+                    return e.EventId == "narrative-doctor-first-payment" && e.ConversationId == DoctorId && e.FundsAmount == 100
+                        && s.Tutorial >= TutorialStep.AwaitDoctorSecond;
                 case NarrativeEffectKind.IntroduceArchitecture:
                     return (e.MemoryCount == 1 || e.MemoryCount == 2 || e.MemoryCount == 4) && e.MemoryCount <= s.MemoryCount
                         && e.EventId == "narrative-architecture-" + e.MemoryCount
@@ -109,7 +128,8 @@ namespace CallmeCatgirl.Gameplay.Narrative
         }
         private static bool KnownNode(string node)
         {
-            if (new[] { "doctor.opening", "doctor.train", "doctor.first-order", "doctor.first-visitor", "doctor.first-income", "doctor.upgrade", "doctor.legacy",
+            if (new[] { "doctor.opening", "doctor.train", "doctor.first-order", "doctor.second-order", "doctor.corpus-nine", "doctor.third-order",
+                "doctor.first-visitor", "doctor.first-income", "doctor.upgrade", "doctor.legacy",
                 "companion.wait", "friend.wait", "ending.choose", "ending.low", "ending.normal", "ending.good", "ending.companion" }.Contains(node, StringComparer.Ordinal)) return true;
             if (Enumerable.Range(1, 5).Any(n => node == "stage." + n || node == "stage." + n + ".after")) return true;
             if (Enumerable.Range(1, 7).Any(n => node == "companion." + n || node == "companion." + n + ".after")) return true;

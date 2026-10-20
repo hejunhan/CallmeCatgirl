@@ -12,6 +12,8 @@ namespace CallmeCatgirl.Gameplay.Narrative
         public const string CompanionId = "narrative-lin";
         public const string StageContactId = "narrative-old-friend";
         public const string FirstDoctorRequestId = "narrative-doctor-first";
+        public const string SecondDoctorRequestId = "narrative-doctor-second";
+        public const string ThirdDoctorRequestId = "narrative-doctor-third";
         public const string FirstOrdinaryRequestId = "narrative-ordinary-first";
         private NarrativeSaveData state;
         public event Action Changed;
@@ -35,7 +37,8 @@ namespace CallmeCatgirl.Gameplay.Narrative
             get
             {
                 var contacts = new List<NarrativeContact> { new NarrativeContact(DoctorId, T("session.contact.doctor.name"), TutorialSummary(),
-                    state.Tutorial == TutorialStep.Opening || state.PendingStageNodes.Any(n => StageNumber(n) <= 2)) };
+                    state.Tutorial == TutorialStep.Opening || state.Tutorial == TutorialStep.AwaitDoctorSecond
+                    || state.Tutorial == TutorialStep.AwaitDoctorThird || state.PendingStageNodes.Any(n => StageNumber(n) <= 2)) };
                 if (state.PendingStageNodes.Any(n => StageNumber(n) >= 3) || state.MemoryCount >= 3)
                     contacts.Add(new NarrativeContact(StageContactId, T("session.contact.old-friend.name"), T("session.contact.old-friend.summary"), state.PendingStageNodes.Any(n => StageNumber(n) >= 3)));
                 if (state.CompanionUnlocked)
@@ -91,23 +94,53 @@ namespace CallmeCatgirl.Gameplay.Narrative
         {
             if (state.Tutorial != TutorialStep.AwaitTraining || !state.CenterCellRevealed || string.IsNullOrWhiteSpace(requestId) || state.EndingRequested) return false;
             state.LastTrainingRequestId = requestId;
-            state.Tutorial = TutorialStep.AwaitDoctorOrder;
-            Enqueue(RequestEffect("narrative-queue-doctor-first", NarrativeEffectKind.QueueDoctorRequest,
-                FirstDoctorRequestId, DoctorId, T("session.request.doctor-first.title"), T("session.request.doctor-first.description"), 1));
-            Show("doctor.first-order"); Publish(); return true;
+            state.Tutorial = TutorialStep.AwaitDoctorSecond;
+            state.ObservedCompletedRequestIds = state.ObservedCompletedRequestIds.Concat(new[] { FirstDoctorRequestId }).Distinct(StringComparer.Ordinal).ToArray();
+            // The first doctor request is narrative-only: no task is created, and the fixed event IDs make every reward once-only.
+            Enqueue(new NarrativeEffect { EventId = "narrative-doctor-first-payment", Kind = NarrativeEffectKind.GrantFunds,
+                ConversationId = DoctorId, FundsAmount = 100, Title = T("special.doctor.second-order.title") });
+            Enqueue(RequestEffect("narrative-queue-doctor-second", NarrativeEffectKind.QueueDoctorRequest,
+                SecondDoctorRequestId, DoctorId, T("session.request.doctor-second.title"), T("session.request.doctor-second.description"),
+                1, 20, 6, 9, 40, OpeningDomain()));
+            Enqueue(new NarrativeEffect { EventId = "narrative-doctor-corpus-nine", Kind = NarrativeEffectKind.GrantCorpus,
+                ConversationId = DoctorId, CorpusDomain = OpeningDomain(), CorpusPoints = 9,
+                Title = T("special.doctor.corpus-nine.title"), Description = T("special.doctor.corpus-nine.body") });
+            Show("doctor.second-order"); Publish(); return true;
         }
-        public bool ObserveRequestSettled(string requestId)
+        public bool ObserveRequestSettled(string requestId) => ObserveRequestSettled(requestId, true);
+        /// <summary>Quality is supplied by the host so tutorial orders can advance even when the first model is intentionally under the bar.</summary>
+        public bool ObserveRequestSettled(string requestId, bool completed)
         {
             if (string.IsNullOrWhiteSpace(requestId) || requestId == state.LastTrainingRequestId || state.EndingRequested
                 || state.ObservedCompletedRequestIds.Contains(requestId, StringComparer.Ordinal)) return false;
+            if (!completed && (requestId == FirstDoctorRequestId || requestId == FirstOrdinaryRequestId)) return false;
+            bool second = state.Tutorial == TutorialStep.AwaitDoctorSecond && requestId == SecondDoctorRequestId;
+            bool third = state.Tutorial == TutorialStep.AwaitDoctorThird && requestId == ThirdDoctorRequestId;
             bool tutorial = state.Tutorial == TutorialStep.AwaitDoctorOrder && requestId == FirstDoctorRequestId
-                || state.Tutorial == TutorialStep.AwaitOrdinaryOrder && requestId == FirstOrdinaryRequestId;
-            if (!tutorial && (requestId == FirstDoctorRequestId || requestId == FirstOrdinaryRequestId)) return false;
+                || state.Tutorial == TutorialStep.AwaitOrdinaryOrder && requestId == FirstOrdinaryRequestId
+                || second || third;
+            if (!tutorial && (requestId == FirstDoctorRequestId || requestId == SecondDoctorRequestId
+                || requestId == ThirdDoctorRequestId || requestId == FirstOrdinaryRequestId)) return false;
             bool meeting = state.CompanionUnlocked && !state.CompanionMeetingReady && state.CompanionBeat >= 2 && state.CompanionBeat <= 7
                 && (state.CurrentNode == "companion.wait" || !(state.CurrentNode ?? "").StartsWith("companion.", StringComparison.Ordinal));
             // The host may report other genuine settlements; record them to make later polling/reloading harmless.
             state.ObservedCompletedRequestIds = state.ObservedCompletedRequestIds.Concat(new[] { requestId }).ToArray();
-            if (state.Tutorial == TutorialStep.AwaitDoctorOrder && requestId == FirstDoctorRequestId)
+            if (second)
+            {
+                // The second order is the failure demonstration; the third is queued once a model meets its explicit bar.
+                state.Tutorial = TutorialStep.AwaitDoctorThird;
+                Enqueue(RequestEffect("narrative-queue-doctor-third", NarrativeEffectKind.QueueDoctorRequest,
+                    ThirdDoctorRequestId, DoctorId, T("session.request.doctor-third.title"), T("session.request.doctor-third.description"),
+                    1, 20, 6, 9, 100, OpeningDomain()));
+            }
+            else if (third)
+            {
+                state.Tutorial = TutorialStep.AwaitOrdinaryOrder;
+                Enqueue(RequestEffect("narrative-queue-ordinary-first", NarrativeEffectKind.QueueOrdinaryRequest,
+                    FirstOrdinaryRequestId, "narrative-first-visitor", T("session.request.ordinary-first.title"), T("session.request.ordinary-first.description"), 1));
+                Show("doctor.first-visitor");
+            }
+            else if (state.Tutorial == TutorialStep.AwaitDoctorOrder && requestId == FirstDoctorRequestId)
             {
                 state.Tutorial = TutorialStep.AwaitOrdinaryOrder;
                 Enqueue(RequestEffect("narrative-queue-ordinary-first", NarrativeEffectKind.QueueOrdinaryRequest,
@@ -265,9 +298,15 @@ namespace CallmeCatgirl.Gameplay.Narrative
             if (state.AcknowledgedEventIds.Contains(effect.EventId, StringComparer.Ordinal) || state.PendingEffects.Any(e => e.EventId == effect.EventId)) return;
             state.PendingEffects = state.PendingEffects.Concat(new[] { effect }).ToArray();
         }
-        private static NarrativeEffect RequestEffect(string eventId, NarrativeEffectKind kind, string requestId, string conversationId, string title, string text, int cells)
+        private static NarrativeEffect RequestEffect(string eventId, NarrativeEffectKind kind, string requestId, string conversationId, string title, string text, int cells,
+            double calculation = 0, double minimumAbility = 0, double excellentAbility = 0, double rewardTokens = 0,
+            NarrativeCorpusDomain domain = NarrativeCorpusDomain.Writing)
             => new NarrativeEffect { EventId = eventId, Kind = kind, RequestId = requestId, ConversationId = conversationId,
-                Title = title, Description = text, RequiredCells = cells };
+                Title = title, Description = text, RequiredCells = cells, Calculation = calculation,
+                MinimumAbility = minimumAbility, ExcellentAbility = excellentAbility, RewardTokens = rewardTokens, CorpusDomain = domain };
+        private NarrativeCorpusDomain OpeningDomain()
+            => state.Memories.FirstOrDefault(m => m.Key == "opening")?.Value == "accept"
+                ? NarrativeCorpusDomain.Reasoning : NarrativeCorpusDomain.Writing;
         private static void CheckMemory(int count)
         { if (count < 0 || count > 5) throw new ArgumentOutOfRangeException(nameof(count), "Installed memory count must be within 0..5."); }
         private static int StageNumber(string node)
@@ -279,6 +318,8 @@ namespace CallmeCatgirl.Gameplay.Narrative
                 case TutorialStep.Opening: return "doctor.opening";
                 case TutorialStep.AwaitTraining: return "doctor.train";
                 case TutorialStep.AwaitDoctorOrder: return "doctor.first-order";
+                case TutorialStep.AwaitDoctorSecond: return "doctor.corpus-nine";
+                case TutorialStep.AwaitDoctorThird: return "doctor.third-order";
                 case TutorialStep.AwaitOrdinaryOrder: return "doctor.first-visitor";
                 case TutorialStep.AwaitUpgradeFunds: return "doctor.first-income";
                 default: return "doctor.legacy";
@@ -291,6 +332,8 @@ namespace CallmeCatgirl.Gameplay.Narrative
                 case TutorialStep.Opening: return T("session.tutorial.opening");
                 case TutorialStep.AwaitTraining: return T("session.tutorial.training");
                 case TutorialStep.AwaitDoctorOrder: return T("session.tutorial.doctor-order");
+                case TutorialStep.AwaitDoctorSecond: return T("session.tutorial.doctor-second");
+                case TutorialStep.AwaitDoctorThird: return T("session.tutorial.doctor-third");
                 case TutorialStep.AwaitOrdinaryOrder: return T("session.tutorial.ordinary-order");
                 case TutorialStep.AwaitUpgradeFunds: return T("session.tutorial.upgrade-funds");
                 default: return T("session.tutorial.complete");

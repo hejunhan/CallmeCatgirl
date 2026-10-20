@@ -63,7 +63,9 @@ namespace CallmeCatgirl.UI
                 else draft.SetPoints(item.ConversationId,Math.Min(item.Points,available));
             }
             if(recipe==null||!session.Recipes.Any(r=>r.Id==recipe)||(recipe==TrainingSession.StarterRecipeId&&!session.StarterTrainingAvailable))
-                recipe=session.StarterTrainingAvailable?TrainingSession.StarterRecipeId:session.Recipes.First(r=>r.Id!=TrainingSession.StarterRecipeId).Id;
+                recipe=session.CompactTrainingAvailable?TrainingSession.TutorialCorpusRecipeId
+                    :session.StarterTrainingAvailable?TrainingSession.StarterRecipeId
+                    :session.Recipes.First(r=>r.Id!=TrainingSession.StarterRecipeId).Id;
             if(architecture==null||session.ArchitectureAvailability(architecture)!=TrainingResult.Success)
                 architecture=session.Architectures.First(a=>session.ArchitectureAvailability(a.Id)==TrainingResult.Success).Id;
             RefreshPickers();RefreshInventory();RefreshDraft();

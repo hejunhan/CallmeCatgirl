@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CallmeCatgirl.Gameplay.GameplayConfiguration
   AbilityInterval: 3
   ModelPoints: {x: 1, y: 1, z: 1, w: 0}
-  PlaybackSpeed: 0.5
+  PlaybackSpeed: 1
   Requests:
   - Id: A
     Title: "\u5199\u4F5C\u8BF7\u6C42"
@@ -54,14 +54,14 @@ MonoBehaviour:
     Tokens: 30
     Minimum: {x: 4, y: 1, z: 1}
     Excellent: {x: 8, y: 2, z: 2}
-  InitialFunds: 1500
+  InitialFunds: 0
   MemoryUpgrades: {fileID: 11400000, guid: d19834b4bb6a4df7b7fe6cb998f98fae, type: 2}
   Story: {fileID: 11400000, guid: 7097ee7307375ad4e88ce31b0180cfb9, type: 2}
   OrdinaryDialoguePool: {fileID: 11400000, guid: 31136a355efd44ce95b340eb79406ce5, type: 2}
   TokenPrice: 1
-  MonthlyMaintenanceFee: 1500
+  MonthlyMaintenanceFee: 350
   SecondsPerGameDay: 120
-  DaysPerGameMonth: 30
+  DaysPerGameMonth: 7
   TaskGeneration: {fileID: 11400000, guid: 49bdc014938d4bc6a5609a1599f80ebf, type: 2}
   InitialAffinity: 0
   SuccessAffinity: 1

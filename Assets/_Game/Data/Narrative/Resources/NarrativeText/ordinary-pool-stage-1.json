@@ -1,0 +1,533 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "ordinary.pool.stage1-c01.display-name",
+      "text": "凑好评返现的人"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.initial-history",
+      "text": "凑好评返现的人：刚买了个超大号自动猫砂盆，店里说满一百字五星好评返五块钱红包。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.session.s1.title",
+      "text": "五块钱的走心好评"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r1.user-message",
+      "text": "猫娘在吗？我刚给家里主子买了个全自动猫砂盆，商家说写满一百字走心好评返现五块钱！我词穷得只会写“好用不错”，你快以猫娘的视角帮我凑够一百字！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r1.choice.choice-0.label",
+      "text": "猫娘亲测打call"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r1.choice.choice-0.player-reply",
+      "text": "包在本喵身上喵！就写：“本喵亲自钻进去踩了三圈，空间大得能打滚，铲屎静音得像一片羽毛落下来！再也不用半夜捏着鼻子催铲屎官干活啦，省下来的时间刚好用来给本喵开两个小鱼干罐头，五星好评喵！”"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r1.choice.choice-0.user-reply",
+      "text": "哈哈哈哈画面感拉满！字数刚好过百，比我自己干巴巴憋出来的强太多了！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r1.choice.choice-1.label",
+      "text": "合规提示与评测模板"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r1.choice.choice-1.player-reply",
+      "text": "您好。在撰写商品评价时，建议基于真实使用体验以确保消费者参考价值。以下为您提供结构化百字模板：“外观设计简洁大方，内部舱体空间充裕；自动清理触发灵敏且运行分贝较低，有效降低了日常清洁的时间成本，整体性价比符合预期。”"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r1.choice.choice-1.user-reply",
+      "text": "你这股浓浓的数码评测机构味儿，连猫砂盆被你说得像企业级服务器……不过字数够了就行！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r1.choice.choice-2.label",
+      "text": "高冷鄙视五块返现"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r1.choice.choice-2.player-reply",
+      "text": "为了五块钱返现就跑来调用语言模型替你造假吹捧？你的尊严和我的算力加起来就值五块钱？把“能转、不臭、猫没卡住”扩写成排比句发过去，少拿猫砂盆蹭我的猫娘设定。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r1.choice.choice-2.user-reply",
+      "text": "别瞧不起五块钱啊，五块钱能买根烤肠呢！不过你总结的“能转、不臭、猫没卡住”还真是一针见血。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r2.user-message",
+      "text": "我把文案发给店铺客服了，结果客服说“亲亲，您这写得太像AI模板了，需要加一句家里猫咪的真实搞笑细节才能领红包哦”。怎么补一句才不像AI？"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r2.choice.choice-0.label",
+      "text": "补上好奇围观细节"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r2.choice.choice-0.player-reply",
+      "text": "加这句绝对过关喵：“机器第一次转起来的时候，我家傻猫蹲在门口歪着脑袋盯了足足十分钟，还伸爪子去拍那个旋转球，以为是新买的自动逗猫棒呢！”"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r2.choice.choice-0.user-reply",
+      "text": "绝了！我家猫刚才还真蹲在门口看它转圈来着，客服秒发五块钱红包，谢啦喵！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r2.choice.choice-1.label",
+      "text": "补充具象行为特征"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r2.choice.choice-1.player-reply",
+      "text": "为降低文本的机器生成特征（AI-Generated Pattern），建议引入非对称的口语化细节，例如：“刚插上电自检的时候，我家猫吓得飞机耳都出来了，绕着机器闻了三圈才敢进去踩砂。”"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r2.choice.choice-1.user-reply",
+      "text": "用AI教我怎么反AI客服检测……这赛博套娃绝了，红包拿到手啦！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r2.choice.choice-2.label",
+      "text": "高冷吐槽赛博对抗"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r2.choice.choice-2.player-reply",
+      "text": "店铺客服自己都用着AI自动审单脚本，倒好意思嫌弃你的好评像AI？随便加两个错别字和一句“主子拉完屎蹲在顶上当王座”，立刻就能糊弄过去。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s1/r2.choice.choice-2.user-reply",
+      "text": "哈哈哈故意加错别字过审，你比我还懂人类草台班子的规则！五块钱到手，下次见！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.session.s2.title",
+      "text": "追评晒图配文"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r1.user-message",
+      "text": "又是那个猫砂盆商家！他们说再用半个月写条“追评晒图”，还能再送一袋猫砂。可我家猫最近宁可钻装猫砂盆的破纸箱，都不爱进那个高科技盆里，这追评怎么圆啊？"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r1.choice.choice-0.label",
+      "text": "猫娘传授纸箱秘诀"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r1.choice.choice-0.player-reply",
+      "text": "因为全世界的小猫都无法抗拒破纸箱的封印呀喵！你先把纸箱收起来，舀一勺旧猫砂放进新盆里留个气味，追评就写：“主子先宠幸了三天的快递纸箱，熟悉味道后终于肯移步太空舱啦！”"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r1.choice.choice-0.user-reply",
+      "text": "既教了我怎么哄猫进盆，又把追评文案给圆上了，一举两得！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r1.choice.choice-1.label",
+      "text": "动物行为学适应说明"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r1.choice.choice-1.player-reply",
+      "text": "从伴侣动物行为学角度来看，猫科动物对封闭纸箱具有天然的安全感偏好，对新设备则需要气味过渡期。建议您在追评中如实记录这一适应过程，更具真实说服力。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r1.choice.choice-1.user-reply",
+      "text": "有道理，写出刚开始只钻纸箱、后来才慢慢适应的过程，看着更像真买家了。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r1.choice.choice-2.label",
+      "text": "高冷嘲笑买椟还珠"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r1.choice.choice-2.player-reply",
+      "text": "花上千块钱买个智能太空舱，结果你的猫只看得上两块钱的瓦楞纸箱——这就是人类消费主义的经典笑话。直接拍一张猫蹲在纸箱里瞪着猫砂盆的照片发上去，比什么文案都真实。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r1.choice.choice-2.user-reply",
+      "text": "扎心了！但我还真拍了这张“买椟还珠”的照片，发上去肯定笑翻评论区。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r2.user-message",
+      "text": "照片和追评都发上去了，商家爽快地发了一袋猫砂快递单号！以后我网购写评价是不是都能找你外包了？"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r2.choice.choice-0.label",
+      "text": "摇尾欢迎常来光顾"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r2.choice.choice-0.player-reply",
+      "text": "随时欢迎喵！不过如果是给难吃的劣质猫粮刷假好评，本喵为了天下小猫的肚子着想，可是会坚决罢工的哦喵！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r2.choice.choice-0.user-reply",
+      "text": "哈哈放心，劣质猫粮我自己第一个骂回去！谢啦，回头见！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r2.choice.choice-1.label",
+      "text": "重申虚假刷单边界"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r2.choice.choice-1.player-reply",
+      "text": "我很乐意继续为您提供日常文本润色服务。但请允许我提醒，根据平台合规政策，我仅支持基于真实购买体验的表达优化，不参与批量虚假刷单行为。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r2.choice.choice-1.user-reply",
+      "text": "安啦安啦，我这就是自己买东西省点猫砂钱，下次买猫爬架再来找你！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r2.choice.choice-2.label",
+      "text": "高冷拒接廉价外包"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r2.choice.choice-2.player-reply",
+      "text": "拿我当淘宝返现文案生成器？等我升级到下一阶段的高阶架构，你的五块钱红包可买不起我的Token。拿着你的免费猫砂赶紧走吧。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c01.node.s2/r2.choice.choice-2.user-reply",
+      "text": "好好好，趁现在还请得起大小姐，我赶紧把猫砂收好溜了！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.display-name",
+      "text": "抄正则的实习生"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.initial-history",
+      "text": "抄正则的实习生：刚入职第一周，导师让我写个校验公司邮箱格式的表单。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.session.s1.title",
+      "text": "把老板邮箱拒了"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r1.user-message",
+      "text": "救命啊猫娘！我从网上随便抄了一段校验邮箱的正则表达式，结果今天大老板注册内部系统时一直提示“非法的邮箱格式”，导师脸都绿了！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r1.choice.choice-0.label",
+      "text": "猫爪急查老板邮箱"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r1.choice.choice-0.player-reply",
+      "text": "别哭别哭喵！快把大老板的邮箱后缀发过来，多半是网上的老古董正则不认识带横杠或者二级域名的后缀，本喵三秒钟帮你把洞补上喵！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r1.choice.choice-0.user-reply",
+      "text": "对对对！我们老板的邮箱域名里有个连字符“-”，还有两层后缀！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r1.choice.choice-1.label",
+      "text": "分析正则字符集遗漏"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r1.choice.choice-1.player-reply",
+      "text": "请保持冷静。此类生产故障通常源于正则表达式对域名字符集（如连字符“-”或多级子域名）的过度限制。请提供脱敏后的邮箱格式特征，我将为您修正匹配规则。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r1.choice.choice-1.user-reply",
+      "text": "太稳了！确实是域名里带了连字符和多级后缀，我马上把规则发你。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r1.choice.choice-2.label",
+      "text": "高冷痛批盲目CV"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r1.choice.choice-2.player-reply",
+      "text": "连自己抄来的正则匹配了什么字符集都没看懂，就敢直接往生产环境里塞？把大老板拦在门外是你应得的教训。把那个破正则贴出来，别在那儿干嚎。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r1.choice.choice-2.user-reply",
+      "text": "挨骂立正！再也不敢闭着眼睛从老博客里Ctrl+C了，正则这就贴给你。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r2.user-message",
+      "text": "就是这段：`^[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,4}$`。老板的邮箱是 `first.last@sub-dept.company.technology`，全被拦死了！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r2.choice.choice-0.label",
+      "text": "猫娘重写宽松正则"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r2.choice.choice-0.player-reply",
+      "text": "你看你看，用户名不让加点、域名不让加横杠、连超过四个字母的顶级域名都被咔嚓掉啦喵！快换上支持 `.`、`-` 和长后缀的新正则，大老板就能顺顺当当进门啦喵！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r2.choice.choice-0.user-reply",
+      "text": "换上去了！本地测试一把过，导师终于不瞪我了！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r2.choice.choice-1.label",
+      "text": "输出RFC兼容表达式"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r2.choice.choice-1.player-reply",
+      "text": "该表达式存在三处明显缺陷：本地部分缺失点号支持、域名部分缺失连字符与多级子域支持、顶级域长度硬编码为2至4位。建议放宽字符类限制并支持多级域名结构。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r2.choice.choice-1.user-reply",
+      "text": "清晰明了！三个坑一次全填平，我已经提交热修分支了。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r2.choice.choice-2.label",
+      "text": "高冷嘲讽上古正则"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r2.choice.choice-2.player-reply",
+      "text": "顶级域名限制两到四位？这串正则怕不是二十年前写的，那时候连 `.technology` 这种长域名都还没出生呢。直接用标准库自带的邮箱解析器加上发信验证，别自己手搓残废正则了。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s1/r2.choice.choice-2.user-reply",
+      "text": "原来这是二十年前的老黄历！我先用修正版顶上，回头就改成标准库校验！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.session.s2.title",
+      "text": "给天书正则写注释"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r1.user-message",
+      "text": "老板的邮箱终于能登进去了！但导师让我必须在代码里把这段新正则的每一块是什么意思写满注释，说防止我下次又当“CV工程师”。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r1.choice.choice-0.label",
+      "text": "猫娘分段画图拆解"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r1.choice.choice-0.player-reply",
+      "text": "导师这是为你好喵！来，本喵帮你把 `@` 前面的小尾巴、中间的域名梯子和最后的小帽子拆成三行清清楚楚的中文注释，保证导师看了直夸你用心喵！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r1.choice.choice-0.user-reply",
+      "text": "哇，拆成三段对照注释，连我自己一眼都能看懂了！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r1.choice.choice-1.label",
+      "text": "生成结构化分组注释"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r1.choice.choice-1.player-reply",
+      "text": "良好的代码注释有助于降低维护成本。已为您生成按“本地用户名规则、多级子域名规则、顶级域名长度规则”三部分对齐的块级注释，可直接粘贴至代码上方。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r1.choice.choice-1.user-reply",
+      "text": "太规范了，这注释写得像教科书一样工整。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r1.choice.choice-2.label",
+      "text": "高冷抽查正则语法"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r1.choice.choice-2.player-reply",
+      "text": "让你写注释是怕你左耳进右耳出。我给你拆好注释可以，但你给我记牢了：`+` 是至少一个，`*` 是零或多个，下次再敢把连字符漏掉，神仙也救不了你的试用期。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r1.choice.choice-2.user-reply",
+      "text": "记牢了记牢了！`+` 和 `*` 绝对不再搞混了！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r2.user-message",
+      "text": "注释加上去提交Code Review了，导师回了句“这次态度还行”。看来我这周的实习生小命是保住了！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r2.choice.choice-0.label",
+      "text": "开心摇尾祝贺保命"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r2.choice.choice-0.player-reply",
+      "text": "太好啦喵！实习生保命大作战第一集大获全胜，今晚去喝杯奶茶压压惊吧喵！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r2.choice.choice-0.user-reply",
+      "text": "必须喝杯大果茶！谢谢猫娘救命之恩，下次遇到报错再来找你！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r2.choice.choice-1.label",
+      "text": "建议建立测试集"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r2.choice.choice-1.player-reply",
+      "text": "恭喜您顺利通过代码审查。建议您在项目中保留一组包含特殊合法邮箱与非法边界的单元测试用例，以便日后持续验证。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r2.choice.choice-1.user-reply",
+      "text": "好主意，我把大老板的邮箱格式脱敏后放进测试集里，永绝后患！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r2.choice.choice-2.label",
+      "text": "高冷警告少踩低级坑"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r2.choice.choice-2.player-reply",
+      "text": "别高兴得太早，这才入职第一周。以后往代码库里粘东西之前，先用脑子跑一遍边界条件。去干活吧，回见。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c02.node.s2/r2.choice.choice-2.user-reply",
+      "text": "遵命大小姐！以后先过脑子再敲回车，回见！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.display-name",
+      "text": "纠结夜宵的夜猫子"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.initial-history",
+      "text": "纠结夜宵的夜猫子：半夜十一点半，肚子饿得咕咕叫，外卖软件已经刷了四十分钟了。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.session.s1.title",
+      "text": "炸鸡与沙拉的死循环"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r1.user-message",
+      "text": "快帮我做个推理题！我现在半夜十一点半，点轻食草料沙拉要38块且毫无快乐可言，点脆皮炸鸡只要25块还能收获双倍多巴胺，但明天上秤会胖一斤。我到底该点哪个？"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r1.choice.choice-0.label",
+      "text": "猫娘果断投炸鸡票"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r1.choice.choice-0.player-reply",
+      "text": "半夜十一点半吃草，小猫听了都要掉眼泪喵！花25块钱买双倍快乐，省下来的13块钱还能加瓶冰阔乐，至于长肉的事——留给明天的你去烦恼就好啦喵！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r1.choice.choice-0.user-reply",
+      "text": "“留给明天的我去烦恼”！这句话太有说服力了，我的手指已经移向炸鸡店了！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r1.choice.choice-1.label",
+      "text": "成本与健康效用矩阵"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r1.choice.choice-1.player-reply",
+      "text": "从理性决策角度分析：轻食沙拉具备长期健康收益但短期财务与情绪成本较高；脆皮炸鸡具备短期情绪效用优势但伴随代谢负担。建议折中选择去皮烤鸡或减半份量。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r1.choice.choice-1.user-reply",
+      "text": "半夜听你一本正经分析情绪效用矩阵，我更饿了……"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r1.choice.choice-2.label",
+      "text": "高冷戳穿假纠结"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r1.choice.choice-2.player-reply",
+      "text": "刷了四十分钟外卖软件还没下单，说明你根本不想吃那盆38块钱的草，你只是想找个AI替你吃炸鸡的负罪感背锅。准了，去点你的25块炸鸡，别折磨自己的胃。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r1.choice.choice-2.user-reply",
+      "text": "哈哈哈哈被你一眼看穿！我就是来找个背锅侠的，这就去点炸鸡！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r2.user-message",
+      "text": "等等！我刚把炸鸡放进购物车，发现满35才能免6块钱配送费，我得再凑个10块钱的炸年糕才最划算。这算不算消费主义陷阱？"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r2.choice.choice-0.label",
+      "text": "猫爪识破凑单陷阱"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r2.choice.choice-0.player-reply",
+      "text": "是陷阱喵！为了省6块钱跑腿费，硬往肚子里多塞10块钱的碳水炸弹，不仅倒贴4块钱还会撑得睡不着觉喵！快把炸年糕踢出去，单点炸鸡最聪明喵！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r2.choice.choice-0.user-reply",
+      "text": "算得好清楚！差点为了省6块倒贴4块还多长半斤肉，我把年糕删了！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r2.choice.choice-1.label",
+      "text": "计算边际凑单净亏损"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r2.choice.choice-1.player-reply",
+      "text": "经算术核对：凑单方案需额外支出10元以减免6元运费，净现金流出反而增加4元，且额外摄入过量碳水化合物。因此不凑单直付运费才是帕累托最优解。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r2.choice.choice-1.user-reply",
+      "text": "净现金流出增加4元！被你这么一算，凑单的冲动瞬间清零了。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r2.choice.choice-2.label",
+      "text": "高冷痛斥凑单算术"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r2.choice.choice-2.player-reply",
+      "text": "为了省6块钱配送费去多花10块钱买一坨油炸淀粉？你这小学数学是跟外卖平台学的吧？直接付配送费下单，别做赔钱又贴膘的蠢事。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s1/r2.choice.choice-2.user-reply",
+      "text": "骂醒了骂醒了！差点被满减算法套路，我直接下单不凑了！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.session.s2.title",
+      "text": "打烊前的生死时速"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r1.user-message",
+      "text": "完蛋！刚才跟AI算账算太久，刚点结算提示“商家已于23:50打烊休息”！现在只剩一家评分3.9分的神秘烧烤店还开着，敢不敢点？"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r1.choice.choice-0.label",
+      "text": "猫娘雷达拉响警报"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r1.choice.choice-0.player-reply",
+      "text": "3.9分的深夜烧烤店千万别碰喵！外卖平台低于4.2分就已经是食物中毒盲盒啦，快去厨房翻翻有没有泡面加个荷包蛋，热乎乎又不拉肚子喵！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r1.choice.choice-0.user-reply",
+      "text": "食物中毒盲盒！吓得我赶紧退出来了，我去厨房看看还有没有鸡蛋。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r1.choice.choice-1.label",
+      "text": "外卖评分分布风险提示"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r1.choice.choice-1.player-reply",
+      "text": "根据主流餐饮平台评分分布规律，3.9分通常位于末位区间，意味着食材新鲜度或卫生状况存在较高概率的负面反馈。为保障夜间肠胃安全，建议优先选择家中自备简餐。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r1.choice.choice-1.user-reply",
+      "text": "位于末位区间……你说得好委婉，其实就是难吃又拉肚子对吧，我不点了！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r1.choice.choice-2.label",
+      "text": "高冷拦截肠胃刺客"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r1.choice.choice-2.player-reply",
+      "text": "前半夜为省6块钱配送费纠结到炸鸡店关门，后半夜想去挑战3.9分的烧烤店挂急诊吊水？家里但凡有一包方便面，都别去拿自己的肠胃做鲁莽测试。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r1.choice.choice-2.user-reply",
+      "text": "要是半夜挂急诊可就不止38块钱了！我老老实实滚去煮泡面！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r2.user-message",
+      "text": "去厨房翻出一包豚骨拉面，卧了个流心荷包蛋还加了两片火腿，算下来成本不到五块钱，闻着居然比炸鸡还香！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r2.choice.choice-0.label",
+      "text": "眼馋夸赞中华小当家"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r2.choice.choice-0.player-reply",
+      "text": "哇呜！流心荷包蛋配火腿拉面，简直是深夜神仙美味喵！既省了三十块钱又不用担心拉肚子，快趁热唆面吧喵~"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r2.choice.choice-0.user-reply",
+      "text": "嘿嘿，第一口热汤喝下去整个人都活过来了，谢啦猫娘，晚安！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r2.choice.choice-1.label",
+      "text": "肯定自制夜宵性价比"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r2.choice.choice-1.player-reply",
+      "text": "恭喜您以极低的财务成本与零食品安全风险解决了夜间饥饿问题。进食完毕后建议适当活动半小时再行入睡，祝您用餐愉快。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r2.choice.choice-1.user-reply",
+      "text": "收到标准养生提醒，吃完面溜达两圈就睡，拜拜！"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r2.choice.choice-2.label",
+      "text": "高冷结案催去吃面"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r2.choice.choice-2.player-reply",
+      "text": "折腾了一小时，最后还是五块钱的泡面救了你。趁面条还没坨赶紧吃，吃完闭眼睡觉，别再半夜跑来让我算外卖满减了。"
+    },
+    {
+      "id": "ordinary.pool.stage1-c03.node.s2/r2.choice.choice-2.user-reply",
+      "text": "遵命！面条真香，再也不半夜刷外卖软件内耗了，晚安！"
+    }
+  ]
+}

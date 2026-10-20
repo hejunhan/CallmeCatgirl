@@ -12,6 +12,7 @@ namespace CallmeCatgirl.Gameplay
         public int DebtAmount { get; private set; }
         public bool IsInGracePeriod { get; private set; }
         public bool IsBankrupt { get; private set; }
+        public bool DebugIgnoreSpending { get; set; }
         public event Action<int> OnFundsChanged;
         public event Action<string> OnEconomyLog;
         private readonly HashSet<string> settledRequests = new HashSet<string>();
@@ -42,12 +43,18 @@ namespace CallmeCatgirl.Gameplay
         public bool TrySpendFunds(int amount)
         {
             if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));
+            if (DebugIgnoreSpending) return true;
             if (IsBankrupt || CurrentFunds < amount) return false;
             CurrentFunds -= amount; OnFundsChanged?.Invoke(CurrentFunds); return true;
         }
         public bool SettleMonth(int fee)
         {
             if (fee < 0) throw new ArgumentOutOfRangeException(nameof(fee));
+            if (DebugIgnoreSpending)
+            {
+                DebtAmount = 0; IsInGracePeriod = false; IsBankrupt = false;
+                OnEconomyLog?.Invoke("调试忽略月底扣费。"); return true;
+            }
             if (IsBankrupt) return false;
             int required = checked(DebtAmount + fee);
             if (CurrentFunds >= required)

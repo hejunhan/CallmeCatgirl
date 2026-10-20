@@ -31,7 +31,9 @@ namespace CallmeCatgirl.Gameplay.Training
             if (!ReferenceEquals(bound, controller.Session))
             {
                 bound = controller.Session; selected.Clear();
-                recipeId = bound.Recipes[0].Id; architectureId = bound.Architectures[0].Id;
+                recipeId = bound.CompactTrainingAvailable ? TrainingSession.TutorialCorpusRecipeId
+                    : bound.StarterTrainingAvailable ? TrainingSession.StarterRecipeId : bound.Recipes[0].Id;
+                architectureId = bound.Architectures[0].Id;
             }
             if (!IsOpen)
             {
@@ -76,14 +78,17 @@ namespace CallmeCatgirl.Gameplay.Training
                 if (GUILayout.Button("确认训练产物 · " + job.Output.Name)) controller.CompleteTraining(job.RequestId);
             }
             GUI.enabled = controller.CanManage && controller.Simulation.Paused;
-            GUILayout.Label("模型目录（旧模型保留；换模后全部在场模块退候选，已判质结果不变）");
+            GUILayout.Label(bound.Models.Count == 0
+                ? "尚无模型。完成第一次训练后会创建第一台模型。"
+                : "模型目录（旧模型保留；换模后全部在场模块退候选，已判质结果不变）");
             foreach (var model in bound.Models)
             {
                 GUILayout.Label(model.Name + " · " + model.ArchitectureId + " · 每 " + model.Definition.Interval
                     + "s 产出 " + Points(model.Definition.Points) + (bound.ActiveModelId == model.Id ? " [当前]" : ""));
                 if (GUILayout.Button("选择 " + model.Name)) controller.SelectModel(model.Id);
             }
-            GUILayout.Label("算力 " + bound.Compute.Id + " · 当前 " + bound.TokensPerSecond.ToString("0.##") + " token/s /任务");
+            GUILayout.Label("算力 " + bound.Compute.Id + " · 当前 " + bound.TokensPerSecond.ToString("0.##")
+                + " token/s /任务" + (bound.ActiveModelId == null ? "（尚无模型，使用基础算力）" : ""));
             if (bound.NextCompute != null && GUILayout.Button("升级算力 · " + bound.NextCompute.TokensPerSecond
                 + " 基础token/s · 费用 " + bound.NextCompute.UpgradeCost)) controller.UpgradeCompute();
             GUI.enabled = true; GUILayout.EndScrollView(); GUILayout.EndArea();

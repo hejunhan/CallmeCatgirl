@@ -61,16 +61,22 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
 
         public bool TryCreate(string requestId, string conversationId, string roundId, TaskDefinition definition,
             out TaskInstance task)
+            => TryCreate(requestId, conversationId, roundId, definition, null, out task);
+
+        /// <summary>Filler visitors share the queue conversation id; story/operating tasks keep one active task per user.</summary>
+        public bool TryCreate(string requestId, string conversationId, string roundId, TaskDefinition definition,
+            VisitorIdentity visitor, out TaskInstance task)
         {
             task = null;
             if (string.IsNullOrWhiteSpace(requestId) || string.IsNullOrWhiteSpace(conversationId)
                 || string.IsNullOrWhiteSpace(roundId) || definition == null) return false;
             var key = Tuple.Create(conversationId, roundId);
+            bool sharesConversation = visitor != null;
             if (tasks.ContainsKey(requestId) || roundRequests.ContainsKey(key)
-                || activeConversations.ContainsKey(conversationId)) return false;
-            task = new TaskInstance(requestId, conversationId, roundId, definition, GameTime);
+                || (!sharesConversation && activeConversations.ContainsKey(conversationId))) return false;
+            task = new TaskInstance(requestId, conversationId, roundId, definition, GameTime) { Visitor = visitor };
             tasks.Add(requestId, task); roundRequests.Add(key, requestId);
-            activeConversations.Add(conversationId, requestId);
+            if (!sharesConversation) activeConversations.Add(conversationId, requestId);
             Emit(TaskEventKind.Arrived, task, GameTime);
             return true;
         }

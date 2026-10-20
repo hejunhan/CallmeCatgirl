@@ -10,18 +10,18 @@ namespace CallmeCatgirl.Gameplay
     {
         [Min(0.1f)] public float AbilityInterval = 3;
         public Vector4 ModelPoints = new Vector4(4, 1, 1, 0);
-        [Range(0.1f, 2)] public float PlaybackSpeed = 0.5f;
+        [Range(1f, 4f)] public float PlaybackSpeed = 1f;
         public DemoTask[] Requests;
-        [Min(0), InspectorName("初始资金"), Tooltip("新开局或重开时读取，可在主配置资源中调整。")] public int InitialFunds = 1500;
+        [Min(0), InspectorName("初始资金"), Tooltip("新局构造后立即清零；保留字段用于测试与直接构造。")] public int InitialFunds = 0;
         [InspectorName("内存配置"), Tooltip("棋盘布局、初始开放格子及升级规则都在这份配置中。")]
         public MemoryUpgradeConfiguration MemoryUpgrades;
         [InspectorName("原有会话配置（由角色类型区分普通与剧情）")] public StoryConfiguration Story;
         [InspectorName("普通随机对话池（替换普通试玩内容，剧情不受影响）")] public StoryConfiguration OrdinaryDialoguePool;
         [Min(0), InspectorName("每Token收入单价")] public int TokenPrice = 1;
-        [Min(0), InspectorName("每月维护费")] public int MonthlyMaintenanceFee = 1500;
+        [Min(0), InspectorName("7天维护费"), Tooltip("每 7 天扣一次；当前 350 为暂定值，按原 1500/30 天的日均 50 摊平，待平衡确认。")] public int MonthlyMaintenanceFee = 350;
         [Min(0.1f), InspectorName("每天游戏秒数"), Tooltip("游戏时间，受暂停和倍速影响。120秒为一天。")]
         public float SecondsPerGameDay = 120;
-        [Min(1), InspectorName("每月天数")] public int DaysPerGameMonth = 30;
+        [Min(1), InspectorName("维护周期天数")] public int DaysPerGameMonth = 7;
         public float SecondsPerGameMonth => SecondsPerGameDay * DaysPerGameMonth;
         [InspectorName("任务生成与方块配置")] public TaskGenerationConfiguration TaskGeneration;
         [Header("角色亲密度（重开生效，允许负值）")]

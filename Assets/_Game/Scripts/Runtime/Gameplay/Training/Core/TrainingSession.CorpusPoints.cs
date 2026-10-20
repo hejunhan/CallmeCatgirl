@@ -127,6 +127,7 @@ namespace CallmeCatgirl.Gameplay.Training
         {
             job=null;
             if(busy)return TrainingResult.Busy;
+            if(recipeId==TutorialCorpusRecipeId && !CompactTrainingAvailable)return TrainingResult.UnknownRecipe;
             if(recipeId==null || !recipes.TryGetValue(recipeId,out var rule))return TrainingResult.UnknownRecipe;
             try
             {

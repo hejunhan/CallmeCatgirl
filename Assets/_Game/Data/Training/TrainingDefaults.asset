@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85c17c0859f9007fc404fe0a5c38f4a9, type: 3}
   m_Name: TrainingDefaults
   m_EditorClassIdentifier:
-  DefaultsNotice: "学习型/高速型/均衡型按内存1/2/4级解锁。语料倍率1.6/1/1.25，速度倍率1/1.6/1.25；首次落位锁定架构，速度同步加速能力周期。"
+  DefaultsNotice: "Transformer/MoE Transformer/协调状态架构按内存1/2/4级解锁。语料倍率1.6/1/1.25，速度倍率1/1.6/1.25；首次落位锁定架构，速度同步加速能力周期。"
   Recipes:
   - Id: dialogue-training
     Title: "对话语料训练（暂定）"

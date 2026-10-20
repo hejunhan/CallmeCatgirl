@@ -11,7 +11,6 @@ namespace CallmeCatgirl.EditorTools
     // An explicit source-scene migration. No import hook, Awake, or Play-time rebuilding.
     public static class UIReadabilityAuthoring
     {
-        [MenuItem("CallmeCatgirl/Apply Readability Pass To Active Scene")]
         public static void Apply()
         {
             if (EditorApplication.isPlaying) throw new InvalidOperationException("Leave Play before editing UI.");

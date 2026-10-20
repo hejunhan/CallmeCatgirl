@@ -10,13 +10,19 @@ namespace CallmeCatgirl.Gameplay
         private OrdinaryConversationLifecycle OrdinaryLifecycle => ordinaryLifecycle
             ?? (ordinaryLifecycle = new OrdinaryConversationLifecycle(configuration?.OrdinaryLifecycle ?? new OrdinaryConversationPolicy()));
         private bool IsScriptedConversation(string id)
-            => User(id).Profile?.Kind == StoryConfiguration.ConversationKind.Scripted;
+            => (FindUser(id)?.Profile ?? ConfiguredProfile(id))?.Kind == StoryConfiguration.ConversationKind.Scripted;
+        private bool IsStageConversation(string id)
+            => stagePool && OrdinaryStagePool.IsStageCustomer(FindUser(id)?.PoolEntryId);
+        // Stage customers are guaranteed their authored session count; only legacy pool users roll a random ending.
+        private bool UsesRandomOrdinaryEnding(string id)
+            => !IsScriptedConversation(id) && !IsStageConversation(id);
         public StoryConfiguration.ConversationKind Kind(string id)
-            => User(id).Profile?.Kind ?? StoryConfiguration.ConversationKind.Ordinary;
+            => (FindUser(id)?.Profile ?? ConfiguredProfile(id))?.Kind ?? StoryConfiguration.ConversationKind.Ordinary;
 
         /// <summary>Called by Submitted after actual settlement, once per request; no corpus mutation.</summary>
         public bool ObserveRequestSettlement(TaskInstance task)
-            => OrdinaryLifecycle.ObserveSettlement(task, task != null && IsScriptedConversation(task.ConversationId), shapeRandom,
+            => OrdinaryLifecycle.ObserveSettlement(task,
+                task != null && !UsesRandomOrdinaryEnding(task.ConversationId), shapeRandom,
                 OrdinaryEndProbabilityMultiplier?.Invoke() ?? 1);
 
         /// <summary>Detached query copy. Changing it cannot alter the running conversation.</summary>

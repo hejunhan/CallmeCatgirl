@@ -3,13 +3,14 @@ using System.Collections.Generic;
 
 namespace CallmeCatgirl.Gameplay.Narrative
 {
-    public enum TutorialStep { Opening, AwaitTraining, AwaitDoctorOrder, AwaitOrdinaryOrder, AwaitUpgradeFunds, Complete, Legacy }
+    // New tutorial steps are appended so every existing serialized value keeps its meaning.
+    public enum TutorialStep { Opening, AwaitTraining, AwaitDoctorOrder, AwaitOrdinaryOrder, AwaitUpgradeFunds, Complete, Legacy, AwaitDoctorSecond, AwaitDoctorThird }
     public enum NarrativeEndingReason { None, LowReputation, OrdinaryReputation, HighReputation, Companion }
     public enum NarrativeCorpusDomain { Writing, Reasoning }
     public enum NarrativeEffectKind
     {
         GrantCorpus, RevealCenterMemory, QueueDoctorRequest, QueueOrdinaryRequest,
-        ShowUpgradeHint, IntroduceArchitecture, QueueStageDoctorRequest, EndRun
+        ShowUpgradeHint, IntroduceArchitecture, QueueStageDoctorRequest, EndRun, GrantFunds
     }
 
     [Serializable]
@@ -24,6 +25,12 @@ namespace CallmeCatgirl.Gameplay.Narrative
         public NarrativeCorpusDomain CorpusDomain;
         public double CorpusPoints;
         public int RequiredCells;
+        // Explicit tutorial request rules. Zero keeps the legacy model-derived threshold.
+        public double Calculation;
+        public double MinimumAbility;
+        public double ExcellentAbility;
+        public double RewardTokens;
+        public int FundsAmount;
         public int MemoryCount;
         public string ArchitectureId;
         public NarrativeEndingReason EndingReason;

@@ -5,7 +5,9 @@ using CallmeCatgirl.Gameplay.TaskGrid;
 using CallmeCatgirl.UI;
 using CallmeCatgirl.Gameplay.Training;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace CallmeCatgirl.Gameplay
 {
@@ -39,10 +41,12 @@ namespace CallmeCatgirl.Gameplay
         public TaskInstance SelectedTask => SelectedId != null && Simulation.Tasks.TryGetValue(SelectedId, out var task) ? task : null;
         public float PlaybackSpeed { get; private set; }
         public int MemoryLevel { get; private set; }
-        public string ModelName => TrainingEnabled ? training.Session.Models.First(m => m.Id == training.Session.ActiveModelId).Name
+        public string ModelName => TrainingEnabled ? training.Session.ActiveModel?.Name ?? "尚无模型"
             : configuration.MemoryUpgrades.GetModelName(MemoryLevel, Simulation.Model.Id);
         public EconomyManager Economy { get; private set; }
         public int Funds => Economy.CurrentFunds;
+        public bool DebugIgnoreCosts { get; private set; }
+        public bool CanAfford(int cost) => DebugIgnoreCosts || Funds >= cost;
         public int CurrentMonth { get; private set; }
         public int DebtAmount => Economy.DebtAmount;
         public bool IsInGracePeriod => Economy.IsInGracePeriod;
@@ -64,7 +68,7 @@ namespace CallmeCatgirl.Gameplay
             && !IsMemoryInstallPending && !IsMemoryInstallOpen && NextMemoryUpgrade != null
             && (NextMemoryUpgrade.TaskMultipliers == null || NextMemoryUpgrade.TaskMultipliers.IsValid) && NextMemoryUpgrade.Cost >= 0 && NextMemoryUpgrade.AbilityPoints >= 0
             && AvailableAbilityPoints <= int.MaxValue - NextMemoryUpgrade.AbilityPoints
-            && Funds >= NextMemoryUpgrade.Cost && CompletedTasks >= NextMemoryUpgrade.RequiredCompletedTasks;
+            && CanAfford(NextMemoryUpgrade.Cost) && CompletedTasks >= NextMemoryUpgrade.RequiredCompletedTasks;
         public string NextMemoryPointRewardText => NextMemoryUpgrade == null ? string.Empty
             : NextMemoryUpgrade.AbilityPoints < 0 ? "奖励点数配置无效" : $"升级奖励：{NextMemoryUpgrade.AbilityPoints} 点，由玩家自由分配";
         public string NextTaskMultiplierText => NextMemoryUpgrade == null ? string.Empty
@@ -80,6 +84,7 @@ namespace CallmeCatgirl.Gameplay
         private readonly HashSet<string> operatingTasks = new HashSet<string>();
         public bool IsOperatingTask(string requestId) => requestId != null && operatingTasks.Contains(requestId);
         private int serial;
+        private readonly int[] fillerGenerated = new int[5];
         private System.Random requestRandom;
         private TaskDefinition[] requestTemplates;
 
@@ -101,6 +106,14 @@ namespace CallmeCatgirl.Gameplay
                 CancelPendingMemoryInstall();
             if (!ManualCommandClock) AdvanceGame(Time.unscaledDeltaTime * PlaybackSpeed);
             if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame) systemMenu?.HandleEscape();
+#if (UNITY_EDITOR || DEVELOPMENT_BUILD) && !CATGIRL_DISABLE_DEBUG
+            if (Keyboard.current != null && !IsDebugShortcutEditing())
+            {
+                if (Keyboard.current[Key.Digit1].wasPressedThisFrame) SkipCurrentNarrative();
+                if (Keyboard.current[Key.Digit2].wasPressedThisFrame) ToggleDebugIgnoreCosts();
+                if (Keyboard.current[Key.Digit3].wasPressedThisFrame) FinishAllTasks();
+            }
+#endif
             if (!GameEnded && !IsModalOpen && !CallmeCatgirl.Debugging.InlineDebugInput.IsEditing && Keyboard.current != null)
             {
                 if (Keyboard.current.rKey.wasPressedThisFrame) RotateSelected();
@@ -108,6 +121,7 @@ namespace CallmeCatgirl.Gameplay
             }
             ReadEvents();
             ProcessCompletion();
+            UpdateEndingScene();
             if (canvasView != null) canvasView.Refresh();
         }
 
@@ -117,6 +131,7 @@ namespace CallmeCatgirl.Gameplay
             try
             {
                 CancelPendingMemoryInstall();
+                ResetEndingScene();
                 BeginCompletionRun();
                 IsMemoryUpgradeOpen = false;
                 configuration.MemoryUpgrades.ValidateTaskMultipliers();
@@ -124,28 +139,33 @@ namespace CallmeCatgirl.Gameplay
                 ManualCommandClock=false; runId=Guid.NewGuid().ToString("D"); saveService=null; saveContentRevision=null;
                 int seed=configuration.TaskGeneration == null ? -1 : configuration.TaskGeneration.RandomSeed;
                 requestRandom = new CallmeCatgirl.Persistence.SaveableRandom(seed < 0 ? Guid.NewGuid().GetHashCode() : seed);
-                Story = new ConversationStory(configuration.Story, configuration.TaskGeneration, requestRandom, configuration.OrdinaryDialoguePool,
+                var ordinaryPool = OrdinaryStagePool.Load() ?? configuration.OrdinaryDialoguePool;
+                Story = new ConversationStory(configuration.Story, configuration.TaskGeneration, requestRandom, ordinaryPool,
                     configuration.InitialAffinity, configuration.SuccessAffinity, configuration.FailureAffinity);
+                Story.StageProvider = () => MemoryLevel;
                 var configuredSimulation = configuration.BuildSimulation();
                 Simulation = new TaskSimulation(configuredSimulation.Width, configuredSimulation.Height, Array.Empty<Cell>(),
                     new ModelDefinition(configuredSimulation.Model.Id, configuredSimulation.Model.Interval, new Dictionary<AbilityKind,double>()), configuration.MemoryUpgrades.GetCompartments());
                 Simulation.Paused = true; definitions.Clear(); taskBases.Clear(); operatingTasks.Clear(); logs.Clear(); serial = 0;
+                Array.Clear(fillerGenerated, 0, fillerGenerated.Length);
                 MemoryLevel = 0; CompletedTasks = 0; AvailableAbilityPoints = 0;
                 if (configuration.DaysPerGameMonth < 1 || configuration.SecondsPerGameDay <= 0
                     || configuration.SecondsPerGameMonth <= 0 || float.IsNaN(configuration.SecondsPerGameMonth)
-                    || float.IsInfinity(configuration.SecondsPerGameMonth)) throw new InvalidOperationException("每天游戏秒数必须为正数、每月天数至少为1，月份时长必须有限。");
+                    || float.IsInfinity(configuration.SecondsPerGameMonth)) throw new InvalidOperationException("每天游戏秒数必须为正数、维护周期天数至少为1，周期时长必须有限。");
                 if (Economy != null) Economy.OnEconomyLog -= AddEconomyLog;
                 Economy = configuration.BuildEconomyManager(); Economy.OnEconomyLog += AddEconomyLog;
+                DebugIgnoreCosts = false; Economy.DebugIgnoreSpending = false;
                 Economy.TrySpendFunds(Economy.CurrentFunds);
                 Story.Economy = Economy;
                 CurrentMonth = 1; monthTimer = 0; GameEnded = false; EndingText = string.Empty;
+                lastAutoSaveDay = AbsoluteGameDay; endingLoadMessage = string.Empty;
                 foreach (var source in configuration.Requests)
                 {
                     var definition = source.Build(); definitions.Add(definition.Id, definition);
                 }
                 requestTemplates = definitions.Values.ToArray();
                 configuration.Story?.Validate(definitions.Keys);
-                configuration.OrdinaryDialoguePool?.Validate(definitions.Keys);
+                ordinaryPool?.Validate(definitions.Keys);
                 // The doctor introduction owns the first request. Normal arrivals unlock after that tutorial.
                 SelectedId = Simulation.Tasks.Keys.FirstOrDefault(); PlaybackSpeed = configuration.PlaybackSpeed;
                 if (training != null)
@@ -226,13 +246,57 @@ namespace CallmeCatgirl.Gameplay
             var basis = operating ?? requestTemplates[requestRandom.Next(requestTemplates.Length)];
             return CreateTask("new-" + suffix, user, "extra-" + suffix, basis, operating != null);
         }
+        public bool IsFillerTask(string requestId) => requestId != null && Simulation != null
+            && Simulation.Tasks.TryGetValue(requestId, out var task) && task.IsFiller;
+        public string VisitorDisplayName(TaskInstance task) => task != null && task.IsFiller ? task.Visitor.DisplayName : null;
+        public string AvatarConversationId(TaskInstance task) => task != null && task.IsFiller ? task.Visitor.SourceCustomerId : task?.ConversationId;
+        public string VisitorSummary(TaskInstance task) => task == null || !task.IsFiller ? null
+            : task.Visitor.DisplayName + " · 轻量来客\n" + StateText(task.State) + "\n\n" + task.Visitor.SourceText;
+        // Story requests draw first; fillers only repair a concurrent deficit and never reserve story customers.
+        private void EnsureVisitorQueue()
+        {
+            if (GameEnded || Simulation == null || configuration == null) return;
+            if (Narrative != null && !Narrative.OrdinaryRequestsUnlocked) return;
+            int stage = Math.Max(1, Math.Min(5, MemoryLevel));
+            OrdinaryStagePool.StageRule rule;
+            if (!OrdinaryStagePool.TryGetRule(stage, out rule)) return;
+            int unfinished = VisitorQueuePolicy.UnfinishedCount(Simulation.Tasks.Values);
+            int arrivals = VisitorQueuePolicy.ArrivalCount(stage, rule.TargetConcurrent, rule.TargetRequests,
+                fillerGenerated[stage - 1], unfinished);
+            if (arrivals <= 0) return;
+            var sources = LightweightVisitorQueue.Sources(configuration.Story, configuration.OrdinaryDialoguePool,
+                OrdinaryStagePool.Load(), stage);
+            if (sources.Count == 0) return;
+            for (int i = 0; i < arrivals; i++)
+                if (CreateVisitorRequest(stage, rule, sources) == null) break;
+        }
+        private TaskInstance CreateVisitorRequest(int stage, OrdinaryStagePool.StageRule rule, IReadOnlyList<VisitorSource> sources)
+        {
+            var source = sources[requestRandom.Next(sources.Count)];
+            int serial = fillerGenerated[stage - 1] + 1;
+            var shape = configuration.TaskGeneration != null ? configuration.TaskGeneration.PickShape(requestRandom)
+                : new[] { new Cell(0, 0) };
+            string requestId = VisitorQueuePolicy.RequestId(stage, serial);
+            var definition = LightweightVisitorQueue.Build(requestId, source, rule, shape);
+            var visitor = new VisitorIdentity(source.DisplayName, source.Text, source.RequestFamily, source.CustomerId);
+            if (!Simulation.TryCreate(requestId, VisitorQueuePolicy.ConversationId, requestId, definition, visitor, out var task))
+                return null;
+            taskBases[requestId] = definition;
+            fillerGenerated[stage - 1] = serial;
+            return task;
+        }
+        private void RestoreFillerCounters(int[] saved, TaskSimulation simulation)
+        {
+            var merged = VisitorQueuePolicy.MergeCounters(saved, simulation?.Tasks.Values);
+            Array.Copy(merged, fillerGenerated, fillerGenerated.Length);
+        }
         // 有剧情时按角色派发；每个角色至多一个请求，候选不足不复制已完成会话凑数。
         private TaskInstance CreateScheduledRequest()
         {
             var profiles = configuration.Story?.Users;
             if (profiles == null || profiles.Length == 0) return CreateRandomRequest();
             if (requestTemplates.Length == 0) return null;
-            var eligible = profiles.Where(p => !Story.Finished(p.UserId))
+            var eligible = profiles.Where(p => Story.PrepareSlot(p.UserId))
                 .Select(p => new { User = p.UserId, Last = Simulation.Tasks.Values.LastOrDefault(t => t.ConversationId == p.UserId) })
                 .Where(p => p.Last == null || ((p.Last.State == RequestState.Submitted || p.Last.State == RequestState.TimedOut
                     || p.Last.State == RequestState.Closed) && !Story.AwaitingReply(p.Last.Id)))
@@ -248,7 +312,7 @@ namespace CallmeCatgirl.Gameplay
         {
             var basis = operating ? fallback : Story.BuildNextTask(user, definitions, fallback);
             if (basis == null) return null;
-            if (!operating && configuration.OpeningBalance != null) basis = configuration.OpeningBalance.Apply(user, Story.SessionNumber(user), basis);
+            if (!operating && configuration.OpeningBalance != null && !Story.UsesStagePool) basis = configuration.OpeningBalance.Apply(user, Story.SessionNumber(user), basis);
             var scaled = configuration.MemoryUpgrades.ScaleTask(MemoryLevel, basis, requestRandom);
             if (!Simulation.TryCreate(requestId, user, round, scaled, out var task)) return null;
             if (operating) operatingTasks.Add(requestId);
@@ -280,7 +344,7 @@ namespace CallmeCatgirl.Gameplay
             if (GameEnded || IsModalOpen) return;
             var previous = SelectedTask;
             if (previous != null && TrainingEnabled && training.IsTrainingRequest(previous.Id)) return;
-            if (previous == null || IsOperatingTask(previous.Id) || Story.Finished(previous.ConversationId) || Story.AwaitingReply(previous.Id) || !Simulation.TryCloseFeedback(previous.Id)) return;
+            if (previous == null || previous.IsFiller || IsOperatingTask(previous.Id) || Story.Finished(previous.ConversationId) || Story.AwaitingReply(previous.Id) || !Simulation.TryCloseFeedback(previous.Id)) return;
             var basis = taskBases.TryGetValue(previous.Id, out var original) ? original : previous.Definition;
             string round = "round-" + (++serial);
             var next = CreateTask(previous.ConversationId + "-" + round, previous.ConversationId, round, basis);
@@ -370,7 +434,7 @@ namespace CallmeCatgirl.Gameplay
             else if (step.AbilityPoints < 0 || AvailableAbilityPoints > int.MaxValue - step.AbilityPoints) failure = "奖励点数配置无效或超过上限";
             else if (step.Cost < 0) failure = "升级价格配置无效";
             else if (CompletedTasks < step.RequiredCompletedTasks) failure = $"需要累计达标提交 {step.RequiredCompletedTasks} 个任务";
-            else if (Economy.IsBankrupt || Funds < step.Cost) failure = "升级资金不足";
+            else if (Economy.IsBankrupt || !CanAfford(step.Cost)) failure = "升级资金不足";
             IReadOnlyList<Cell> outline = null;
             bool geometryFailed = false;
             if (failure == null)
@@ -395,6 +459,7 @@ namespace CallmeCatgirl.Gameplay
             }
             MemoryLevel = step.TargetLevel; AvailableAbilityPoints += step.AbilityPoints;
             Narrative?.ObserveMemoryCount(MemoryLevel);
+            EnsureVisitorQueue();
             Message = $"内存升级至 Lv{MemoryLevel}：新增 {Simulation.OpenCellCount - before} 格，花费 {step.Cost}，获得 {step.AbilityPoints} 点（剩余 {AvailableAbilityPoints} 点）";
             logs.Insert(0, Message);
             if (logs.Count > 7) logs.RemoveAt(logs.Count - 1);
@@ -474,6 +539,8 @@ namespace CallmeCatgirl.Gameplay
         {
             if (SelectedTask == null || GameEnded || IsModalOpen) return;
             if (IsNarrativeContact(SelectedTask.ConversationId)) { OpenNarrativeContact(SelectedTask.ConversationId); return; }
+            if (SelectedTask.IsFiller)
+            { Message = "轻量来客只做经营结算，不包含角色剧情或亲密度。"; canvasView?.Refresh(); return; }
             if (IsOperatingTask(SelectedId))
             { Message = "经营委托只做任务结算，不包含角色剧情或亲密度。"; canvasView?.Refresh(); return; }
             if (TrainingEnabled && training.IsTrainingRequest(SelectedId)) return;
@@ -493,11 +560,11 @@ namespace CallmeCatgirl.Gameplay
                 Simulation.Advance(step); ReadEvents(); monthTimer += step; delta -= step;
                 if (monthTimer + 1e-9 < configuration.SecondsPerGameMonth)
                 {
-                    if (CurrentDay != dayBefore) RefreshScheduledRequests(true);
+                    if (CurrentDay != dayBefore) { RefreshScheduledRequests(true); EnsureVisitorQueue(); }
                     continue;
                 }
                 monthTimer = 0;
-                if (Economy.SettleMonth(configuration.MonthlyMaintenanceFee)) { CurrentMonth++; RefreshScheduledRequests(false); RefreshScheduledRequests(true); }
+                if (Economy.SettleMonth(configuration.MonthlyMaintenanceFee)) { CurrentMonth++; RefreshScheduledRequests(false); RefreshScheduledRequests(true); EnsureVisitorQueue(); }
                 else
                 {
                     GameEnded = true; Simulation.Paused = true;
@@ -506,6 +573,7 @@ namespace CallmeCatgirl.Gameplay
                     AddEconomyLog(EndingText);
                 }
             }
+            TryAutoSaveDay();
             canvasView?.Refresh();
         }
         private void AddEconomyLog(string content)
@@ -526,7 +594,13 @@ namespace CallmeCatgirl.Gameplay
                 int income = Economy.Settle(item);
                 if (Simulation.Tasks.TryGetValue(item.RequestId, out var task))
                 {
-                    if (IsOperatingTask(task.Id))
+                    if (task.IsFiller)
+                    {
+                        // Lightweight visitors settle like operating work: no story, affinity, corpus or ending roll.
+                        if (item.Kind == TaskEventKind.Submitted || item.Kind == TaskEventKind.TimedOut)
+                            Simulation.TryCloseFeedback(task.Id);
+                    }
+                    else if (IsOperatingTask(task.Id))
                     {
                         // 经营任务直接完成反馈，不占剧情，不创建角色亲密度记录。
                         if (item.Kind == TaskEventKind.Submitted || item.Kind == TaskEventKind.TimedOut)
@@ -534,9 +608,14 @@ namespace CallmeCatgirl.Gameplay
                     }
                     else
                     {
-                        if (item.Kind == TaskEventKind.Arrived) Story.Arrived(task);
-                        if (item.Kind == TaskEventKind.TimedOut) Story.TimedOut(task);
-                        if (item.Kind == TaskEventKind.Submitted) { IsMemoryUpgradeOpen = false; Story.Submitted(task); notifications.Add(() => canvasView?.CancelDrag()); }
+                        if (item.Kind == TaskEventKind.Arrived) ObserveStory(() => Story.Arrived(task));
+                        if (item.Kind == TaskEventKind.TimedOut) ObserveStory(() => Story.TimedOut(task));
+                        if (item.Kind == TaskEventKind.Submitted)
+                        {
+                            IsMemoryUpgradeOpen = false;
+                            ObserveStory(() => Story.Submitted(task));
+                            notifications.Add(() => canvasView?.CancelDrag());
+                        }
                     }
                 }
                 logs.Insert(0, $"{item.GameTime:0.0}s  {item.RequestId}  {EventText(item.Kind)}"
@@ -548,9 +627,16 @@ namespace CallmeCatgirl.Gameplay
             foreach (var notify in notifications)
                 try { notify(); } catch (Exception error) { Debug.LogWarning("Task observer failed after settlement: " + error.Message); }
         }
+        // Event draining must not stall because a story slot could not draw a customer.
+        private static void ObserveStory(Action action)
+        {
+            try { action(); }
+            catch (StagePoolExhaustedException error)
+            { Debug.LogWarning("Stage pool binding failed after event: " + error.Message); }
+        }
         private void QueueTaskObservers(TaskEvent item, List<Action> notifications)
         {
-            notifications.Add(() => ObserveCompletionTask(item));
+            if (!IsFillerTask(item.RequestId)) notifications.Add(() => ObserveCompletionTask(item));
             if (TaskEventRaised == null) return;
             foreach (Action<TaskEvent> observer in TaskEventRaised.GetInvocationList()) notifications.Add(() => observer(item));
         }
@@ -565,14 +651,68 @@ namespace CallmeCatgirl.Gameplay
         {
             var cells = CapacityForNarrative(Narrative, level).ToArray();
             if (!TrainingEnabled) return cells;
-            var model = training.Session.Models.First(m => m.Id == training.Session.ActiveModelId);
+            var model = training.Session.ActiveModel;
+            if (model == null) return cells;
             return training.Session.Architectures.First(a => a.Id == model.ArchitectureId).Transform(cells, Simulation.Width, Simulation.Height);
         }
+#if (UNITY_EDITOR || DEVELOPMENT_BUILD) && !CATGIRL_DISABLE_DEBUG
+        private static bool IsDebugShortcutEditing()
+        {
+            if (CallmeCatgirl.Debugging.InlineDebugInput.IsEditing) return true;
+            var selected = EventSystem.current == null ? null : EventSystem.current.currentSelectedGameObject;
+            if (selected == null) return false;
+            var input = selected.GetComponentInParent<InputField>();
+            if (input != null && input.isActiveAndEnabled && input.isFocused) return true;
+            var tmpInput = selected.GetComponentInParent<TMPro.TMP_InputField>();
+            return tmpInput != null && tmpInput.isActiveAndEnabled && tmpInput.isFocused;
+        }
+        private void SkipCurrentNarrative()
+        {
+            if (endingSceneRequested) return;
+            bool hadFrame = Narrative != null && Narrative.CurrentFrame != null;
+            for (int step = 0; step < 64 && Narrative != null && Narrative.CurrentFrame != null; step++)
+            {
+                var frame = Narrative.CurrentFrame;
+                if (frame.CanClose)
+                {
+                    if (!Narrative.CloseConversation()) break;
+                    continue;
+                }
+                var choice = frame.Choices.FirstOrDefault();
+                if (choice == null || !Narrative.Choose(choice.Id)) break;
+            }
+            if (canvasView != null && canvasView.IsConversationVisible) canvasView.DismissConversation();
+            bool stillOpen = Narrative != null && Narrative.CurrentFrame != null;
+            Message = !hadFrame ? "当前没有可跳过的剧情。"
+                : stillOpen ? "已跳过部分剧情，仍有对话需要处理。"
+                : "已跳过当前剧情对话。";
+            canvasView?.Refresh();
+        }
+        private void ToggleDebugIgnoreCosts()
+        {
+            DebugIgnoreCosts = !DebugIgnoreCosts;
+            if (Economy != null) Economy.DebugIgnoreSpending = DebugIgnoreCosts;
+            Message = DebugIgnoreCosts ? "调试：已无视金币消耗。" : "调试：已恢复金币消耗。";
+            canvasView?.Refresh();
+        }
+        private void FinishAllTasks()
+        {
+            int finished = 0;
+            foreach (var task in Simulation.Tasks.Values.ToList())
+                if ((task.State == RequestState.Waiting || task.State == RequestState.Withdrawn || task.State == RequestState.Running)
+                    && Simulation.TryDebugFinishCalculation(task.Id)) finished++;
+            ReadEvents();
+            Message = finished > 0 ? $"已瞬间完成 {finished} 个任务，可提交。" : "没有可瞬间完成的任务。";
+            canvasView?.Refresh();
+        }
+#endif
         public IReadOnlyList<Cell> ModelOutlineFor(string modelId)
         {
-            if(!TrainingEnabled)return CapacityForNarrative(Narrative,MemoryLevel).ToArray();
-            var model=training.Session.Models.First(m=>m.Id==modelId);
-            return training.Session.Architectures.First(a=>a.Id==model.ArchitectureId).Transform(CapacityForNarrative(Narrative,MemoryLevel),Simulation.Width,Simulation.Height);
+            var cells=CapacityForNarrative(Narrative,MemoryLevel).ToArray();
+            if(!TrainingEnabled)return cells;
+            var model=training.Session.Models.FirstOrDefault(m=>m.Id==modelId);
+            if(model==null)return cells;
+            return training.Session.Architectures.First(a=>a.Id==model.ArchitectureId).Transform(cells,Simulation.Width,Simulation.Height);
         }
         private void OnDisable()
         {

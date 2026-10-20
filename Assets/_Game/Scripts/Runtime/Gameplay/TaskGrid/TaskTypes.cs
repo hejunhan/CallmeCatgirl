@@ -143,12 +143,32 @@ namespace CallmeCatgirl.Gameplay.TaskGrid
         }
     }
 
+    /// <summary>Display identity for a lightweight visitor drawn from authored ordinary content.</summary>
+    public sealed class VisitorIdentity
+    {
+        public string DisplayName { get; }
+        public string SourceText { get; }
+        public string RequestFamily { get; }
+        public string SourceCustomerId { get; }
+        public VisitorIdentity(string displayName, string sourceText, string requestFamily, string sourceCustomerId = null)
+        {
+            if (string.IsNullOrWhiteSpace(displayName) || string.IsNullOrWhiteSpace(sourceText))
+                throw new ArgumentException("A filler visitor needs a display name and source text.");
+            DisplayName = displayName;
+            SourceText = sourceText;
+            RequestFamily = requestFamily ?? string.Empty;
+            SourceCustomerId = sourceCustomerId ?? string.Empty;
+        }
+    }
+
     public sealed class TaskInstance
     {
         public string Id { get; }
         public string ConversationId { get; }
         public string RoundId { get; }
         public TaskDefinition Definition { get; }
+        public VisitorIdentity Visitor { get; internal set; }
+        public bool IsFiller => Visitor != null;
         public RequestState State { get; internal set; }
         public double ArrivedAt { get; }
         public double Deadline { get; }

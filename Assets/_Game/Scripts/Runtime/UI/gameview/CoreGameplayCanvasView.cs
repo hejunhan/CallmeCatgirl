@@ -73,7 +73,7 @@ namespace CallmeCatgirl.UI
         [SerializeField] private Text pauseLabel;
 
         [SerializeField] private Button[] speedButtons;
-        [SerializeField, Tooltip("与速度按钮一一对应的倍率。")] private float[] speedValues = { 1, 2, 4 };
+        [SerializeField, Tooltip("与速度按钮一一对应的倍率。")] private float[] speedValues = { 1, 2, 3, 4 };
         [SerializeField] private Color speedActiveColor = new Color(0.32f, 0.12f, 0.9f, 1f);
         private Color[] speedIdleColors;
         [SerializeField] private Color pauseActiveColor = new Color(0.32f, 0.12f, 0.9f, 1f);
@@ -101,6 +101,9 @@ namespace CallmeCatgirl.UI
         [SerializeField] private Text economyStatusLabel;
         [SerializeField] private GameObject endingPanel;
         [SerializeField] private Text endingLabel;
+        [SerializeField] private Button endingLoadButton;
+        [SerializeField] private Text endingLoadMessage;
+        private bool endingPanelShown;
         [SerializeField] private ConversationPopupView conversationPopup;
         [SerializeField] private MemoryUpgradePopupView memoryUpgradePopup;
         private readonly Dictionary<string, TaskCardView> cards = new Dictionary<string, TaskCardView>();
@@ -118,8 +121,10 @@ namespace CallmeCatgirl.UI
         private TaskModuleView ghost;
         public bool IsInitialized => controller != null;
         public string RequestDisplayName(TaskInstance task) => controller.TrainingEnabled && controller.Training.IsTrainingRequest(task.Id)
-            ? "训练" : controller.ConversationDisplayName(task.ConversationId);
+            ? "训练" : task != null && task.IsFiller ? controller.VisitorDisplayName(task)
+            : controller.ConversationDisplayName(task.ConversationId);
         public bool IsOperatingRequest(string id) => controller != null && controller.IsOperatingTask(id);
+        public bool IsFillerRequest(string id) => controller != null && controller.IsFillerTask(id);
         public bool IsDragging => draggedId != null;
         public RectTransform Board => board;
 
@@ -133,7 +138,7 @@ namespace CallmeCatgirl.UI
                 if (modelLabel != null) modelIdle = modelLabel.color;
             }
             if (!sceneLayoutReady && Application.isPlaying)
-                throw new System.InvalidOperationException("Bake the fixed UI into the scene with CallmeCatgirl/Save Current UI Layout To Scene first.");
+                throw new System.InvalidOperationException("Save the fixed UI layout into the scene before Play.");
             if (!sceneLayoutReady)
             {
             foreach(var text in new[]{modelLabel,memoryUpgradeLabel,clockLabel,infoStatus,abilitiesLabel,qualityLabel})
@@ -282,8 +287,16 @@ namespace CallmeCatgirl.UI
             if (draggedId != null && (!sim.Tasks.TryGetValue(draggedId, out var dragging)
                 || (dragging.State != RequestState.Running && dragging.State != RequestState.Waiting && dragging.State != RequestState.Withdrawn))) CancelDrag();
             if ((controller.GameEnded || controller.IsModalOpen) && IsDragging) CancelDrag();
-            if (endingPanel != null) endingPanel.SetActive(controller.GameEnded);
+            bool ended = controller.GameEnded;
+            if (endingPanel != null) endingPanel.SetActive(ended);
+            if (ended && !endingPanelShown)
+            {
+                controller.ClearEndingLoadMessage();
+                if (endingLoadButton != null) endingLoadButton.interactable = controller.HasResumableSave();
+            }
+            endingPanelShown = ended;
             if (endingLabel != null) endingLabel.text = controller.EndingText;
+            if (endingLoadMessage != null) endingLoadMessage.text = controller.EndingLoadMessage;
             if (economyStatusLabel != null) economyStatusLabel.text = $"第{controller.CurrentMonth}月 第{controller.CurrentDay}天 · 今日剩 {controller.DayTimeRemaining:0}s · "
                 + (controller.GameEnded ? "经营结束" : controller.IsInGracePeriod ? $"宽限期，欠款 {controller.DebtAmount}" : "正常经营");
             pauseButton.interactable = !controller.GameEnded && !controller.IsModalOpen;
@@ -420,15 +433,17 @@ namespace CallmeCatgirl.UI
             taskDebug?.SetTarget(task?.Id);
             bool trainingTask = task != null && controller.TrainingEnabled && controller.Training.IsTrainingRequest(task.Id);
             if (conversationAvatar != null)
-            { conversationAvatar.sprite = IsOperatingRequest(task?.Id) ? null : GetAvatar(task?.ConversationId); conversationAvatar.enabled = conversationAvatar.sprite != null; }
+            { conversationAvatar.sprite = IsOperatingRequest(task?.Id) ? null : GetAvatar(controller.AvatarConversationId(task)); conversationAvatar.enabled = conversationAvatar.sprite != null; }
             if (conversationLabel != null) conversationLabel.text = task == null ? "选择用户查看通讯。"
                 : trainingTask ? "训练模块 / 模型产物\n不产生用户订单收入或剧情。"
+                : IsFillerRequest(task.Id) ? controller.VisitorSummary(task)
                 : IsOperatingRequest(task.Id) ? "经营委托 · 不含角色剧情，不计亲密度" : controller.Story.Name(task.ConversationId) + $" · 亲密度 {controller.Story.Affinity(task.ConversationId):0.##}\n" + CoreGameplayController.StateText(task.State)
                 + "\n\n" + controller.Story.Latest(task.ConversationId);
-            submitButton.gameObject.SetActive(trainingTask || IsOperatingRequest(task?.Id));
+            submitButton.gameObject.SetActive(trainingTask || IsOperatingRequest(task?.Id) || IsFillerRequest(task?.Id));
             if (task == null) return;
             infoTitle.text = RequestDisplayName(task) + " · " + task.Definition.Title
-                + (trainingTask ? " · 训练模块" : IsOperatingRequest(task.Id) ? " · 经营委托" : $" · 亲密度 {controller.Story.Affinity(task.ConversationId):0.##}");
+                + (trainingTask ? " · 训练模块" : IsFillerRequest(task.Id) ? " · 轻量来客"
+                : IsOperatingRequest(task.Id) ? " · 经营委托" : $" · 亲密度 {controller.Story.Affinity(task.ConversationId):0.##}");
             infoStatus.text = $"{CoreGameplayController.StateText(task.State)}  ·  计算 {task.Progress:0.#}/{task.Definition.Calculation:0.#}  ·  忍耐 {task.Remaining(controller.Simulation.GameTime):0.0}s · 达标奖励 {task.Definition.Tokens:0.#} Token";
             abilitiesLabel.text = string.Join("\n", task.Definition.Requirements.Select(req =>
                 $"{CoreGameplayController.AbilityText(req.Kind)}  {task.GetAbility(req.Kind):0.#} / 完成 {req.Minimum:0.#} / 优秀 {req.Excellent:0.#}"
@@ -442,7 +457,7 @@ namespace CallmeCatgirl.UI
             rotateButton.interactable = !controller.GameEnded && !controller.IsModalOpen && (task.State == RequestState.Waiting || task.State == RequestState.Withdrawn || task.State == RequestState.Running);
             withdrawButton.interactable = !controller.GameEnded && !controller.IsModalOpen && (task.State == RequestState.Running);
             submitButton.interactable = !controller.GameEnded && !controller.IsModalOpen && (task.State == RequestState.Ready);
-            nextRoundButton.interactable = !trainingTask && !IsOperatingRequest(task.Id) && !controller.GameEnded && !controller.IsModalOpen && !controller.Story.Finished(task.ConversationId) && (task.State == RequestState.Submitted || task.State == RequestState.TimedOut);
+            nextRoundButton.interactable = !trainingTask && !IsOperatingRequest(task.Id) && !IsFillerRequest(task.Id) && !controller.GameEnded && !controller.IsModalOpen && !controller.Story.Finished(task.ConversationId) && (task.State == RequestState.Submitted || task.State == RequestState.TimedOut);
         }
 
         public Sprite GetAvatar(string conversationId)
@@ -465,7 +480,7 @@ namespace CallmeCatgirl.UI
         public void OpenRequestConversation(string id)
         {
             controller.SelectRequest(id);
-            if (controller.IsOperatingTask(id)) { controller.SubmitSelected(); RefreshInfo(); return; }
+            if (controller.IsOperatingTask(id) || controller.IsFillerTask(id)) { controller.SubmitSelected(); RefreshInfo(); return; }
             controller.OpenConversationHistory();
         }
         public void SelectRequest(string id) { controller.SelectRequest(id); RefreshInfo(); }

@@ -1,28 +1,3 @@
-# Normal gameplay API
+# 文档已迁移
 
-`CoreGameplayController.ExecuteCommand(GameCommand)` returns `{ok, code, message, snapshot}`. `ExecuteCommandJson(string)` and `QueryGameJson()` expose the same contract to Unity MCP and external test scripts. These methods run on Unity's main thread and use the existing Simulation, Story, Economy and Training instances. There is no second gameplay state or event consumer.
-
-Commands: `query`, `pause` (`paused`), `advance` (`seconds`, maximum 3600), `place` (`id,x,y,rotation`), `rotate`, `withdraw`, `submit`, `reply` (`choice,storyRevision`), `nextRound`, `closeHistory`, `train` (`recipe,architecture,displayName,corpusIds`), `selectModel`, `renameModel`, `upgradeCompute`, `save`, `restore`. Task/model commands use complete stable IDs. Save/restore use the dedicated cross-module transaction, never replay training, purchases or rewards. `ConfigureSaveSlot` accepts only a short alphanumeric/underscore/hyphen slot name, never an arbitrary path.
-
-`clock` with `paused:true` selects manual command time; `paused:false` returns to Unity frame time. It does not unpause gameplay or bypass modal windows. Enable manual time before scripted stepping, and return it to frame time after testing. UI placement uses `TryPlaceRequest`, the same validation and event-processing entry as the command API. Submit/reply/training call existing business methods, including funds, corpus eligibility, architecture unlocks, modal rules and stale-reply validation. Debug methods, AddFunds and reflective arbitrary method invocation are not exposed.
-
-Each response includes a detached snapshot: board dimensions, open cells and compartment IDs; task shape, state, progress, original patience, deadline and actual remaining time; ability requirements and produced values; wallet/month/stage; corpus scores and consumption; recipes and available architecture IDs; model UUID/name/architecture. `PreviewPlacement(id,x,y,rotation)` returns the existing simulation validation code without mutation. Scan snapshot cells and preview candidates before placing.
-
-Optional `expectedVersion` rejects stale discrete state with `StaleVersion`; omit it or use -1 for no optimistic check. Clock/progress changes alone do not invalidate the version; state transitions, pause/modal changes, funds, model names/selections and corpus consumption do. Story replies additionally require the current `storyRevision`. A snapshot version is local to the controller instance and is not a save-file revision.
-
-Unity MCP `execute_code` example while the gameplay scene is in Play:
-
-```csharp
-var game = UnityEngine.Object.FindFirstObjectByType<CallmeCatgirl.Gameplay.CoreGameplayController>();
-return game.ExecuteCommandJson("{\"kind\":\"place\",\"id\":\"C-1\",\"x\":1,\"y\":2,\"rotation\":0}");
-```
-
-Reproducible scene test: `CallmeCatgirl.Tests.GameJamIntegrationTests.DefaultOpeningDialogueTrainsModelAndSwitchPreservesTasksWithoutUserRewards` (EditMode, enters real Play). The test starts from the normal 1/1/1/0 model, plans placement through query/preview, earns eligible corpus, trains, selects and renames a UUID model. It verifies reserve funds and patience, rejects duplicate submit and stale reply/version, preserves finished/in-flight tasks, and checks observer exception isolation. One synthetic long task is added only after the normal training loop to exercise withdrawal preservation; it does not provide money, abilities or corpus.
-
-Opening overrides live in `OpeningBalance.asset`, separately from original story tasks. Session 1/2/3 minimum requirements are respectively 1/1/1, 2/1/1, 3/2/2; excellent requirements 2/2/2, 3/2/2, 5/3/3; patience at least 100. Raw story values are preserved in the asset and `validation/opening-original-story-snapshot.json`. First order takes 10 game seconds at 10 token/s, first training 12 seconds and 20 funds. This is a provisional balance curve, not a change to corpus eligibility.
-
-Architecture assessment: pure TaskSimulation owns grid/time/task transitions; training reuses its clock and wallet; duplicate reply/submit safeguards and immutable training inputs make scripted validation practical. Controller still combines scheduling, economy, story orchestration and UI updates. The current change establishes a bounded command/query seam rather than expanding that responsibility into another manager. Domain events are settled across the entire drained batch before isolated UI/subscriber notifications.
-
-Persistence: files live under `Application.persistentDataPath/GameJamSaves-v1/<slot>/run.json`, with exclusive slot lock, verified staging, atomic replacement and unique retained backups. Content/schema incompatibility rejects recovery to older content; corrupt files may recover from a committed backup. Capture uses public native state APIs; restore builds a detached graph, validates training/catalogue/outline/wallet/story/policies, then swaps references once. RNG uses an explicitly serializable xorshift stream for new runs. The scene test `NormalApiDiskSaveRestoresRenamedUuidAndMenuContinueWithoutReplayingRewards` exercises an isolated `api-qa-<uuid>` slot, including running training continuation, duplicate recovery and a deliberately corrupted QA primary. Existing user slots are not used by tests.
-
-Development controls are separate from the normal command API. Foldouts appear only beside the selected task, a corpus record or a training job, begin collapsed, and require `UNITY_EDITOR || DEVELOPMENT_BUILD` with no `CATGIRL_DISABLE_DEBUG`. They share normal Ready/CompleteTraining transitions and the owner's single event consumer. `LocalDebugUsesSharedLifecycleWithoutClockOrDuplicateRewards` is separate from the normal opening proof. Stage debug is intentionally unsupported until an actual phase owner is defined; month and memory level are not substituted.
+正文位于 [NORMAL-GAME-API.md](../agent/系统/知识/NORMAL-GAME-API.md)。旧路径仅保留兼容入口。

@@ -1,0 +1,2145 @@
+{
+  "schemaVersion": 1,
+  "stages": [
+    {
+      "stage": 1,
+      "customers": [
+        {
+          "userId": "stage1-c01",
+          "displayNameTextId": "ordinary.pool.stage1-c01.display-name",
+          "initialHistoryTextId": "ordinary.pool.stage1-c01.initial-history",
+          "sessions": [
+            {
+              "id": "s1",
+              "titleTextId": "ordinary.pool.stage1-c01.session.s1.title",
+              "requestId": "A",
+              "rounds": [
+                {
+                  "id": "s1/r1",
+                  "userMessageTextId": "ordinary.pool.stage1-c01.node.s1/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage1-c01.node.s1/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c01.node.s1/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c01.node.s1/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage1-c01.node.s1/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c01.node.s1/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c01.node.s1/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage1-c01.node.s1/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c01.node.s1/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c01.node.s1/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s1/r2",
+                  "userMessageTextId": "ordinary.pool.stage1-c01.node.s1/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage1-c01.node.s1/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c01.node.s1/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c01.node.s1/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage1-c01.node.s1/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c01.node.s1/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c01.node.s1/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage1-c01.node.s1/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c01.node.s1/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c01.node.s1/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "s2",
+              "titleTextId": "ordinary.pool.stage1-c01.session.s2.title",
+              "requestId": "A",
+              "rounds": [
+                {
+                  "id": "s2/r1",
+                  "userMessageTextId": "ordinary.pool.stage1-c01.node.s2/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage1-c01.node.s2/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c01.node.s2/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c01.node.s2/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage1-c01.node.s2/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c01.node.s2/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c01.node.s2/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage1-c01.node.s2/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c01.node.s2/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c01.node.s2/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s2/r2",
+                  "userMessageTextId": "ordinary.pool.stage1-c01.node.s2/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage1-c01.node.s2/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c01.node.s2/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c01.node.s2/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage1-c01.node.s2/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c01.node.s2/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c01.node.s2/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage1-c01.node.s2/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c01.node.s2/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c01.node.s2/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "userId": "stage1-c02",
+          "displayNameTextId": "ordinary.pool.stage1-c02.display-name",
+          "initialHistoryTextId": "ordinary.pool.stage1-c02.initial-history",
+          "sessions": [
+            {
+              "id": "s1",
+              "titleTextId": "ordinary.pool.stage1-c02.session.s1.title",
+              "requestId": "B",
+              "rounds": [
+                {
+                  "id": "s1/r1",
+                  "userMessageTextId": "ordinary.pool.stage1-c02.node.s1/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage1-c02.node.s1/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c02.node.s1/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c02.node.s1/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage1-c02.node.s1/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c02.node.s1/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c02.node.s1/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage1-c02.node.s1/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c02.node.s1/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c02.node.s1/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s1/r2",
+                  "userMessageTextId": "ordinary.pool.stage1-c02.node.s1/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage1-c02.node.s1/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c02.node.s1/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c02.node.s1/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage1-c02.node.s1/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c02.node.s1/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c02.node.s1/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage1-c02.node.s1/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c02.node.s1/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c02.node.s1/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "s2",
+              "titleTextId": "ordinary.pool.stage1-c02.session.s2.title",
+              "requestId": "B",
+              "rounds": [
+                {
+                  "id": "s2/r1",
+                  "userMessageTextId": "ordinary.pool.stage1-c02.node.s2/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage1-c02.node.s2/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c02.node.s2/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c02.node.s2/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage1-c02.node.s2/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c02.node.s2/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c02.node.s2/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage1-c02.node.s2/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c02.node.s2/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c02.node.s2/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s2/r2",
+                  "userMessageTextId": "ordinary.pool.stage1-c02.node.s2/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage1-c02.node.s2/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c02.node.s2/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c02.node.s2/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage1-c02.node.s2/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c02.node.s2/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c02.node.s2/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage1-c02.node.s2/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c02.node.s2/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c02.node.s2/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "userId": "stage1-c03",
+          "displayNameTextId": "ordinary.pool.stage1-c03.display-name",
+          "initialHistoryTextId": "ordinary.pool.stage1-c03.initial-history",
+          "sessions": [
+            {
+              "id": "s1",
+              "titleTextId": "ordinary.pool.stage1-c03.session.s1.title",
+              "requestId": "C",
+              "rounds": [
+                {
+                  "id": "s1/r1",
+                  "userMessageTextId": "ordinary.pool.stage1-c03.node.s1/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage1-c03.node.s1/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c03.node.s1/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c03.node.s1/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage1-c03.node.s1/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c03.node.s1/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c03.node.s1/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage1-c03.node.s1/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c03.node.s1/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c03.node.s1/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s1/r2",
+                  "userMessageTextId": "ordinary.pool.stage1-c03.node.s1/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage1-c03.node.s1/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c03.node.s1/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c03.node.s1/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage1-c03.node.s1/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c03.node.s1/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c03.node.s1/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage1-c03.node.s1/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c03.node.s1/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c03.node.s1/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "s2",
+              "titleTextId": "ordinary.pool.stage1-c03.session.s2.title",
+              "requestId": "C",
+              "rounds": [
+                {
+                  "id": "s2/r1",
+                  "userMessageTextId": "ordinary.pool.stage1-c03.node.s2/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage1-c03.node.s2/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c03.node.s2/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c03.node.s2/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage1-c03.node.s2/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c03.node.s2/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c03.node.s2/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage1-c03.node.s2/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c03.node.s2/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c03.node.s2/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s2/r2",
+                  "userMessageTextId": "ordinary.pool.stage1-c03.node.s2/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage1-c03.node.s2/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c03.node.s2/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c03.node.s2/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage1-c03.node.s2/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c03.node.s2/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c03.node.s2/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage1-c03.node.s2/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage1-c03.node.s2/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage1-c03.node.s2/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "stage": 2,
+      "customers": [
+        {
+          "userId": "stage2-c01",
+          "displayNameTextId": "ordinary.pool.stage2-c01.display-name",
+          "initialHistoryTextId": "ordinary.pool.stage2-c01.initial-history",
+          "sessions": [
+            {
+              "id": "s1",
+              "titleTextId": "ordinary.pool.stage2-c01.session.s1.title",
+              "requestId": "A",
+              "rounds": [
+                {
+                  "id": "s1/r1",
+                  "userMessageTextId": "ordinary.pool.stage2-c01.node.s1/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage2-c01.node.s1/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c01.node.s1/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c01.node.s1/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage2-c01.node.s1/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c01.node.s1/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c01.node.s1/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage2-c01.node.s1/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c01.node.s1/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c01.node.s1/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s1/r2",
+                  "userMessageTextId": "ordinary.pool.stage2-c01.node.s1/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage2-c01.node.s1/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c01.node.s1/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c01.node.s1/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage2-c01.node.s1/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c01.node.s1/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c01.node.s1/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage2-c01.node.s1/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c01.node.s1/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c01.node.s1/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "s2",
+              "titleTextId": "ordinary.pool.stage2-c01.session.s2.title",
+              "requestId": "A",
+              "rounds": [
+                {
+                  "id": "s2/r1",
+                  "userMessageTextId": "ordinary.pool.stage2-c01.node.s2/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage2-c01.node.s2/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c01.node.s2/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c01.node.s2/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage2-c01.node.s2/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c01.node.s2/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c01.node.s2/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage2-c01.node.s2/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c01.node.s2/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c01.node.s2/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s2/r2",
+                  "userMessageTextId": "ordinary.pool.stage2-c01.node.s2/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage2-c01.node.s2/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c01.node.s2/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c01.node.s2/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage2-c01.node.s2/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c01.node.s2/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c01.node.s2/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage2-c01.node.s2/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c01.node.s2/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c01.node.s2/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "userId": "stage2-c02",
+          "displayNameTextId": "ordinary.pool.stage2-c02.display-name",
+          "initialHistoryTextId": "ordinary.pool.stage2-c02.initial-history",
+          "sessions": [
+            {
+              "id": "s1",
+              "titleTextId": "ordinary.pool.stage2-c02.session.s1.title",
+              "requestId": "B",
+              "rounds": [
+                {
+                  "id": "s1/r1",
+                  "userMessageTextId": "ordinary.pool.stage2-c02.node.s1/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage2-c02.node.s1/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c02.node.s1/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c02.node.s1/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage2-c02.node.s1/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c02.node.s1/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c02.node.s1/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage2-c02.node.s1/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c02.node.s1/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c02.node.s1/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s1/r2",
+                  "userMessageTextId": "ordinary.pool.stage2-c02.node.s1/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage2-c02.node.s1/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c02.node.s1/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c02.node.s1/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage2-c02.node.s1/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c02.node.s1/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c02.node.s1/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage2-c02.node.s1/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c02.node.s1/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c02.node.s1/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "s2",
+              "titleTextId": "ordinary.pool.stage2-c02.session.s2.title",
+              "requestId": "B",
+              "rounds": [
+                {
+                  "id": "s2/r1",
+                  "userMessageTextId": "ordinary.pool.stage2-c02.node.s2/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage2-c02.node.s2/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c02.node.s2/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c02.node.s2/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage2-c02.node.s2/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c02.node.s2/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c02.node.s2/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage2-c02.node.s2/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c02.node.s2/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c02.node.s2/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s2/r2",
+                  "userMessageTextId": "ordinary.pool.stage2-c02.node.s2/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage2-c02.node.s2/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c02.node.s2/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c02.node.s2/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage2-c02.node.s2/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c02.node.s2/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c02.node.s2/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage2-c02.node.s2/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c02.node.s2/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c02.node.s2/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "userId": "stage2-c03",
+          "displayNameTextId": "ordinary.pool.stage2-c03.display-name",
+          "initialHistoryTextId": "ordinary.pool.stage2-c03.initial-history",
+          "sessions": [
+            {
+              "id": "s1",
+              "titleTextId": "ordinary.pool.stage2-c03.session.s1.title",
+              "requestId": "C",
+              "rounds": [
+                {
+                  "id": "s1/r1",
+                  "userMessageTextId": "ordinary.pool.stage2-c03.node.s1/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage2-c03.node.s1/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c03.node.s1/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c03.node.s1/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage2-c03.node.s1/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c03.node.s1/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c03.node.s1/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage2-c03.node.s1/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c03.node.s1/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c03.node.s1/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s1/r2",
+                  "userMessageTextId": "ordinary.pool.stage2-c03.node.s1/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage2-c03.node.s1/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c03.node.s1/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c03.node.s1/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage2-c03.node.s1/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c03.node.s1/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c03.node.s1/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage2-c03.node.s1/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c03.node.s1/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c03.node.s1/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "s2",
+              "titleTextId": "ordinary.pool.stage2-c03.session.s2.title",
+              "requestId": "C",
+              "rounds": [
+                {
+                  "id": "s2/r1",
+                  "userMessageTextId": "ordinary.pool.stage2-c03.node.s2/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage2-c03.node.s2/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c03.node.s2/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c03.node.s2/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage2-c03.node.s2/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c03.node.s2/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c03.node.s2/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage2-c03.node.s2/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c03.node.s2/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c03.node.s2/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s2/r2",
+                  "userMessageTextId": "ordinary.pool.stage2-c03.node.s2/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage2-c03.node.s2/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c03.node.s2/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c03.node.s2/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage2-c03.node.s2/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c03.node.s2/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c03.node.s2/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage2-c03.node.s2/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage2-c03.node.s2/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage2-c03.node.s2/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "stage": 3,
+      "customers": [
+        {
+          "userId": "stage3-c01",
+          "displayNameTextId": "ordinary.pool.stage3-c01.display-name",
+          "initialHistoryTextId": "ordinary.pool.stage3-c01.initial-history",
+          "sessions": [
+            {
+              "id": "s1",
+              "titleTextId": "ordinary.pool.stage3-c01.session.s1.title",
+              "requestId": "A",
+              "rounds": [
+                {
+                  "id": "s1/r1",
+                  "userMessageTextId": "ordinary.pool.stage3-c01.node.s1/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage3-c01.node.s1/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c01.node.s1/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c01.node.s1/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage3-c01.node.s1/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c01.node.s1/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c01.node.s1/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage3-c01.node.s1/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c01.node.s1/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c01.node.s1/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s1/r2",
+                  "userMessageTextId": "ordinary.pool.stage3-c01.node.s1/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage3-c01.node.s1/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c01.node.s1/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c01.node.s1/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage3-c01.node.s1/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c01.node.s1/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c01.node.s1/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage3-c01.node.s1/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c01.node.s1/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c01.node.s1/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "s2",
+              "titleTextId": "ordinary.pool.stage3-c01.session.s2.title",
+              "requestId": "A",
+              "rounds": [
+                {
+                  "id": "s2/r1",
+                  "userMessageTextId": "ordinary.pool.stage3-c01.node.s2/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage3-c01.node.s2/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c01.node.s2/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c01.node.s2/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage3-c01.node.s2/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c01.node.s2/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c01.node.s2/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage3-c01.node.s2/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c01.node.s2/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c01.node.s2/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s2/r2",
+                  "userMessageTextId": "ordinary.pool.stage3-c01.node.s2/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage3-c01.node.s2/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c01.node.s2/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c01.node.s2/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage3-c01.node.s2/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c01.node.s2/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c01.node.s2/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage3-c01.node.s2/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c01.node.s2/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c01.node.s2/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "userId": "stage3-c02",
+          "displayNameTextId": "ordinary.pool.stage3-c02.display-name",
+          "initialHistoryTextId": "ordinary.pool.stage3-c02.initial-history",
+          "sessions": [
+            {
+              "id": "s1",
+              "titleTextId": "ordinary.pool.stage3-c02.session.s1.title",
+              "requestId": "B",
+              "rounds": [
+                {
+                  "id": "s1/r1",
+                  "userMessageTextId": "ordinary.pool.stage3-c02.node.s1/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage3-c02.node.s1/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c02.node.s1/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c02.node.s1/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage3-c02.node.s1/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c02.node.s1/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c02.node.s1/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage3-c02.node.s1/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c02.node.s1/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c02.node.s1/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s1/r2",
+                  "userMessageTextId": "ordinary.pool.stage3-c02.node.s1/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage3-c02.node.s1/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c02.node.s1/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c02.node.s1/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage3-c02.node.s1/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c02.node.s1/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c02.node.s1/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage3-c02.node.s1/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c02.node.s1/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c02.node.s1/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "s2",
+              "titleTextId": "ordinary.pool.stage3-c02.session.s2.title",
+              "requestId": "B",
+              "rounds": [
+                {
+                  "id": "s2/r1",
+                  "userMessageTextId": "ordinary.pool.stage3-c02.node.s2/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage3-c02.node.s2/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c02.node.s2/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c02.node.s2/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage3-c02.node.s2/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c02.node.s2/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c02.node.s2/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage3-c02.node.s2/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c02.node.s2/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c02.node.s2/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s2/r2",
+                  "userMessageTextId": "ordinary.pool.stage3-c02.node.s2/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage3-c02.node.s2/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c02.node.s2/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c02.node.s2/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage3-c02.node.s2/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c02.node.s2/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c02.node.s2/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage3-c02.node.s2/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c02.node.s2/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c02.node.s2/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "userId": "stage3-c03",
+          "displayNameTextId": "ordinary.pool.stage3-c03.display-name",
+          "initialHistoryTextId": "ordinary.pool.stage3-c03.initial-history",
+          "sessions": [
+            {
+              "id": "s1",
+              "titleTextId": "ordinary.pool.stage3-c03.session.s1.title",
+              "requestId": "C",
+              "rounds": [
+                {
+                  "id": "s1/r1",
+                  "userMessageTextId": "ordinary.pool.stage3-c03.node.s1/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage3-c03.node.s1/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c03.node.s1/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c03.node.s1/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage3-c03.node.s1/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c03.node.s1/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c03.node.s1/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage3-c03.node.s1/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c03.node.s1/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c03.node.s1/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s1/r2",
+                  "userMessageTextId": "ordinary.pool.stage3-c03.node.s1/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage3-c03.node.s1/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c03.node.s1/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c03.node.s1/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage3-c03.node.s1/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c03.node.s1/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c03.node.s1/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage3-c03.node.s1/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c03.node.s1/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c03.node.s1/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "s2",
+              "titleTextId": "ordinary.pool.stage3-c03.session.s2.title",
+              "requestId": "C",
+              "rounds": [
+                {
+                  "id": "s2/r1",
+                  "userMessageTextId": "ordinary.pool.stage3-c03.node.s2/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage3-c03.node.s2/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c03.node.s2/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c03.node.s2/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage3-c03.node.s2/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c03.node.s2/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c03.node.s2/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage3-c03.node.s2/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c03.node.s2/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c03.node.s2/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s2/r2",
+                  "userMessageTextId": "ordinary.pool.stage3-c03.node.s2/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage3-c03.node.s2/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c03.node.s2/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c03.node.s2/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage3-c03.node.s2/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c03.node.s2/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c03.node.s2/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage3-c03.node.s2/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage3-c03.node.s2/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage3-c03.node.s2/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "stage": 4,
+      "customers": [
+        {
+          "userId": "stage4-c01",
+          "displayNameTextId": "ordinary.pool.stage4-c01.display-name",
+          "initialHistoryTextId": "ordinary.pool.stage4-c01.initial-history",
+          "sessions": [
+            {
+              "id": "s1",
+              "titleTextId": "ordinary.pool.stage4-c01.session.s1.title",
+              "requestId": "A",
+              "rounds": [
+                {
+                  "id": "s1/r1",
+                  "userMessageTextId": "ordinary.pool.stage4-c01.node.s1/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage4-c01.node.s1/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c01.node.s1/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c01.node.s1/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage4-c01.node.s1/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c01.node.s1/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c01.node.s1/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage4-c01.node.s1/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c01.node.s1/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c01.node.s1/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s1/r2",
+                  "userMessageTextId": "ordinary.pool.stage4-c01.node.s1/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage4-c01.node.s1/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c01.node.s1/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c01.node.s1/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage4-c01.node.s1/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c01.node.s1/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c01.node.s1/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage4-c01.node.s1/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c01.node.s1/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c01.node.s1/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "s2",
+              "titleTextId": "ordinary.pool.stage4-c01.session.s2.title",
+              "requestId": "A",
+              "rounds": [
+                {
+                  "id": "s2/r1",
+                  "userMessageTextId": "ordinary.pool.stage4-c01.node.s2/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage4-c01.node.s2/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c01.node.s2/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c01.node.s2/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage4-c01.node.s2/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c01.node.s2/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c01.node.s2/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage4-c01.node.s2/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c01.node.s2/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c01.node.s2/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s2/r2",
+                  "userMessageTextId": "ordinary.pool.stage4-c01.node.s2/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage4-c01.node.s2/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c01.node.s2/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c01.node.s2/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage4-c01.node.s2/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c01.node.s2/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c01.node.s2/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage4-c01.node.s2/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c01.node.s2/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c01.node.s2/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "userId": "stage4-c02",
+          "displayNameTextId": "ordinary.pool.stage4-c02.display-name",
+          "initialHistoryTextId": "ordinary.pool.stage4-c02.initial-history",
+          "sessions": [
+            {
+              "id": "s1",
+              "titleTextId": "ordinary.pool.stage4-c02.session.s1.title",
+              "requestId": "B",
+              "rounds": [
+                {
+                  "id": "s1/r1",
+                  "userMessageTextId": "ordinary.pool.stage4-c02.node.s1/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage4-c02.node.s1/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c02.node.s1/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c02.node.s1/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage4-c02.node.s1/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c02.node.s1/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c02.node.s1/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage4-c02.node.s1/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c02.node.s1/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c02.node.s1/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s1/r2",
+                  "userMessageTextId": "ordinary.pool.stage4-c02.node.s1/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage4-c02.node.s1/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c02.node.s1/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c02.node.s1/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage4-c02.node.s1/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c02.node.s1/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c02.node.s1/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage4-c02.node.s1/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c02.node.s1/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c02.node.s1/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "s2",
+              "titleTextId": "ordinary.pool.stage4-c02.session.s2.title",
+              "requestId": "B",
+              "rounds": [
+                {
+                  "id": "s2/r1",
+                  "userMessageTextId": "ordinary.pool.stage4-c02.node.s2/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage4-c02.node.s2/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c02.node.s2/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c02.node.s2/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage4-c02.node.s2/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c02.node.s2/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c02.node.s2/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage4-c02.node.s2/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c02.node.s2/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c02.node.s2/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s2/r2",
+                  "userMessageTextId": "ordinary.pool.stage4-c02.node.s2/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage4-c02.node.s2/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c02.node.s2/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c02.node.s2/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage4-c02.node.s2/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c02.node.s2/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c02.node.s2/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage4-c02.node.s2/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c02.node.s2/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c02.node.s2/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "userId": "stage4-c03",
+          "displayNameTextId": "ordinary.pool.stage4-c03.display-name",
+          "initialHistoryTextId": "ordinary.pool.stage4-c03.initial-history",
+          "sessions": [
+            {
+              "id": "s1",
+              "titleTextId": "ordinary.pool.stage4-c03.session.s1.title",
+              "requestId": "C",
+              "rounds": [
+                {
+                  "id": "s1/r1",
+                  "userMessageTextId": "ordinary.pool.stage4-c03.node.s1/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage4-c03.node.s1/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c03.node.s1/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c03.node.s1/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage4-c03.node.s1/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c03.node.s1/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c03.node.s1/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage4-c03.node.s1/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c03.node.s1/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c03.node.s1/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s1/r2",
+                  "userMessageTextId": "ordinary.pool.stage4-c03.node.s1/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage4-c03.node.s1/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c03.node.s1/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c03.node.s1/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage4-c03.node.s1/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c03.node.s1/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c03.node.s1/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage4-c03.node.s1/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c03.node.s1/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c03.node.s1/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "s2",
+              "titleTextId": "ordinary.pool.stage4-c03.session.s2.title",
+              "requestId": "C",
+              "rounds": [
+                {
+                  "id": "s2/r1",
+                  "userMessageTextId": "ordinary.pool.stage4-c03.node.s2/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage4-c03.node.s2/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c03.node.s2/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c03.node.s2/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage4-c03.node.s2/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c03.node.s2/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c03.node.s2/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage4-c03.node.s2/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c03.node.s2/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c03.node.s2/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s2/r2",
+                  "userMessageTextId": "ordinary.pool.stage4-c03.node.s2/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage4-c03.node.s2/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c03.node.s2/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c03.node.s2/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage4-c03.node.s2/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c03.node.s2/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c03.node.s2/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage4-c03.node.s2/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage4-c03.node.s2/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage4-c03.node.s2/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "stage": 5,
+      "customers": [
+        {
+          "userId": "stage5-c01",
+          "displayNameTextId": "ordinary.pool.stage5-c01.display-name",
+          "initialHistoryTextId": "ordinary.pool.stage5-c01.initial-history",
+          "sessions": [
+            {
+              "id": "s1",
+              "titleTextId": "ordinary.pool.stage5-c01.session.s1.title",
+              "requestId": "A",
+              "rounds": [
+                {
+                  "id": "s1/r1",
+                  "userMessageTextId": "ordinary.pool.stage5-c01.node.s1/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage5-c01.node.s1/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c01.node.s1/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c01.node.s1/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage5-c01.node.s1/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c01.node.s1/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c01.node.s1/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage5-c01.node.s1/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c01.node.s1/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c01.node.s1/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s1/r2",
+                  "userMessageTextId": "ordinary.pool.stage5-c01.node.s1/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage5-c01.node.s1/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c01.node.s1/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c01.node.s1/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage5-c01.node.s1/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c01.node.s1/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c01.node.s1/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage5-c01.node.s1/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c01.node.s1/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c01.node.s1/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "s2",
+              "titleTextId": "ordinary.pool.stage5-c01.session.s2.title",
+              "requestId": "A",
+              "rounds": [
+                {
+                  "id": "s2/r1",
+                  "userMessageTextId": "ordinary.pool.stage5-c01.node.s2/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage5-c01.node.s2/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c01.node.s2/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c01.node.s2/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage5-c01.node.s2/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c01.node.s2/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c01.node.s2/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage5-c01.node.s2/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c01.node.s2/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c01.node.s2/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s2/r2",
+                  "userMessageTextId": "ordinary.pool.stage5-c01.node.s2/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage5-c01.node.s2/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c01.node.s2/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c01.node.s2/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage5-c01.node.s2/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c01.node.s2/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c01.node.s2/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage5-c01.node.s2/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c01.node.s2/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c01.node.s2/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "userId": "stage5-c02",
+          "displayNameTextId": "ordinary.pool.stage5-c02.display-name",
+          "initialHistoryTextId": "ordinary.pool.stage5-c02.initial-history",
+          "sessions": [
+            {
+              "id": "s1",
+              "titleTextId": "ordinary.pool.stage5-c02.session.s1.title",
+              "requestId": "B",
+              "rounds": [
+                {
+                  "id": "s1/r1",
+                  "userMessageTextId": "ordinary.pool.stage5-c02.node.s1/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage5-c02.node.s1/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c02.node.s1/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c02.node.s1/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage5-c02.node.s1/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c02.node.s1/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c02.node.s1/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage5-c02.node.s1/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c02.node.s1/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c02.node.s1/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s1/r2",
+                  "userMessageTextId": "ordinary.pool.stage5-c02.node.s1/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage5-c02.node.s1/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c02.node.s1/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c02.node.s1/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage5-c02.node.s1/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c02.node.s1/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c02.node.s1/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage5-c02.node.s1/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c02.node.s1/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c02.node.s1/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "s2",
+              "titleTextId": "ordinary.pool.stage5-c02.session.s2.title",
+              "requestId": "B",
+              "rounds": [
+                {
+                  "id": "s2/r1",
+                  "userMessageTextId": "ordinary.pool.stage5-c02.node.s2/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage5-c02.node.s2/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c02.node.s2/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c02.node.s2/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage5-c02.node.s2/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c02.node.s2/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c02.node.s2/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage5-c02.node.s2/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c02.node.s2/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c02.node.s2/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s2/r2",
+                  "userMessageTextId": "ordinary.pool.stage5-c02.node.s2/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage5-c02.node.s2/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c02.node.s2/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c02.node.s2/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage5-c02.node.s2/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c02.node.s2/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c02.node.s2/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage5-c02.node.s2/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c02.node.s2/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c02.node.s2/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "userId": "stage5-c03",
+          "displayNameTextId": "ordinary.pool.stage5-c03.display-name",
+          "initialHistoryTextId": "ordinary.pool.stage5-c03.initial-history",
+          "sessions": [
+            {
+              "id": "s1",
+              "titleTextId": "ordinary.pool.stage5-c03.session.s1.title",
+              "requestId": "C",
+              "rounds": [
+                {
+                  "id": "s1/r1",
+                  "userMessageTextId": "ordinary.pool.stage5-c03.node.s1/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage5-c03.node.s1/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c03.node.s1/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c03.node.s1/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage5-c03.node.s1/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c03.node.s1/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c03.node.s1/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage5-c03.node.s1/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c03.node.s1/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c03.node.s1/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s1/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s1/r2",
+                  "userMessageTextId": "ordinary.pool.stage5-c03.node.s1/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage5-c03.node.s1/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c03.node.s1/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c03.node.s1/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage5-c03.node.s1/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c03.node.s1/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c03.node.s1/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage5-c03.node.s1/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c03.node.s1/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c03.node.s1/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "s2",
+              "titleTextId": "ordinary.pool.stage5-c03.session.s2.title",
+              "requestId": "C",
+              "rounds": [
+                {
+                  "id": "s2/r1",
+                  "userMessageTextId": "ordinary.pool.stage5-c03.node.s2/r1.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage5-c03.node.s2/r1.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c03.node.s2/r1.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c03.node.s2/r1.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage5-c03.node.s2/r1.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c03.node.s2/r1.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c03.node.s2/r1.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage5-c03.node.s2/r1.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c03.node.s2/r1.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c03.node.s2/r1.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": "s2/r2"
+                    }
+                  ]
+                },
+                {
+                  "id": "s2/r2",
+                  "userMessageTextId": "ordinary.pool.stage5-c03.node.s2/r2.user-message",
+                  "choices": [
+                    {
+                      "key": "choice-0",
+                      "labelTextId": "ordinary.pool.stage5-c03.node.s2/r2.choice.choice-0.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c03.node.s2/r2.choice.choice-0.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c03.node.s2/r2.choice.choice-0.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-1",
+                      "labelTextId": "ordinary.pool.stage5-c03.node.s2/r2.choice.choice-1.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c03.node.s2/r2.choice.choice-1.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c03.node.s2/r2.choice.choice-1.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    },
+                    {
+                      "key": "choice-2",
+                      "labelTextId": "ordinary.pool.stage5-c03.node.s2/r2.choice.choice-2.label",
+                      "playerReplyTextId": "ordinary.pool.stage5-c03.node.s2/r2.choice.choice-2.player-reply",
+                      "userReplyTextId": "ordinary.pool.stage5-c03.node.s2/r2.choice.choice-2.user-reply",
+                      "requirement": "Any",
+                      "nextNodeId": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

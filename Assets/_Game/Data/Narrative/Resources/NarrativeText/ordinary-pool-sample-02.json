@@ -19,39 +19,39 @@
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s1/r1.choice.check-empty-input.label",
-      "text": "确认输入是否空"
+      "text": "猫娘空罐头类比"
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s1/r1.choice.check-empty-input.player-reply",
-      "text": "你取的是第一个，先看列表里有没有元素。空列表没有第一个，所以会报这个错。"
+      "text": "摸摸头喵~ 这就像伸爪子去掏第一个小鱼干罐头，却没先看盒子里是不是空的！先打印一下列表长度，看看是不是空列表喵！"
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s1/r1.choice.check-empty-input.user-reply",
-      "text": "啊，我还没查列表里有没有东西。先去看一下输入。"
+      "text": "啊，我还没查盒子里有没有东西！先去打个日志看一下输入。"
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s1/r1.choice.empty-drawer-analogy.label",
-      "text": "空抽屉类比"
+      "text": "标准安全排障"
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s1/r1.choice.empty-drawer-analogy.player-reply",
-      "text": "这像是伸手取抽屉第一件东西，却没确认抽屉里有没有。先查一下列表是不是空的。"
+      "text": "我理解深夜调试代码带来的挫败感。从编程规范角度来看，语法正确不代表运行时状态安全：当列表为空时访问索引 0 会触发越界异常。建议您先验证数据源是否为空。"
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s1/r1.choice.empty-drawer-analogy.user-reply",
-      "text": "懂了，我先看看抽屉里到底有没有东西。"
+      "text": "标准教科书回答，不过确实提醒我了，我先看看输入到底是不是空的。"
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s1/r1.choice.distinguish-syntax-runtime.label",
-      "text": "区分语法与运行"
+      "text": "高冷嘲讽代码"
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s1/r1.choice.distinguish-syntax-runtime.player-reply",
-      "text": "语法可以是对的。IndexError 说的是下标超出了范围；空列表也不能取第一个。"
+      "text": "连判空保护都不写就直接硬取下标 0，报错难道不是天经地义？解释器可不会替你的偷懒买单，去查是不是传了空列表。"
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s1/r1.choice.distinguish-syntax-runtime.user-reply",
-      "text": "明白，下标也得对应得上内容。我先查列表里到底有多少东西。"
+      "text": "被骂得体无完肤……我这就去查列表里到底有没有东西。"
     },
     {
       "id": "ordinary.pool.sample-02.session.sample-02-s2.title",
@@ -59,43 +59,43 @@
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s2/r1.user-message",
-      "text": "查了，今天确实没有数据。我本来想没数据时显示“暂无记录”，结果直接崩了。"
+      "text": "查了，今天确实没有数据。我本来想没数据时显示“暂无记录”，结果没加判断直接崩了。"
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s2/r1.choice.restate-empty-input.label",
-      "text": "复述空输入事实"
+      "text": "温柔贴上补丁"
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s2/r1.choice.restate-empty-input.player-reply",
-      "text": "问题位置找到了：空列表还走了取第一个元素的流程，没走到“暂无记录”。"
+      "text": "破案啦喵！在取值前面加一行判空，空列表就直接返回“暂无记录”，改完这行就能安心钻进被窝睡觉咯！"
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s2/r1.choice.restate-empty-input.user-reply",
-      "text": "对，破案了，总算知道为什么今晚突然报错了。"
+      "text": "对，总算破案了！补完这行我就睡，谢啦喵！"
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s2/r1.choice.guard-before-read.label",
-      "text": "先判空再取值"
+      "text": "规范防御编程"
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s2/r1.choice.guard-before-read.player-reply",
-      "text": "取值前先加一步判断，有数据才拿第一个，空的就直接走“暂无记录”分支。"
+      "text": "很高兴您定位到了根因。为保障系统鲁棒性，建议在访问集合前添加防御性非空校验，将空集合优雅降级为“暂无记录”提示。"
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s2/r1.choice.guard-before-read.user-reply",
-      "text": "明白了，我先把空列表这条分支补上。"
+      "text": "好家伙，空列表判断被你说成了优雅降级，我先把这条分支补上。"
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s2/r1.choice.distinguish-debugging-checks.label",
-      "text": "区分两种排查"
+      "text": "高冷审视结单"
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s2/r1.choice.distinguish-debugging-checks.player-reply",
-      "text": "允许没有记录，就处理空列表；如果今天本该有记录，还要查数据是在哪一步没进来的。"
+      "text": "这种初级边界条件都敢漏写，还好意思怪脚本跟你过不去。赶紧把判空分支补上，别再让低级异常污染我的日志。"
     },
     {
       "id": "ordinary.pool.sample-02.node.sample-02-s2/r1.choice.distinguish-debugging-checks.user-reply",
-      "text": "今天没记录是正常的，那我先补空列表这条分支。"
+      "text": "遵命大小姐，我立马补上判空分支，绝不再犯！"
     }
   ]
 }

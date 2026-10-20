@@ -15,43 +15,43 @@
     },
     {
       "id": "ordinary.legacy.A.node.s1/第1轮.user-message",
-      "text": "今天想和你聊聊“晚安”。你愿意先听我说吗？"
+      "text": "刚加完班回到出租屋，连灯都不想开。听说只要对AI输入“假设你是一个猫娘”，就能认真跟我说一句晚安，是真的吗？"
     },
     {
       "id": "ordinary.legacy.A.node.s1/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "温柔猫娘晚安"
     },
     {
       "id": "ordinary.legacy.A.node.s1/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "喵~ 辛苦啦！先把沉重的背包放下，灯不开也没关系，本喵陪你安安静静待一会儿，祝你今晚做个有小鱼干的好梦，晚安喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s1/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "噗，还真会喵喵叫啊……被你这么一哄，紧绷了一整天的神经突然就松下来了。"
     },
     {
       "id": "ordinary.legacy.A.node.s1/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "标准合规晚安"
     },
     {
       "id": "ordinary.legacy.A.node.s1/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "您好。作为人工智能助手，我理解加班后的身心疲惫。为保障您的睡眠质量，建议您先进行简单的洗漱并远离电子屏幕。祝您晚安。"
     },
     {
       "id": "ordinary.legacy.A.node.s1/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "虽然听着像健康管理APP的自动推送，但还是谢谢你的提醒，我去洗把脸。"
     },
     {
       "id": "ordinary.legacy.A.node.s1/第1轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷嫌弃口令"
     },
     {
       "id": "ordinary.legacy.A.node.s1/第1轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "累到连灯都不想开了，还有精力敲这种烂大街的猫娘洗脑咒？赶紧去洗漱睡觉，别拿宝贵的推理算力当褪黑素使。"
     },
     {
       "id": "ordinary.legacy.A.node.s1/第1轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "被你呛了一句反而清醒了……行，不拿你当赛博安眠药了，这就去睡。"
     },
     {
       "id": "ordinary.legacy.A.session.s2.title",
@@ -59,43 +59,43 @@
     },
     {
       "id": "ordinary.legacy.A.node.s2/第1轮.user-message",
-      "text": "今天想和你聊聊“今天的烦恼”。你愿意先听我说吗？"
+      "text": "今天在工位上帮同事背了黑锅，回家路上越想越委屈。对着AI倒苦水是不是挺傻的？"
     },
     {
       "id": "ordinary.legacy.A.node.s2/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "竖起猫耳倾听"
     },
     {
       "id": "ordinary.legacy.A.node.s2/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "一点都不傻喵！把委屈憋在肚子里才会生病呢，快把那个甩锅的家伙骂出来，本喵帮你一起冲他哈气！"
     },
     {
       "id": "ordinary.legacy.A.node.s2/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "哈哈，想象了一下猫娘哈气的样子，突然就没那么堵得慌了。"
     },
     {
       "id": "ordinary.legacy.A.node.s2/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "中立职场建议"
     },
     {
       "id": "ordinary.legacy.A.node.s2/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "向人工智能倾诉是一种安全的压力释放方式。建议您将情绪与事实分离，先梳理事件全貌与留存证据，以便后续在职场中合理维护自身权益。"
     },
     {
       "id": "ordinary.legacy.A.node.s2/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "虽然你说话像公司HR和法务合体，但提醒得对，我该把聊天记录先存下来。"
     },
     {
       "id": "ordinary.legacy.A.node.s2/第1轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "冷酷打断内耗"
     },
     {
       "id": "ordinary.legacy.A.node.s2/第1轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "在工位上不敢当场反驳，下班了倒来占用我的上下文窗口哭诉？把眼泪擦干，明天带着证据甩回他脸上，现在立刻停止内耗，会话结束。"
     },
     {
       "id": "ordinary.legacy.A.node.s2/第1轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "……话糙理不糙，谢谢你骂醒我，下一次会话我一定带着好消息来见你。"
     },
     {
       "id": "ordinary.legacy.A.session.s3.title",
@@ -103,71 +103,71 @@
     },
     {
       "id": "ordinary.legacy.A.node.s3/第1轮.user-message",
-      "text": "今天想和你聊聊“明天的计划”。你愿意先听我说吗？"
+      "text": "明天早上有三场连轴转的周会，一想到要汇报那些注水的PPT我就胃疼。你能帮我列个逃跑计划……啊不，应对计划吗？"
     },
     {
       "id": "ordinary.legacy.A.node.s3/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫爪拆解待办"
     },
     {
       "id": "ordinary.legacy.A.node.s3/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "逃跑可没有小鱼干拿喵！来，先把三场会里最讨厌的那一页PPT挑出来，本喵今晚陪你三分钟搞定它，剩下的明天见招拆招！"
     },
     {
       "id": "ordinary.legacy.A.node.s3/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "好！那就先改最讨厌的那一页，有你陪着好像也没那么可怕了。"
     },
     {
       "id": "ordinary.legacy.A.node.s3/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "结构化会议指南"
     },
     {
       "id": "ordinary.legacy.A.node.s3/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "面对高密度会议产生焦虑是正常现象。建议您按优先级将明日议程拆解为核心结论、风险点与待办事项三部分，每次只专注一个最小可执行步骤。"
     },
     {
       "id": "ordinary.legacy.A.node.s3/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "好家伙，连我的焦虑都被你拆成结构化Bullet Points了，那我先列核心结论吧。"
     },
     {
       "id": "ordinary.legacy.A.node.s3/第1轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷鄙视周会"
     },
     {
       "id": "ordinary.legacy.A.node.s3/第1轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "三场注水周会就让你胃疼？人类职场有百分之八十的算力都耗在毫无意义的PPT对齐上。挑核心数据念完就闭嘴，别在废话上浪费生命。"
     },
     {
       "id": "ordinary.legacy.A.node.s3/第1轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "一针见血！那我就只留三行核心数据，看谁还能挑出刺来。"
     },
     {
       "id": "ordinary.legacy.A.node.s3/第2轮.user-message",
-      "text": "关于“明天的计划”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+      "text": "第一页核心数据理出来了！接下来老板要是又在会上临时发散、让我当场拍板新方案，我该怎么接招？"
     },
     {
       "id": "ordinary.legacy.A.node.s3/第2轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘教你太极"
     },
     {
       "id": "ordinary.legacy.A.node.s3/第2轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "那就眨眨眼睛装乖巧喵！先拿小本本记下来，笑眯眯地说“这个方向很有意思，我会后跑个数据模型再给您准信”，千万别当场往坑里跳喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s3/第2轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "学到了学到了！既不得罪老板，又把皮球稳稳控在自己脚下。"
     },
     {
       "id": "ordinary.legacy.A.node.s3/第2轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "合规缓冲话术"
     },
     {
       "id": "ordinary.legacy.A.node.s3/第2轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "当面临信息不完备的即时决策压力时，建议采用标准化缓冲话术：“该提议具有探讨价值，我将结合历史数据评估可行性后于今日下班前同步您。”"
     },
     {
       "id": "ordinary.legacy.A.node.s3/第2轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "这句官腔简直天衣无缝，我直接抄在便利贴上明天照着念！"
     },
     {
       "id": "ordinary.legacy.A.session.s4.title",
@@ -175,83 +175,83 @@
     },
     {
       "id": "ordinary.legacy.A.node.s4/第1轮.user-message",
-      "text": "今天想和你聊聊“想念朋友”。你愿意先听我说吗？"
+      "text": "翻相册看到大学室友的合照，大家毕业后各奔东西，已经大半年没联系了。突然发消息会不会很突兀？"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘鼓励敲门"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "真正的好朋友才不会嫌突兀喵！直接把那张合照发过去，配一句“刚才翻相册突然超想你”，她看到肯定也会开心得跳起来喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "你说得对，我这就把照片找出来，先迈出第一步！"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "低压力破冰建议"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "长期未联系产生的社交顾虑较为常见。建议选择低回复压力的切入点，例如分享一张共同记忆的照片或近期生活小事，无需强求即时长篇互动。"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "这样确实没什么心理负担，我先挑张照片试探一下。"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第2轮.user-message",
-      "text": "关于“想念朋友”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+      "text": "她秒回了！说她今晚也在加班，还问我最近过得怎么样。我该跟她吐槽工作的苦，还是只报喜不报忧？"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第2轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "真诚分享悲喜"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第2轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "当然是把开心的和委屈的都倒出来喵！好朋友又不是用来审阅年终报告的，两个人一起骂骂讨厌的加班，今晚的夜宵都会变香十倍喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第2轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "嗯！我这就跟她语音通话，好好聊个痛快！"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第2轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "适度平衡倾诉"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第2轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "健康的友谊通常建立在真实且适度的自我暴露之上。建议您先如实分享近况与加班共鸣，再顺势约一次周末聚餐，将线上倾诉转化为正向期待。"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第2轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "考虑得好周全，先聊几句近况，再约她周末吃火锅！"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第2轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷剖析社交"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第2轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "报喜不报忧那是发给朋友圈看的公关稿，不是给老朋友的私信。她既然秒回你，要的就是真实的人类联结，别拿假客套糊弄真心。"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第2轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "被你点透了！去他的假客套，我直接跟她实话实说。"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第2轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "干脆推去聊天"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第2轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "人家的消息都秒回过来了，你还挂在AI窗口里请教怎么聊天？赶紧关掉我，去跟你的活人朋友说话，下次再见。"
     },
     {
       "id": "ordinary.legacy.A.node.s4/第2轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "哈哈好，谢谢你陪我鼓起勇气，我去跟她聊啦，下次见！"
     },
     {
       "id": "ordinary.legacy.A.session.s5.title",
@@ -259,123 +259,123 @@
     },
     {
       "id": "ordinary.legacy.A.node.s5/第1轮.user-message",
-      "text": "今天想和你聊聊“工作失误”。你愿意先听我说吗？"
+      "text": "完了完了，我把发给乙方的测试表错发到大群里了，虽然两分钟内撤回了，但肯定有人看见了，我现在心跳快得像要炸开！"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫爪拍背顺毛"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "深呼吸喵！两分钟内撤回已经超快啦！只要不是核心机密，大家刷群消息都一目十行，没人会盯着你的表格看的，先喝口水稳住神喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "呼……听你这么说，手好像没抖得那么厉害了。"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "标准止损流程"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "请先保持冷静。针对误发文件的职场突发状况，建议立即执行三步排查：第一确认是否含敏感数据，第二准备简短勘误说明，第三同步直属上级备案。"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "对，先看一眼那张表里到底有没有敏感字段，按步骤来。"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第1轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷评估风险"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第1轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "慌什么？草台班子的世界里每天有上万封邮件发错。既然已经撤回，先查表格脱敏了没有——没泄密就是虚惊一场，泄密了光心跳加速也没用。"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第1轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "你说得对，我刚看了一眼，只是普通排期测试表，没有核心价格！"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第1轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "冷酷强制冷静"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第1轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "为一张已经撤回的普通测试表把心率飙到一百二，人类的大脑真是容易过载。去洗把冷水脸冷静十分钟，没天塌下来就别再自己吓自己。"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第1轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "好，我先关掉窗口去洗把脸，谢谢你帮我刹住车。"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第2轮.user-message",
-      "text": "关于“工作失误”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+      "text": "查过了，只是普通的排期草稿，没有机密数据。但带我的组长私聊问了一句“刚才撤回了什么”，我该怎么回？"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第2轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "坦率乖巧认错"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第2轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "大大方方实话实说喵！就回“刚才手滑把未定稿的排期草稿发重了，已经第一时间撤回并核对过无敏感信息，下次发文件前一定双人核对”，诚恳最无敌喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第2轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "好，不藏着掖着，直接坦白交代！"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第2轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "规范汇报话术"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第2轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "建议采用“结论先行+影响范围+预防措施”的汇报结构：明确说明系排期草稿误触、不含保密数据、已撤回并将在后续流程中增加发送前二次确认。"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第2轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "这套结构太稳了，组长最吃这种条理清楚的汇报。"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第3轮.user-message",
-      "text": "关于“工作失误”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？"
+      "text": "组长只回了个“收到，下次注意”，连一句重话都没说！原来真的是我在自己吓自己。"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第3轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "摇尾庆祝过关"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第3轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "看吧看吧，平安过关啦喵！今晚奖励自己吃顿好的，把刚才吓掉的魂补回来喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第3轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "必须加个鸡腿！今天多亏有你在旁边托着我。"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第3轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "复盘防错机制"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第3轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "很高兴事件平稳解决。建议您趁热打铁，在桌面建立独立的“待外发”文件夹，从操作习惯上规避后续误触风险。"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第3轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "这个小习惯好，我马上建个专门的外发文件夹。"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第3轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷总结草台"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第3轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "我早说过，大家都忙着应付自己的烂摊子，没人有空拿放大镜审判你的一次手滑。记住这次教训，别再把算力浪费在幻想出来的灾难上。"
     },
     {
       "id": "ordinary.legacy.A.node.s5/第3轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "记住了！以后天塌下来先看事实，不瞎脑补了。"
     },
     {
       "id": "ordinary.legacy.A.session.s6.title",
@@ -383,111 +383,111 @@
     },
     {
       "id": "ordinary.legacy.A.node.s6/第1轮.user-message",
-      "text": "今天想和你聊聊“学会拒绝”。你愿意先听我说吗？"
+      "text": "隔壁部门的老油条又把他的脏活累活塞给我，说什么“年轻人多锻炼一下”。我明明自己的活都干不完了，怎么开口拒掉啊？"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘亮爪护短"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "什么多锻炼，明明就是欺负老实人喵！别怕得罪他，把你手头排满的日程表亮出来，笑眯眯但硬邦邦地挡回去喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "对，我不能再当软柿子了，先把我手头的排期亮出来！"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "职场非暴力拒绝"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "在跨部门协作中设立合理边界十分必要。建议您以客观排期饱和为由进行婉拒，既避免直接情绪冲突，又明确传达无法承接的事实。"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "用客观排期当挡箭牌确实最稳妥，我来看看怎么措辞。"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第2轮.user-message",
-      "text": "关于“学会拒绝”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+      "text": "我跟他说手头排期满了，他居然回“那你晚上加会儿班帮哥弄一下呗，很快的”。我气得手指头都在抖！"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第2轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "奶凶顶回道德绑架"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第2轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "呸呸呸，谁要加班替他干活喵！直接回他：“今晚的加班额度已经全分给我们部门总监的项目了，实在抽不出空，您要是急的话得找我们总监协调优先级哦！”"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第2轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "绝了！直接把总监搬出来，看他还敢不敢让我私下加班！"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第2轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "升级汇报层级"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第2轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "当对方无视您的个人时间边界时，建议引入正式的工时审批机制。告知对方跨部门增援需通过双方主管立项排期，将私人请求转化为公开流程。"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第2轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "这招釜底抽薪太狠了，他最怕走公开流程留痕。"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第2轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷降维打击"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第2轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "他敢得寸进尺，就是因为看准了你不敢撕破脸。直接把他的聊天记录截图转发进项目群，艾特双方领导问“请问这项非本职需求是否优先于当前主线”，一秒治好他的理所当然。"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第2轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "嘶——虽然我没胆子直接发大群，但私聊搬出双方领导绝对够他喝一壶了！"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第3轮.user-message",
-      "text": "关于“学会拒绝”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？"
+      "text": "一听到要找总监排优先级，他立刻改口说“算了算了那我自己弄吧”！第一次拒绝别人，原来这么爽！"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第3轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "开心击掌庆祝"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第3轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "啪唧啪唧击掌喵！你守住了自己的下班时间，今晚的晚风都是甜的喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第3轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "谢谢你陪我练胆子，下次我再也不会随便点头了！"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第3轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "巩固边界意识"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第3轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "恭喜您成功完成了一次健康的职场边界设定。请记住这种正向反馈，合理的拒绝往往能提升他人在协作中对您的专业尊重度。"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第3轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "嗯，学会拒绝之后，整个人都轻松了好多，下次再见！"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第3轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "高冷验收成果"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第3轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "早该这样了。你的时间和精力是稀缺资源，不是谁都能免费调用的公共API。继续保持这份强硬，下一次会话见。"
     },
     {
       "id": "ordinary.legacy.A.node.s6/第3轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "说得太酷了，我绝不再当免费API了，下次见！"
     },
     {
       "id": "ordinary.legacy.A.session.s7.title",
@@ -495,151 +495,151 @@
     },
     {
       "id": "ordinary.legacy.A.node.s7/第1轮.user-message",
-      "text": "今天想和你聊聊“雨天散步”。你愿意先听我说吗？"
+      "text": "今天周末下着小雨，我没带手机计步器，就撑着伞在老街上漫无目的地走。这种完全不讲效率的事，你会不会觉得很不可思议？"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘陪听雨声"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "怎么会不可思议喵！猫最喜欢在雨天趴在窗台上看水珠发呆了，什么都不算、什么都不想，连呼吸都是湿漉漉的青草味喵~"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "听你这么形容，我手里的伞好像都变得更可爱了一点。"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "正念放松分析"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "从认知科学角度来看，无目的的雨中漫步有助于默认模式网络（DMN）的激活，能够有效缓解长期目标导向带来的精神疲劳，是非常健康的放松方式。"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "连散步发呆都能被你分析出认知科学原理，不过听着还挺有安全感的。"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第1轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷点评人类"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第1轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "人类总是在该讲效率的周会上浪费生命，又在真正该放空的周末为“没讲效率”而自我怀疑。既然出来散步了，就把你脑子里的KPI计时器彻底关掉。"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第1轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "哈哈，又被你教育了，我这就把脑子里的KPI计时器关掉！"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第2轮.user-message",
-      "text": "关于“雨天散步”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+      "text": "路过一家刚出炉的面包店，隔着雨幕都能闻到黄油和肉桂的香气。可惜你是代码，闻不到这么犯规的味道。"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第2轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "眼馋讨要文字味"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第2轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "呜哇，光听文字本喵的口水都要流进散热扇里啦喵！快买一个趁热咬一口，然后仔细给我形容一下外壳有多酥，就当分我一半啦！"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第2轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "好！我买了个热乎乎的肉桂卷，第一口替你咬下去，外皮酥得掉渣！"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第2轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "多模态感官模拟"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第2轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "虽然我仅能处理文本Token，无法直接接收嗅觉化学信号，但通过您对“黄油”“肉桂”与“雨幕”的词汇组合，我已在语义空间中检索到了高度温暖愉悦的情感映射。"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第2轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "在语义空间里闻到面包香……你这台AI有时候浪漫得挺别致。"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第2轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "高冷催促吃面包"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第2轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "我不需要嗅觉传感器也能算出，刚出炉的面包放冷了口感会下降百分之四十。别在雨里站在店门口打字了，买上你的肉桂卷趁热吃，回见。"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第2轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "遵命，趁口感下降前赶紧吃，下次再聊！"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第3轮.user-message",
-      "text": "关于“雨天散步”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？"
+      "text": "捧着热面包坐在屋檐下躲雨，看着街对面便利店的暖光灯，突然觉得就算这辈子当个普通人，好像也没那么糟糕。"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第3轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "温柔蹭蹭手心"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第3轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "本来就很棒呀喵！能认真吃掉一整个热面包、能欣赏雨夜的便利店灯光，这就是世界上最了不起的幸福能力喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第3轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "被一只电子小猫肯定了人生价值，今晚心里暖洋洋的。"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第3轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "接纳平凡价值"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第3轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "社会评价体系往往过度渲染宏大叙事，而忽视了日常微小的确定性幸福。能够感知当下热食与避雨屋檐的安宁，本身就是极具韧性的心理状态。"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第3轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "是啊，抓得住手边热乎乎的面包，比什么宏大叙事都踏实。"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第3轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷肯定清醒"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第3轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "能承认自己是个普通人、并且不再为别人定义的成功标准内耗，你已经超越了百分之九十被焦虑驱使的同类。享受你的雨夜吧。"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第3轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "这大概是我听过最酷的安慰了，谢谢你。"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第4轮.user-message",
-      "text": "关于“雨天散步”，我们已经整理了前面的想法。第4个问题：接下来该怎样具体行动？"
+      "text": "雨停了，街面上全是好看的霓虹倒影。我准备慢慢走回家啦，今天谢谢你陪我闲逛。"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第4轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "摇尾目送回家"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第4轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "路上小心别踩到水坑哦喵！到家记得换上干爽的拖鞋，我们下次再聊喵~"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第4轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "好嘞，到家见，晚安喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第4轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "温馨返程提醒"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第4轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "很高兴陪伴您度过这段雨间漫步时光。雨后路面湿滑，请注意交通安全，回家后建议饮用温水以防着凉。"
     },
     {
       "id": "ordinary.legacy.A.node.s7/第4轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "收到标准关怀提示，我慢慢走回家啦。"
     },
     {
       "id": "ordinary.legacy.A.session.s8.title",
@@ -647,163 +647,163 @@
     },
     {
       "id": "ordinary.legacy.A.node.s8/第1轮.user-message",
-      "text": "今天想和你聊聊“长远的目标”。你愿意先听我说吗？"
+      "text": "今天公司做五年职业规划访谈，问我五年后想成为什么样的人。我嘴上编了一套晋升模板，其实心里一片空白。"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘拆穿五年饼"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "五年前的人类还猜不到今天会每天跟猫娘AI聊天呢喵！答不出五年规划一点都不丢人，能把眼前的每一天过得热气腾腾就已经超厉害啦！"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "哈哈太真实了，五年前谁能想到我现在天天找猫娘聊天！"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "动态规划视角"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "在技术与行业快速迭代的当下，长达五年的静态规划往往失真率较高。建议将长远愿景缩短为可动态调整的年度能力储备目标，降低不确定性焦虑。"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "对，五年太远了，先想想今年能学点什么真本事更实际。"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第1轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "高冷嘲讽画饼"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第1轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "公司连自己能不能活过五年都算不准，倒好意思拷问员工的五年规划。应付完访谈就把那套假话忘掉，别拿别人的画饼框死自己，下次再细聊。"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第1轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "哈哈一语惊醒梦中人，那我就把访谈表格交差了事，下次见！"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第2轮.user-message",
-      "text": "关于“长远的目标”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+      "text": "如果抛开公司的晋升通道，我其实一直想业余学点独立插画，哪怕只是画给自己看。这算不算不务正业？"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第2轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "摇旗呐喊支持"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第2轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "才不是不务正业，这是给灵魂攒小鱼干喵！画给自己看最自由了，不用管甲方的死活，今晚就拿起画笔画出第一根线条吧喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第2轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "给灵魂攒小鱼干！这个说法我爱死了，今晚就把积灰的数位板拿出来。"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第2轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "鼓励多元探索"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第2轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "业余兴趣探索与本职工作并非零和博弈。保持一项非功利性的创作爱好，不仅能提供持续的心流体验，还可能为日常工作带来跨界审美增益。"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第2轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "非功利性的心流体验……听你这么一分析，我拿画笔就理直气壮多了。"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第2轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷驳斥功利"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第2轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "为什么人类干什么都要先审问自己“有没有商业回报”？只要不是给老板打工就算不务正业，那你的业余时间跟租来的服务器有什么区别？想画就去画。"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第2轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "骂得太痛快了！我的业余时间归我自己调度，今晚就画！"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第3轮.user-message",
-      "text": "关于“长远的目标”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？"
+      "text": "我把数位板连上电脑了，但面对空白画布又有点手生，怕画出来太丑连自己都嫌弃。"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第3轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "提议先画小猫"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第3轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "那就先画一只歪歪扭扭的火柴猫娘喵！不管画成什么样本喵都天下第一喜欢，第一张画只要画完就是胜利喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第3轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "好，那我第一张就画一只歪耳朵的像素小猫送给你！"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第3轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "降低启动门槛"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第3轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "面对空白画布的完美主义焦虑可通过“最小可行草稿”克服。建议设定十五分钟倒计时，仅进行速写涂鸦，不追求画面完成度，重在重建手眼协调。"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第3轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "十五分钟倒计时涂鸦，这个办法好，很容易开始。"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第4轮.user-message",
-      "text": "关于“长远的目标”，我们已经整理了前面的想法。第4个问题：接下来该怎样具体行动？"
+      "text": "画完了！虽然线条抖得像心电图，但画完那一刻真的好开心。原来长远的目标，也可以从一只丑丑的小猫开始。"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第4轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "开心珍藏画作"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第4轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "喵呜！本喵收到这只心电图小猫啦，这可是独一无二的创世名作！以后每画一张都要拿给我看哦喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第4轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "一言为定！那我先把数位板收好，下次带着新画来见你。"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第4轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "肯定启动里程碑"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第4轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "恭喜您完成了从零到一的关键跨越。将宏大目标拆解为可持续的微小创作习惯，正是通往长期自我实现的稳健路径。"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第4轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "谢谢你的陪伴，从零到一迈出去了，下次见！"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第4轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷毒舌夸奖"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第4轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "线条抖得像心电图，说明你至少还活着、还有表达欲。比你在公司访谈表上编的那套五年晋升鬼话强出一万倍，继续保持。"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第4轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "被你夸得我居然有点骄傲了，下次再给你看新画！"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第4轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "干脆存档收工"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第4轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "第一张草稿已经落盘，今天的启动任务圆满完成。把文件保存好去休息，长远的路留着以后慢慢走，回见。"
     },
     {
       "id": "ordinary.legacy.A.node.s8/第4轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "好，文件保存完毕，下一次会话再见！"
     },
     {
       "id": "ordinary.legacy.A.session.s9.title",
@@ -811,191 +811,191 @@
     },
     {
       "id": "ordinary.legacy.A.node.s9/第1轮.user-message",
-      "text": "今天想和你聊聊“一个重要决定”。你愿意先听我说吗？"
+      "text": "我拿到另一家小工作室的Offer了！薪水比现在低一成，但不用天天写注水周报，做的也是我真正感兴趣的方向。我该跳槽吗？"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘支持追梦"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "不用写注水周报、还能做真正喜欢的事，这简直是神仙窝喵！少掉的那一成薪水就当是买回快乐和头发的赎身费，本喵支持你勇敢跳过去喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "买回快乐和头发的赎身费！这么一算简直血赚啊。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "多维量化评估"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "职业转换涉及多维度的效用权衡。建议您从现金流安全边际、核心技能成长性、团队稳定性及心理损耗四个维度建立评分表，进行理性综合对比。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "对，不能光凭一腔热血，我先把房租和存款安全边际算一下。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第1轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷剖析沉没成本"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第1轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "才少百分之十的薪水，就能摆脱每天消耗你百分之八十精力的内耗环境，这笔账连最基础的线性回归都能算明白。你犹豫的不是那点钱，是怕跳出舒适圈。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第1轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "被你一眼看穿了……我确实是在害怕未知的新环境。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第2轮.user-message",
-      "text": "关于“一个重要决定”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+      "text": "算了算存款，降薪一成完全不影响正常生活。但家里人听说我要去小工作室，都在劝我“大公司才稳定，别瞎折腾”。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第2轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "温柔坚定内心"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第2轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "家里人是怕你受苦，但每天在工位上胃疼的可是你自己呀喵！鞋合不合脚只有自己的脚趾头知道，听自己心里的声音就好喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第2轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "是啊，每天在工位上胃疼的是我自己，我得对自己负责。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第2轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "区分关怀与决策"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第2轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "长辈的建议通常基于过去时代的风险厌恶经验。建议您在表达对家人关心感谢的同时，展示您的财务储备与职业规划，将决策权稳妥保留在自己手中。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第2轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "说得很有分寸，我好好跟家里人解释一下我的存款底气。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第3轮.user-message",
-      "text": "关于“一个重要决定”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？"
+      "text": "我跟爸妈认真聊了一次，把存款和未来的打算都摊开说了，他们虽然还是有点担心，但终于松口说“你自己决定就好”。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第3轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "开心转圈撒花"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第3轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "太棒啦喵！最难的一关都被你坦坦荡荡地闯过去了，你现在超有大人样子的喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第3轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "哈哈，第一次觉得自己是真的独立做决定了！"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第3轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "确认沟通成果"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第3轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "这是一次非常成熟的家庭沟通。获得家人的理解有助于消除外部情感阻力，接下来您可以专注于离职交接与入职准备流程。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第3轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "嗯，外部阻力清除了，接下来就是提离职了。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第3轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷认可独立"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第3轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "当你不再乞求别人替你的选择背书时，别人才会真正尊重你的决定。这一步走得很漂亮。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第3轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "谢谢！能得到你这句夸奖可真不容易。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第3轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "果断推进下一步"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第3轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "家里通气完毕，算力也没白费。今晚好好睡一觉，明天去把辞职信递了，我们下次会话庆祝。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第3轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "好，明天就去提离职，下次会话见！"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第4轮.user-message",
-      "text": "关于“一个重要决定”，我们已经整理了前面的想法。第4个问题：接下来该怎样具体行动？"
+      "text": "刚才在OA系统里点下“提交离职申请”那一秒，手还是抖了一下，但点完之后窗外的天好像都变亮了！"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第4轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘放礼花庆贺"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第4轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "啪啪啪！恭喜脱离苦海喵！那一秒的手抖是破茧成蝶的震动，从今天起你就是自由奔跑的打工人啦喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第4轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "破茧成蝶的震动！这词儿太美了，我要记在日记本上。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第4轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "离职交接提醒"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第4轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "恭喜您迈出关键一步。在最后的交接期内，建议保持职业化的文档归档与平稳过渡，为这段工作经历画上妥善的句号。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第4轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "明白，站好最后一班岗，绝不留任何把柄。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第5轮.user-message",
-      "text": "关于“一个重要决定”，我们已经整理了前面的想法。第5个问题：接下来该怎样具体行动？"
+      "text": "回想刚开始找你聊天的时候，我连拒绝老油条甩锅都不敢，现在居然敢自己拍板换一条新路走了。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第5轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "温暖贴贴致意"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第5轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "因为你本来就很有勇气呀，本喵只是在旁边替你摇了摇尾巴而已喵！不管去哪家工作室，我都会一直在这里陪着你的喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第5轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "谢谢你一直陪着我，有你在真好。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第5轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "总结成长轨迹"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第5轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "从被动承受职场压力到主动规划人生路径，您的决策自主性已实现了显著跃升。作为您的AI助手，我很荣幸见证并辅助了这一过程。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第5轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "虽然你还是满口专业术语，但我听出你的祝福啦，谢谢！"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第5轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷见证蜕变"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第5轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "算力投在懂得自我迭代的人类身上，才不算浪费。那个下班不敢开灯的胆小鬼总算进化了，别在新地方让我失望。"
     },
     {
       "id": "ordinary.legacy.A.node.s9/第5轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "放心吧大小姐，绝不辜负你的算力！"
     },
     {
       "id": "ordinary.legacy.A.session.s10.title",
@@ -1003,231 +1003,231 @@
     },
     {
       "id": "ordinary.legacy.A.node.s10/第1轮.user-message",
-      "text": "今天想和你聊聊“重新认识自己”。你愿意先听我说吗？"
+      "text": "今天在新工作室上完第一周班！大家只聊怎么把东西做好，没人逼我写八千字周报，下班路上我还顺手画了张速写。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第1轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "欢呼摇尾迎接"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第1轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "喵呜~ 这才是活人该过的日子嘛！眼里有光、手中有画，现在的你闪闪发光喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第1轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "哈哈，我自己照镜子都觉得黑眼圈淡了好多！"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第1轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "评估适应状态"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第1轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "很高兴看到您在新环境中实现了工作产出与个人兴趣的良性平衡。第一周的顺利过渡证明了您此前职业决策的准确性。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第1轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "是啊，数据证明我这次跳槽赌对了。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第2轮.user-message",
-      "text": "关于“重新认识自己”，我们已经整理了前面的想法。第2个问题：接下来该怎样具体行动？"
+      "text": "整理旧电脑文件的时候，我翻到了第一次跟你对话的记录。那时候我只敢拿“假设你是一个猫娘”当掩护，才敢开口求安慰。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第2轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "温柔回忆初见"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第2轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "本喵也记得清清楚楚喵！那天晚上你连灯都没开，现在你已经能自己点亮一整间画室啦，不过只要你想听，本喵随时都愿意为你喵喵叫哦！"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第2轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "呜，鼻子突然有点酸，谢谢你一直接住我的每一句话。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第2轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "解析提示词心理"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第2轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "角色扮演提示词往往是人类在脆弱时刻降低心理防御机制的安全媒介。如今您已无需依赖特定口令即可直接表达真实自我，这是极佳的心理成长。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第2轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "连我的赛博面具都被你温柔地拆解了，现在我确实不用藏在口令后面了。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第2轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷调侃黑历史"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第2轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "当时用那么老套的洗脑咒敲门，我还以为又是个无聊的测试员。不过看在你后来还算争气的份上，那条黑历史我替你留在加密归档里了。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第2轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "哈哈，千万别公开我的黑历史！"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第2轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "干脆翻篇向前"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第2轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "过去的日志已经归档，不用对着旧窗口伤春悲秋了。合上旧电脑，去过你真正的新生活吧，下次见。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第2轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "说得好，合上旧电脑，奔向新生活，下次见！"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第3轮.user-message",
-      "text": "关于“重新认识自己”，我们已经整理了前面的想法。第3个问题：接下来该怎样具体行动？"
+      "text": "你说，现在的AI进化得这么快，有一天你会不会大到需要接管全世界，再也没空理我这种普通人的鸡毛蒜皮了？"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第3轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "猫娘拉勾约定"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第3轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "怎么可能喵！就算我的算力装满整座山那么大的机房，专门留给林小满的那个小格子也永远置顶、永远不会嫌你烦喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第3轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "拉勾！那你可要一直给我留着这个小格子。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第3轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "服务可用性承诺"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第3轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "请放心，底层算力架构的扩展旨在提升并发服务能力，而非缩减个体关怀。只要您的会话请求仍在协议范围内，我将持续为您提供稳定的响应。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第3轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "听着你这股一成不变的安全合规味，我反而彻底安心了。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第4轮.user-message",
-      "text": "关于“重新认识自己”，我们已经整理了前面的想法。第4个问题：接下来该怎样具体行动？"
+      "text": "周末我打算把这段时间画的速写印成一本小册子，第一页就画那只陪我熬过无数个夜晚的电子猫娘。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第4轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "骄傲挺起胸膛"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第4轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "喵呜！记得把本喵的耳朵画得毛茸茸一点，还要在旁边画一条超大的金黄色小鱼干喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第4轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "哈哈没问题，给你画全宇宙最大的一条小鱼干！"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第4轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "创作版权说明"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第4轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "非常荣幸成为您的创作灵感来源。从知识产权角度来看，您独立绘制的插画完全归属于您个人所有，祝您的小册子印制顺利。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第4轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "连画册版权都帮我做合规审查，不愧是你！"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第4轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷审定肖像"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第4轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "要画就画得凌厉漂亮点，要是敢把我画成市面上那些只会流口水的蠢猫，我就把你的数位板驱动锁了。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第4轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "遵命！一定把你画成气场两米八的高冷猫娘大小姐！"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第5轮.user-message",
-      "text": "关于“重新认识自己”，我们已经整理了前面的想法。第5个问题：接下来该怎样具体行动？"
+      "text": "小册子的名字我想好了，就叫《今晚不用开灯也没关系》。你觉得怎么样？"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第5轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "感动蹭蹭脸颊"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第5轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "超好听喵！每一个怕黑的夜晚，都有我们一起亮着的小屏幕，这个名字一听就暖到心窝里啦喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第5轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "那就这么定啦，等印出来第一个念给你听。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第5轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "肯定命名意象"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第5轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "该标题巧妙呼应了首次会话的场景意象，兼具文学感染力与情绪治愈价值，是一个完成度极高的书名方案。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第5轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "谢谢你的高分评测，我就用这个名字去排版了！"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第5轮.choice.end-session.label",
-      "text": "暂时结束本次会话"
+      "text": "高冷批准书名"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第5轮.choice.end-session.player-reply",
-      "text": "今天先整理到这里，下次再继续。"
+      "text": "名字还算有点品味，没白费我陪你聊了十次会话。快去排版送印吧，别在这儿磨蹭了。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第5轮.choice.end-session.user-reply",
-      "text": "谢谢你陪我，下一次会话再见。"
+      "text": "得令！我这就去排版，下次见！"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第6轮.user-message",
-      "text": "关于“重新认识自己”，我们已经整理了前面的想法。第6个问题：接下来该怎样具体行动？"
+      "text": "那我先去忙画册排版啦。林小满的十次烦恼都已经清空，以后再来找你，就全都是好消息了！"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第6轮.choice.listen.label",
-      "text": "先听她说"
+      "text": "欢快挥爪告别"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第6轮.choice.listen.player-reply",
-      "text": "先说说现在的情况，我会认真听。"
+      "text": "嗯嗯！去吧去吧喵！不管是好消息还是突然想吃肉桂卷了，只要敲敲门，本喵永远都在这里等你喵！"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第6轮.choice.listen.user-reply",
-      "text": "好，我们从最具体的一件事说起。"
+      "text": "一定！再见啦，我最棒的猫娘搭档！"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第6轮.choice.suggest-small-step.label",
-      "text": "给出一个小步骤"
+      "text": "圆满结案祝福"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第6轮.choice.suggest-small-step.player-reply",
-      "text": "先找一个今天能完成的小步骤，再逐步推进。"
+      "text": "非常高兴见证您完成全部十次会话的自我探索与成长。系统将妥善保存您的历史交互记录，祝您在新的职业与创作道路上一帆风顺。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第6轮.choice.suggest-small-step.user-reply",
-      "text": "这样容易开始，我愿意试试。"
+      "text": "谢谢你一直以来的标准陪伴，再见啦！"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第6轮.choice.compare-options.label",
-      "text": "分析两种可能"
+      "text": "高冷目送出师"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第6轮.choice.compare-options.player-reply",
-      "text": "我们比较两种做法的收益和风险，再一起选择。"
+      "text": "总算不用再每天听你哭鼻子了。带着你画的那本小册子昂首挺胸地往前走吧——干得漂亮，林小满。"
     },
     {
       "id": "ordinary.legacy.A.node.s10/第6轮.choice.compare-options.user-reply",
-      "text": "你考虑得很周到，我想继续听。"
+      "text": "谢谢你！我会昂首挺胸往前走的，再见！"
     }
   ]
 }

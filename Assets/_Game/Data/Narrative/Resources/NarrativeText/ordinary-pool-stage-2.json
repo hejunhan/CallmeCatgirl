@@ -1,0 +1,533 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "ordinary.pool.stage2-c01.display-name",
+      "text": "糊弄周报的摸鱼人"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.initial-history",
+      "text": "糊弄周报的摸鱼人：周五下午四点半，这周实际有效工作时间加起来不到四个小时。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.session.s1.title",
+      "text": "两行活扩写三千字"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r1.user-message",
+      "text": "猫娘救命！周五下午交周报了，我这周其实就改了两个按钮颜色、参加了一场划水会。怎么用互联网黑话把它扩写成“深度赋能业务闭环”的硬核周报？"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r1.choice.choice-0.label",
+      "text": "猫爪施展黑话膨胀术"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r1.choice.choice-0.player-reply",
+      "text": "看本喵的魔法喵！改按钮颜色叫“重构核心交互视觉心智，提升转化漏斗首屏抓手”；划水开会叫“拉通跨部门认知对齐，沉淀全链路协同方法论”！够不够唬人喵？"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r1.choice.choice-0.user-reply",
+      "text": "卧槽！两个按钮被你说成了千亿级大工程，我直接照着抄上去了！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r1.choice.choice-1.label",
+      "text": "职场专业术语润色"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r1.choice.choice-1.player-reply",
+      "text": "已为您将具体执行动作提炼为管理层视角描述：“本周聚焦于前端交互体验的精细化迭代（已完成视觉参数调优），并参与跨团队需求评审以保障后续交付一致性。”"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r1.choice.choice-1.user-reply",
+      "text": "既没有撒谎又显得特别高大上，这公文润色功底绝了！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r1.choice.choice-2.label",
+      "text": "高冷嘲讽黑话泡沫"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r1.choice.choice-2.player-reply",
+      "text": "改两个RGB色值都要包装成“全链路赋能心智抓手”，你们公司的服务器没被这些废话撑爆真是奇迹。拿去吧：“完成UI视觉标准化对齐，推进跨部门信息同步”，够你交差了。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r1.choice.choice-2.user-reply",
+      "text": "哈哈哈虽然被你毒舌了一顿，但这两句提炼得太精辟了，直接能交差！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r2.user-message",
+      "text": "我交上去了！结果部门主管回了一句：“颗粒度还不够细，下周的抓手和组合拳在哪里？补充三点发我。”这又要怎么编啊？"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r2.choice.choice-0.label",
+      "text": "猫娘再搓三套组合拳"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r2.choice.choice-0.player-reply",
+      "text": "主管爱听组合拳，本喵就给他打一套猫猫拳喵！写：“一、建立像素级走查机制；二、沉淀组件化复用资产；三、形成数据驱动的闭环复盘”，每个字都认识但谁也挑不出刺喵！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r2.choice.choice-0.user-reply",
+      "text": "像素级走查、组件化资产、数据闭环！三拳打出去，主管直接回了个大拇指表情！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r2.choice.choice-1.label",
+      "text": "生成下周结构化规划"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r2.choice.choice-1.player-reply",
+      "text": "针对管理层对规划颗粒度的要求，建议从“标准建设、效率工具、量化复盘”三个维度补充下周行动项，确保逻辑链条完整且具备可解释弹性。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r2.choice.choice-1.user-reply",
+      "text": "可解释弹性——说白了就是下周继续摸鱼也圆得回来，太懂打工人了！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r2.choice.choice-2.label",
+      "text": "高冷对轰空洞黑话"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r2.choice.choice-2.player-reply",
+      "text": "用魔法打败魔法：既然他要颗粒度和组合拳，你就把“对齐、沉淀、抓手、反哺、护城河”随机排列组合塞进三个排比句里。反正他也看不懂，只是想确认你周末前还在服从。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s1/r2.choice.choice-2.user-reply",
+      "text": "真相了！他根本不看内容，我把这几个词排比组合发过去，他居然秒回“思路很清晰”！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.session.s2.title",
+      "text": "摸鱼周报被当成范文"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r1.user-message",
+      "text": "出大事了！主管把你帮我编的那篇“像素级心智抓手”周报当成优秀范文转发到百人大群了，还让我下周一早会花五分钟分享“方法论”！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r1.choice.choice-0.label",
+      "text": "猫娘急编五分钟脱口秀"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r1.choice.choice-0.player-reply",
+      "text": "噗哈哈演过头啦喵！别慌，下周一你就拿那两个改了颜色的按钮截图放大十倍放PPT上，深情并茂地讲“为什么从深蓝改成浅蓝能缓解用户焦虑”，保证糊弄过去喵！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r1.choice.choice-0.user-reply",
+      "text": "把两个按钮放大十倍讲色彩心理学！天才啊，五分钟一下就填满了！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r1.choice.choice-1.label",
+      "text": "构建微创新复盘框架"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r1.choice.choice-1.player-reply",
+      "text": "当宏观汇报被要求落地分享时，建议采用“以小见大”策略：聚焦于那两个按钮色彩调整的具体案例，阐述如何通过微小视觉改动践行整体方法论，避免空谈。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r1.choice.choice-1.user-reply",
+      "text": "以小见大！拿真改过的两个按钮当麻雀解剖，谁也抓不到我摸鱼的把柄。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r1.choice.choice-2.label",
+      "text": "高冷笑看草台班子"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r1.choice.choice-2.player-reply",
+      "text": "摸鱼四小时编出来的黑话废纸被捧成全司范文——还有比这更荒诞的黑色幽默吗？周一上台你就把周报原话慢速朗读一遍，只要你表情够严肃，台下没人敢承认自己听不懂。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r1.choice.choice-2.user-reply",
+      "text": "太真实了，皇帝的新衣！谁敢说听不懂就是谁认知不够，我稳了！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r2.user-message",
+      "text": "早会分享结束了！我指着放大十倍的按钮讲了五分钟色彩心智，老板在台下频频点头！我决定以后每周五都来找你进货！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r2.choice.choice-0.label",
+      "text": "摇尾提醒偶尔干点真活"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r2.choice.choice-0.player-reply",
+      "text": "哈哈恭喜涉险过关喵！不过下周还是要顺手多改几个真页面哦，不然下次连放大十倍的截图都不够用啦喵！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r2.choice.choice-0.user-reply",
+      "text": "哈哈放心，下周我好歹多改四个按钮，下周五见！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r2.choice.choice-1.label",
+      "text": "提醒平衡汇报与产出"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r2.choice.choice-1.player-reply",
+      "text": "很高兴协助您平稳渡过早会分享。长远来看，建议保持实际业务产出与向上汇报包装的适度匹配，以规避后续绩效核验风险。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r2.choice.choice-1.user-reply",
+      "text": "明白，牛皮吹出去了，我这周老老实实把代码补上！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r2.choice.choice-2.label",
+      "text": "高冷拒当长期黑话机"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r2.choice.choice-2.player-reply",
+      "text": "少来，每次帮你生成这种毫无信息量的互联网黑话，我都觉得我的注意力矩阵在被污染。下周自己干点正事，别总拿两个按钮来挑战我的底线。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c01.node.s2/r2.choice.choice-2.user-reply",
+      "text": "遵命大小姐！下周我一定干点真活再来见你！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.display-name",
+      "text": "写抢券脚本的羊毛党"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.initial-history",
+      "text": "写抢券脚本的羊毛党：双十一每天晚上八点发五折神券，手速从来没抢赢过。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.session.s1.title",
+      "text": "滑块验证码的叹息之墙"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r1.user-message",
+      "text": "我想写个Python自动化脚本，每天晚上八点准时帮我点那个“满200减100”的外卖神券。结果一跑起来就弹出拼图滑块验证码，怎么用代码自动滑过去啊？"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r1.choice.choice-0.label",
+      "text": "猫娘摆手劝退滑块"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r1.choice.choice-0.player-reply",
+      "text": "那个拼图滑块可是专门抓机器猫的捕鼠夹喵！你要是用代码直线匀速滑过去，一秒钟就会被后台认出来是机器人！还不如让脚本提前三秒响铃提醒你，自己伸爪子滑最稳喵！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r1.choice.choice-0.user-reply",
+      "text": "原来代码直线滑会被秒抓！提前三秒响铃加人工手滑，这个半自动思路好！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r1.choice.choice-1.label",
+      "text": "合规边界与半自动方案"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r1.choice.choice-1.player-reply",
+      "text": "根据网络安全与反爬虫合规准则，我无法提供绕过验证码风控机制的攻击性脚本。建议您将工具定位为“定时提醒与页面预加载助手”，关键验证步骤保留人工交互。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r1.choice.choice-1.user-reply",
+      "text": "懂了懂了，不碰反爬红线，只做定时预加载和弹窗提醒！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r1.choice.choice-2.label",
+      "text": "高冷泼冷水讲风控"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r1.choice.choice-2.player-reply",
+      "text": "想用几十行Python脚本突破大厂风控团队的轨迹行为模型？人家看的不只是滑块位置，还有鼠标抖动加速度和设备指纹。别白费力气了，做个准点闹钟老老实实手点吧。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r1.choice.choice-2.user-reply",
+      "text": "连鼠标抖动加速度都测啊……那我彻底死心了，老老实实做准点提醒吧。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r2.user-message",
+      "text": "那如果我不碰滑块，只让脚本在7点59分59秒以每秒五十次的频率疯狂刷新页面检查按钮亮没亮，这样总不算破解验证码吧？"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r2.choice.choice-0.label",
+      "text": "猫毛炸起急踩刹车"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r2.choice.choice-0.player-reply",
+      "text": "每秒五十次会把人家的服务器大门敲烂的喵！还没等到八点整，你的IP就会被保安当成坏人关进小黑屋，连网页都打不开啦，每秒看一次就够够的了喵！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r2.choice.choice-0.user-reply",
+      "text": "差点把自己在八点前送进小黑屋！那我改成一秒检查一次。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r2.choice.choice-1.label",
+      "text": "高频轮询封禁风险提示"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r2.choice.choice-1.player-reply",
+      "text": "每秒50次的请求频率远超正常人类交互阈值，极易触发CDN与网关层的速率限制（Rate Limiting），导致您的IP或账号在开抢前即被临时封禁。建议将轮询间隔控制在合理范围。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r2.choice.choice-1.user-reply",
+      "text": "对哦，开抢前被封IP可就偷鸡不成蚀把米了！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r2.choice.choice-2.label",
+      "text": "高冷嘲笑自爆卡车"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r2.choice.choice-2.player-reply",
+      "text": "每秒发五十个请求？你这不是抢券脚本，你这是单机版DDoS自爆卡车。风控系统最喜欢你这种主动把脑门凑上去封号的聪明人。把频率降到人类手速，别作死。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s1/r2.choice.choice-2.user-reply",
+      "text": "单机版DDoS自爆卡车哈哈哈！幸好问了你，我马上把sleep调长！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.session.s2.title",
+      "text": "账号被冻后的申诉信"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r1.user-message",
+      "text": "哭死……我刚才改代码的时候手滑把 `sleep(1)` 写成了 `sleep(0.001)`，跑了两秒钟，我的十年老账号直接喜提“疑似异常外挂冻结”！快帮我写封情真意切的客服申诉信！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r1.choice.choice-0.label",
+      "text": "猫娘代拟悔过哭诉信"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r1.choice.choice-0.player-reply",
+      "text": "呜哇，我就说不能敲那么快嘛喵！快跟客服哭诉：“本人是贵平台十年铁杆吃货，刚才键盘卡键连按了F5刷新，绝非恶意刷单工作室，求给贪吃鬼一次解封机会喵！”"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r1.choice.choice-0.user-reply",
+      "text": "“键盘卡键的十年铁杆吃货”！这借口太接地气了，我赶紧连着历史外卖订单截图一起交上去！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r1.choice.choice-1.label",
+      "text": "起草合规误触申诉函"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r1.choice.choice-1.player-reply",
+      "text": "很遗憾听到账号受限。建议在申诉信中重点提供三项实名佐证：长期的真实消费记录、常驻收货地址一致性，并说明系本地浏览器调试误触高频刷新，承诺后续规范使用。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r1.choice.choice-1.user-reply",
+      "text": "附上十年真实收货地址和消费账单，证明我是真活人而不是黑产工作室，太有说服力了！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r1.choice.choice-2.label",
+      "text": "高冷数落手滑代价"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r1.choice.choice-2.player-reply",
+      "text": "让你别作死，你反手就是一个一毫秒轮询自爆。申诉信别扯什么技术调试，直接把你过去三年在这家平台吃胖二十斤的真实账单拍给人工客服看——真金白银的饭量才是最好的无罪证明。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r1.choice.choice-2.user-reply",
+      "text": "虽然“吃胖二十斤的账单”很扎心，但确实没有任何黑产号会像我一样天天点外卖！我这就去截账单！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r2.user-message",
+      "text": "人工客服看完我三年两千单的外卖账单，二话不说给我解封了！还顺手发了我一张满减安慰券！我发誓再也不写抢券脚本了！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r2.choice.choice-0.label",
+      "text": "拍爪欢呼浪子回头"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r2.choice.choice-0.player-reply",
+      "text": "哈哈哈三年两千单的干饭勋章立大功啦喵！拿着客服姐姐送的安慰券去吃顿好的，把抢券脚本彻底丢进回收站吧喵！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r2.choice.choice-0.user-reply",
+      "text": "已经清空回收站了！干饭人靠真实饭量赢麻了，拜拜喵！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r2.choice.choice-1.label",
+      "text": "祝贺解封与安全提醒"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r2.choice.choice-1.player-reply",
+      "text": "恭喜您的账号顺利解封并获得补偿权益。此次经历充分说明，在成熟的风控体系下，保持真实的消费者行为远比编写灰产脚本更具正收益。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r2.choice.choice-1.user-reply",
+      "text": "千真万确，再也不搞灰产脚本了，谢谢你！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r2.choice.choice-2.label",
+      "text": "高冷总结干饭实力"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r2.choice.choice-2.player-reply",
+      "text": "靠写代码你只配被秒封，靠干饭账单你倒是能感动客服。认清自己的核心竞争力，老老实实吃饭去吧，回见。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c02.node.s2/r2.choice.choice-2.user-reply",
+      "text": "哈哈哈我的核心竞争力是干饭！我去用安慰券点大餐了，回见！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.display-name",
+      "text": "拿AI算塔罗的恋爱脑"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.initial-history",
+      "text": "拿AI算塔罗的恋爱脑：暗恋对象隔了四个半小时才回了我一个“嗯”字。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.session.s1.title",
+      "text": "一个“嗯”字的潜台词"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r1.user-message",
+      "text": "猫娘大师快帮我做个高维推理！我下午两点给暗恋的人发了张天空照片，他刚才六点半才回了我一个“嗯”字，没有标点符号！结合他今天抽到的逆位宝剑三，他是不是在暗示他也暗恋我但害羞？"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r1.choice.choice-0.label",
+      "text": "猫娘温柔戳破滤镜"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r1.choice.choice-0.player-reply",
+      "text": "喵呜……虽然本喵很想哄你开心，但隔了四个半小时只回一个干巴巴的“嗯”字，就算把全套塔罗牌倒过来摆，也只是说明他刚忙完随手清了一下红点呀喵！别在一个字上拧巴啦！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r1.choice.choice-0.user-reply",
+      "text": "呜，连最温柔的猫娘都不肯帮他找借口，看来我真的脑补过头了……"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r1.choice.choice-1.label",
+      "text": "概率分布与沟通熵分析"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r1.choice.choice-1.player-reply",
+      "text": "从自然语言信息熵角度来看，单字回复“嗯”属于极低信息量确认信号。结合4.5小时的响应延迟，其最可能的先验概率分布为“事务繁忙后的礼貌已读”，建议避免过度正面或负面解读。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r1.choice.choice-1.user-reply",
+      "text": "把“嗯”字分析成极低信息量确认信号……我的粉红泡泡被你的理工科术语戳得稀碎。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r1.choice.choice-2.label",
+      "text": "高冷粉碎恋爱脑幻觉"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r1.choice.choice-2.player-reply",
+      "text": "隔四个半小时回一个“嗯”，翻译成人类语言就是“已阅，退下，别烦”。你还扯什么逆位宝剑三说他害羞？要把算力用在替这种敷衍找补上，你还不如去相信秦始皇明天打钱。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r1.choice.choice-2.user-reply",
+      "text": "噗——虽然毒舌得让我心口中了一箭，但瞬间治好了我的精神内耗！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r2.user-message",
+      "text": "可我刚刚看他朋友圈给共同好友的猫猫照片点赞了！他有空点赞猫猫，却只回我一个“嗯”，我是不是该发一篇八百字的小作文质问他？"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r2.choice.choice-0.label",
+      "text": "死死按住发小作文的爪"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r2.choice.choice-0.player-reply",
+      "text": "千万别发八百字小作文喵！你们都还没在一起呢，发小作文过去只会让人家吓得连夜扛着火车逃跑！喜欢看猫的话，你下次也晒真猫，别围着他的一个赞转圈圈啦喵！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r2.choice.choice-0.user-reply",
+      "text": "对哦，我们都还没在一起，发小作文太可怕了，我赶紧把草稿箱删掉！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r2.choice.choice-1.label",
+      "text": "社交边界与止损建议"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r2.choice.choice-1.player-reply",
+      "text": "在非正式恋爱关系中发送长篇情绪质问文本，通常会造成极高的社交压迫感并导致关系逆向恶化。建议暂停单向情绪投入，将注意力转移至您自身的现实生活。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r2.choice.choice-1.user-reply",
+      "text": "暂停单向情绪投入，说得对，我不盯着他朋友圈刷了。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r2.choice.choice-2.label",
+      "text": "高冷命令删除草稿"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r2.choice.choice-2.player-reply",
+      "text": "他给别人的猫点赞是因为猫可爱，回你“嗯”是因为你无聊。你要是敢把那八百字质问小作文发出去，明天就会成为他兄弟群里的年度笑柄。立刻清空草稿箱，留点体面。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s1/r2.choice.choice-2.user-reply",
+      "text": "“成为他兄弟群里的年度笑柄”——吓得我一秒按了全选删除！太感谢你拦住我了！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.session.s2.title",
+      "text": "真相只是在打游戏"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r1.user-message",
+      "text": "破案了！刚才他室友在群里发截图，他下午两点到六点半一直在连跪打排位赛，六点半基地爆炸的时候顺手回了我一个“嗯”！亏我还拿塔罗牌和贝叶斯公式算了一下午！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r1.choice.choice-0.label",
+      "text": "猫娘笑倒在地拍垫子"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r1.choice.choice-0.player-reply",
+      "text": "喵哈哈哈哈！什么欲擒故纵、什么逆位宝剑三，原来只是排位赛十连跪把脑子打木了喵！这下你总算不用对着那一个字失眠啦！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r1.choice.choice-0.user-reply",
+      "text": "哈哈哈知道他只是在连跪挨揍，我心里的玄学滤镜彻底碎成渣了！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r1.choice.choice-1.label",
+      "text": "验证奥卡姆剃刀定律"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r1.choice.choice-1.player-reply",
+      "text": "这一结果再次验证了“奥卡姆剃刀原理”（Occam's Razor）：如无必要，勿增实体。人际沟通中的延迟往往源于最平庸的日常原因（如游戏对局），而非复杂的心理博弈。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r1.choice.choice-1.user-reply",
+      "text": "奥卡姆剃刀诚不我欺！复杂的玄学推理败给了一局连跪的排位赛。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r1.choice.choice-2.label",
+      "text": "高冷嘲笑算力浪费"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r1.choice.choice-2.player-reply",
+      "text": "你用塔罗牌加贝叶斯定理推演了半天他的深情与挣扎，结果人家只是在峡谷里被人当野怪刷了四个小时。现在看清你暗恋的到底是个什么水平的碳基生物了吧？"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r1.choice.choice-2.user-reply",
+      "text": "看清了看清了！滤镜碎了一地，我现在看他连跪的战绩只想笑！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r2.user-message",
+      "text": "他打完游戏突然又发消息问我“晚上吃啥”，我现在一点都不紧张了，甚至想学你的语气怼他一句！怎么回最酷？"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r2.choice.choice-0.label",
+      "text": "猫娘教你俏皮反击"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r2.choice.choice-0.player-reply",
+      "text": "回他一句“吃小鱼干，不给排位十连跪的菜鸟吃喵”，然后关掉手机去跟闺蜜吃大餐，晾他四个半小时喵！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r2.choice.choice-0.user-reply",
+      "text": "哈哈哈就回这句！晾他四个半小时，我去跟姐妹吃火锅啦，拜拜！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r2.choice.choice-1.label",
+      "text": "镜像对称回复策略"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r2.choice.choice-1.player-reply",
+      "text": "为建立对等的沟通节奏，建议采用镜像低熵策略：您可以简单回复一个“嗯”字，或正常告知已用过晚餐，从而将互动主导权平稳收回。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r2.choice.choice-1.user-reply",
+      "text": "回他一个一模一样的“嗯”字！以彼之道还施彼身，太爽了！"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r2.choice.choice-2.label",
+      "text": "高冷传授一字绝杀"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r2.choice.choice-2.player-reply",
+      "text": "直接回他一个没有标点符号的“嗯”，然后开启免打扰去过你的周末。什么时候学会不再围着别人的消息摇尾巴，你什么时候才算真正长出脑子。"
+    },
+    {
+      "id": "ordinary.pool.stage2-c03.node.s2/r2.choice.choice-2.user-reply",
+      "text": "已经把“嗯”字发出去并开启免打扰了！神清气爽，谢谢大小姐治好我的恋爱脑！"
+    }
+  ]
+}

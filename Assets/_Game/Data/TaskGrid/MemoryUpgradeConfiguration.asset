@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CallmeCatgirl.Gameplay.MemoryUpgradeConfiguration
   BoardWidth: 8
   BoardHeight: 8
-  InitialLevel: 1
-  InitialModelName: "\u5C0F\u732B Lv.1"
+  InitialLevel: 0
+  InitialModelName: "\u521D\u59CB\u6A21\u578B"
   InitialTaskMultipliers:
     CalculationMin: 1
     CalculationMax: 1

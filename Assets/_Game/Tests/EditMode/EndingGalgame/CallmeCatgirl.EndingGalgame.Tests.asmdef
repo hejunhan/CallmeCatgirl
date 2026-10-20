@@ -1,0 +1,7 @@
+{
+  "name": "CallmeCatgirl.EndingGalgame.Tests",
+  "references": ["CallmeCatgirl.EndingGalgame", "CallmeCatgirl.Persistence"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false
+}

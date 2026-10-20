@@ -22,6 +22,8 @@ namespace CallmeCatgirl.Gameplay
         private readonly StoryConfiguration configuration;
         private readonly TaskGenerationConfiguration generation;
         private readonly StoryConfiguration ordinaryPool;
+        private readonly bool stagePool;
+        private readonly HashSet<string> usedPoolEntries = new HashSet<string>(StringComparer.Ordinal);
         private readonly System.Random shapeRandom;
         private readonly Dictionary<string, UserState> users = new Dictionary<string, UserState>();
         private readonly HashSet<string> submitted = new HashSet<string>();
@@ -31,15 +33,18 @@ namespace CallmeCatgirl.Gameplay
         public EconomyManager Economy { get; set; }
         private readonly Queue<TaskInstance> pending = new Queue<TaskInstance>();
         public bool IsOpen { get; private set; }
+        /// <summary>Host memory level used to draw the matching stage customer pool.</summary>
+        public Func<int> StageProvider { get; set; }
+        public bool UsesStagePool => stagePool;
         public bool IsReply { get; private set; }
         public string UserId { get; private set; }
         public string RequestId { get; private set; }
         public Quality Result { get; private set; }
         public int Revision { get; private set; }
-        public string CurrentCorpusNodeId => User(UserId).NodeId ?? "__default__";
+        public string CurrentCorpusNodeId => FindUser(UserId)?.NodeId ?? "__default__";
         public int SessionNumber(string id)
         {
-            var state = User(id); var session = state.Profile?.FindSession(state.NodeId);
+            var state = FindUser(id); var session = state?.Profile?.FindSession(state.NodeId);
             return session == null ? 0 : Array.IndexOf(state.Profile.Sessions, session) + 1;
         }
         public string CorpusChoiceId(StoryConfiguration.ReplyChoice choice)
@@ -66,20 +71,29 @@ namespace CallmeCatgirl.Gameplay
             if (new[] { initial, success, failure }.Any(n => double.IsNaN(n) || double.IsInfinity(n)))
                 throw new ArgumentException("亲密度配置必须是有限数值。");
             configuration = config; generation = taskGeneration; shapeRandom = random; ordinaryPool = ordinaryDialoguePool;
+            stagePool = ordinaryPool != null && ordinaryPool.Users != null
+                && ordinaryPool.Users.Any(p => p != null && OrdinaryStagePool.IsStageCustomer(p.UserId));
             initialAffinity = initial; successAffinity = success; failureAffinity = failure;
             if (ordinaryPool != null && (ordinaryPool.Users == null || ordinaryPool.Users.Length == 0
                 || ordinaryPool.Users.Any(p => p == null || p.Kind != StoryConfiguration.ConversationKind.Ordinary)))
                 throw new ArgumentException("普通对话池必须包含明确标记为 Ordinary 的内容。");
         }
-        private UserState User(string id)
+        private UserState FindUser(string id)
+            => !string.IsNullOrEmpty(id) && users.TryGetValue(id, out var state) ? state : null;
+        private StoryConfiguration.UserStory ConfiguredProfile(string id)
+            => string.IsNullOrEmpty(id) ? null : configuration?.Users?.FirstOrDefault(p => p != null && p.UserId == id);
+        private bool IsSlot(string id)
+            => !string.IsNullOrEmpty(id) && configuration?.Users?.Any(p => p != null && p.UserId == id) == true;
+        private UserState User(string id) => FindUser(id) ?? BindUser(id, null, false);
+        // Read-only accessors never draw from the stage pool; a failed binding stays on the command path.
+        public string Name(string id)
         {
-            if (users.TryGetValue(id, out var state)) return state;
-            return BindUser(id, null, false);
+            var profile = FindUser(id)?.Profile ?? ConfiguredProfile(id);
+            return profile?.DisplayName is string name && !string.IsNullOrWhiteSpace(name) ? name : "用户 " + id;
         }
-        public string Name(string id) => User(id).Profile?.DisplayName is string name && !string.IsNullOrWhiteSpace(name) ? name : "用户 " + id;
-        public string History(string id) => string.Join("\n\n", User(id).History);
-        public string Latest(string id) => User(id).History.LastOrDefault() ?? "还没有对话记录。";
-        public double Affinity(string id) => User(id).Affinity;
+        public string History(string id) => string.Join("\n\n", FindUser(id)?.History ?? new List<string>());
+        public string Latest(string id) => FindUser(id)?.History.LastOrDefault() ?? "还没有对话记录。";
+        public double Affinity(string id) => FindUser(id)?.Affinity ?? 0;
         public bool AwaitingReply(string request) => (IsReply && RequestId == request) || pending.Any(t => t.Id == request);
         // 以请求ID去重；多轮选项、查看历史、关闭反馈均不重复结算。
         private void Settle(TaskInstance task, bool success)
@@ -188,13 +202,19 @@ namespace CallmeCatgirl.Gameplay
                     : choice.MinimumFunds == 0 && choice.FundsReward == 0);
         public bool Finished(string id)
         {
-            var state = User(id);
+            var state = FindUser(id);
+            if (state == null) return false;
             // A finite text sequence may finish naturally; ordinary requests still draw once at every settlement.
             return (state.Profile?.HasSessions == true && string.IsNullOrEmpty(state.NodeId))
-                || (!IsScriptedConversation(id) && OrdinaryLifecycle.IsEnded(id));
+                || (UsesRandomOrdinaryEnding(id) && OrdinaryLifecycle.IsEnded(id));
         }
-        public string Progress(string id) => IsScriptedConversation(id) ? User(id).Profile.Progress(User(id).NodeId)
-            : Finished(id) ? "对话已结束" : User(id).Profile?.Progress(User(id).NodeId) ?? string.Empty;
+        public string Progress(string id)
+        {
+            var state = FindUser(id);
+            if (state == null) return string.Empty;
+            return IsScriptedConversation(id) ? state.Profile.Progress(state.NodeId)
+                : Finished(id) ? "对话已结束" : state.Profile?.Progress(state.NodeId) ?? string.Empty;
+        }
         public TaskDefinition BuildNextTask(string id, IReadOnlyDictionary<string, TaskDefinition> templates, TaskDefinition fallback)
         {
             if (Finished(id)) return null;
@@ -203,7 +223,7 @@ namespace CallmeCatgirl.Gameplay
             var basis = !string.IsNullOrEmpty(templateId) && templates.TryGetValue(templateId, out var template) ? template : fallback;
             if (session == null && generation == null) return basis;
             var difficulty = session?.Task;
-            if (state.PoolEntryId != null && session != null)
+            if (!stagePool && state.PoolEntryId != null && session != null)
             {
                 // Dialogue replacement preserves the matching ABC ordinary request's existing difficulty curve.
                 int index = Array.IndexOf(state.Profile.Sessions, session);

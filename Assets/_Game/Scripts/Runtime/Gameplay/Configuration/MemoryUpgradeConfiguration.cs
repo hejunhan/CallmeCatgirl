@@ -11,7 +11,7 @@ namespace CallmeCatgirl.Gameplay
         // 棋盘尺寸与格子开放规则统一保存在这里，Inspector 用可视化棋盘编辑。
         [HideInInspector] public int BoardWidth = 8;
         [HideInInspector] public int BoardHeight = 8;
-        [Min(1), InspectorName("初始内存等级")] public int InitialLevel = 1;
+        [Min(0), InspectorName("初始内存等级")] public int InitialLevel = 0;
         [InspectorName("初始模型名称"), Tooltip("ModelInfo显示的名称；留空沿用模型原标识。")]
         public string InitialModelName = "";
         [InspectorName("初始等级的新任务倍率")]
